@@ -41,6 +41,10 @@ public class ConceptMapApp extends AbstractStandaloneApp {
 		createGesturableBackground();
 	}
 	
+	/**
+	 * adds instructions
+	 * 
+	 */
 	private void addInstruction() {
 		ILabel instruction = contentFactory.createLabel("instruction", UUID.randomUUID());
 		instruction.setText("Draw a C shape, but in reverse...");
@@ -95,6 +99,17 @@ public class ConceptMapApp extends AbstractStandaloneApp {
 	
 
 
+	/**
+	 * This is the main method
+	 * 
+	 * @param args
+	 * @throws SecurityException
+	 * @throws IllegalArgumentException
+	 * @throws NoSuchMethodException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
 	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		SingleAppTableSystem.startSystem(ConceptMapApp.class);
 	}
