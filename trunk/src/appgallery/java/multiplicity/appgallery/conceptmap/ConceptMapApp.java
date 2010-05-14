@@ -31,6 +31,11 @@ import multiplicity.input.IMultiTouchEventProducer;
 
 public class ConceptMapApp extends AbstractStandaloneApp {
 
+    /**
+     * test again
+     * 
+     * @param producer
+     */
 	public ConceptMapApp(IMultiTouchEventProducer producer) {
 		super(producer);
 	}
