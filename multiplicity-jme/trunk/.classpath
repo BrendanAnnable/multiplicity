@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry exported="true" kind="lib" path="lib/scene-monitor/jmejtree_jme2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/scene-monitor/propertytable.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/scene-monitor/scenemonitor_jme2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/scene-monitor/sm_properties_jme2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jmephysics-2.1/jbullet.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jmephysics-2.1/jme-physics.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jmephysics-2.1/odejava-jni.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jmephysics-2.1/stack-alloc.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jmephysics-2.1/vecmath.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/jme-audio.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/jme-awt.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/jme-collada.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/jme-editors.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/jme-effects.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/jme-font.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/jme-gamestates.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/jme-model.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/jme-ogrexml.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/jme-scene.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/jme-terrain.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/jme.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/multiplicity-jme/lib/jme2.0/jme2-javadoc.zip!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/lwjgl/jinput.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/lwjgl/lwjgl_util_applet.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/lwjgl/lwjgl_util.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jme2.0/lwjgl/lwjgl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="multiplicity-jme/lib/jme2.0/lwjgl/natives"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
