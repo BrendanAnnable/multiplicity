@@ -33,18 +33,34 @@
 package multiplicity.input;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.jme.math.Vector2f;
+
+import multiplicity.input.data.CursorPositionRecord;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.input.events.MultiTouchObjectEvent;
 import multiplicity.input.filters.IMultiTouchInputFilter;
+import multiplicity.jmeutils.UnitConversion;
 
+/**
+ * Manages a multi-touch input source and passes it through a set
+ * of filters. Register a listener with this class to get
+ * multi-touch events that have been through the filtering
+ * process.
+ * 
+ * @author dcs0ah1
+ *
+ */
 public class MultiTouchInputComponent implements IMultiTouchEventListener, IMultiTouchEventProducer {
 	
 	private List<IMultiTouchEventListener> listeners = new ArrayList<IMultiTouchEventListener>();
 	private List<IMultiTouchInputFilter> filters = new ArrayList<IMultiTouchInputFilter>();
 	private IMultiTouchInputSource source;
 	private boolean isMultiTouchInputEnabled = true;
+	private Map<Long, List<CursorPositionRecord>> cursorTrails = new HashMap<Long,List<CursorPositionRecord>>();
 	
 	public MultiTouchInputComponent(IMultiTouchInputSource source) {
 		this.source = source;
@@ -64,16 +80,35 @@ public class MultiTouchInputComponent implements IMultiTouchEventListener, IMult
 		source.registerMultiTouchEventListener(filters.get(0));		
 	}
 	
+	/**
+	 * Add a multi-touch input filter. The filter will be added at the
+	 * end of the current (possibly empty) filter queue. The filter
+	 * will be told to pass events back to the MultiTouchInputComponent
+	 * so that it can then pass it on to any listeners.
+	 * @param filter
+	 */
 	public void addMultiTouchInputFilter(IMultiTouchInputFilter filter) {
 		if(filters.size() > 0) {
-			IMultiTouchInputFilter t = getLastFilter();			
+			// if we already have filters
+			// get the last one
+			IMultiTouchInputFilter t = getLastFilter();
+			// last one now daisy chains onto this new filter
 			t.setNext(filter);
+			// add to collection of filters
 			filters.add(filter);
+			// get the filter to pass the results back to us
+			// so that we can pass it on to our listeners
 			filter.setNext(this);
 		}else{
+			// if we don't currently have any filters
+			// unregister this from the source
 			source.unregisterMultiTouchEventListener(this);
+			// get the source to pass to the filter
 			source.registerMultiTouchEventListener(filter);
+			// get the filter to pass the results back
+			// so that we can pass it on to our listeners
 			filter.setNext(this);
+			// add to collection of filters
 			filters.add(filter);
 		}
 	}
@@ -115,6 +150,13 @@ public class MultiTouchInputComponent implements IMultiTouchEventListener, IMult
 
 	public void cursorChanged(MultiTouchCursorEvent event) {
 		if (!this.isMultiTouchInputEnabled) return;
+		
+		List<CursorPositionRecord> trail = cursorTrails.get(event.getCursorID());
+		Vector2f loc = new Vector2f();
+		UnitConversion.tableToScreen(event.getPosition(), loc);
+		trail.add(new CursorPositionRecord(loc, System.currentTimeMillis()));
+		event.setPositionHistory(trail);
+		
 		for(IMultiTouchEventListener l : listeners) {
 			l.cursorChanged(event);
 		}		
@@ -129,6 +171,13 @@ public class MultiTouchInputComponent implements IMultiTouchEventListener, IMult
 
 	public void cursorPressed(MultiTouchCursorEvent event) {
 		if (!this.isMultiTouchInputEnabled) return;
+		Vector2f loc = new Vector2f();
+		UnitConversion.tableToScreen(event.getPosition(), loc);
+		List<CursorPositionRecord> trail = new ArrayList<CursorPositionRecord>();		
+		trail.add(new CursorPositionRecord(loc, System.currentTimeMillis()));
+		cursorTrails.put(event.getCursorID(), trail);
+		event.setPositionHistory(trail);
+		
 		for(IMultiTouchEventListener l : listeners) {
 			l.cursorPressed(event);
 		}
@@ -136,6 +185,11 @@ public class MultiTouchInputComponent implements IMultiTouchEventListener, IMult
 
 	public void cursorReleased(MultiTouchCursorEvent event) {
 		if (!this.isMultiTouchInputEnabled) return;
+		
+		List<CursorPositionRecord> trail = cursorTrails.remove(event.getCursorID());
+		event.setPositionHistory(trail);
+		cursorTrails.remove(event.getCursorID());
+		
 		for(IMultiTouchEventListener l : listeners) {
 			l.cursorReleased(event);
 		}

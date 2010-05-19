@@ -33,6 +33,9 @@
 package multiplicity.input.events;
 
 import java.io.Serializable;
+import java.util.List;
+
+import multiplicity.input.data.CursorPositionRecord;
 
 import com.jme.math.Vector2f;
 
@@ -48,7 +51,8 @@ public abstract class MultiTouchEvent implements Serializable {
 	private static final long serialVersionUID = 7048581503978460895L;
 	
 	protected long cursorID;
-	protected Vector2f position;
+	protected List<CursorPositionRecord> positionHistory;
+	protected Vector2f currentPosition;
 	protected Vector2f velocity;
 	protected long timeOfCreationNanos;
 	protected float pressure;
@@ -71,7 +75,7 @@ public abstract class MultiTouchEvent implements Serializable {
 	
 	public MultiTouchEvent(long id, Vector2f position, Vector2f velocity, float pressure, double angle) {
 		this.cursorID = id;
-		this.position = position;
+		this.currentPosition = position;
 		this.velocity = velocity;
 		this.pressure = pressure;
 		this.angle = angle;
@@ -83,7 +87,15 @@ public abstract class MultiTouchEvent implements Serializable {
 	}
 	
 	public Vector2f getPosition() {
-		return position;
+		return currentPosition;
+	}
+		
+	public void setPositionHistory(List<CursorPositionRecord> history) {
+		this.positionHistory = history;
+	}
+	
+	public List<CursorPositionRecord> getPositionHistory() {
+		return this.positionHistory;
 	}
 
 	public Vector2f getVelocity() {
@@ -103,6 +115,6 @@ public abstract class MultiTouchEvent implements Serializable {
 	}
 	
 	public String toString() {
-		return getClass().getName() + " " + cursorID + " @" + position + " vel: " + velocity;
+		return getClass().getName() + " " + cursorID + " @" + currentPosition + " vel: " + velocity;
 	}
 }
