@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import multiplicity.jmeutils.UnitConversion;
 import multiplicity.csysng.gfx.ColourUtils;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
@@ -16,10 +15,10 @@ import multiplicity.csysngjme.zordering.GlobalZOrder;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.IMultiTouchEventProducer;
+import multiplicity.input.data.CursorPositionRecord;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.input.events.MultiTouchObjectEvent;
 
-import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.renderer.Renderer;
@@ -32,7 +31,6 @@ import com.jme.util.geom.BufferUtils;
 public class JMECursorTrails extends JMEItem implements ICursorTrailsOverlay, IMultiTouchEventListener {
 	private static final long serialVersionUID = 7359258481754712453L;
 	
-	private Map<Long, List<Vector2f>> cursorTrails = new HashMap<Long,List<Vector2f>>();
 	private List<Line> freeTrailLines = new ArrayList<Line>();
 	private Map<Long, Line> trailLinesInUse = new HashMap<Long, Line>();
 	private ColorRGBA trailColour = new ColorRGBA(1f, 1f, 1f, 0.8f);
@@ -85,48 +83,35 @@ public class JMECursorTrails extends JMEItem implements ICursorTrailsOverlay, IM
 	
 	private void hideLine(Line line) {
 		line.setCullHint(CullHint.Always);
-		
 	}
-	
 	
 	private void hideLine(MultiTouchCursorEvent event) {
 		Line l = getTailLineForCursor(event.getCursorID());
 		hideLine(l);
 		trailLinesInUse.remove(event.getCursorID());
 		freeTrailLines.add(l);	
-		cursorTrails.remove(event.getCursorID());
 	}
 	
 	private void showNewTrailLine(MultiTouchCursorEvent event) {
 		Line line = getTailLineForCursor(event.getCursorID());
 		line.clearBuffers();
 		line.setCullHint(CullHint.Never);
-		Vector2f loc = new Vector2f();
-		UnitConversion.tableToScreen(event.getPosition(), loc);
-		List<Vector2f> trail = new ArrayList<Vector2f>();
-		trail.add(loc);
-		cursorTrails.put(event.getCursorID(), trail);
 	}
 
 	@Override
 	public void cursorChanged(MultiTouchCursorEvent event) {
-		
-		List<Vector2f> trail = cursorTrails.get(event.getCursorID());
-		Vector2f loc = new Vector2f();
-		UnitConversion.tableToScreen(event.getPosition(), loc);
-		trail.add(loc);
-
+		List<CursorPositionRecord> history = event.getPositionHistory();
 		Line line = getTailLineForCursor(event.getCursorID());
-		FloatBuffer v = BufferUtils.createFloatBuffer(trail.size() * 3);
-		FloatBuffer c = BufferUtils.createFloatBuffer(trail.size() * 4);
+		FloatBuffer v = BufferUtils.createFloatBuffer(history.size() * 3);
+		FloatBuffer c = BufferUtils.createFloatBuffer(history.size() * 4);
 		v.rewind();
 		int i = 0;
-		for(Vector2f x : trail) {			
-			v.put(x.x).put(x.y).put(0);
+		for(CursorPositionRecord x : history) {			
+			v.put(x.getPosition().x).put(x.getPosition().y).put(0);
 			if(solid) {
 				c.put(trailColour.r).put(trailColour.g).put(trailColour.b).put(trailColour.a);
 			}else{
-				c.put(trailColour.r).put(trailColour.g).put(trailColour.b).put(i/(float)trail.size());
+				c.put(trailColour.r).put(trailColour.g).put(trailColour.b).put(i/(float)history.size());
 			}
 			i++;
 		}
@@ -135,14 +120,12 @@ public class JMECursorTrails extends JMEItem implements ICursorTrailsOverlay, IM
 	}
 	
 	@Override
-	public void cursorPressed(MultiTouchCursorEvent event) {
-		
+	public void cursorPressed(MultiTouchCursorEvent event) {		
 		showNewTrailLine(event);
 	}
 
 	@Override
-	public void cursorReleased(MultiTouchCursorEvent event) {
-	
+	public void cursorReleased(MultiTouchCursorEvent event) {	
 		hideLine(event);		
 	}
 
