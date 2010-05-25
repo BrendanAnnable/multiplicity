@@ -20,8 +20,8 @@ public abstract class AbstractStandaloneApp {
 	
 	protected Node orthoNode;
 	protected List<IItem> items = new ArrayList<IItem>();
-	protected IContentFactory contentFactory;
-	protected IZOrderManager zOrderManager;
+	private IContentFactory contentFactory;
+	private IZOrderManager zOrderManager;
 	private IMultiTouchEventProducer mtInput;
 	
 	public AbstractStandaloneApp(IMultiTouchEventProducer producer) {
@@ -32,7 +32,7 @@ public abstract class AbstractStandaloneApp {
 		orthoNode.setLocalTranslation(r.getWidth()/2, r.getHeight()/2, 0);
 		contentFactory = new JMEContentItemFactory();
 		zOrderManager = new NestedZOrderManager(null, 500);
-		zOrderManager.setItemZOrder(0);
+		getzOrderManager().setItemZOrder(0);
 	}
 	
 	public IMultiTouchEventProducer getMultiTouchEventProducer() {
@@ -50,9 +50,17 @@ public abstract class AbstractStandaloneApp {
 	public void add(IItem item) {
 		orthoNode.attachChild(item.getTreeRootSpatial());
 		items.add(item);
-		zOrderManager.registerForZOrdering(item);
+		getzOrderManager().registerForZOrdering(item);
 		orthoNode.updateGeometricState(0f, true);
 	}
 
 	public abstract void onAppStart();
+
+    public IContentFactory getContentFactory() {
+        return contentFactory;
+    }
+
+    public IZOrderManager getzOrderManager() {
+        return zOrderManager;
+    }
 }
