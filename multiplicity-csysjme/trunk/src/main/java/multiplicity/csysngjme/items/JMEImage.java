@@ -25,6 +25,7 @@ public class JMEImage extends JMERectangularItem implements IImage {
 	private TextureState textureState;
 
 	private BlendState alphaBlending;
+	private URL resourceURL;
 	
 	public JMEImage(String name, UUID uuid) {
 		super(name, uuid);	
@@ -61,7 +62,8 @@ public class JMEImage extends JMERectangularItem implements IImage {
 	}
 	
 	@Override
-	public void setImage(URL resource, float scale) {		
+	public void setImage(URL resource, float scale) {	
+	    this.resourceURL = resource;
 		Texture t = new Texture2D();
 		t.setMinificationFilter(Texture.MinificationFilter.NearestNeighborNoMipMaps); // for some reason, Trilinear causes strange problems
 		t.setMagnificationFilter(Texture.MagnificationFilter.Bilinear);
@@ -112,4 +114,9 @@ public class JMEImage extends JMERectangularItem implements IImage {
 	public Spatial getManipulableSpatial() {
 		return imageQuad;
 	}
+
+    @Override
+    public URL getImageUrl() {
+        return this.resourceURL;
+    }
 }
