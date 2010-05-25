@@ -92,7 +92,40 @@ public class NestedZOrderManager extends ItemListenerAdapter implements IZOrderM
 		registeredItems.add(item);
 		updateZOrdering();
 	}	
-
+	
+//	@Override
+//	public void bumpTop(IItem item) {
+//	    int indexOf = registeredItems.indexOf(item);
+//	    if( registeredItems.get(indexOf - 1) != null ) {
+//	        IItem swap = registeredItems.get(indexOf - 1);
+//	        
+//	        registeredItems.remove(indexOf);
+//	        registeredItems.remove(indexOf-1);
+//	        
+//	        registeredItems.add(indexOf-1, item);
+//	        registeredItems.add(indexOf, swap);
+//	        updateZOrdering();
+//
+//	    }// if
+//	    
+//	}
+//	@Override
+//	   public void bumpBottom(IItem item) {
+//	        int indexOf = registeredItems.indexOf(item);
+//	        if( registeredItems.size() > indexOf ) {
+//	            IItem swap = registeredItems.get(indexOf + 1);
+//	            
+//	            registeredItems.remove(indexOf);
+//	            registeredItems.remove(indexOf+1);
+//	            
+//	            registeredItems.add(indexOf+1, item);
+//	            registeredItems.add(indexOf, swap);
+//	            updateZOrdering();
+//
+//	        }// if
+//	        
+//	    }
+	   
 	@Override
 	public void updateZOrdering() {
 		if(itemBeingManaged != null && itemBeingManaged.getTreeRootSpatial() != null) {

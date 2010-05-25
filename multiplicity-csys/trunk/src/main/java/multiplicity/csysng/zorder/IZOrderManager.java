@@ -11,6 +11,8 @@ public interface IZOrderManager extends IItemListener {
 	int getZSpaceRequirement();
 	void setCapacity(int c);
 	void sendToBottom(IItem item, MultiTouchCursorEvent event);
+	//void bumpTop(IItem item);
+	//void bumpBottom(IItem item);
 	void bringToTop(IItem itemPressed, MultiTouchCursorEvent event);
 	void registerForZOrdering(IItem item);
 	void updateZOrdering();

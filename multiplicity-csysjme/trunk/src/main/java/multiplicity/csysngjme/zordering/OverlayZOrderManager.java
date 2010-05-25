@@ -89,4 +89,16 @@ public class OverlayZOrderManager implements IZOrderManager {
 		
 	}
 
+//    @Override
+//    public void bumpBottom(IItem item) {
+//        // TODO Auto-generated method stub
+//        
+//    }
+//
+//    @Override
+//    public void bumpTop(IItem item) {
+//        // TODO Auto-generated method stub
+//        
+//    }
+
 }
