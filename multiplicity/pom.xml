@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                               http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>multiplicity.multiplicity</groupId>
+  <artifactId>parent</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Multiplicity JME Parent Project</name>
+  <url/>
+  <modules>
+    <module>multiplicity-jme</module>
+    <module>multiplicity-input</module>
+    <module>multiplicity-csysjme</module>
+    <module>multiplicity-csys</module>
+    <module>multiplicity-config</module>
+    <module>multiplicity-appsys</module>
+    <module>multiplicity-appgallery</module>
+    <module>multiplicity-servicesys</module>
+  </modules>
+  <repositories>
+        <repository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <releases>
+                <enabled>true</enabled>
+            </releases>
+          <id>central</id>
+          <name>libs-releases</name>
+          <url>http://www.intermedia.uio.no/artifactory/libs-releases</url>
+        </repository>
+        <repository>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+          <releases>
+                <enabled>false</enabled>
+            </releases>
+          <id>snapshots</id>
+          <name>libs-snapshots</name>
+          <url>http://www.intermedia.uio.no/artifactory/libs-snapshots</url>
+        </repository>
+      </repositories>
+</project>
