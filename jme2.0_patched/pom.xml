@@ -43,6 +43,11 @@
             <systemPath>${basedir}/lib/jme-colladabinding.jar</systemPath>
         </dependency>  -->
         <dependency>
+			<groupId>jme-colladabinding</groupId>
+			<artifactId>jme-colladabinding</artifactId>
+			<version>1.0</version>
+		</dependency>
+        <dependency>
             <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl</artifactId>
             <version>${lwjgl.version}</version>
