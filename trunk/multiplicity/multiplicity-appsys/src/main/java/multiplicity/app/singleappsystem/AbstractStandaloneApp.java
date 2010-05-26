@@ -7,6 +7,7 @@ import multiplicity.csysng.factory.IContentFactory;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.factory.JMEContentItemFactory;
+import multiplicity.csysngjme.utils.JMEUtils;
 import multiplicity.csysngjme.zordering.NestedZOrderManager;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.IMultiTouchEventProducer;
@@ -52,6 +53,7 @@ public abstract class AbstractStandaloneApp {
 		items.add(item);
 		getzOrderManager().registerForZOrdering(item);
 		orthoNode.updateGeometricState(0f, true);
+		JMEUtils.dumpItemToConsole(item);
 	}
 
 	public abstract void onAppStart();

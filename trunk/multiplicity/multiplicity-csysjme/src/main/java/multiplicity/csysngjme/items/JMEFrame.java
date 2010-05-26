@@ -159,6 +159,8 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 		});
 		zOrderManager.updateZOrdering();
 		updateRenderState();
+		
+		JMEUtils.dumpItemToConsole(item);
 	}
 
 	public IBorder getBorder() {
