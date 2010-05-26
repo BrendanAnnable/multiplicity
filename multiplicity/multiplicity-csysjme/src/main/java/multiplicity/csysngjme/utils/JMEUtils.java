@@ -2,9 +2,12 @@ package multiplicity.csysngjme.utils;
 
 import java.nio.FloatBuffer;
 
+import org.eclipse.swt.widgets.Item;
+
 import multiplicity.csysng.gfx.ColourUtils;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
+import multiplicity.csysng.items.IItem;
 
 import com.jme.renderer.ColorRGBA;
 import com.jme.scene.shape.Quad;
@@ -34,4 +37,17 @@ public class JMEUtils {
 
 		colorBuf.flip();
 	}
+	
+	
+	public static void dumpItemToConsole(IItem item) {
+	   System.out.println("Item zorder: " + item.getZOrderManager().getItemZOrder());
+	   if( item.getManipulableSpatial() != null ) {
+	       System.out.println( "item spatial zorder " + item.getManipulableSpatial().getZOrder());
+	   }
+	   
+	   if( item.hasChildren() )
+	       dumpItemToConsole(item);
+	    
+	}
+	
 }
