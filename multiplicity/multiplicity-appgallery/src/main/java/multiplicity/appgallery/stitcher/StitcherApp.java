@@ -203,7 +203,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 	                                MultiTouchCursorEvent event) {
 	                            // TODO Auto-generated method stub
 	                               System.out.println("item clicked" + item.getBehaviours());
-	                               getzOrderManager().bumpBottom(item);
+	                             //  getzOrderManager().bumpBottom(item);
 	                        }
 	                    });
 	                    BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);

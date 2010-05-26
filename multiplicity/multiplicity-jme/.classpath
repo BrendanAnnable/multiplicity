@@ -13,6 +13,6 @@
 	<classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl_util/2.1/lwjgl_util-2.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl_util_applet/2.1/lwjgl_util_applet-2.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/eclipse/swt/carbon/macosx/3.3.0-v3346/macosx-3.3.0-v3346.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/JVM 1.6"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

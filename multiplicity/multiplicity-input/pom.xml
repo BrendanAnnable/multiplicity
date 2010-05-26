@@ -35,6 +35,11 @@
 			<artifactId>jme-colladabinding</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>multiplicity.jme</groupId>
+			<artifactId>multiplicity-jme</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
