@@ -148,17 +148,15 @@ public class Grouper implements IMultiTouchEventListener {
             
             JMERectangularItem ji = (JMERectangularItem)item;
            
-            ji.getManipulableSpatial().getLocalTranslation().set(new Vector3f(10f,10f, 0f));
-            ji.getLocalTranslation().set(new Vector3f(10f,10f,0f));
-           ji.getManipulableSpatial().setZOrder(0);
-            ji.getTreeRootSpatial().setZOrder(0);
-            ji.getZOrderManager().setItemZOrder(0);
-            frame.getZOrderManager().bringToTop(ji, null);
+            
+            
+            
+            Vector2f worldLocation = ji.getWorldLocation();
+            
+            
             frame.add(ji);
+            ji.setWorldLocation(worldLocation);
             frame.getZOrderManager().bringToTop(ji, null);
-           frame.getZOrderManager().bringToTop(ji, null);
-           frame.getZOrderManager().updateZOrdering();
-           frame.getRelativeLocation().set(new Vector2f(10, 10));
            System.out.println("ji z" + ji.getManipulableSpatial().getZOrder() + " " + ji.getZOrder());
            
             System.out.println( "frame relative location " + frame.getRelativeLocation());
