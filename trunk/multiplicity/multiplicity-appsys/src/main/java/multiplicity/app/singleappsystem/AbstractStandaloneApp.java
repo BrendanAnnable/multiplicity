@@ -20,8 +20,8 @@ public abstract class AbstractStandaloneApp {
 	
 	protected Node orthoNode;
 	protected List<IItem> items = new ArrayList<IItem>();
-	private IContentFactory contentFactory;
-	private IZOrderManager zOrderManager;
+	protected IContentFactory contentFactory;
+	protected IZOrderManager zOrderManager;
 	private IMultiTouchEventProducer mtInput;
 	
 	public AbstractStandaloneApp(IMultiTouchEventProducer producer) {
