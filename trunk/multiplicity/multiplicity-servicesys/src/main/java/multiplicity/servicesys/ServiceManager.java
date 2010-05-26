@@ -52,6 +52,8 @@ public class ServiceManager {
 			return instance;
 		}
 	}
+	
+	
 
 	private ServiceManager() {
 		log.info("ServiceManager created. Adding shutdown hook to runtime.");
