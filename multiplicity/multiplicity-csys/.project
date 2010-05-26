@@ -4,7 +4,6 @@
   <projects>
     <project>jme</project>
     <project>multiplicity-input</project>
-    <project>multiplicity-jme</project>
   </projects>
   <buildSpec>
     <buildCommand>
