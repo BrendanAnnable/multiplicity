@@ -53,7 +53,7 @@ public abstract class AbstractStandaloneApp {
 		items.add(item);
 		getzOrderManager().registerForZOrdering(item);
 		orthoNode.updateGeometricState(0f, true);
-		JMEUtils.dumpItemToConsole(item);
+		JMEUtils.dumpItemToConsole(item, this.getClass());
 	}
 
 	public abstract void onAppStart();
