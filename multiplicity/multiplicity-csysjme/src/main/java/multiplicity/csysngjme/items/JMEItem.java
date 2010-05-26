@@ -25,7 +25,7 @@ public abstract class JMEItem extends Node implements IItem {
 	private static final long serialVersionUID = 3335181666188989601L;
 	public static final String KEY_JMEITEMDATA = "KEY_JMEITEMDATA";
 	
-	protected List<IItem> itemChildren = new ArrayList<IItem>();
+	private List<IItem> itemChildren = new ArrayList<IItem>();
 	protected MultiTouchEventDispatcher dispatcher = new MultiTouchEventDispatcher();
 	protected final List<IItemListener> itemListeners = new ArrayList<IItemListener>();
 	protected IItem parentItem;
@@ -170,7 +170,7 @@ public abstract class JMEItem extends Node implements IItem {
 	
 	@Override
 	public void add(IItem item) {
-		itemChildren.add(item);
+		getItemChildren().add(item);
 		attachChild(item.getTreeRootSpatial());
 		item.setParentItem(this);
 		getZOrderManager().registerForZOrdering(item);
@@ -178,12 +178,12 @@ public abstract class JMEItem extends Node implements IItem {
 	
 	@Override
 	public int getChildrenCount() {
-		return itemChildren.size();
+		return getItemChildren().size();
 	}
 
 	@Override
 	public boolean hasChildren() {
-		return itemChildren.size() > 0;
+		return getItemChildren().size() > 0;
 	}
 	
 	public void addItemListener(IItemListener itemListener) {
@@ -233,5 +233,9 @@ public abstract class JMEItem extends Node implements IItem {
 	public List<IBehaviour> getBehaviours() {
 		return behaviours;
 	}
+
+    public List<IItem> getItemChildren() {
+        return itemChildren;
+    }
 }
 

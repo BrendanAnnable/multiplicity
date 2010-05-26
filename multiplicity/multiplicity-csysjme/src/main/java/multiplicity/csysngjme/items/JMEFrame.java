@@ -140,7 +140,7 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 
 	@Override
 	public void add(IItem item) {
-		itemChildren.add(item);
+		getItemChildren().add(item);
 		JMEItemUserData itemData = (JMEItemUserData) item.getManipulableSpatial().getUserData(JMEItem.KEY_JMEITEMDATA);
 		itemData.setMaskGeometry(maskGeometry);
 		item.getTreeRootSpatial().setRenderState(drawableArea);
