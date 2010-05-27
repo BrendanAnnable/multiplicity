@@ -131,7 +131,6 @@
 	<classpathentry kind="src" path="/multiplicity-csys"/>
 	<classpathentry kind="src" path="/multiplicity-csysjme"/>
 	<classpathentry kind="src" path="/multiplicity-input"/>
-	<classpathentry kind="src" path="/multiplicity-jme"/>
 	<classpathentry kind="var" path="M2_REPO/multiplicity/multiplicity/multiplicity-jme/1.0-SNAPSHOT/multiplicity-jme-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/json/org.json/2.0/org.json-2.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/restlet/org.restlet/1.1.4/org.restlet-1.1.4.jar"/>
