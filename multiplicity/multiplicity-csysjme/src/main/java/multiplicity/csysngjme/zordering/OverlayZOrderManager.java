@@ -89,6 +89,12 @@ public class OverlayZOrderManager implements IZOrderManager {
 		
 	}
 
+	@Override
+	public void unregisterForZOrdering(IItem i) {
+		// TODO Auto-generated method stub
+		
+	}
+
 //    @Override
 //    public void bumpBottom(IItem item) {
 //        // TODO Auto-generated method stub

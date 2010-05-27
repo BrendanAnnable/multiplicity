@@ -48,7 +48,7 @@ public class JMEUtils {
 		colorBuf.flip();
 	}
 
-	public static void dumpItemToConsole(IItem item, Class clazz) {
+	public static void dumpItemToConsole(IItem item, Class<?> clazz) {
 
 		logger = Logger.getLogger(clazz.getName());
 		logger.info("Item zorder: " + item.getZOrderManager().getItemZOrder());

@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
-import org.lwjgl.opengl.Display;
-
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.gfx.Gradient;
@@ -15,22 +12,16 @@ import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
-import multiplicity.csysngjme.items.JMERectangularItem;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
-import multiplicity.csysngjme.utils.JMEUtils;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.data.CursorPositionRecord;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.input.events.MultiTouchObjectEvent;
 
 import com.jme.math.Vector2f;
-import com.jme.scene.state.BlendState;
-import com.jme.scene.state.RenderState;
-import com.jme.system.DisplaySystem;
 
 public class Grouper implements IMultiTouchEventListener {
 	
-	private static Logger logger = Logger.getLogger(Grouper.class.getName());
 	private List<IItem> registeredItems = new ArrayList<IItem>();
 	private AbstractStandaloneApp app;
 
@@ -72,8 +63,8 @@ public class Grouper implements IMultiTouchEventListener {
 		}
 
 		if (!selectedItems.isEmpty() /* && selectedItems.size() > 1 */) {
-
-			this.addItemsToFrame(selectedItems);
+			
+			this.addItemsToFrame(selectedItems, event.getPosition());
 
 		}
 
@@ -146,20 +137,29 @@ public class Grouper implements IMultiTouchEventListener {
 		this.app = app;
 	}
 
-	private void addItemsToFrame(List<IItem> items) {
+	private void addItemsToFrame(List<IItem> items, Vector2f atPosition) {
+		int frameWidth = 600;
+		int frameHeight = 600;
 		IFrame frame = app.getContentFactory().createFrame("group",
-				UUID.randomUUID(), 600, 600);
+				UUID.randomUUID(), frameWidth, frameHeight);
 		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID
-				.randomUUID(), 1f, 15));
+				.randomUUID(), 10f, 15));
 		frame
 				.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f,
 						0.8f), new Color(0f, 0f, 0f, 0.8f),
 						GradientDirection.VERTICAL));
 		frame.maintainBorderSizeDuringScale();
+		frame.setRelativeLocation(atPosition);
 		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
-		app.add(frame,-1);
+		app.add(frame);
 		for (IItem item : items) {
+<<<<<<< .mine
+			Vector2f itemWorldPos = item.getWorldLocation();
+			app.remove(item);			
+			frame.add(item);
+			item.setWorldLocation(itemWorldPos);
+=======
 
 			JMERectangularItem ji = (JMERectangularItem) item;
 			//put the object right in the center of the new frame
@@ -171,17 +171,8 @@ public class Grouper implements IMultiTouchEventListener {
 			logger.info("JI Z: "+ji.getZOrder()+" - "+ji.getName());
 			logger.info("JI Z: "+ji.getChild(0).getZOrder()+" - "+ji.getChild(0).getName());
 			JMEUtils.dumpItemToConsole(ji, this.getClass());
+>>>>>>> .r56
 		}
-
-		// ILabel label2 = app.getContentFactory().createLabel("label",
-		// UUID.randomUUID());
-		// label2.setText("MultiTouch");
-		// label2.setFont(new Font("Myriad Pro", Font.BOLD, 24));
-		// label2.setTextColour(Color.white);
-		// label2.setRelativeLocation(new Vector2f(10, 10));
-		// BehaviourMaker.addBehaviour(label2,
-		// RotateTranslateScaleBehaviour.class);
-		// frame.add(label2);
 		app.getzOrderManager().bringToTop(frame, null);
 
 	}

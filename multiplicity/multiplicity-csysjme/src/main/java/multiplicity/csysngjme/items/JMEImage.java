@@ -48,12 +48,8 @@ public class JMEImage extends JMERectangularItem implements IImage {
 		imageQuad.updateModelBound();
 		
 		alphaBlending = DisplaySystem.getDisplaySystem().getRenderer().createBlendState();
-		alphaBlending.setBlendEnabled(true);
-		alphaBlending.setSourceFunction(BlendState.SourceFunction.SourceAlpha);
-		alphaBlending.setDestinationFunction(BlendState.DestinationFunction.OneMinusSourceAlpha);
-		alphaBlending.setTestEnabled(true);
-		alphaBlending.setTestFunction(BlendState.TestFunction.GreaterThan);
 		alphaBlending.setEnabled(false);
+		
 		imageQuad.setRenderState(alphaBlending);
 	}
 
@@ -90,8 +86,27 @@ public class JMEImage extends JMERectangularItem implements IImage {
 	}
 
 	@Override
-	public void setAlphaBlending(boolean blendingOn) {
-		alphaBlending.setEnabled(blendingOn);
+	public void setAlphaBlending(AlphaStyle style) {
+		switch(style) {
+		case NO_TRANSPARENCY: {
+			alphaBlending.setEnabled(false);
+			break;
+		}
+		case USE_TRANSPARENCY: {
+			alphaBlending.setBlendEnabled(false);
+			alphaBlending.setEnabled(true);
+			break;
+		}
+		case BLEND: {
+			alphaBlending.setBlendEnabled(true);
+			alphaBlending.setSourceFunction(BlendState.SourceFunction.SourceAlpha);
+			alphaBlending.setDestinationFunction(BlendState.DestinationFunction.OneMinusSourceAlpha);
+			alphaBlending.setTestEnabled(true);
+			alphaBlending.setTestFunction(BlendState.TestFunction.GreaterThan);
+			alphaBlending.setEnabled(true);
+			break;
+		}
+		}
 		imageQuad.updateRenderState();
 	}
 

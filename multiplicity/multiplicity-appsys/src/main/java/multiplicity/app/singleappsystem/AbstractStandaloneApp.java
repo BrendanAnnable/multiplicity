@@ -7,8 +7,6 @@ import multiplicity.csysng.factory.IContentFactory;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.factory.JMEContentItemFactory;
-import multiplicity.csysngjme.items.JMERectangularItem;
-import multiplicity.csysngjme.utils.JMEUtils;
 import multiplicity.csysngjme.zordering.NestedZOrderManager;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.IMultiTouchEventProducer;
@@ -16,13 +14,9 @@ import multiplicity.input.IMultiTouchEventProducer;
 import com.jme.renderer.Renderer;
 import com.jme.scene.Node;
 import com.jme.scene.Spatial;
-import com.jme.scene.state.BlendState;
 import com.jme.system.DisplaySystem;
 
 public abstract class AbstractStandaloneApp {
-
-	public static final int IMAGE_TYPE = 0;
-
 	protected Node orthoNode;
 	protected List<IItem> items = new ArrayList<IItem>();
 	protected IContentFactory contentFactory;
@@ -52,24 +46,30 @@ public abstract class AbstractStandaloneApp {
 		return orthoNode;
 	}
 
-	public void add(IItem item, int type) {
+	public void add(IItem item) {
 		orthoNode.attachChild(item.getTreeRootSpatial());
 		items.add(item);
 		getzOrderManager().registerForZOrdering(item);
 		orthoNode.updateGeometricState(0f, true);
-		JMEUtils.dumpItemToConsole(item, this.getClass());
-
-		switch (type) {
-		case IMAGE_TYPE:
-			JMERectangularItem ji = (JMERectangularItem) item;
-			BlendState blend = DisplaySystem.getDisplaySystem().getRenderer()
-					.createBlendState();
-			blend.setBlendEnabled(true);
-			ji.getChild(0).setRenderState(blend);
-			break;
-		default:
-			break;
+	}
+	
+	public void remove(List<IItem> items) {
+		for(IItem i : items) {
+			remove(i);
 		}
+	}
+	
+	public void remove(IItem... someItems) {
+		for(IItem i : someItems) {
+			remove(i);
+		}
+	}
+	
+	public void remove(IItem i) {
+		orthoNode.detachChild(i.getTreeRootSpatial());
+		items.remove(i);
+		getzOrderManager().unregisterForZOrdering(i);
+		orthoNode.updateGeometricState(0f, true);
 	}
 
 	public abstract void onAppStart();
