@@ -78,6 +78,15 @@ public class NestedZOrderManager extends ItemListenerAdapter implements IZOrderM
 			item.addItemListener(this);			
 		}
 	}
+	
+	@Override
+	public void unregisterForZOrdering(IItem item) {
+		if(registeredItems.contains(item)) {
+			registeredItems.remove(item);
+			usedZSpace -= item.getZOrderManager().getZSpaceRequirement();
+			item.removeItemListener(this);
+		}
+	}
 
 	@Override
 	public void bringToTop(IItem itemPressed, MultiTouchCursorEvent event) {

@@ -116,4 +116,7 @@ public class SimpleZOrderManager implements IZOrderManager {
 //        // TODO Auto-generated method stub
 //        
 //    }
+
+	@Override
+	public void unregisterForZOrdering(IItem i) {}
 }

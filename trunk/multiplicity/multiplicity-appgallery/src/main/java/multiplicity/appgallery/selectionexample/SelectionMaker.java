@@ -3,24 +3,16 @@ package multiplicity.appgallery.selectionexample;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import com.jme.math.Vector2f;
 
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
-import multiplicity.appgallery.gallery.GalleryApp;
-import multiplicity.appgallery.stitcher.StitcherApp;
 import multiplicity.csysng.behaviours.BehaviourMaker;
-import multiplicity.csysng.behaviours.button.ButtonBehaviour;
-import multiplicity.csysng.behaviours.button.IButtonBehaviourListener;
-import multiplicity.csysng.behaviours.inertia.InertiaBehaviour;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IFrame;
-import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.ILabel;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
@@ -141,7 +133,7 @@ public class SelectionMaker implements IMultiTouchEventListener {
                 new Color(0.5f, 0.5f, 0.5f, 0.8f), 
                 new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
-        app.add(frame,-1);
+        app.add(frame);
         BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
        for (IItem item : items) {

@@ -1,4 +1,5 @@
 package multiplicity.appgallery.selectionexample;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
@@ -8,7 +9,6 @@ import com.jme.math.Vector2f;
 
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
-import multiplicity.appgallery.gallery.GalleryApp;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.ILabel;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
@@ -27,19 +27,19 @@ public class SelectionExample extends AbstractStandaloneApp {
 	    IImage bg = getContentFactory().createImage("backgroundimage", UUID.randomUUID());
         bg.setImage(SelectionExample.class.getResource("yellowflowers_1680x1050.png"));
         bg.centerItem();
-        add(bg, AbstractStandaloneApp.IMAGE_TYPE);
+        add(bg);
 	    
 	   
 		
 		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
         cursors.respondToMultiTouchInput(getMultiTouchEventProducer());     
-        add(cursors, -1);
+        add(cursors);
 
         
         ICursorTrailsOverlay trails = getContentFactory().createCursorTrailsOverlay("trails", UUID.randomUUID());
         trails.respondToItem(bg);
         trails.setFadingColour(Color.white);
-        add(trails, -1);
+        add(trails);
         
         SelectionMaker smaker = new SelectionMaker();
         this.getMultiTouchEventProducer().registerMultiTouchEventListener(smaker);
@@ -58,7 +58,7 @@ public class SelectionExample extends AbstractStandaloneApp {
 		lbl.setSize(200, 100);
 		lbl.setTextColour(Color.red);
 		
-		add(lbl, -1);
+		add(lbl);
 		sm.register(lbl);
 		
 		getzOrderManager().bringToTop(lbl, null);
