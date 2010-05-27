@@ -56,7 +56,7 @@ public class ConceptMapApp extends AbstractStandaloneApp {
 		instruction.setFont(new Font("Arial Narrow", Font.PLAIN, 14));
 		instruction.setRelativeLocation(new Vector2f(0, 0));
 		instruction.setTextColour(Color.white);
-		add(instruction);
+		add(instruction,-1);
 		zOrderManager.bringToTop(instruction, null);
 		AnimationSystem.getInstance().add(new Fader((Geometry)instruction.getManipulableSpatial(), Fader.MODE_FADE_IN, 2, 10));
 	}
@@ -67,7 +67,7 @@ public class ConceptMapApp extends AbstractStandaloneApp {
 		frame.setGradientBackground(new Gradient(
 				new Color(0.5f, 0.5f, 0.5f, 1f), 
 				new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
-		add(frame);
+		add(frame,-1);
 		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
 		ILabel label2 = contentFactory.createLabel("label", UUID.randomUUID());
@@ -84,7 +84,7 @@ public class ConceptMapApp extends AbstractStandaloneApp {
 		IImage bg = contentFactory.createImage("backgroundimage", UUID.randomUUID());
 		bg.setImage(GalleryApp.class.getResource("yellowflowers_1680x1050.png"));
 		bg.centerItem();
-		add(bg);		
+		add(bg, AbstractStandaloneApp.IMAGE_TYPE);		
 		zOrderManager.sendToBottom(bg, null);
 		zOrderManager.neverBringToTop(bg);
 		

@@ -89,7 +89,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 		IImage bg = getContentFactory().createImage("backgroundimage", UUID.randomUUID());
 		bg.setImage(StitcherApp.class.getResource("yellowflowers_1680x1050.png"));
 		bg.centerItem();
-		add(bg);
+		add(bg, AbstractStandaloneApp.IMAGE_TYPE);
 
 		//load the comments
 		for (IComment comment : comments) {
@@ -127,7 +127,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 	            smaker.register(commentLabel, this);
 	            
 	            zOrderedItems.add(commentLabel);
-		        add(commentLabel);
+		        add(commentLabel, -1);
         }
 		
 		//load the tags
@@ -159,7 +159,7 @@ public class StitcherApp extends AbstractStandaloneApp {
               smaker.register(tagLabel, this);
 
               zOrderedItems.add(tagLabel);
-              add(tagLabel);
+              add(tagLabel, -1);
 	        }
 		
 		
@@ -209,7 +209,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 	                    smaker.register(img, this);
 	                    
 	                    zOrderedItems.add(img);
-	                    add(img);
+	                    add(img, AbstractStandaloneApp.IMAGE_TYPE);
 	                } catch (IOException e) {
 	                    e.printStackTrace();
 	                } 
@@ -227,7 +227,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 		
 		IColourRectangle rect = getContentFactory().createColourRectangle("cr", UUID.randomUUID(), 100, 50);
 		rect.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
-		add(rect);
+		add(rect, -1);
 		BehaviourMaker.addBehaviour(rect, RotateTranslateScaleBehaviour.class);
 		
 
@@ -251,12 +251,12 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
 		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());		
-		add(cursors);
+		add(cursors, -1);
 
 		ICursorTrailsOverlay trails = getContentFactory().createCursorTrailsOverlay("trails", UUID.randomUUID());
 		trails.respondToItem(bg);
 		trails.setFadingColour(Color.white);
-		add(trails);
+		add(trails, -1);
 		
 
 //		addNestedFrameExample();
