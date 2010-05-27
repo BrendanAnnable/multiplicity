@@ -175,7 +175,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 					IImage img = getContentFactory().createImage("photo", UUID.randomUUID());
 					img.setImage(file.toURI().toURL());
 					img.setRelativeScale(0.8f);
-					img.setAlphaBlending(AlphaStyle.NO_TRANSPARENCY);
+					img.setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
 
 					img.addItemListener(new ItemListenerAdapter() {
 						@Override
