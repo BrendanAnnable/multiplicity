@@ -5,6 +5,7 @@
     <project>jme</project>
     <project>multiplicity-csys</project>
     <project>multiplicity-input</project>
+    <project>multiplicity-jme</project>
   </projects>
   <buildSpec>
     <buildCommand>
