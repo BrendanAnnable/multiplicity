@@ -1,7 +1,9 @@
 package multiplicity.csysngjme.utils;
 
 import java.nio.FloatBuffer;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
+
 
 import multiplicity.csysng.gfx.ColourUtils;
 import multiplicity.csysng.gfx.Gradient;
@@ -12,6 +14,7 @@ import com.jme.renderer.ColorRGBA;
 import com.jme.scene.shape.Quad;
 
 public class JMEUtils {
+	
 	private static Logger logger;
 
 	public static void applyGradientToQuad(Quad q, Gradient g) {

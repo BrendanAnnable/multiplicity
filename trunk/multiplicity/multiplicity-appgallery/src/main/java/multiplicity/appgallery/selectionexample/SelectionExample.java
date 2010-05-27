@@ -27,19 +27,19 @@ public class SelectionExample extends AbstractStandaloneApp {
 	    IImage bg = getContentFactory().createImage("backgroundimage", UUID.randomUUID());
         bg.setImage(SelectionExample.class.getResource("yellowflowers_1680x1050.png"));
         bg.centerItem();
-        add(bg);
+        add(bg, AbstractStandaloneApp.IMAGE_TYPE);
 	    
 	   
 		
 		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
         cursors.respondToMultiTouchInput(getMultiTouchEventProducer());     
-        add(cursors);
+        add(cursors, -1);
 
         
         ICursorTrailsOverlay trails = getContentFactory().createCursorTrailsOverlay("trails", UUID.randomUUID());
         trails.respondToItem(bg);
         trails.setFadingColour(Color.white);
-        add(trails);
+        add(trails, -1);
         
         SelectionMaker smaker = new SelectionMaker();
         this.getMultiTouchEventProducer().registerMultiTouchEventListener(smaker);
@@ -58,7 +58,7 @@ public class SelectionExample extends AbstractStandaloneApp {
 		lbl.setSize(200, 100);
 		lbl.setTextColour(Color.red);
 		
-		add(lbl);
+		add(lbl, -1);
 		sm.register(lbl);
 		
 		getzOrderManager().bringToTop(lbl, null);

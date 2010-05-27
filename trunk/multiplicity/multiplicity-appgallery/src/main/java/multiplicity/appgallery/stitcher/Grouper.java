@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
+import org.lwjgl.opengl.Display;
+
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.gfx.Gradient;
@@ -21,9 +24,13 @@ import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.input.events.MultiTouchObjectEvent;
 
 import com.jme.math.Vector2f;
+import com.jme.scene.state.BlendState;
+import com.jme.scene.state.RenderState;
+import com.jme.system.DisplaySystem;
 
 public class Grouper implements IMultiTouchEventListener {
-
+	
+	private static Logger logger = Logger.getLogger(Grouper.class.getName());
 	private List<IItem> registeredItems = new ArrayList<IItem>();
 	private AbstractStandaloneApp app;
 
@@ -151,7 +158,7 @@ public class Grouper implements IMultiTouchEventListener {
 		frame.maintainBorderSizeDuringScale();
 		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
-		app.add(frame);
+		app.add(frame,-1);
 		for (IItem item : items) {
 
 			JMERectangularItem ji = (JMERectangularItem) item;
@@ -160,6 +167,15 @@ public class Grouper implements IMultiTouchEventListener {
 
 			JMEUtils.dumpItemToConsole(ji, this.getClass());
 			frame.add(ji);
+			logger.info(ji.getChildIndex(ji.getManipulableSpatial()));
+			ji.getChild(0).setZOrder(2, true);
+			
+			BlendState blend =  DisplaySystem.getDisplaySystem().getRenderer().createBlendState();
+		    blend.setBlendEnabled(true);
+		    ji.getChild(0).setRenderState(blend);
+
+			logger.info(ji.getChild(0).getRenderState(RenderState.StateType.Blend));
+			logger.info("JI Z: "+ji.getZOrder()+" - "+ji.getName());
 			JMEUtils.dumpItemToConsole(ji, this.getClass());
 		}
 
