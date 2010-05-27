@@ -169,10 +169,6 @@ public class Grouper implements IMultiTouchEventListener {
 			frame.add(ji);
 			logger.info(ji.getChildIndex(ji.getManipulableSpatial()));
 			ji.getChild(0).setZOrder(2, true);
-			
-			BlendState blend =  DisplaySystem.getDisplaySystem().getRenderer().createBlendState();
-		    blend.setBlendEnabled(true);
-		    ji.getChild(0).setRenderState(blend);
 
 			logger.info(ji.getChild(0).getRenderState(RenderState.StateType.Blend));
 			logger.info("JI Z: "+ji.getZOrder()+" - "+ji.getName());
