@@ -93,7 +93,7 @@ public class JMEImage extends JMERectangularItem implements IImage {
 			break;
 		}
 		case USE_TRANSPARENCY: {
-			alphaBlending.setBlendEnabled(false);
+			alphaBlending.setBlendEnabled(true);
 			alphaBlending.setEnabled(true);
 			break;
 		}
