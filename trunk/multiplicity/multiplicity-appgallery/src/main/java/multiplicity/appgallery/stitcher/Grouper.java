@@ -168,10 +168,8 @@ public class Grouper implements IMultiTouchEventListener {
 			JMEUtils.dumpItemToConsole(ji, this.getClass());
 			frame.add(ji);
 			logger.info(ji.getChildIndex(ji.getManipulableSpatial()));
-			ji.getChild(0).setZOrder(2, true);
-
-			logger.info(ji.getChild(0).getRenderState(RenderState.StateType.Blend));
 			logger.info("JI Z: "+ji.getZOrder()+" - "+ji.getName());
+			logger.info("JI Z: "+ji.getChild(0).getZOrder()+" - "+ji.getChild(0).getName());
 			JMEUtils.dumpItemToConsole(ji, this.getClass());
 		}
 
