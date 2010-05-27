@@ -154,24 +154,11 @@ public class Grouper implements IMultiTouchEventListener {
 
 		app.add(frame);
 		for (IItem item : items) {
-<<<<<<< .mine
 			Vector2f itemWorldPos = item.getWorldLocation();
 			app.remove(item);			
 			frame.add(item);
 			item.setWorldLocation(itemWorldPos);
-=======
 
-			JMERectangularItem ji = (JMERectangularItem) item;
-			//put the object right in the center of the new frame
-			ji.setLocalTranslation(0.0f, 0.0f, 0.0f);
-
-			JMEUtils.dumpItemToConsole(ji, this.getClass());
-			frame.add(ji);
-			logger.info(ji.getChildIndex(ji.getManipulableSpatial()));
-			logger.info("JI Z: "+ji.getZOrder()+" - "+ji.getName());
-			logger.info("JI Z: "+ji.getChild(0).getZOrder()+" - "+ji.getChild(0).getName());
-			JMEUtils.dumpItemToConsole(ji, this.getClass());
->>>>>>> .r56
 		}
 		app.getzOrderManager().bringToTop(frame, null);
 
