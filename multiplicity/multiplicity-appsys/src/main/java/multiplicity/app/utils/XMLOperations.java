@@ -1,4 +1,4 @@
-package multiplicity.appgallery.stitcher;
+package multiplicity.app.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -47,10 +47,38 @@ public class XMLOperations {
 		//TODO: check if there is already an xml document existing for this group, if so fetch it
 		Document newDoc = createDocument();
 		Element root = newDoc.getRootElement();
+		Element node;
 		for (IItem iItem : items) {
-			root.addElement("item").addAttribute("id", iItem.getUUID().toString()).addAttribute("location", iItem.getRelativeLocation().toString());			
+			node = root.addElement("item");
+			node.addElement("id").addCDATA(iItem.getUUID().toString());
+			node.addElement("location").addCDATA(iItem.getRelativeLocation().toString());
 		}
 		outputDocument(newDoc);
+		writeToLocalStorageDir(uUID, newDoc, "stitcher", "1.0");
+	}
+
+
+	/**
+	 * Enables to write to a local directory, will which be created if non-existant
+	 * @param id
+	 * @param org.dom4j.Document
+	 * @param Directory name
+	 * @param Version
+	 */
+	private void writeToLocalStorageDir(UUID uUID, Document newDoc, String dirName, String version) {
+		String targetDirectory = LocalStorageUtility.getLocalWorkingDirectory(dirName, version).getAbsolutePath();
+		boolean canUpload = false;
+		if(new File(targetDirectory).exists() == false) {
+			canUpload = (new File(targetDirectory)).mkdir();
+		}
+		else {
+			canUpload = true;
+		}
+		
+		if(canUpload) {
+			output_document_path = targetDirectory + File.separatorChar + "Group_"+uUID+".xml";
+			writeToFile(newDoc);			
+		}
 	}
 	
 	/**
@@ -162,16 +190,20 @@ public class XMLOperations {
 	 * Write the xml document to a file
 	 * @param document
 	 */
-	private static void writeToFile(Document document) {
+	private static boolean writeToFile(Document document) {
 		System.setProperty("file.encoding", ENCODING_FORMAT);
 		try {
 			FileOutputStream fos = new FileOutputStream(output_document_path);
 			fos.write(convertToByteArray(document));
 			fos.close();
+			logger.info("File successfully written here: "+output_document_path);
+			return true;
 		} catch (FileNotFoundException e) {
 			logger.error("FileNotFoundException: " + e);
+			return false;
 		} catch (IOException e) {
 			logger.error("IOException: " + e);
+			return false;
 		}
 	}
 }

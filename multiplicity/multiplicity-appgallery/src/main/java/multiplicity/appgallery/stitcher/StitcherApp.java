@@ -15,8 +15,11 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
+import org.dom4j.Document;
+
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
+import multiplicity.app.utils.LocalStorageUtility;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.button.ButtonBehaviour;
 import multiplicity.csysng.behaviours.button.IButtonBehaviourListener;
@@ -44,12 +47,14 @@ import com.jme.math.Vector2f;
 public class StitcherApp extends AbstractStandaloneApp {
 
 	private static final Logger logger = Logger.getLogger(StitcherApp.class.getName());
+	private static final String MULTIPLICITY_SPACE = "multiplicity";
 
 	private IPage wikiPage;
 	private Vector<IComment> comments;
 	private XWikiRestFulService wikiService;
 	private Vector<IAttachment> attachments;
 	private Vector<ITag> tags;
+	private String output_document_path = "";
 
 	//when this is filled the first one is at the top of the z index
 	private ArrayList<IItem> zOrderedItems;
@@ -169,7 +174,9 @@ public class StitcherApp extends AbstractStandaloneApp {
 			if(iAttachment.getMimeType().equals("image/png") ||iAttachment.getMimeType().equals("image/jpeg") || iAttachment.getMimeType().equals("image/jpg") || iAttachment.getMimeType().equals("image/gif")) {
 				BufferedImage resource = (BufferedImage) iAttachment.getResource();
 
-				File file = new File ( iAttachment.getName() );
+				//File file = new File ( iAttachment.getName() );
+				File file = writeFileToLocalStorageDir(iAttachment.getName(), wikiPage.getPageName());
+				
 				try {
 					ImageIO.write( resource,  iAttachment.getMimeType().substring(6), file);
 					IImage img = getContentFactory().createImage("photo", UUID.randomUUID());
@@ -194,9 +201,6 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 					zOrderedItems.add(img);
 					add(img);
-					
-					//let's delete it from the file system.
-					file.delete();
 				} catch (IOException e) {
 					e.printStackTrace();
 				} 
@@ -254,6 +258,31 @@ public class StitcherApp extends AbstractStandaloneApp {
 		getzOrderManager().sendToBottom(bg, null);
 		getzOrderManager().neverBringToTop(bg);
 
+	}
+	
+	/**
+	 * Enables to write to a local directory, will which be created if non-existant
+	 * @param id
+	 * @param org.dom4j.Document
+	 * @param Directory name
+	 * @param Version
+	 */
+	private File writeFileToLocalStorageDir(String filename, String dirName) {
+		String targetDirectory = LocalStorageUtility.getLocalWorkingDirectory(MULTIPLICITY_SPACE, "").getAbsolutePath() + File.separatorChar + dirName;
+		boolean canUpload = false;
+		File savedFile = null;
+		if(new File(targetDirectory).exists() == false) {
+			canUpload = (new File(targetDirectory)).mkdirs();
+		}
+		else {
+			canUpload = true;
+		}
+		
+		if(canUpload) {
+			output_document_path = targetDirectory + File.separatorChar + filename;	
+			savedFile = new File(output_document_path);
+		}
+		return savedFile;
 	}
 
 	/**

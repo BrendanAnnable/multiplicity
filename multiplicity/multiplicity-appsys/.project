@@ -7,7 +7,6 @@
     <project>multiplicity-csys</project>
     <project>multiplicity-csysjme</project>
     <project>multiplicity-input</project>
-    <project>multiplicity-jme</project>
   </projects>
   <buildSpec>
     <buildCommand>
