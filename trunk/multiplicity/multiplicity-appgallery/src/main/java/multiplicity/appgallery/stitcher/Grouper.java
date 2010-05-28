@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
+import multiplicity.app.utils.XMLOperations;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
