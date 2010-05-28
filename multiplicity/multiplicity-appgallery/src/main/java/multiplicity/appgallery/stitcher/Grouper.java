@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
+
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.gfx.Gradient;
@@ -21,6 +23,8 @@ import multiplicity.input.events.MultiTouchObjectEvent;
 import com.jme.math.Vector2f;
 
 public class Grouper implements IMultiTouchEventListener {
+	
+	private static final Logger logger = Logger.getLogger(Grouper.class.getName());
 	
 	private List<IItem> registeredItems = new ArrayList<IItem>();
 	private AbstractStandaloneApp app;
@@ -140,14 +144,11 @@ public class Grouper implements IMultiTouchEventListener {
 	private void addItemsToFrame(List<IItem> items, Vector2f atPosition) {
 		int frameWidth = 600;
 		int frameHeight = 600;
-		IFrame frame = app.getContentFactory().createFrame("group",
-				UUID.randomUUID(), frameWidth, frameHeight);
-		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID
-				.randomUUID(), 10f, 15));
-		frame
-				.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f,
-						0.8f), new Color(0f, 0f, 0f, 0.8f),
-						GradientDirection.VERTICAL));
+		UUID uUID = UUID.randomUUID();
+		IFrame frame = app.getContentFactory().createFrame("group", uUID, frameWidth, frameHeight);
+		logger.info("Group UUID: "+uUID.toString());
+		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 10f, 15));
+		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 		frame.maintainBorderSizeDuringScale();
 		frame.setRelativeLocation(atPosition);
 		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
@@ -158,10 +159,14 @@ public class Grouper implements IMultiTouchEventListener {
 			app.remove(item);			
 			frame.add(item);
 			item.setWorldLocation(itemWorldPos);
-
 		}
 		app.getzOrderManager().bringToTop(frame, null);
+		
+		createXMLRepresentationForGroup(uUID, items);
+	}
 
+	private void createXMLRepresentationForGroup(UUID uUID, List<IItem> items) {
+		XMLOperations xmlOperations = new XMLOperations(uUID, items);
 	}
 
 }
