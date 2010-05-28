@@ -194,6 +194,9 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 					zOrderedItems.add(img);
 					add(img);
+					
+					//let's delete it from the file system.
+					file.delete();
 				} catch (IOException e) {
 					e.printStackTrace();
 				} 
