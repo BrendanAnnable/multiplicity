@@ -3,15 +3,17 @@ package multiplicity.appgallery.stitcher;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.Vector;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import javax.imageio.ImageIO;
 
@@ -20,6 +22,7 @@ import org.dom4j.Document;
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.app.utils.LocalStorageUtility;
+import multiplicity.app.utils.XMLOperations;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.button.ButtonBehaviour;
 import multiplicity.csysng.behaviours.button.IButtonBehaviourListener;
@@ -36,6 +39,7 @@ import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.input.IMultiTouchEventProducer;
 import multiplicity.input.events.MultiTouchCursorEvent;
+import no.uio.intermedia.snomobile.WikiUtility;
 import no.uio.intermedia.snomobile.XWikiRestFulService;
 import no.uio.intermedia.snomobile.interfaces.IAttachment;
 import no.uio.intermedia.snomobile.interfaces.IComment;
@@ -46,7 +50,7 @@ import com.jme.math.Vector2f;
 
 public class StitcherApp extends AbstractStandaloneApp {
 
-	private static final Logger logger = Logger.getLogger(StitcherApp.class.getName());
+	private final static Logger logger = Logger.getLogger(StitcherApp.class.getName());	
 	private static final String MULTIPLICITY_SPACE = "multiplicity";
 
 	private IPage wikiPage;
@@ -54,7 +58,10 @@ public class StitcherApp extends AbstractStandaloneApp {
 	private XWikiRestFulService wikiService;
 	private Vector<IAttachment> attachments;
 	private Vector<ITag> tags;
-	private String output_document_path = "";
+	private String output_document_path = null;
+	private String wikiUser = null;
+	private String wikiPass = null;
+	
 
 	//when this is filled the first one is at the top of the z index
 	private ArrayList<IItem> zOrderedItems;
@@ -76,10 +83,12 @@ public class StitcherApp extends AbstractStandaloneApp {
 			prop.load(StitcherApp.class.getResourceAsStream("xwiki.properties"));
 		} 
 		catch (IOException e) {
-			logger.log(Level.SEVERE, "setup:  IOException: "+e);
+			logger.debug("setup:  IOException: "+e);
 		}
+		this.wikiUser = prop.getProperty("DEFAULT_USER");
+		this.wikiPass = prop.getProperty("DEFAULT_PASS");
 		wikiService = new XWikiRestFulService(prop);
-		wikiPage = wikiService.getWikiPage();
+		wikiPage = wikiService.getWikiPageWithoutAttachmentResources();
 		comments = wikiPage.getComments();
 		attachments = wikiPage.getAttachments();
 		tags = wikiPage.getTags();
@@ -172,49 +181,52 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 
 			if(iAttachment.getMimeType().equals("image/png") ||iAttachment.getMimeType().equals("image/jpeg") || iAttachment.getMimeType().equals("image/jpg") || iAttachment.getMimeType().equals("image/gif")) {
-				BufferedImage resource = (BufferedImage) iAttachment.getResource();
-
-				//File file = new File ( iAttachment.getName() );
+				IImage img = null;
 				File file = writeFileToLocalStorageDir(iAttachment.getName(), wikiPage.getPageName());
 				
+				logger.info("File exists: "+file.exists());
+				if(file.exists() == false) {
+					WikiUtility wikiUtility = new WikiUtility(wikiUser, wikiPass);
+					Object resourceToDownload = wikiUtility.getResource(iAttachment.getMimeType(),iAttachment.getAbsoluteUrl());
+					
+					if(resourceToDownload != null) {
+						try {
+							ImageIO.write( (RenderedImage) resourceToDownload,  iAttachment.getMimeType().substring(6), file);
+						} catch (IOException e) {
+							logger.debug("IOException: "+e);
+						} 
+					}
+				}
+				
+					
 				try {
-					ImageIO.write( resource,  iAttachment.getMimeType().substring(6), file);
-					IImage img = getContentFactory().createImage("photo", UUID.randomUUID());
+					img = getContentFactory().createImage("photo", UUID.randomUUID());
 					img.setImage(file.toURI().toURL());
-					img.setRelativeScale(0.8f);
-					img.setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
-
-					img.addItemListener(new ItemListenerAdapter() {
-						@Override
-						public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
-							System.out.println("item pressed" + item.getBehaviours());
-						}
-
-						@Override
-						public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
-							System.out.println("item clicked" + item.getBehaviours());
-						}
-					});
-					BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
-
-					smaker.register(img, this);
-
-					zOrderedItems.add(img);
-					add(img);
-				} catch (IOException e) {
-					e.printStackTrace();
-				} 
-
+				} catch (MalformedURLException e) {
+					logger.debug("MalformedURLException: "+e);
+				}
+				img.setRelativeScale(0.8f);
+				img.setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
+	
+				img.addItemListener(new ItemListenerAdapter() {
+					@Override
+					public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
+						System.out.println("item pressed" + item.getBehaviours());
+					}
+	
+					@Override
+					public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
+						System.out.println("item clicked" + item.getBehaviours());
+					}
+				});
+				BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
+	
+				smaker.register(img, this);
+	
+				zOrderedItems.add(img);
+				add(img);
 			}
-
-
-
 		}
-
-
-
-
-
 
 		IColourRectangle rect = getContentFactory().createColourRectangle("cr", UUID.randomUUID(), 100, 50);
 		rect.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
@@ -259,6 +271,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 		getzOrderManager().neverBringToTop(bg);
 
 	}
+	
+	
 	
 	/**
 	 * Enables to write to a local directory, will which be created if non-existant

@@ -87,7 +87,7 @@
 	<classpathentry kind="var" path="M2_REPO/org/hibernate/hibernate-validator/4.0.0.GA/hibernate-validator-4.0.0.GA.jar"/>
 	<classpathentry kind="var" path="M2_REPO/net/sourceforge/htmlcleaner/htmlcleaner/2.1/htmlcleaner-2.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/ical4j/ical4j/0.9.20/ical4j-0.9.20.jar"/>
-	<classpathentry kind="var" path="M2_REPO/no/uio/intermedia/snomobile/ime-snomobile/1.0-SNAPSHOT/ime-snomobile-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="var" path="M2_REPO/no/uio/intermedia/snomobile/ime-snomobile/2.0-SNAPSHOT/ime-snomobile-2.0-SNAPSHOT.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/jackrabbit/jackrabbit-core/1.1-xwiki/jackrabbit-core-1.1-xwiki.jar"/>
 	<classpathentry kind="var" path="M2_REPO/net/java/dev/javacc/javacc/5.0/javacc-5.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/net/java/dev/jaxb2-commons/jaxb-fluent-api/2.1.8/jaxb-fluent-api-2.1.8.jar"/>
