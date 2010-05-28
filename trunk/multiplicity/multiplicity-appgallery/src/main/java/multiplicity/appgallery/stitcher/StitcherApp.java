@@ -197,6 +197,9 @@ public class StitcherApp extends AbstractStandaloneApp {
 						} 
 					}
 				}
+				else {
+					//TODO: check that the file on the disk is at least the same size as the "expected one", if not, download new
+				}
 				
 					
 				try {
