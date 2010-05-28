@@ -2,7 +2,6 @@ package multiplicity.appgallery.stitcher;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,17 +11,12 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.Vector;
-import java.util.logging.Level;
-import org.apache.log4j.Logger;
 
 import javax.imageio.ImageIO;
-
-import org.dom4j.Document;
 
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.app.utils.LocalStorageUtility;
-import multiplicity.app.utils.XMLOperations;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.button.ButtonBehaviour;
 import multiplicity.csysng.behaviours.button.IButtonBehaviourListener;
@@ -45,6 +39,8 @@ import no.uio.intermedia.snomobile.interfaces.IAttachment;
 import no.uio.intermedia.snomobile.interfaces.IComment;
 import no.uio.intermedia.snomobile.interfaces.IPage;
 import no.uio.intermedia.snomobile.interfaces.ITag;
+
+import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 
@@ -184,50 +180,56 @@ public class StitcherApp extends AbstractStandaloneApp {
 				IImage img = null;
 				File file = writeFileToLocalStorageDir(iAttachment.getName(), wikiPage.getPageName());
 				
-				logger.info("File exists: "+file.exists());
+				logger.info("File exists: "+file.exists()+" - "+iAttachment.getName()+" - "+iAttachment.getSize());
 				if(file.exists() == false) {
 					WikiUtility wikiUtility = new WikiUtility(wikiUser, wikiPass);
 					Object resourceToDownload = wikiUtility.getResource(iAttachment.getMimeType(),iAttachment.getAbsoluteUrl());
 					
 					if(resourceToDownload != null) {
+						iAttachment.setIsValid(true);
 						try {
 							ImageIO.write( (RenderedImage) resourceToDownload,  iAttachment.getMimeType().substring(6), file);
 						} catch (IOException e) {
 							logger.debug("IOException: "+e);
 						} 
 					}
+					else {
+						iAttachment.setIsValid(false);
+					}
 				}
 				else {
+					iAttachment.setIsValid(true);
 					//TODO: check that the file on the disk is at least the same size as the "expected one", if not, download new
 				}
 				
+				if(iAttachment.getIsValid()) {
+					try {
+						img = getContentFactory().createImage("photo", UUID.randomUUID());
+						img.setImage(file.toURI().toURL());
+					} catch (MalformedURLException e) {
+						logger.debug("MalformedURLException: "+e);
+					}
+					img.setRelativeScale(0.8f);
+					img.setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
 					
-				try {
-					img = getContentFactory().createImage("photo", UUID.randomUUID());
-					img.setImage(file.toURI().toURL());
-				} catch (MalformedURLException e) {
-					logger.debug("MalformedURLException: "+e);
+					img.addItemListener(new ItemListenerAdapter() {
+						@Override
+						public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
+							System.out.println("item pressed" + item.getBehaviours());
+						}
+						
+						@Override
+						public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
+							System.out.println("item clicked" + item.getBehaviours());
+						}
+					});
+					BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
+					
+					smaker.register(img, this);
+					
+					zOrderedItems.add(img);
+					add(img);	
 				}
-				img.setRelativeScale(0.8f);
-				img.setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
-	
-				img.addItemListener(new ItemListenerAdapter() {
-					@Override
-					public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
-						System.out.println("item pressed" + item.getBehaviours());
-					}
-	
-					@Override
-					public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
-						System.out.println("item clicked" + item.getBehaviours());
-					}
-				});
-				BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
-	
-				smaker.register(img, this);
-	
-				zOrderedItems.add(img);
-				add(img);
 			}
 		}
 
