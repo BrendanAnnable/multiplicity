@@ -129,8 +129,6 @@ public class GetAttachmentItems extends Thread {
 					});
 					BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
 					
-					//stitcher.smaker.register(img, this);
-					
 					stitcher.zOrderedItems.add(img);
 					items.add(img);
 				}

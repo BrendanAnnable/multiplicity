@@ -244,10 +244,9 @@ public class StitcherApp extends AbstractStandaloneApp {
 		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
 		this.add(frame);
+		smaker.register(frame, this);
 		for (IItem item : items) {
-			//Vector2f itemWorldPos = item.getWorldLocation();
 			frame.add(item);
-			//item.setWorldLocation(itemWorldPos);
 		}
 		this.getzOrderManager().bringToTop(frame, null);
 	}
