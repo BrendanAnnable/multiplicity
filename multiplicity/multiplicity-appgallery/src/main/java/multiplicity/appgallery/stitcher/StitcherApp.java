@@ -57,6 +57,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 	private String output_document_path = null;
 	private String wikiUser = null;
 	private String wikiPass = null;
+	private int maxFileSize = 0;
 	
 
 	//when this is filled the first one is at the top of the z index
@@ -83,6 +84,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 		}
 		this.wikiUser = prop.getProperty("DEFAULT_USER");
 		this.wikiPass = prop.getProperty("DEFAULT_PASS");
+		this.maxFileSize = Integer.valueOf(prop.getProperty("MAX_ATTCHMENT_SIZE"));
 		wikiService = new XWikiRestFulService(prop);
 		wikiPage = wikiService.getWikiPageWithoutAttachmentResources();
 		comments = wikiPage.getComments();
@@ -180,9 +182,9 @@ public class StitcherApp extends AbstractStandaloneApp {
 				IImage img = null;
 				File file = writeFileToLocalStorageDir(iAttachment.getName(), wikiPage.getPageName());
 				
-				logger.info("File exists: "+file.exists()+" - "+iAttachment.getName()+" - "+iAttachment.getSize());
+				logger.info("File exists: "+file.exists()+" - "+iAttachment.getName()+" - "+iAttachment.getSize()+ " - "+file.length());
 				if(file.exists() == false) {
-					WikiUtility wikiUtility = new WikiUtility(wikiUser, wikiPass);
+					WikiUtility wikiUtility = new WikiUtility(wikiUser, wikiPass, maxFileSize);
 					Object resourceToDownload = wikiUtility.getResource(iAttachment.getMimeType(),iAttachment.getAbsoluteUrl());
 					
 					if(resourceToDownload != null) {
@@ -200,6 +202,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 				else {
 					iAttachment.setIsValid(true);
 					//TODO: check that the file on the disk is at least the same size as the "expected one", if not, download new
+					
 				}
 				
 				if(iAttachment.getIsValid()) {
