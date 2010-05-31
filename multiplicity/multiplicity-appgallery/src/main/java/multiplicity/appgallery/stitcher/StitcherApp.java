@@ -1,44 +1,35 @@
 package multiplicity.appgallery.stitcher;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.Vector;
-
-import javax.imageio.ImageIO;
 
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.app.utils.LocalStorageUtility;
 import multiplicity.csysng.behaviours.BehaviourMaker;
-import multiplicity.csysng.behaviours.button.ButtonBehaviour;
-import multiplicity.csysng.behaviours.button.IButtonBehaviourListener;
 import multiplicity.csysng.behaviours.gesture.GestureLibrary;
-import multiplicity.csysng.behaviours.inertia.InertiaBehaviour;
+import multiplicity.csysng.gfx.Gradient;
+import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IColourRectangle;
+import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.ILabel;
-import multiplicity.csysng.items.IImage.AlphaStyle;
-import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
-import multiplicity.input.events.MultiTouchCursorEvent;
-import no.uio.intermedia.snomobile.WikiUtility;
 import no.uio.intermedia.snomobile.XWikiRestFulService;
 import no.uio.intermedia.snomobile.interfaces.IAttachment;
-import no.uio.intermedia.snomobile.interfaces.IComment;
 import no.uio.intermedia.snomobile.interfaces.IPage;
-import no.uio.intermedia.snomobile.interfaces.ITag;
 
 import org.apache.log4j.Logger;
 
@@ -47,21 +38,31 @@ import com.jme.math.Vector2f;
 public class StitcherApp extends AbstractStandaloneApp {
 
 	private final static Logger logger = Logger.getLogger(StitcherApp.class.getName());	
-	private static final String MULTIPLICITY_SPACE = "multiplicity";
+	public final String MULTIPLICITY_SPACE = "multiplicity";
 
-	private IPage wikiPage;
-	private Vector<IComment> comments;
+	private final String STENCIL_NAME = "stencils";
+	private final String BACKGROUND_NAME = "backgrounds";
+	private final String SCAN_NAME = "scans";
+	private final ArrayList<String> pageNames = new ArrayList<String>();
+	private IPage stencilsPage;
+	private IPage backgroundsPage;
+	private IPage scansPage;
+	private HashMap<String, IPage> wikiPages;
+	//private Vector<IComment> comments;
 	private XWikiRestFulService wikiService;
 	private Vector<IAttachment> attachments;
-	private Vector<ITag> tags;
-	private String output_document_path = null;
-	private String wikiUser = null;
-	private String wikiPass = null;
-	private int maxFileSize = 0;
+	//private Vector<ITag> tags;
+	public String output_document_path = null;
+	public String wikiUser = null;
+	public String wikiPass = null;
+	public Grouper smaker = null;
+	public int maxFileSize = 0;
+	private int frameWidth = 600;
+	private int frameHeight = 600;
 	
 
 	//when this is filled the first one is at the top of the z index
-	private ArrayList<IItem> zOrderedItems;
+	ArrayList<IItem> zOrderedItems;
 
 	public StitcherApp(IMultiTouchEventProducer mtInput) {
 		super(mtInput);
@@ -69,34 +70,47 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 	@Override
 	public void onAppStart() {
+		pageNames.add(STENCIL_NAME);
+		pageNames.add(BACKGROUND_NAME);
+		pageNames.add(SCAN_NAME);
 		populateFromWiki();
-		loadContent();
+		loadContent(wikiPages);
 	}
 
 	private void populateFromWiki() {
 		Properties prop = new Properties();
+		wikiPages = new HashMap<String, IPage>();
 
 		try {
 			prop.load(StitcherApp.class.getResourceAsStream("xwiki.properties"));
+			this.wikiUser = prop.getProperty("DEFAULT_USER");
+			this.wikiPass = prop.getProperty("DEFAULT_PASS");
+			this.maxFileSize = Integer.valueOf(prop.getProperty("MAX_ATTCHMENT_SIZE"));
+			stencilsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("REPOSITORY_WIKI_SPACE"), prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
+			wikiPages.put(pageNames.get(0), stencilsPage);
+			backgroundsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
+			wikiPages.put(pageNames.get(1), backgroundsPage);
+			scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
+			wikiPages.put(pageNames.get(2), scansPage);
 		} 
 		catch (IOException e) {
 			logger.debug("setup:  IOException: "+e);
 		}
-		this.wikiUser = prop.getProperty("DEFAULT_USER");
-		this.wikiPass = prop.getProperty("DEFAULT_PASS");
-		this.maxFileSize = Integer.valueOf(prop.getProperty("MAX_ATTCHMENT_SIZE"));
-		wikiService = new XWikiRestFulService(prop);
-		wikiPage = wikiService.getWikiPageWithoutAttachmentResources();
-		comments = wikiPage.getComments();
-		attachments = wikiPage.getAttachments();
-		tags = wikiPage.getTags();
-
+		
 	}
 
-	private void loadContent() {
+	private IPage getWikiPage(Properties prop, String wikiName, String spaceName, String pageName, boolean withAttachments) {
+		IPage wikiPage = null;
+		wikiService = new XWikiRestFulService(prop);
+		//String wikiName, String spaceName, String pageName, boolean withAttachments
+		wikiPage = wikiService.getWikiPage(wikiName, spaceName, pageName, withAttachments);
+		return wikiPage;
+	}
+
+	private void loadContent(HashMap<String, IPage> wikiPages) {
 
 		zOrderedItems = new ArrayList<IItem>();
-		Grouper smaker = new Grouper();
+		smaker = new Grouper();
 		this.getMultiTouchEventProducer().registerMultiTouchEventListener(smaker);
 
 		IImage bg = getContentFactory().createImage("backgroundimage", UUID.randomUUID());
@@ -104,135 +118,95 @@ public class StitcherApp extends AbstractStandaloneApp {
 		bg.centerItem();
 		add(bg);
 
-		//load the comments
-		for (IComment comment : comments) {
-			ILabel commentLabel = getContentFactory().createLabel("comment", UUID.randomUUID());
-			commentLabel.setText(comment.getText());
-			commentLabel.setFont(new Font("Myriad Pro", Font.BOLD, 24));
-			commentLabel.setTextColour(Color.white);
-			commentLabel.setRelativeLocation(new Vector2f(10, 10));
-			ButtonBehaviour bb = (ButtonBehaviour) BehaviourMaker.addBehaviour(commentLabel, ButtonBehaviour.class);
-			bb.addListener(new IButtonBehaviourListener() {
-				@Override
-				public void buttonClicked(IItem item) {
-					System.out.println("click");                    
-				}
+//		//load the comments
+//		for (IComment comment : comments) {
+//			ILabel commentLabel = getContentFactory().createLabel("comment", UUID.randomUUID());
+//			commentLabel.setText(comment.getText());
+//			commentLabel.setFont(new Font("Myriad Pro", Font.BOLD, 24));
+//			commentLabel.setTextColour(Color.white);
+//			commentLabel.setRelativeLocation(new Vector2f(10, 10));
+//			ButtonBehaviour bb = (ButtonBehaviour) BehaviourMaker.addBehaviour(commentLabel, ButtonBehaviour.class);
+//			bb.addListener(new IButtonBehaviourListener() {
+//				@Override
+//				public void buttonClicked(IItem item) {
+//					System.out.println("click");                    
+//				}
+//
+//				@Override
+//				public void buttonPressed(IItem item) {
+//					System.out.println("pressed");                    
+//
+//				}
+//
+//				@Override
+//				public void buttonReleased(IItem item) {
+//					System.out.println("released");                    
+//
+//
+//				}
+//
+//			});
+//
+//			BehaviourMaker.addBehaviour(commentLabel, RotateTranslateScaleBehaviour.class);
+//			BehaviourMaker.addBehaviour(commentLabel, InertiaBehaviour.class);
+//
+//			//	            smaker.register(commentLabel);
+//			smaker.register(commentLabel, this);
+//
+//			zOrderedItems.add(commentLabel);
+//			add(commentLabel);
+//		}
+//
+//		//load the tags
+//		for( ITag tag : tags) {
+//			ILabel tagLabel = getContentFactory().createLabel("tag", UUID.randomUUID());
+//			tagLabel.setText(tag.getName());
+//			tagLabel.setFont(new Font("Myriad Pro", Font.BOLD, 18));
+//			tagLabel.setTextColour(Color.BLUE);
+//			tagLabel.setRelativeLocation(new Vector2f(10, 10));
+//			ButtonBehaviour bb = (ButtonBehaviour) BehaviourMaker.addBehaviour(tagLabel, ButtonBehaviour.class);
+//			bb.addListener(new IButtonBehaviourListener() {
+//				@Override
+//				public void buttonClicked(IItem item) {
+//					getzOrderManager().sendToBottom(item, null);             
+//				}
+//
+//				@Override
+//				public void buttonPressed(IItem item) {}
+//
+//				@Override
+//				public void buttonReleased(IItem item) {}
+//
+//			});
+//
+//			BehaviourMaker.addBehaviour(tagLabel, RotateTranslateScaleBehaviour.class);
+//			BehaviourMaker.addBehaviour(tagLabel, InertiaBehaviour.class);
+//
+//			smaker.register(tagLabel, this);
+//
+//			zOrderedItems.add(tagLabel);
+//			add(tagLabel);
+//		}
+		
+		List<IItem> items = null;
+		IPage iPage = null;
+		GetAttachmentItems getAttachmentItems;
+		for (int i = 0; i < wikiPages.size(); i++) {
+			iPage = wikiPages.get(pageNames.get(i));
+			attachments = iPage.getAttachments();
+			items = new ArrayList<IItem>();
 
-				@Override
-				public void buttonPressed(IItem item) {
-					System.out.println("pressed");                    
-
-				}
-
-				@Override
-				public void buttonReleased(IItem item) {
-					System.out.println("released");                    
-
-
-				}
-
-			});
-
-			BehaviourMaker.addBehaviour(commentLabel, RotateTranslateScaleBehaviour.class);
-			BehaviourMaker.addBehaviour(commentLabel, InertiaBehaviour.class);
-
-			//	            smaker.register(commentLabel);
-			smaker.register(commentLabel, this);
-
-			zOrderedItems.add(commentLabel);
-			add(commentLabel);
-		}
-
-		//load the tags
-		for( ITag tag : tags) {
-			ILabel tagLabel = getContentFactory().createLabel("tag", UUID.randomUUID());
-			tagLabel.setText(tag.getName());
-			tagLabel.setFont(new Font("Myriad Pro", Font.BOLD, 18));
-			tagLabel.setTextColour(Color.BLUE);
-			tagLabel.setRelativeLocation(new Vector2f(10, 10));
-			ButtonBehaviour bb = (ButtonBehaviour) BehaviourMaker.addBehaviour(tagLabel, ButtonBehaviour.class);
-			bb.addListener(new IButtonBehaviourListener() {
-				@Override
-				public void buttonClicked(IItem item) {
-					getzOrderManager().sendToBottom(item, null);             
-				}
-
-				@Override
-				public void buttonPressed(IItem item) {}
-
-				@Override
-				public void buttonReleased(IItem item) {}
-
-			});
-
-			BehaviourMaker.addBehaviour(tagLabel, RotateTranslateScaleBehaviour.class);
-			BehaviourMaker.addBehaviour(tagLabel, InertiaBehaviour.class);
-
-			smaker.register(tagLabel, this);
-
-			zOrderedItems.add(tagLabel);
-			add(tagLabel);
-		}
-
-
-		for (IAttachment iAttachment : attachments) {
-
-
-			if(iAttachment.getMimeType().equals("image/png") ||iAttachment.getMimeType().equals("image/jpeg") || iAttachment.getMimeType().equals("image/jpg") || iAttachment.getMimeType().equals("image/gif")) {
-				IImage img = null;
-				File file = writeFileToLocalStorageDir(iAttachment.getName(), wikiPage.getPageName());
-				
-				logger.info("File exists: "+file.exists()+" - "+iAttachment.getName()+" - "+iAttachment.getSize()+ " - "+file.length());
-				if(file.exists() == false) {
-					WikiUtility wikiUtility = new WikiUtility(wikiUser, wikiPass, maxFileSize);
-					Object resourceToDownload = wikiUtility.getResource(iAttachment.getMimeType(),iAttachment.getAbsoluteUrl());
-					
-					if(resourceToDownload != null) {
-						iAttachment.setIsValid(true);
-						try {
-							ImageIO.write( (RenderedImage) resourceToDownload,  iAttachment.getMimeType().substring(6), file);
-						} catch (IOException e) {
-							logger.debug("IOException: "+e);
-						} 
-					}
-					else {
-						iAttachment.setIsValid(false);
-					}
-				}
-				else {
-					iAttachment.setIsValid(true);
-					//TODO: check that the file on the disk is at least the same size as the "expected one", if not, download new
-					
-				}
-				
-				if(iAttachment.getIsValid()) {
-					try {
-						img = getContentFactory().createImage("photo", UUID.randomUUID());
-						img.setImage(file.toURI().toURL());
-					} catch (MalformedURLException e) {
-						logger.debug("MalformedURLException: "+e);
-					}
-					img.setRelativeScale(0.8f);
-					img.setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
-					
-					img.addItemListener(new ItemListenerAdapter() {
-						@Override
-						public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
-							System.out.println("item pressed" + item.getBehaviours());
-						}
-						
-						@Override
-						public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
-							System.out.println("item clicked" + item.getBehaviours());
-						}
-					});
-					BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
-					
-					smaker.register(img, this);
-					
-					zOrderedItems.add(img);
-					add(img);	
-				}
+			getAttachmentItems = new GetAttachmentItems(this, iPage, attachments, items);
+			try {
+				getAttachmentItems.start();
+				getAttachmentItems.join();
+				items = getAttachmentItems.getItems();
+			} catch (InterruptedException e) {
+				logger.debug("GetAttachmentItems:  InterruptedException: " + e);
+			}
+			
+			if(items != null) {
+				addItemsToFrame(getAttachmentItems.getItems(), new Vector2f(i*0.2f, i*0.2f), pageNames.get(i));				
 			}
 		}
 
@@ -241,24 +215,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 		add(rect);
 		BehaviourMaker.addBehaviour(rect, RotateTranslateScaleBehaviour.class);
 
-
-
-
 		GestureLibrary.getInstance().loadGesture("circle");
 		GestureLibrary.getInstance().loadGesture("line");
-
-		//		GestureDetectionBehaviour gdb = (GestureDetectionBehaviour) BehaviourMaker.addBehaviour(bg, GestureDetectionBehaviour.class);
-		//		gdb.addListener(new IGestureListener() {				
-		//			@Override
-		//			public void gestureDetected(GestureMatch match, IItem item) {				
-		//				if(match.libraryGesture.getName().equals("circle") && match.matchScore > 0.8) {
-		//				    
-		//				    
-		//				    System.out.println("Item children: " + item.getChildrenCount());
-		//					addRandomFrame(""+(int)(Math.random() * 10));						
-		//				}
-		//			}
-		//		});
 
 		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
 		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());		
@@ -269,43 +227,31 @@ public class StitcherApp extends AbstractStandaloneApp {
 		trails.setFadingColour(Color.white);
 		add(trails);
 
-
-		//		addNestedFrameExample();
-		//		addRandomFrame("aotn.jpg");
-		//		addRandomFrame("fabbey.jpg");
-		//		addRandomFrame("wreck.jpg");
-
 		getzOrderManager().sendToBottom(bg, null);
 		getzOrderManager().neverBringToTop(bg);
 
 	}
 	
-	
-	
-	/**
-	 * Enables to write to a local directory, will which be created if non-existant
-	 * @param id
-	 * @param org.dom4j.Document
-	 * @param Directory name
-	 * @param Version
-	 */
-	private File writeFileToLocalStorageDir(String filename, String dirName) {
-		String targetDirectory = LocalStorageUtility.getLocalWorkingDirectory(MULTIPLICITY_SPACE, "").getAbsolutePath() + File.separatorChar + dirName;
-		boolean canUpload = false;
-		File savedFile = null;
-		if(new File(targetDirectory).exists() == false) {
-			canUpload = (new File(targetDirectory)).mkdirs();
-		}
-		else {
-			canUpload = true;
-		}
+	private void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {
 		
-		if(canUpload) {
-			output_document_path = targetDirectory + File.separatorChar + filename;	
-			savedFile = new File(output_document_path);
+		UUID uUID = UUID.randomUUID();
+		IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
+		
+		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 10f, 15));
+		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
+		frame.maintainBorderSizeDuringScale();
+		frame.setRelativeLocation(atPosition);
+		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
+
+		this.add(frame);
+		for (IItem item : items) {
+			//Vector2f itemWorldPos = item.getWorldLocation();
+			frame.add(item);
+			//item.setWorldLocation(itemWorldPos);
 		}
-		return savedFile;
+		this.getzOrderManager().bringToTop(frame, null);
 	}
+	
 
 	/**
 	 * bumps the item down one. 
