@@ -54,7 +54,7 @@ public class XMLOperations {
 			node.addElement("location").addCDATA(iItem.getRelativeLocation().toString());
 		}
 		outputDocument(newDoc);
-		writeToLocalStorageDir(uUID, newDoc, "stitcher", "1.0");
+		writeToLocalStorageDir(uUID, newDoc, "multiplicity", "xmlOuts");
 	}
 
 
@@ -65,8 +65,8 @@ public class XMLOperations {
 	 * @param Directory name
 	 * @param Version
 	 */
-	private void writeToLocalStorageDir(UUID uUID, Document newDoc, String dirName, String version) {
-		String targetDirectory = LocalStorageUtility.getLocalWorkingDirectory(dirName, version).getAbsolutePath();
+	private void writeToLocalStorageDir(UUID uUID, Document newDoc, String multiplicitySpace, String dirName) {
+		String targetDirectory = LocalStorageUtility.getLocalWorkingDirectory(multiplicitySpace, "").getAbsolutePath() + File.separatorChar + dirName;
 		boolean canUpload = false;
 		if(new File(targetDirectory).exists() == false) {
 			canUpload = (new File(targetDirectory)).mkdir();
