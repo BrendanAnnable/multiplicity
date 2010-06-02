@@ -40,9 +40,9 @@ public class StitcherApp extends AbstractStandaloneApp {
 	private final static Logger logger = Logger.getLogger(StitcherApp.class.getName());	
 	public final String MULTIPLICITY_SPACE = "multiplicity";
 
-	private final String STENCIL_NAME = "stencils";
-	private final String BACKGROUND_NAME = "backgrounds";
-	private final String SCAN_NAME = "scans";
+	public final String STENCIL_NAME = "stencils";
+	public final String BACKGROUND_NAME = "backgrounds";
+	public final String SCAN_NAME = "scans";
 	private final ArrayList<String> pageNames = new ArrayList<String>();
 	private IPage stencilsPage;
 	private IPage backgroundsPage;
@@ -70,9 +70,9 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 	@Override
 	public void onAppStart() {
-		pageNames.add(STENCIL_NAME);
+//		pageNames.add(STENCIL_NAME);
 		pageNames.add(BACKGROUND_NAME);
-		pageNames.add(SCAN_NAME);
+//		pageNames.add(SCAN_NAME);
 		populateFromWiki();
 		loadContent(wikiPages);
 	}
@@ -86,12 +86,12 @@ public class StitcherApp extends AbstractStandaloneApp {
 			this.wikiUser = prop.getProperty("DEFAULT_USER");
 			this.wikiPass = prop.getProperty("DEFAULT_PASS");
 			this.maxFileSize = Integer.valueOf(prop.getProperty("MAX_ATTCHMENT_SIZE"));
-			stencilsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("REPOSITORY_WIKI_SPACE"), prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
-			wikiPages.put(pageNames.get(0), stencilsPage);
+//			stencilsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("REPOSITORY_WIKI_SPACE"), prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
+//			wikiPages.put(pageNames.get(0), stencilsPage);
 			backgroundsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
-			wikiPages.put(pageNames.get(1), backgroundsPage);
-			scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
-			wikiPages.put(pageNames.get(2), scansPage);
+			wikiPages.put(pageNames.get(0), backgroundsPage);
+//			scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
+//			wikiPages.put(pageNames.get(2), scansPage);
 		} 
 		catch (IOException e) {
 			logger.debug("setup:  IOException: "+e);
@@ -102,7 +102,6 @@ public class StitcherApp extends AbstractStandaloneApp {
 	private IPage getWikiPage(Properties prop, String wikiName, String spaceName, String pageName, boolean withAttachments) {
 		IPage wikiPage = null;
 		wikiService = new XWikiRestFulService(prop);
-		//String wikiName, String spaceName, String pageName, boolean withAttachments
 		wikiPage = wikiService.getWikiPage(wikiName, spaceName, pageName, withAttachments);
 		return wikiPage;
 	}
@@ -113,10 +112,10 @@ public class StitcherApp extends AbstractStandaloneApp {
 		smaker = new Grouper();
 		this.getMultiTouchEventProducer().registerMultiTouchEventListener(smaker);
 
-		IImage bg = getContentFactory().createImage("backgroundimage", UUID.randomUUID());
-		bg.setImage(StitcherApp.class.getResource("yellowflowers_1680x1050.png"));
-		bg.centerItem();
-		add(bg);
+//		IImage bg = getContentFactory().createImage("backgroundimage", UUID.randomUUID());
+//		bg.setImage(StitcherApp.class.getResource("yellowflowers_1680x1050.png"));
+//		bg.centerItem();
+//		add(bg);
 
 //		//load the comments
 //		for (IComment comment : comments) {
@@ -196,7 +195,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 			attachments = iPage.getAttachments();
 			items = new ArrayList<IItem>();
 
-			getAttachmentItems = new GetAttachmentItems(this, iPage, attachments, items);
+			getAttachmentItems = new GetAttachmentItems(this, iPage, attachments, items, pageNames.get(i));
 			try {
 				getAttachmentItems.start();
 				getAttachmentItems.join();
@@ -206,7 +205,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 			}
 			
 			if(items != null) {
-				addItemsToFrame(getAttachmentItems.getItems(), new Vector2f(i*0.2f, i*0.2f), pageNames.get(i));				
+				addItemsToFrame(getAttachmentItems.getItems(), new Vector2f(i*5f, i*5f), pageNames.get(i));				
 			}
 		}
 
@@ -223,17 +222,16 @@ public class StitcherApp extends AbstractStandaloneApp {
 		add(cursors);
 
 		ICursorTrailsOverlay trails = getContentFactory().createCursorTrailsOverlay("trails", UUID.randomUUID());
-		trails.respondToItem(bg);
+//		trails.respondToItem(bg);
 		trails.setFadingColour(Color.white);
 		add(trails);
 
-		getzOrderManager().sendToBottom(bg, null);
-		getzOrderManager().neverBringToTop(bg);
+//		getzOrderManager().sendToBottom(bg, null);
+//		getzOrderManager().neverBringToTop(bg);
 
 	}
 	
-	private void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {
-		
+	public void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {	
 		UUID uUID = UUID.randomUUID();
 		IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
 		
@@ -246,9 +244,12 @@ public class StitcherApp extends AbstractStandaloneApp {
 		this.add(frame);
 		smaker.register(frame, this);
 		for (IItem item : items) {
+			item.setRelativeScale(0.5f);
 			frame.add(item);
 		}
 		this.getzOrderManager().bringToTop(frame, null);
+		
+		//createXMLRepresentationForGroup(uUID, items);
 	}
 	
 
