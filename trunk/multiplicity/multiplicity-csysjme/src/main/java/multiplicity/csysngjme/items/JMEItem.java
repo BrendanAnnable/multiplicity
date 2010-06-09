@@ -3,6 +3,7 @@ package multiplicity.csysngjme.items;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IItem;
@@ -27,7 +28,7 @@ public abstract class JMEItem extends Node implements IItem {
 	
 	private List<IItem> itemChildren = new ArrayList<IItem>();
 	protected MultiTouchEventDispatcher dispatcher = new MultiTouchEventDispatcher();
-	protected final List<IItemListener> itemListeners = new ArrayList<IItemListener>();
+	protected final List<IItemListener> itemListeners = new CopyOnWriteArrayList<IItemListener>();
 	protected IItem parentItem;
 	protected UUID uuid;
 	protected Quaternion rot = new Quaternion();
@@ -175,6 +176,10 @@ public abstract class JMEItem extends Node implements IItem {
 		attachChild(item.getTreeRootSpatial());
 		item.setParentItem(this);
 		getZOrderManager().registerForZOrdering(item);
+	}
+	
+	public void remove(IItem item) {
+		getItemChildren().remove(item);
 	}
 	
 	@Override
