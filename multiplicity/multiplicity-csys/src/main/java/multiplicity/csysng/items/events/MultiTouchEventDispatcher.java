@@ -37,9 +37,9 @@ public class MultiTouchEventDispatcher implements IMultiTouchEventListener {
 	@Override
 	public void cursorReleased(MultiTouchCursorEvent event) {
 		if(!enabled) return;
-		for(IMultiTouchEventListener item : items) {
-			item.cursorReleased(event);
-		}
+			for(IMultiTouchEventListener item : items) {
+				item.cursorReleased(event);
+			}
 	}	
 
 	@Override

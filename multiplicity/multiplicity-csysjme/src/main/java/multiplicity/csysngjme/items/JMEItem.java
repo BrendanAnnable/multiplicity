@@ -33,10 +33,11 @@ public abstract class JMEItem extends Node implements IItem {
 	protected Quaternion rot = new Quaternion();
 	protected float angle;
 	protected IZOrderManager zOrderManager;
-
+	private String itemName;
 
 	public JMEItem(String name, UUID uuid) {
 		super(name);
+		this.itemName = name;
 		this.uuid = uuid;
 		setUserData(KEY_JMEITEMDATA, new JMEItemUserData(uuid));		
 		setRenderQueueMode(Renderer.QUEUE_ORTHO);
@@ -45,7 +46,7 @@ public abstract class JMEItem extends Node implements IItem {
 		dispatcher.addListener(new IMultiTouchEventListener() {			
 			@Override
 			public void cursorReleased(MultiTouchCursorEvent event) {
-				for(IItemListener l : itemListeners) l.itemCursorReleased(instance, event);
+					for(IItemListener l : itemListeners) l.itemCursorReleased(instance, event);
 			}
 			
 			@Override
@@ -237,5 +238,14 @@ public abstract class JMEItem extends Node implements IItem {
     public List<IItem> getItemChildren() {
         return itemChildren;
     }
+    
+	public String getItemName() {
+		return itemName;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
 }
 
