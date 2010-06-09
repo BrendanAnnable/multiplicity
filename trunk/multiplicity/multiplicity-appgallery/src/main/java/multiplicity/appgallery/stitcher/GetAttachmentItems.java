@@ -148,15 +148,9 @@ public class GetAttachmentItems extends Thread {
 						
 						@Override
 						public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
-							logger.info(item.getClass()+" "+item.getParentItem().getClass());
 							if(parentContainerName.equals(stitcher.BACKGROUND_NAME)) {
 								items = new ArrayList<IItem>();
-								logger.info(item.getParentItem().getClass());
 								items.add(item);
-								//item.getTreeRootSpatial().removeFromParent();
-		
-								//logger.info(item.getParentItem().getManipulableSpatial().getClass());
-								//TODO: need to find a way to add the item on the new frame
 								stitcher.addItemsToFrame(items, new Vector2f(0.0f, 0.0f), "back");
 							}
 //							logger.info("cursor released caught event: "+item.getParentItem().getClass());
