@@ -243,6 +243,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 		for (IItem item : items) {
 			item.setRelativeScale(0.5f);
 			frame.add(item);
+			frame.getZOrderManager().bringToTop(item, null);
 		}
 		this.getzOrderManager().bringToTop(frame, null);
 		
