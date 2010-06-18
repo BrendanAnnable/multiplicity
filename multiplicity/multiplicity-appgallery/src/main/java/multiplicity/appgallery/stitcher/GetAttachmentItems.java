@@ -151,9 +151,9 @@ public class GetAttachmentItems extends Thread {
 							if(parentContainerName.equals(stitcher.BACKGROUND_NAME)) {
 								items = new ArrayList<IItem>();
 								items.add(item);
-								stitcher.addItemsToFrame(items, new Vector2f(0.0f, 0.0f), "back");
+								stitcher.addItemsToFrame(items, new Vector2f(0.0f, 0.0f), "back-"+item.getUUID());
 							}
-//							logger.info("cursor released caught event: "+item.getParentItem().getClass());
+							logger.info("cursor released caught event: "+item.getParentItem().getClass());
 //							List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal((Node) stitcher.getOrthoNode(), event.getPosition());
 //							if(!spatialsList.contains(item.getParentItem())) {
 //								Vector2f itemWorldPos = item.getWorldLocation();		
