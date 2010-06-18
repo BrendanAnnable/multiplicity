@@ -90,7 +90,7 @@ public class GetAttachmentItems extends Thread {
 		for (IAttachment iAttachment : attachments) {
 			
 			
-			if(iAttachment.getMimeType().equals("image/png") ||iAttachment.getMimeType().equals("image/jpeg") || iAttachment.getMimeType().equals("image/jpg") || iAttachment.getMimeType().equals("image/gif")) {
+			if(iAttachment.isOfImageType()) {
 				IImage img = null;
 				File file = writeFileToLocalStorageDir(iAttachment.getName(), iPage.getPageName());
 				
@@ -166,7 +166,7 @@ public class GetAttachmentItems extends Thread {
 					BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
 					//BehaviourMaker.addBehaviour(img, MoveBetweenContainerBehaviour.class);
 					
-					stitcher.zOrderedItems.add(img);
+					//stitcher.zOrderedItems.add(img);
 					items.add(img);
 				}
 			}
