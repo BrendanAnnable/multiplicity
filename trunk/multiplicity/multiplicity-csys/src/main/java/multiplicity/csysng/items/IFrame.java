@@ -13,4 +13,5 @@ public interface IFrame extends IItem {
 	public void setSolidBackgroundColour(Color c);
 	public void setGradientBackground(Gradient g);
 	public IItemListener maintainBorderSizeDuringScale();
+	public void removeItem(IItem item);
 }

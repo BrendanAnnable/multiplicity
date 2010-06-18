@@ -28,6 +28,8 @@ public abstract class JMEItem extends Node implements IItem {
 	
 	private List<IItem> itemChildren = new ArrayList<IItem>();
 	protected MultiTouchEventDispatcher dispatcher = new MultiTouchEventDispatcher();
+	
+//	protected final List<IItemListener> itemListeners = new ArrayList<IItemListener>();
 	protected final List<IItemListener> itemListeners = new CopyOnWriteArrayList<IItemListener>();
 	protected IItem parentItem;
 	protected UUID uuid;
