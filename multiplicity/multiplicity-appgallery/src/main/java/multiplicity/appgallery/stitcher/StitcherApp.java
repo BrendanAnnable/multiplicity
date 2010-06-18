@@ -211,8 +211,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 			attachments = iPage.getAttachments();
 			items = new ArrayList<IItem>();
 
-			getAttachmentItems = new GetAttachmentItems(this, iPage,
-					attachments, items, pageNames.get(i));
+			getAttachmentItems = new GetAttachmentItems(this, iPage, attachments, items, pageNames.get(i));
 			try {
 				getAttachmentItems.start();
 				getAttachmentItems.join();
