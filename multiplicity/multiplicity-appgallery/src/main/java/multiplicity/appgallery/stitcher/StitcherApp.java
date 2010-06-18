@@ -250,22 +250,13 @@ public class StitcherApp extends AbstractStandaloneApp {
 	public void moveItemToNewFrame(IItem item, Vector2f atPosition, String frameName) {
 	    UUID uUID = UUID.randomUUID();
 	    
-	    
-	    
-	    
-	    
 	    JMEImage bi = (JMEImage) item;
 	    
-	    logger.info(" would bound " + bi.getLocalScale());
-	    
+	    //scale image.
 	    Vector3f localScale = bi.getLocalScale();
 	    
 	    float newX = bi.getSize().x * localScale.x;
 	    float newY = bi.getSize().y * localScale.y;
-	    
-	    //logger.info(" would bound " + item.getManipulableSpatial().);
-	    
-	    logger.info(" size " + bi.getSize());
 	    
         IFrame frame = this.getContentFactory().createFrame(frameName, uUID, Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
 
@@ -276,16 +267,8 @@ public class StitcherApp extends AbstractStandaloneApp {
         BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
         this.add(frame);
-        //smaker.register(frame, this);
-        IImage img = contentFactory.createImage("photo", UUID.randomUUID());
-        img.setImage(GalleryApp.class.getResource("wreck.jpg"));
-        BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
-
        
-        System.out.println(" relative location: " + item.getRelativeLocation());
-        System.out.println(" world location: " + item.getWorldLocation());
         Vector2f itemWorldPos = item.getWorldLocation();
-        // frame.setSize(item., height)
         frame.add(item);
         item.setWorldLocation(itemWorldPos);
         frame.getZOrderManager().bringToTop(item, null);    
