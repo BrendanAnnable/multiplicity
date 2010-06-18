@@ -78,22 +78,16 @@ public class StitcherApp extends AbstractStandaloneApp {
 		wikiPages = new HashMap<String, IPage>();
 
 		try {
-			prop
-					.load(StitcherApp.class
-							.getResourceAsStream("xwiki.properties"));
+			prop.load(StitcherApp.class.getResourceAsStream("xwiki.properties"));
 			this.wikiUser = prop.getProperty("DEFAULT_USER");
 			this.wikiPass = prop.getProperty("DEFAULT_PASS");
-			this.maxFileSize = Integer.valueOf(prop
-					.getProperty("MAX_ATTCHMENT_SIZE"));
+			this.maxFileSize = Integer.valueOf(prop.getProperty("MAX_ATTCHMENT_SIZE"));
 			// stencilsPage = getWikiPage(prop,
 			// prop.getProperty("DEFAULT_WIKI_NAME"),
 			// prop.getProperty("REPOSITORY_WIKI_SPACE"),
 			// prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
 			// wikiPages.put(pageNames.get(0), stencilsPage);
-			backgroundsPage = getWikiPage(prop, prop
-					.getProperty("DEFAULT_WIKI_NAME"), prop
-					.getProperty("CLASS_WIKI_SPACE"), prop
-					.getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
+			backgroundsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
 			wikiPages.put(pageNames.get(0), backgroundsPage);
 			// scansPage = getWikiPage(prop,
 			// prop.getProperty("DEFAULT_WIKI_NAME"),
@@ -299,10 +293,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 		}
 	}
 
-	public static void main(String[] args) throws SecurityException,
-			IllegalArgumentException, NoSuchMethodException,
-			InstantiationException, IllegalAccessException,
-			InvocationTargetException {
+	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		SingleAppTableSystem.startSystem(StitcherApp.class);
 	}
 }
