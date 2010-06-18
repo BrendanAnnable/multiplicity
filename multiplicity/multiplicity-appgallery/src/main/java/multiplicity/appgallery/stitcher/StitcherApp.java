@@ -12,12 +12,14 @@ import java.util.Vector;
 
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
+import multiplicity.appgallery.gallery.GalleryApp;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.gesture.GestureLibrary;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IFrame;
+import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
@@ -241,6 +243,43 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 	}
 
+	
+	public void moveItemsToNewFrame(List<IItem> items, Vector2f atPosition, String frameName) {
+	    UUID uUID = UUID.randomUUID();
+        IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
+
+        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 10f, 15));
+        frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
+        frame.maintainBorderSizeDuringScale();
+        frame.setRelativeLocation(atPosition);
+        BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
+
+        this.add(frame);
+        //smaker.register(frame, this);
+        IImage img = contentFactory.createImage("photo", UUID.randomUUID());
+        img.setImage(GalleryApp.class.getResource("wreck.jpg"));
+        BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
+
+        //frame.add(img);
+        for (IItem item : items) {
+       
+            System.out.println(" relative location: " +  item.getRelativeLocation() );
+            System.out.println(" world location: " +  item.getWorldLocation() );
+            Vector2f itemWorldPos = item.getWorldLocation();
+            //frame.setSize(item., height)
+            frame.add(item);
+            item.setWorldLocation(itemWorldPos);
+            frame.getZOrderManager().bringToTop(item, null);
+            
+        }
+        
+        
+        this.getzOrderManager().bringToTop(frame, null);
+        
+     
+        frame.getZOrderManager().updateZOrdering();
+	}
+	
 	public void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {
 		UUID uUID = UUID.randomUUID();
 		IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
@@ -252,12 +291,12 @@ public class StitcherApp extends AbstractStandaloneApp {
 		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
 		this.add(frame);
-		smaker.register(frame, this);
 		for (IItem item : items) {
 			item.setRelativeScale(0.5f);
 			frame.add(item);
-			frame.getZOrderManager().bringToTop(item, null);
 		}
+		
+		
 		this.getzOrderManager().bringToTop(frame, null);
 
 		// createXMLRepresentationForGroup(uUID, items);

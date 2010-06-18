@@ -1,6 +1,7 @@
 package multiplicity.csysngjme.items;
 
 import java.awt.Color;
+import java.util.List;
 import java.util.UUID;
 
 import com.jme.bounding.OrthogonalBoundingBox;
@@ -138,6 +139,22 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 		maskGeometry.updateRenderState();
 	}
 
+	
+	@Override
+	public void removeItem(IItem item) {
+	    /**
+	    List<IItem> cs = getItemChildren();
+	    for (IItem i : cs) {
+            if( i.getUUID().equals(item.getUUID())) {
+                drawableContent.detachChild(item.getTreeRootSpatial());
+                getItemChildren().remove(item);
+            }
+        }
+	    zOrderManager.updateZOrdering();
+	    updateRenderState();
+	    **/
+	}
+	
 	@Override
 	public void add(IItem item) {
 		getItemChildren().add(item);
@@ -259,4 +276,5 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 	public void setGradientBackground(Gradient g) {
 		JMEUtils.applyGradientToQuad(maskGeometry, g);		
 	}
+
 }
