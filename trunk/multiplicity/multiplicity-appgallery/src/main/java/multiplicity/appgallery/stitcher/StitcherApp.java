@@ -24,6 +24,7 @@ import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
 import no.uio.intermedia.snomobile.XWikiRestFulService;
@@ -32,7 +33,9 @@ import no.uio.intermedia.snomobile.interfaces.IPage;
 
 import org.apache.log4j.Logger;
 
+import com.jme.bounding.BoundingVolume;
 import com.jme.math.Vector2f;
+import com.jme.math.Vector3f;
 
 public class StitcherApp extends AbstractStandaloneApp {
 
@@ -244,9 +247,27 @@ public class StitcherApp extends AbstractStandaloneApp {
 	}
 
 	
-	public void moveItemsToNewFrame(List<IItem> items, Vector2f atPosition, String frameName) {
+	public void moveItemToNewFrame(IItem item, Vector2f atPosition, String frameName) {
 	    UUID uUID = UUID.randomUUID();
-        IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
+	    
+	    
+	    
+	    
+	    
+	    JMEImage bi = (JMEImage) item;
+	    
+	    logger.info(" would bound " + bi.getLocalScale());
+	    
+	    Vector3f localScale = bi.getLocalScale();
+	    
+	    float newX = bi.getSize().x * localScale.x;
+	    float newY = bi.getSize().y * localScale.y;
+	    
+	    //logger.info(" would bound " + item.getManipulableSpatial().);
+	    
+	    logger.info(" size " + bi.getSize());
+	    
+        IFrame frame = this.getContentFactory().createFrame(frameName, uUID, Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
 
         frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 10f, 15));
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
@@ -260,19 +281,16 @@ public class StitcherApp extends AbstractStandaloneApp {
         img.setImage(GalleryApp.class.getResource("wreck.jpg"));
         BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
 
-        //frame.add(img);
-        for (IItem item : items) {
        
-            System.out.println(" relative location: " +  item.getRelativeLocation() );
-            System.out.println(" world location: " +  item.getWorldLocation() );
-            Vector2f itemWorldPos = item.getWorldLocation();
-            //frame.setSize(item., height)
-            frame.add(item);
-            item.setWorldLocation(itemWorldPos);
-            frame.getZOrderManager().bringToTop(item, null);
-            
-        }
+        System.out.println(" relative location: " + item.getRelativeLocation());
+        System.out.println(" world location: " + item.getWorldLocation());
+        Vector2f itemWorldPos = item.getWorldLocation();
+        // frame.setSize(item., height)
+        frame.add(item);
+        item.setWorldLocation(itemWorldPos);
+        frame.getZOrderManager().bringToTop(item, null);    
         
+        item.centerItem();
         
         this.getzOrderManager().bringToTop(frame, null);
         

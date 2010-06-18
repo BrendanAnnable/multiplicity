@@ -134,8 +134,6 @@ public class GetAttachmentItems extends Thread {
 					img.setRelativeScale(0.8f);
 					img.setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
 					img.addItemListener(new ItemListenerAdapter() {
-						List<IItem> items = null;
-						
 						@Override
 						public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
 							logger.info("item pressed" + item.getBehaviours() + "parent: "+item.getParentItem());
@@ -149,11 +147,9 @@ public class GetAttachmentItems extends Thread {
 						@Override
 						public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
 							if(parentContainerName.equals(stitcher.BACKGROUND_NAME)) {
-								items = new ArrayList<IItem>();
-								items.add(item);
 								IFrame frame = (IFrame) item.getParentItem();
 								frame.removeItem(item);
-								stitcher.moveItemsToNewFrame(items, new Vector2f(0.0f, 0.0f), "back-"+item.getUUID());
+								stitcher.moveItemToNewFrame(item, new Vector2f(0.0f, 0.0f), "back-"+item.getUUID());
 //								stitcher.addItemsToFrame(items, new Vector2f(0.0f, 0.0f), "back-"+item.getUUID());
 							}
 							logger.info("cursor released caught event: "+item.getParentItem().getClass());
