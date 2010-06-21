@@ -16,7 +16,9 @@ import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 import com.jme.scene.Node;
+import com.jme.scene.Spatial;
 
+import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.app.utils.LocalStorageUtility;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.gfx.Gradient;
@@ -35,6 +37,7 @@ import multiplicity.csysngjme.picking.AccuratePickingUtility;
 import multiplicity.csysngjme.picking.PickedSpatial;
 import multiplicity.input.data.CursorPositionRecord;
 import multiplicity.input.events.MultiTouchCursorEvent;
+import multiplicity.jmeutils.UnitConversion;
 import no.uio.intermedia.snomobile.WikiUtility;
 import no.uio.intermedia.snomobile.interfaces.IAttachment;
 import no.uio.intermedia.snomobile.interfaces.IPage;
@@ -146,19 +149,42 @@ public class GetAttachmentItems extends Thread {
 						
 						@Override
 						public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
-							if(parentContainerName.equals(stitcher.BACKGROUND_NAME)) {
+						    boolean offParent = true;
+						    
+						    Node s = (Node) stitcher.getOrthoNode();
+						    Node parent = s.getParent();
+						    
+						    Vector2f locStore = new Vector2f();
+						        UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
+						    
+	                          List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
+	                          
+	                          if( item.getParentItem().getTreeRootSpatial() instanceof JMEFrame ) {
+	                              JMEFrame frame = (JMEFrame) item.getParentItem().getTreeRootSpatial();
+	                              for (PickedSpatial pickedSpatial : spatialsList) {
+	                                
+	                                if( pickedSpatial.getSpatial().equals(frame.getMaskGeometry())) {
+	                                    offParent = false;
+	                                }
+	                            }
+	                          }
+//	                          for (PickedSpatial pickedSpatial : spatialsList) {
+//	                              
+//	                              JMEFrame frame = (JMEFrame) item.getParentItem().getTreeRootSpatial();
+//	                              if( pickedSpatial.getSpatial().equals(frame.getMaskGeometry())) {
+//	                                  offParent = false;
+//	                              }
+//	                          }
+						    
+							if(parentContainerName.equals(stitcher.BACKGROUND_NAME) && offParent) {
 								IFrame frame = (IFrame) item.getParentItem();
 								frame.removeItem(item);
 								stitcher.moveItemToNewFrame(item, new Vector2f(0.0f, 0.0f), "back-"+item.getUUID());
 //								stitcher.addItemsToFrame(items, new Vector2f(0.0f, 0.0f), "back-"+item.getUUID());
 							}
+							//if not we are in the two other cases
 							logger.info("cursor released caught event: "+item.getParentItem().getClass());
-//							List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal((Node) stitcher.getOrthoNode(), event.getPosition());
-//							if(!spatialsList.contains(item.getParentItem())) {
-//								Vector2f itemWorldPos = item.getWorldLocation();		
-//								stitcher.add(item);
-//								item.setWorldLocation(itemWorldPos);
-//							}
+
 						}
 					});
 					
