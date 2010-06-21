@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
+import com.jme.scene.Geometry;
 import com.jme.scene.Node;
 import com.jme.scene.Spatial;
 
@@ -43,155 +44,196 @@ import no.uio.intermedia.snomobile.interfaces.IAttachment;
 import no.uio.intermedia.snomobile.interfaces.IPage;
 
 public class GetAttachmentItems extends Thread {
-	
-	private final static Logger logger = Logger.getLogger(GetAttachmentItems.class.getName());	
+
+	private final static Logger logger = Logger
+			.getLogger(GetAttachmentItems.class.getName());
 	private Object obj = new Object();
 	private Vector<IAttachment> attachments;
 	private List<IItem> items = null;
 	private IPage iPage = null;
 	private StitcherApp stitcher;
 	private String parentContainerName;
-	
-	public GetAttachmentItems(StitcherApp stitcherApp, IPage iPage, Vector<IAttachment> attachments, List<IItem> items, String parentContainerName) {
+
+	public GetAttachmentItems(StitcherApp stitcherApp, IPage iPage,
+			Vector<IAttachment> attachments, List<IItem> items,
+			String parentContainerName) {
 		this.stitcher = stitcherApp;
 		this.attachments = attachments;
 		this.iPage = iPage;
 		this.items = items;
 		this.parentContainerName = parentContainerName;
 	}
-	
+
 	/**
-	 * Enables to write to a local directory, will which be created if non-existant
+	 * Enables to write to a local directory, will which be created if
+	 * non-existant
+	 * 
 	 * @param id
-	 * @param org.dom4j.Document
-	 * @param Directory name
+	 * @param org
+	 *            .dom4j.Document
+	 * @param Directory
+	 *            name
 	 * @param Version
 	 */
 	public File writeFileToLocalStorageDir(String filename, String dirName) {
-		String targetDirectory = LocalStorageUtility.getLocalWorkingDirectory(stitcher.MULTIPLICITY_SPACE, "").getAbsolutePath() + File.separatorChar + dirName;
+		String targetDirectory = LocalStorageUtility.getLocalWorkingDirectory(
+				stitcher.MULTIPLICITY_SPACE, "").getAbsolutePath()
+				+ File.separatorChar + dirName;
 		boolean canUpload = false;
 		File savedFile = null;
-		if(new File(targetDirectory).exists() == false) {
+		if (new File(targetDirectory).exists() == false) {
 			canUpload = (new File(targetDirectory)).mkdirs();
-		}
-		else {
+		} else {
 			canUpload = true;
 		}
-		
-		if(canUpload) {
-			stitcher.output_document_path = targetDirectory + File.separatorChar + filename;	
+
+		if (canUpload) {
+			stitcher.output_document_path = targetDirectory
+					+ File.separatorChar + filename;
 			savedFile = new File(stitcher.output_document_path);
 		}
 		return savedFile;
 	}
-	
+
 	public List<IItem> getItems() {
 		return items;
 	}
-	
+
 	public void run() {
 		for (IAttachment iAttachment : attachments) {
-			
-			
-			if(iAttachment.isOfImageType()) {
+
+			if (iAttachment.isOfImageType()) {
 				IImage img = null;
-				File file = writeFileToLocalStorageDir(iAttachment.getName(), iPage.getPageName());
-				
-				logger.info("File exists: "+file.exists()+" - "+iAttachment.getName()+" - "+iAttachment.getSize()+ " - "+file.length());
-				if(file.exists() == false) {
-					WikiUtility wikiUtility = new WikiUtility(stitcher.wikiUser, stitcher.wikiPass, stitcher.maxFileSize, iAttachment.getMimeType(),iAttachment.getAbsoluteUrl());
+				File file = writeFileToLocalStorageDir(iAttachment.getName(),
+						iPage.getPageName());
+
+				logger.info("File exists: " + file.exists() + " - "
+						+ iAttachment.getName() + " - " + iAttachment.getSize()
+						+ " - " + file.length());
+				if (file.exists() == false) {
+					WikiUtility wikiUtility = new WikiUtility(
+							stitcher.wikiUser, stitcher.wikiPass,
+							stitcher.maxFileSize, iAttachment.getMimeType(),
+							iAttachment.getAbsoluteUrl());
 					try {
 						wikiUtility.start();
 						wikiUtility.join();
 					} catch (InterruptedException e) {
-						logger.debug("getComments:  InterruptedException: " + e);
+						logger
+								.debug("getComments:  InterruptedException: "
+										+ e);
 					}
 					Object resourceToDownload = wikiUtility.getResource();
-					
-					if(resourceToDownload != null) {
+
+					if (resourceToDownload != null) {
 						iAttachment.setIsValid(true);
 						try {
-							ImageIO.write( (RenderedImage) resourceToDownload,  iAttachment.getMimeType().substring(6), file);
+							ImageIO.write((RenderedImage) resourceToDownload,
+									iAttachment.getMimeType().substring(6),
+									file);
 						} catch (IOException e) {
-							logger.debug("IOException: "+e);
-						} 
-					}
-					else {
+							logger.debug("IOException: " + e);
+						}
+					} else {
 						iAttachment.setIsValid(false);
 					}
-				}
-				else {
+				} else {
 					iAttachment.setIsValid(true);
-					//TODO: check that the file on the disk is at least the same size as the "expected one", if not, download new.
-					// udpate: 31/05/2010 - Already attempted comparing iAttachment.getSize() and file.length(), but they appear not to be the same
+					// TODO: check that the file on the disk is at least the
+					// same size as the "expected one", if not, download new.
+					// udpate: 31/05/2010 - Already attempted comparing
+					// iAttachment.getSize() and file.length(), but they appear
+					// not to be the same
 					// even though the files on disk are valid
 				}
-				
-				if(iAttachment.getIsValid()) {
+
+				if (iAttachment.getIsValid()) {
 					try {
-						img = stitcher.getContentFactory().createImage("photo", UUID.randomUUID());
+						img = stitcher.getContentFactory().createImage("photo",
+								UUID.randomUUID());
 						img.setImage(file.toURI().toURL());
 					} catch (MalformedURLException e) {
-						logger.debug("MalformedURLException: "+e);
+						logger.debug("MalformedURLException: " + e);
 					}
 					img.setRelativeScale(0.8f);
 					img.setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
 					img.addItemListener(new ItemListenerAdapter() {
 						@Override
-						public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
-							logger.info("item pressed" + item.getBehaviours() + "parent: "+item.getParentItem());
+						public void itemCursorPressed(IItem item,
+								MultiTouchCursorEvent event) {
+							logger.info("item pressed" + item.getBehaviours()
+									+ "parent: " + item.getParentItem());
 						}
-						
+
 						@Override
-						public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
+						public void itemCursorClicked(IItem item,
+								MultiTouchCursorEvent event) {
 							logger.info("item clicked" + item.getBehaviours());
 						}
-						
+
 						@Override
 						public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
-						    boolean offParent = true;
-						    
-						    Node s = (Node) stitcher.getOrthoNode();
-						    Node parent = s.getParent();
-						    
-						    Vector2f locStore = new Vector2f();
-						        UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
-						    
-	                          List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
-	                          
-	                          if( item.getParentItem().getTreeRootSpatial() instanceof JMEFrame ) {
-	                              JMEFrame frame = (JMEFrame) item.getParentItem().getTreeRootSpatial();
-	                              for (PickedSpatial pickedSpatial : spatialsList) {
-	                                
-	                                if( pickedSpatial.getSpatial().equals(frame.getMaskGeometry())) {
-	                                    offParent = false;
-	                                }
-	                            }
-	                          }
-//	                          for (PickedSpatial pickedSpatial : spatialsList) {
-//	                              
-//	                              JMEFrame frame = (JMEFrame) item.getParentItem().getTreeRootSpatial();
-//	                              if( pickedSpatial.getSpatial().equals(frame.getMaskGeometry())) {
-//	                                  offParent = false;
-//	                              }
-//	                          }
-						    
-							if(parentContainerName.equals(stitcher.BACKGROUND_NAME) && offParent) {
+							boolean offParent = true;
+
+							Node s = (Node) stitcher.getOrthoNode();
+
+							Vector2f locStore = new Vector2f();
+							UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
+
+							List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
+
+							if (item.getParentItem().getTreeRootSpatial() instanceof JMEFrame) {
+								JMEFrame frame = (JMEFrame) item.getParentItem().getTreeRootSpatial();
+								for (PickedSpatial pickedSpatial : spatialsList) {
+									if (pickedSpatial.getSpatial().equals(frame.getMaskGeometry())) {
+										offParent = false;
+									}
+								}
+							}
+
+							if (parentContainerName.equals(stitcher.BACKGROUND_NAME) && offParent) {
 								IFrame frame = (IFrame) item.getParentItem();
 								frame.removeItem(item);
-								stitcher.moveItemToNewFrame(item, new Vector2f(0.0f, 0.0f), "back-"+item.getUUID());
-//								stitcher.addItemsToFrame(items, new Vector2f(0.0f, 0.0f), "back-"+item.getUUID());
+								stitcher.moveItemToNewFrame(item, new Vector2f(0.0f, 0.0f), "back-" + item.getUUID());
+							} else {
+								// check if we are dropping on a "background" frame
+								boolean firstFrameFound = false;
+								for (PickedSpatial pickedSpatial : spatialsList) {
+									if((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && !firstFrameFound ) {
+										try {
+											Geometry geometry = (Geometry) pickedSpatial.getSpatial();
+											JMEFrame targetFrame = (JMEFrame) geometry.getParent();
+											
+											if(targetFrame.getName().contains("back-")) {
+												firstFrameFound = true;
+												IFrame frame = (IFrame) item.getParentItem();
+												frame.removeItem(item);
+												
+												Vector2f itemWorldPos = item.getWorldLocation();
+												targetFrame.add(item);
+										        item.setWorldLocation(itemWorldPos);
+										        targetFrame.getZOrderManager().bringToTop(item, null);    
+										        item.centerItem();
+										        //BehaviourMaker.addBehaviour(item, RotateTranslateScaleBehaviour.class);
+											}
+											
+										}
+										catch (Exception e) {
+											logger.debug("GetAttachmentItems: itemCursorReleased: Exception: "+e);
+										}
+									}
+								}
 							}
-							//if not we are in the two other cases
-							logger.info("cursor released caught event: "+item.getParentItem().getClass());
+
+							logger.info("cursor released caught event: " + item.getParentItem().getClass());
 
 						}
 					});
-					
+
 					BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
-					//BehaviourMaker.addBehaviour(img, MoveBetweenContainerBehaviour.class);
-					
-					//stitcher.zOrderedItems.add(img);
+					// BehaviourMaker.addBehaviour(img, MoveBetweenContainerBehaviour.class);
+
+					// stitcher.zOrderedItems.add(img);
 					items.add(img);
 				}
 			}
