@@ -1,6 +1,8 @@
 package multiplicity.appgallery.stitcher;
 
 import java.awt.Color;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -21,12 +23,18 @@ import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
+import multiplicity.csysngjme.picking.AccuratePickingUtility;
+import multiplicity.csysngjme.picking.PickedSpatial;
 import multiplicity.input.IMultiTouchEventProducer;
+import multiplicity.input.events.MultiTouchCursorEvent;
+import multiplicity.jmeutils.UnitConversion;
 import no.uio.intermedia.snomobile.XWikiRestFulService;
 import no.uio.intermedia.snomobile.interfaces.IAttachment;
 import no.uio.intermedia.snomobile.interfaces.IPage;
@@ -36,6 +44,8 @@ import org.apache.log4j.Logger;
 import com.jme.bounding.BoundingVolume;
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
+import com.jme.scene.Geometry;
+import com.jme.scene.Node;
 
 public class StitcherApp extends AbstractStandaloneApp {
 
@@ -45,6 +55,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 	public final String STENCIL_NAME = "stencils";
 	public final String BACKGROUND_NAME = "backgrounds";
 	public final String SCAN_NAME = "scans";
+	
+	private final Float BORDER_THICKNESS = 40f;
 	private final ArrayList<String> pageNames = new ArrayList<String>();
 	private IPage stencilsPage;
 	private IPage backgroundsPage;
@@ -61,19 +73,21 @@ public class StitcherApp extends AbstractStandaloneApp {
 	public int maxFileSize = 0;
 	private int frameWidth = 600;
 	private int frameHeight = 600;
+	private StitcherApp stitcher;
 
 	// when this is filled the first one is at the top of the z index
 	ArrayList<IItem> zOrderedItems;
 
 	public StitcherApp(IMultiTouchEventProducer mtInput) {
 		super(mtInput);
+		stitcher = this;
 	}
 
 	@Override
 	public void onAppStart() {
-		pageNames.add(STENCIL_NAME);
+//		pageNames.add(STENCIL_NAME);
 		pageNames.add(BACKGROUND_NAME);
-		pageNames.add(SCAN_NAME);
+//		pageNames.add(SCAN_NAME);
 		populateFromWiki();
 		loadContent(wikiPages);
 	}
@@ -87,12 +101,12 @@ public class StitcherApp extends AbstractStandaloneApp {
 			this.wikiUser = prop.getProperty("DEFAULT_USER");
 			this.wikiPass = prop.getProperty("DEFAULT_PASS");
 			this.maxFileSize = Integer.valueOf(prop.getProperty("MAX_ATTCHMENT_SIZE"));
-			stencilsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("REPOSITORY_WIKI_SPACE"), prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
-			wikiPages.put(pageNames.get(0), stencilsPage);
+//			stencilsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("REPOSITORY_WIKI_SPACE"), prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
+//			wikiPages.put(pageNames.get(0), stencilsPage);
 			backgroundsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
-			wikiPages.put(pageNames.get(1), backgroundsPage);
-			scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
-			wikiPages.put(pageNames.get(2), scansPage);
+			wikiPages.put(pageNames.get(0), backgroundsPage);
+//			scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
+//			wikiPages.put(pageNames.get(2), scansPage);
 		} catch (IOException e) {
 			logger.debug("setup:  IOException: " + e);
 		}
@@ -217,11 +231,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 				addItemsToFrame(getAttachmentItems.getItems(), new Vector2f(i * 5f, i * 5f), pageNames.get(i));
 			}
 		}
-
-		IColourRectangle rect = getContentFactory().createColourRectangle("cr", UUID.randomUUID(), 20, 20);
-		rect.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
-		add(rect);
-		BehaviourMaker.addBehaviour(rect, RotateTranslateScaleBehaviour.class);
+		
+		createHotSpotRepo();
 
 		GestureLibrary.getInstance().loadGesture("circle");
 		GestureLibrary.getInstance().loadGesture("line");
@@ -254,7 +265,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 	    
         IFrame frame = this.getContentFactory().createFrame(frameName, uUID, Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
 
-        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 10f, 15));
+        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
         frame.setRelativeLocation(atPosition);
@@ -279,7 +290,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 		UUID uUID = UUID.randomUUID();
 		IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
 
-		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 30f, 15));
+		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
 		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 		frame.maintainBorderSizeDuringScale();
 		frame.setRelativeLocation(atPosition);
@@ -295,6 +306,89 @@ public class StitcherApp extends AbstractStandaloneApp {
 		this.getzOrderManager().bringToTop(frame, null);
 
 		// createXMLRepresentationForGroup(uUID, items);
+	}
+	
+	public void createHotSpotRepo() {
+		UUID uUID = UUID.randomUUID();
+		IFrame frame = this.getContentFactory().createFrame("hotspots", uUID, 60, 60);
+
+		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 5f, 5));
+		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
+		frame.maintainBorderSizeDuringScale();
+		
+		//TODO: use width/height of app instead
+		Float xPos = Integer.valueOf(frameWidth - 120).floatValue();
+		Float yPos = Integer.valueOf(frameHeight/2 + 60).floatValue();
+		
+		frame.setRelativeLocation(new Vector2f(xPos, yPos));
+
+		this.add(frame);
+		fillHotSpotRepo(frame);
+		
+		this.getzOrderManager().bringToTop(frame, null);
+
+		// createXMLRepresentationForGroup(uUID, items);
+	}
+
+	private void fillHotSpotRepo(IFrame frame) {
+		IColourRectangle rect = getContentFactory().createColourRectangle("cr", UUID.randomUUID(), 20, 20);
+		rect.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
+		frame.add(rect);
+		rect.centerItem();
+		
+		rect.addItemListener(new ItemListenerAdapter() {
+			@Override
+			public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
+				logger.info("hotspot released!!");
+				boolean offParent = true;
+				Node s = (Node) stitcher.getOrthoNode();
+
+				Vector2f locStore = new Vector2f();
+				UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
+
+				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
+				
+				if (item.getParentItem().getTreeRootSpatial() instanceof JMEFrame) {
+					JMEFrame frame = (JMEFrame) item.getParentItem().getTreeRootSpatial();
+					for (PickedSpatial pickedSpatial : spatialsList) {
+						if (pickedSpatial.getSpatial().equals(frame.getMaskGeometry())) {
+							offParent = false;
+						}
+					}
+				}
+				
+				boolean firstFrameFound = false;
+				for (PickedSpatial pickedSpatial : spatialsList) {
+					if((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && !firstFrameFound ) {
+						try {
+							Geometry geometry = (Geometry) pickedSpatial.getSpatial();
+							JMEFrame targetFrame = (JMEFrame) geometry.getParent();
+							
+							if(targetFrame.getName().contains("back-")) {
+								firstFrameFound = true;
+								IFrame frame = (IFrame) item.getParentItem();
+								frame.removeItem(item);
+								
+								Vector2f itemWorldPos = item.getWorldLocation();
+								targetFrame.add(item);
+						        item.setWorldLocation(itemWorldPos);
+						        targetFrame.getZOrderManager().bringToTop(item, null);    
+						        //item.centerItem();
+						        
+						        fillHotSpotRepo(frame);
+							}
+							
+						}
+						catch (Exception e) {
+							logger.debug("GetAttachmentItems: itemCursorReleased: Exception: "+e);
+						}
+					}
+				}
+				
+			}
+		});
+		
+		BehaviourMaker.addBehaviour(rect, RotateTranslateScaleBehaviour.class);
 	}
 
 	/**
