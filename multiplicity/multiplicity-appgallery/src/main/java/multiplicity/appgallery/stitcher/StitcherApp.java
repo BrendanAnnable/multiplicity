@@ -339,7 +339,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 		rect.addItemListener(new ItemListenerAdapter() {
 			@Override
 			public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
-				logger.info("hotspot released!!");
+				String message = "Hotspot released: ";
 				boolean offParent = true;
 				Node s = (Node) stitcher.getOrthoNode();
 
@@ -348,18 +348,13 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
 				
-				if (item.getParentItem().getTreeRootSpatial() instanceof JMEFrame) {
-					JMEFrame frame = (JMEFrame) item.getParentItem().getTreeRootSpatial();
-					for (PickedSpatial pickedSpatial : spatialsList) {
-						if (pickedSpatial.getSpatial().equals(frame.getMaskGeometry())) {
-							offParent = false;
-						}
-					}
-				}
-				
 				boolean firstFrameFound = false;
 				for (PickedSpatial pickedSpatial : spatialsList) {
-					if((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && !firstFrameFound ) {
+					if (pickedSpatial.getSpatial().equals(((JMEFrame) item.getParentItem().getTreeRootSpatial()).getMaskGeometry())) {
+						offParent = false;
+						message = message + "on its parent. Nothing happens";
+					}
+					else if((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && !firstFrameFound ) {
 						try {
 							Geometry geometry = (Geometry) pickedSpatial.getSpatial();
 							JMEFrame targetFrame = (JMEFrame) geometry.getParent();
@@ -376,6 +371,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 						        //item.centerItem();
 						        
 						        fillHotSpotRepo(frame);
+						        message = message + "on "+targetFrame.getName()+". Great!!";
 							}
 							
 						}
@@ -385,6 +381,12 @@ public class StitcherApp extends AbstractStandaloneApp {
 					}
 				}
 				
+				if(!firstFrameFound && offParent) {
+					item.centerItem();
+					message = message + "in the mist .... Let's place it back to the center of its mother frame.";
+				}
+				
+				logger.info(message);
 			}
 		});
 		
