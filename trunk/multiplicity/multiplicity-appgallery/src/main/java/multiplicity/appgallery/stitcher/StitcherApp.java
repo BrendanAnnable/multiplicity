@@ -14,6 +14,7 @@ import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.gesture.GestureLibrary;
+import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IColourRectangle;
@@ -23,10 +24,11 @@ import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
-import multiplicity.csysngjme.items.HotSpotFrame;
+import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
+import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
 import multiplicity.csysngjme.picking.AccuratePickingUtility;
 import multiplicity.csysngjme.picking.PickedSpatial;
 import multiplicity.input.IMultiTouchEventProducer;
@@ -75,6 +77,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 	// when this is filled the first one is at the top of the z index
 	ArrayList<IItem> zOrderedItems;
+    private IHotSpotContentFactory hotSpotContentFactory;
 
 	public StitcherApp(IMultiTouchEventProducer mtInput) {
 		super(mtInput);
@@ -88,6 +91,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 //		pageNames.add(SCAN_NAME);
 		populateFromWiki();
 		loadContent(wikiPages);
+		
+		setHotSpotContentFactory(new HotSpotContentItemFactory());
 	}
 
 	private void populateFromWiki() {
@@ -261,8 +266,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 	    float newX = bi.getSize().x * localScale.x;
 	    float newY = bi.getSize().y * localScale.y;
 	    
-        IFrame frame = this.getContentFactory().createHotSpotFrame(frameName, uUID, Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
-
+        IFrame frame = this.getHotSpotContentFactory().createHotSpotFrame(frameName, uUID, Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
+        
         frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
@@ -275,7 +280,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         frame.addItem(item);
         item.setWorldLocation(itemWorldPos);
         frame.getZOrderManager().bringToTop(item, null);    
-
+//        BehaviourMaker.removeBehavior(item, RotateTranslateScaleBehaviour.class);
         item.centerItem();
         
         this.getzOrderManager().bringToTop(frame, null);
@@ -314,6 +319,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 		frame.maintainBorderSizeDuringScale();
 		
+		//TODO: use width/height of app instead
 		Float xPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getWidth()/2 - 60/2).floatValue();
 		Float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight()/2 - 60/2).floatValue();
 		
@@ -424,4 +430,12 @@ public class StitcherApp extends AbstractStandaloneApp {
 	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		SingleAppTableSystem.startSystem(StitcherApp.class);
 	}
+
+    public void setHotSpotContentFactory(IHotSpotContentFactory hotSpotContentFactory) {
+        this.hotSpotContentFactory = hotSpotContentFactory;
+    }
+
+    public IHotSpotContentFactory getHotSpotContentFactory() {
+        return hotSpotContentFactory;
+    }
 }
