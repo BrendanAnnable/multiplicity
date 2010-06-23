@@ -1,11 +1,10 @@
-package multiplicity.appgallery.stitcher;
+package multiplicity.csysngjme.items;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysngjme.items.JMEFrame;
 
 public class HotSpotFrame extends JMEFrame {
 	
