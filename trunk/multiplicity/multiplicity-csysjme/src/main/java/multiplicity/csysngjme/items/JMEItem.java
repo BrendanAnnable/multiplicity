@@ -173,15 +173,20 @@ public abstract class JMEItem extends Node implements IItem {
 	}
 	
 	@Override
-	public void add(IItem item) {
+	public void addItem(IItem item) {
 		getItemChildren().add(item);
 		attachChild(item.getTreeRootSpatial());
 		item.setParentItem(this);
 		getZOrderManager().registerForZOrdering(item);
+		zOrderManager.updateZOrdering();
 	}
 	
-	public void remove(IItem item) {
+	@Override
+	public void removeItem(IItem item) {
 		getItemChildren().remove(item);
+		detachChild(item.getTreeRootSpatial());
+		//item.setParentItem(null);
+		getZOrderManager().unregisterForZOrdering(item);
 	}
 	
 	@Override

@@ -272,7 +272,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         this.add(frame);
        
         Vector2f itemWorldPos = item.getWorldLocation();
-        frame.add(item);
+        frame.addItem(item);
         item.setWorldLocation(itemWorldPos);
         frame.getZOrderManager().bringToTop(item, null);    
         
@@ -297,7 +297,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 		this.add(frame);
 		for (IItem item : items) {
 			item.setRelativeScale(0.5f);
-			frame.add(item);
+			frame.addItem(item);
 		}
 		
 		
@@ -331,7 +331,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 	private void fillHotSpotRepo(IFrame frame) {
 		IColourRectangle rect = getContentFactory().createColourRectangle("cr", UUID.randomUUID(), 20, 20);
 		rect.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
-		frame.add(rect);
+		frame.addItem(rect);
 		rect.centerItem();
 		
 		rect.addItemListener(new ItemListenerAdapter() {
@@ -363,7 +363,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 								frame.removeItem(item);
 								
 								Vector2f itemWorldPos = item.getWorldLocation();
-								targetFrame.add(item);
+								targetFrame.addItem(item);
 						        item.setWorldLocation(itemWorldPos);
 						        targetFrame.getZOrderManager().bringToTop(item, null);    
 						        

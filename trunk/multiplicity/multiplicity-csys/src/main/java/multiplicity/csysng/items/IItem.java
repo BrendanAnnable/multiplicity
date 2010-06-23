@@ -35,7 +35,8 @@ public interface IItem {
 	
 	public IZOrderManager getZOrderManager();
 	
-	public void add(IItem item);
+	public void addItem(IItem item);
+	public void removeItem(IItem item);
 	public boolean hasChildren();
 	public int getChildrenCount();	
 

@@ -104,7 +104,7 @@ public class GalleryApp extends AbstractStandaloneApp {
 				new Color(0.5f, 0.5f, 0.5f, 0.8f), 
 				new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 		f.maintainBorderSizeDuringScale();
-		framewrap.add(f);
+		framewrap.addItem(f);
 		BehaviourMaker.addBehaviour(f, RotateTranslateScaleBehaviour.class);
 		
 
@@ -141,14 +141,14 @@ public class GalleryApp extends AbstractStandaloneApp {
 		});
 
 
-		frame.add(label2);
+		frame.addItem(label2);
 
 		IImage img = contentFactory.createImage("photo", UUID.randomUUID());
 		img.setImage(GalleryApp.class.getResource(photoResource));
 		img.setRelativeScale(0.8f);
 		BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
 		BehaviourMaker.addBehaviour(img, InertiaBehaviour.class);
-		frame.add(img);
+		frame.addItem(img);
 
 		zOrderManager.bringToTop(frame, null);
 	}
