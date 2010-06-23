@@ -27,4 +27,10 @@ public class HotSpotFrame extends JMEFrame {
 	public void addHotSpot(IItem item) {
 		hotSpots.add((IColourRectangle) item);
 	}
+
+	public void bringHotSpotsToTop() {
+		for (IColourRectangle iColourRectangle : hotSpots) {
+			this.getZOrderManager().bringToTop(iColourRectangle, null);   
+		}
+	}
 }
