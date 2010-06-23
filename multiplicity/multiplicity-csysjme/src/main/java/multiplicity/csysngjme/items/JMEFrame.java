@@ -1,7 +1,6 @@
 package multiplicity.csysngjme.items;
 
 import java.awt.Color;
-import java.util.List;
 import java.util.UUID;
 
 import multiplicity.csysng.behaviours.IBehaviour;
@@ -142,29 +141,24 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 	
 	@Override
 	public void removeItem(IItem item) {
-//	    List<IItem> cs = getItemChildren();
-//	    for (IItem i : cs) {
-//            if( i.getUUID().equals(item.getUUID())) {
-//                drawableContent.detachChild(item.getTreeRootSpatial());
-//                getItemChildren().remove(item);
-//            }
-//        }
-	    
-	    zOrderManager.unregisterForZOrdering(item);	
-	    zOrderManager.updateZOrdering();
+		super.removeItem(item);
 	    updateRenderState();
 	}
 	
 	@Override
-	public void add(IItem item) {
+	public void addItem(IItem item) {
+		// common operations from JMEItem:
 		getItemChildren().add(item);
+		item.setParentItem(this);
+		getZOrderManager().registerForZOrdering(item);
+		
+		// special case for JMEFrame to deal with nesting of content
 		JMEItemUserData itemData = (JMEItemUserData) item.getManipulableSpatial().getUserData(JMEItem.KEY_JMEITEMDATA);
 		itemData.setMaskGeometry(maskGeometry);
 		item.getTreeRootSpatial().setRenderState(drawableArea);
 		item.getTreeRootSpatial().updateRenderState();
 		drawableContent.attachChild(item.getTreeRootSpatial());		
-		item.setParentItem(this);
-		zOrderManager.registerForZOrdering(item);
+		
 		final IItem instance = this;
 		item.addItemListener(new ItemListenerAdapter() {
 			@Override

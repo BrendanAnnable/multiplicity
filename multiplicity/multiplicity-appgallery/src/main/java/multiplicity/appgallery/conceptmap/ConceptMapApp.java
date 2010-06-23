@@ -74,7 +74,7 @@ public class ConceptMapApp extends AbstractStandaloneApp {
 		label2.setText("<New Node>");
 		label2.setFont(new Font("Arial", Font.PLAIN, 18));
 		label2.setTextColour(Color.white);
-		frame.add(label2);
+		frame.addItem(label2);
 		label2.centerItem();
 		
 		zOrderManager.bringToTop(frame, null);

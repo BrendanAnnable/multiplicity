@@ -288,7 +288,7 @@ public class HotSpotApp extends AbstractStandaloneApp {
         this.add(frame);
        
         Vector2f itemWorldPos = item.getWorldLocation();
-        frame.add(item);
+        frame.addItem(item);
         item.setWorldLocation(itemWorldPos);
         frame.getZOrderManager().bringToTop(item, null);    
         
@@ -313,7 +313,7 @@ public class HotSpotApp extends AbstractStandaloneApp {
 		this.add(frame);
 		for (IItem item : items) {
 			item.setRelativeScale(0.5f);
-			frame.add(item);
+			frame.addItem(item);
 		}
 		
 		

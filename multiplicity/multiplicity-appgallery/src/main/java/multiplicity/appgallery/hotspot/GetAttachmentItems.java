@@ -226,7 +226,7 @@ public class GetAttachmentItems extends Thread {
         					frame.removeItem(item);
         					
         					Vector2f itemWorldPos = item.getWorldLocation();
-        					targetFrame.add(item);
+        					targetFrame.addItem(item);
         			        item.setWorldLocation(itemWorldPos);
         			        targetFrame.getZOrderManager().bringToTop(item, null);    
         			        item.centerItem();

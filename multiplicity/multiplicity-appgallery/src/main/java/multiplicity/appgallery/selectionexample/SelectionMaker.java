@@ -138,7 +138,7 @@ public class SelectionMaker implements IMultiTouchEventListener {
 
        for (IItem item : items) {
            item.setRelativeLocation(new Vector2f(10, 10));
-           frame.add(item);
+           frame.addItem(item);
           // item.centerItem();
        }
        
@@ -148,7 +148,7 @@ public class SelectionMaker implements IMultiTouchEventListener {
        label2.setTextColour(Color.white);
        label2.setRelativeLocation(new Vector2f(10, 10));
        
-       frame.add(label2);
+       frame.addItem(label2);
         app.getzOrderManager().bringToTop(frame, null);
     }
 
