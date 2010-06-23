@@ -1,48 +1,38 @@
 package multiplicity.appgallery.stitcher;
 
-import java.awt.Color;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
-import org.apache.log4j.Logger;
-
-import com.jme.math.Vector2f;
-import com.jme.scene.Geometry;
-import com.jme.scene.Node;
-import com.jme.scene.Spatial;
-
-import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.app.utils.LocalStorageUtility;
 import multiplicity.csysng.behaviours.BehaviourMaker;
-import multiplicity.csysng.gfx.Gradient;
-import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IImage.AlphaStyle;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
-import multiplicity.csysngjme.behaviours.MoveBetweenContainerBehaviour;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.items.HotSpotFrame;
 import multiplicity.csysngjme.items.JMEFrame;
-import multiplicity.csysngjme.items.JMEItem;
-import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.csysngjme.picking.AccuratePickingUtility;
 import multiplicity.csysngjme.picking.PickedSpatial;
-import multiplicity.input.data.CursorPositionRecord;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.jmeutils.UnitConversion;
 import no.uio.intermedia.snomobile.WikiUtility;
 import no.uio.intermedia.snomobile.interfaces.IAttachment;
 import no.uio.intermedia.snomobile.interfaces.IPage;
+
+import org.apache.log4j.Logger;
+
+import com.jme.math.Vector2f;
+import com.jme.scene.Geometry;
+import com.jme.scene.Node;
 
 public class GetAttachmentItems extends Thread {
 
