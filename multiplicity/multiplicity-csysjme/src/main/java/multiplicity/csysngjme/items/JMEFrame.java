@@ -149,10 +149,10 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 //                getItemChildren().remove(item);
 //            }
 //        }
-//	    
-//	    zOrderManager.unregisterForZOrdering(item);	
-//	    zOrderManager.updateZOrdering();
-//	    updateRenderState();
+	    
+	    zOrderManager.unregisterForZOrdering(item);	
+	    zOrderManager.updateZOrdering();
+	    updateRenderState();
 	}
 	
 	@Override
