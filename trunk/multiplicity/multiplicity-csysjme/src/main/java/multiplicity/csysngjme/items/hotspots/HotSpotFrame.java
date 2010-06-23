@@ -1,10 +1,11 @@
-package multiplicity.csysngjme.items;
+package multiplicity.csysngjme.items.hotspots;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysngjme.items.JMEFrame;
 
 public class HotSpotFrame extends JMEFrame {
 	
