@@ -24,5 +24,4 @@ public interface IContentFactory {
 	public ICursorOverlay createCursorOverlay(String string, UUID randomUUID);
 	public ICursorTrailsOverlay createCursorTrailsOverlay(String string, UUID randomUUID);
 	public IColourRectangle createColourRectangle(String string, UUID randomUUID, int width, int height);
-	public IFrame createHotSpotFrame(String name, UUID uuid, int width, int height);
 }
