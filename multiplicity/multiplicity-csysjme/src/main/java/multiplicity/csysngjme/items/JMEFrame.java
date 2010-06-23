@@ -4,6 +4,19 @@ import java.awt.Color;
 import java.util.List;
 import java.util.UUID;
 
+import multiplicity.csysng.behaviours.IBehaviour;
+import multiplicity.csysng.gfx.Gradient;
+import multiplicity.csysng.items.IBorder;
+import multiplicity.csysng.items.IFrame;
+import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.events.IItemListener;
+import multiplicity.csysng.items.events.ItemListenerAdapter;
+import multiplicity.csysngjme.ItemMap;
+import multiplicity.csysngjme.picking.JMEItemUserData;
+import multiplicity.csysngjme.utils.JMEUtils;
+import multiplicity.csysngjme.zordering.FrameZOrderManager;
+import multiplicity.input.events.MultiTouchCursorEvent;
+
 import com.jme.bounding.OrthogonalBoundingBox;
 import com.jme.math.Vector2f;
 import com.jme.renderer.ColorRGBA;
@@ -17,19 +30,6 @@ import com.jme.scene.state.BlendState.SourceFunction;
 import com.jme.scene.state.StencilState.StencilFunction;
 import com.jme.scene.state.StencilState.StencilOperation;
 import com.jme.system.DisplaySystem;
-
-import multiplicity.csysng.behaviours.IBehaviour;
-import multiplicity.csysng.gfx.Gradient;
-import multiplicity.csysng.items.IBorder;
-import multiplicity.csysng.items.IFrame;
-import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.events.IItemListener;
-import multiplicity.csysng.items.events.ItemListenerAdapter;
-import multiplicity.csysngjme.ItemMap;
-import multiplicity.csysngjme.picking.JMEItemUserData;
-import multiplicity.csysngjme.utils.JMEUtils;
-import multiplicity.csysngjme.zordering.FrameZOrderManager;
-import multiplicity.input.events.MultiTouchCursorEvent;
 
 public class JMEFrame extends JMERectangularItem implements IFrame {
 	private static final long serialVersionUID = -4475581295160543158L;
@@ -142,7 +142,6 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 	
 	@Override
 	public void removeItem(IItem item) {
-	    /**
 	    List<IItem> cs = getItemChildren();
 	    for (IItem i : cs) {
             if( i.getUUID().equals(item.getUUID())) {
@@ -150,9 +149,10 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
                 getItemChildren().remove(item);
             }
         }
+	    
+	    zOrderManager.unregisterForZOrdering(item);	
 	    zOrderManager.updateZOrdering();
 	    updateRenderState();
-	    **/
 	}
 	
 	@Override

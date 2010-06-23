@@ -10,6 +10,7 @@ import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.ILabel;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
+import multiplicity.csysngjme.items.HotSpotFrame;
 import multiplicity.csysngjme.items.JMEColourRectangle;
 import multiplicity.csysngjme.items.JMECursorTrails;
 import multiplicity.csysngjme.items.JMEDiskCursorOverlay;
@@ -27,6 +28,13 @@ public class JMEContentItemFactory implements IContentFactory {
 	@Override
 	public IFrame createFrame(String name, UUID uuid, int width, int height) {
 		JMEFrame frame = new JMEFrame(validateName(name), validateUUID(uuid), width, height);
+		frame.initializeGeometry();
+		return frame;
+	}
+	
+	@Override
+	public IFrame createHotSpotFrame(String name, UUID uuid, int width, int height) {
+		HotSpotFrame frame = new HotSpotFrame(validateName(name), validateUUID(uuid), width, height);
 		frame.initializeGeometry();
 		return frame;
 	}

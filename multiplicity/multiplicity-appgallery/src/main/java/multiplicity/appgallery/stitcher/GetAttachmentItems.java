@@ -193,8 +193,8 @@ public class GetAttachmentItems extends Thread {
 
 							if (parentContainerName.equals(stitcher.BACKGROUND_NAME) && offParent) {
 								IFrame frame = (IFrame) item.getParentItem();
-								frame.removeItem(item);
 								stitcher.moveItemToNewFrame(item, new Vector2f(0.0f, 0.0f), "back-" + item.getUUID());
+								frame.removeItem(item);
 							} else {
 								// check if we are dropping on a "background" frame
 								boolean firstFrameFound = false;

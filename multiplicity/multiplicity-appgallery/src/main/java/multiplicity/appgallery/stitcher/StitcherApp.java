@@ -27,6 +27,7 @@ import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysngjme.items.HotSpotFrame;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
@@ -85,9 +86,9 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 	@Override
 	public void onAppStart() {
-//		pageNames.add(STENCIL_NAME);
+		pageNames.add(STENCIL_NAME);
 		pageNames.add(BACKGROUND_NAME);
-//		pageNames.add(SCAN_NAME);
+		pageNames.add(SCAN_NAME);
 		populateFromWiki();
 		loadContent(wikiPages);
 	}
@@ -101,12 +102,12 @@ public class StitcherApp extends AbstractStandaloneApp {
 			this.wikiUser = prop.getProperty("DEFAULT_USER");
 			this.wikiPass = prop.getProperty("DEFAULT_PASS");
 			this.maxFileSize = Integer.valueOf(prop.getProperty("MAX_ATTCHMENT_SIZE"));
-//			stencilsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("REPOSITORY_WIKI_SPACE"), prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
-//			wikiPages.put(pageNames.get(0), stencilsPage);
+			stencilsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("REPOSITORY_WIKI_SPACE"), prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
+			wikiPages.put(pageNames.get(0), stencilsPage);
 			backgroundsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
-			wikiPages.put(pageNames.get(0), backgroundsPage);
-//			scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
-//			wikiPages.put(pageNames.get(2), scansPage);
+			wikiPages.put(pageNames.get(1), backgroundsPage);
+			scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
+			wikiPages.put(pageNames.get(2), scansPage);
 		} catch (IOException e) {
 			logger.debug("setup:  IOException: " + e);
 		}
@@ -263,7 +264,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 	    float newX = bi.getSize().x * localScale.x;
 	    float newY = bi.getSize().y * localScale.y;
 	    
-        IFrame frame = this.getContentFactory().createFrame(frameName, uUID, Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
+        IFrame frame = this.getContentFactory().createHotSpotFrame(frameName, uUID, Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
 
         frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
@@ -368,10 +369,11 @@ public class StitcherApp extends AbstractStandaloneApp {
 								targetFrame.add(item);
 						        item.setWorldLocation(itemWorldPos);
 						        targetFrame.getZOrderManager().bringToTop(item, null);    
-						        //item.centerItem();
 						        
-						        fillHotSpotRepo(frame);
+						        JMEFrame hsFrame = (HotSpotFrame) item.getParentItem();
+						        ((HotSpotFrame) hsFrame).addHotSpot(item);
 						        message = message + "on "+targetFrame.getName()+". Great!!";
+						        fillHotSpotRepo(frame);
 							}
 							
 						}
