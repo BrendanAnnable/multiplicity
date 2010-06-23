@@ -142,17 +142,17 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 	
 	@Override
 	public void removeItem(IItem item) {
-	    List<IItem> cs = getItemChildren();
-	    for (IItem i : cs) {
-            if( i.getUUID().equals(item.getUUID())) {
-                drawableContent.detachChild(item.getTreeRootSpatial());
-                getItemChildren().remove(item);
-            }
-        }
-	    
-	    zOrderManager.unregisterForZOrdering(item);	
-	    zOrderManager.updateZOrdering();
-	    updateRenderState();
+//	    List<IItem> cs = getItemChildren();
+//	    for (IItem i : cs) {
+//            if( i.getUUID().equals(item.getUUID())) {
+//                drawableContent.detachChild(item.getTreeRootSpatial());
+//                getItemChildren().remove(item);
+//            }
+//        }
+//	    
+//	    zOrderManager.unregisterForZOrdering(item);	
+//	    zOrderManager.updateZOrdering();
+//	    updateRenderState();
 	}
 	
 	@Override

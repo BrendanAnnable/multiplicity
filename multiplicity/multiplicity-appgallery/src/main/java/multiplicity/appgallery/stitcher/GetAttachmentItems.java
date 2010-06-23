@@ -31,6 +31,7 @@ import multiplicity.csysng.items.IImage.AlphaStyle;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysngjme.behaviours.MoveBetweenContainerBehaviour;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysngjme.items.HotSpotFrame;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEItem;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
@@ -202,7 +203,7 @@ public class GetAttachmentItems extends Thread {
 									if((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && !firstFrameFound ) {
 										try {
 											Geometry geometry = (Geometry) pickedSpatial.getSpatial();
-											JMEFrame targetFrame = (JMEFrame) geometry.getParent();
+											HotSpotFrame targetFrame = (HotSpotFrame) geometry.getParent();
 											
 											if(targetFrame.getName().contains("back-")) {
 												firstFrameFound = true;
@@ -213,7 +214,9 @@ public class GetAttachmentItems extends Thread {
 												targetFrame.add(item);
 										        item.setWorldLocation(itemWorldPos);
 										        targetFrame.getZOrderManager().bringToTop(item, null);    
-										        item.centerItem();
+										        
+										        targetFrame.bringHotSpotsToTop();
+										        
 										        //BehaviourMaker.addBehaviour(item, RotateTranslateScaleBehaviour.class);
 											}
 											

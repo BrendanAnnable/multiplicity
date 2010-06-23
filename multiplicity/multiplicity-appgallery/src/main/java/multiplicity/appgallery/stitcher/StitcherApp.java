@@ -88,7 +88,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 	public void onAppStart() {
 		pageNames.add(STENCIL_NAME);
 		pageNames.add(BACKGROUND_NAME);
-		pageNames.add(SCAN_NAME);
+//		pageNames.add(SCAN_NAME);
 		populateFromWiki();
 		loadContent(wikiPages);
 	}
@@ -106,8 +106,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 			wikiPages.put(pageNames.get(0), stencilsPage);
 			backgroundsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
 			wikiPages.put(pageNames.get(1), backgroundsPage);
-			scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
-			wikiPages.put(pageNames.get(2), scansPage);
+//			scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
+//			wikiPages.put(pageNames.get(2), scansPage);
 		} catch (IOException e) {
 			logger.debug("setup:  IOException: " + e);
 		}
