@@ -1,5 +1,7 @@
 package multiplicity.csysng.behaviours;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 import multiplicity.csysng.items.IItem;
@@ -20,5 +22,20 @@ public class BehaviourMaker {
 			log.warning(e.toString());
 		}
 		return null;
+	}
+	
+	public static void removeBehavior(IItem item, Class<? extends IBehaviour> behaviourClass) {
+	     if( !item.getBehaviours().isEmpty() ) {
+	         List<IBehaviour> behaviours = item.getBehaviours();
+	         IBehaviour newInstance;
+                for (IBehaviour be : behaviours) {
+                    if( be.getClass().equals(behaviourClass) ) {
+                        item.getBehaviours().remove(be);
+                    }
+               }
+	         
+	        
+	         
+	     }
 	}
 }
