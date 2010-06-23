@@ -1,8 +1,6 @@
 package multiplicity.appgallery.stitcher;
 
 import java.awt.Color;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -14,14 +12,12 @@ import java.util.Vector;
 
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
-import multiplicity.appgallery.gallery.GalleryApp;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.gesture.GestureLibrary;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IFrame;
-import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
@@ -42,7 +38,6 @@ import no.uio.intermedia.snomobile.interfaces.IPage;
 
 import org.apache.log4j.Logger;
 
-import com.jme.bounding.BoundingVolume;
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
 import com.jme.scene.Geometry;
