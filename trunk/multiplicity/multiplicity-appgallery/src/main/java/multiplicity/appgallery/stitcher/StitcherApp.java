@@ -275,7 +275,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         frame.addItem(item);
         item.setWorldLocation(itemWorldPos);
         frame.getZOrderManager().bringToTop(item, null);    
-        
+
         item.centerItem();
         
         this.getzOrderManager().bringToTop(frame, null);
@@ -314,7 +314,6 @@ public class StitcherApp extends AbstractStandaloneApp {
 		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 		frame.maintainBorderSizeDuringScale();
 		
-		//TODO: use width/height of app instead
 		Float xPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getWidth()/2 - 60/2).floatValue();
 		Float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight()/2 - 60/2).floatValue();
 		
