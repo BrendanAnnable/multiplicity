@@ -317,7 +317,6 @@ public class StitcherApp extends AbstractStandaloneApp {
 		//TODO: use width/height of app instead
 		Float xPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getWidth()/2 - 60/2).floatValue();
 		Float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight()/2 - 60/2).floatValue();
-		logger.info(xPos + " " + yPos);
 		
 		frame.setRelativeLocation(new Vector2f(xPos, yPos));
 
