@@ -37,11 +37,13 @@ import no.uio.intermedia.snomobile.interfaces.IAttachment;
 import no.uio.intermedia.snomobile.interfaces.IPage;
 
 import org.apache.log4j.Logger;
+import org.lwjgl.util.Display;
 
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
 import com.jme.scene.Geometry;
 import com.jme.scene.Node;
+import com.jme.system.DisplaySystem;
 
 public class StitcherApp extends AbstractStandaloneApp {
 
@@ -81,7 +83,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 	@Override
 	public void onAppStart() {
-		pageNames.add(STENCIL_NAME);
+//		pageNames.add(STENCIL_NAME);
 		pageNames.add(BACKGROUND_NAME);
 //		pageNames.add(SCAN_NAME);
 		populateFromWiki();
@@ -97,10 +99,10 @@ public class StitcherApp extends AbstractStandaloneApp {
 			this.wikiUser = prop.getProperty("DEFAULT_USER");
 			this.wikiPass = prop.getProperty("DEFAULT_PASS");
 			this.maxFileSize = Integer.valueOf(prop.getProperty("MAX_ATTCHMENT_SIZE"));
-			stencilsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("REPOSITORY_WIKI_SPACE"), prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
-			wikiPages.put(pageNames.get(0), stencilsPage);
+//			stencilsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("REPOSITORY_WIKI_SPACE"), prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
+//			wikiPages.put(pageNames.get(0), stencilsPage);
 			backgroundsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
-			wikiPages.put(pageNames.get(1), backgroundsPage);
+			wikiPages.put(pageNames.get(0), backgroundsPage);
 //			scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
 //			wikiPages.put(pageNames.get(2), scansPage);
 		} catch (IOException e) {
@@ -313,8 +315,9 @@ public class StitcherApp extends AbstractStandaloneApp {
 		frame.maintainBorderSizeDuringScale();
 		
 		//TODO: use width/height of app instead
-		Float xPos = Integer.valueOf(frameWidth - 120).floatValue();
-		Float yPos = Integer.valueOf(frameHeight/2 + 60).floatValue();
+		Float xPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getWidth()/2 - 60/2).floatValue();
+		Float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight()/2 - 60/2).floatValue();
+		logger.info(xPos + " " + yPos);
 		
 		frame.setRelativeLocation(new Vector2f(xPos, yPos));
 
