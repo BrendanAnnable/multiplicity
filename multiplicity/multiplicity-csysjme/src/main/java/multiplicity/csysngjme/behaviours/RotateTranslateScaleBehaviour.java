@@ -18,7 +18,7 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 	protected Vector2f cursor2OldPos = new Vector2f();
 
 	protected float maxScale = 4.0f;
-	protected float minScale = 0.5f;
+	protected float minScale = 0.1f;
 
 	private IItem item;
 	
