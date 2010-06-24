@@ -17,10 +17,10 @@ import multiplicity.csysng.behaviours.gesture.GestureLibrary;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
-import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
+import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
@@ -39,7 +39,6 @@ import no.uio.intermedia.snomobile.interfaces.IAttachment;
 import no.uio.intermedia.snomobile.interfaces.IPage;
 
 import org.apache.log4j.Logger;
-import org.lwjgl.util.Display;
 
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
@@ -86,13 +85,14 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 	@Override
 	public void onAppStart() {
-		pageNames.add(STENCIL_NAME);
+	    setHotSpotContentFactory(new HotSpotContentItemFactory());
+    	pageNames.add(STENCIL_NAME);
 		pageNames.add(BACKGROUND_NAME);
 //		pageNames.add(SCAN_NAME);
 		populateFromWiki();
 		loadContent(wikiPages);
 		
-		setHotSpotContentFactory(new HotSpotContentItemFactory());
+		
 	}
 
 	private void populateFromWiki() {
@@ -107,7 +107,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 			stencilsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("REPOSITORY_WIKI_SPACE"), prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
 			wikiPages.put(pageNames.get(0), stencilsPage);
 			backgroundsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
-			wikiPages.put(pageNames.get(1), backgroundsPage);
+			wikiPages.put(pageNames.get(0), backgroundsPage);
 //			scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
 //			wikiPages.put(pageNames.get(2), scansPage);
 		} catch (IOException e) {
@@ -334,12 +334,14 @@ public class StitcherApp extends AbstractStandaloneApp {
 	}
 
 	private void fillHotSpotRepo(IFrame frame) {
-		IColourRectangle rect = getContentFactory().createColourRectangle("cr", UUID.randomUUID(), 20, 20);
-		rect.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
-		frame.addItem(rect);
-		rect.centerItem();
+	    
+	    IHotSpotItem hotspot = this.getHotSpotContentFactory().createHotSpotItem("cr", UUID.randomUUID(), 20, 20);
+//		IColourRectangle rect = getContentFactory().createColourRectangle("cr", UUID.randomUUID(), 20, 20);
+		hotspot.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
+		frame.addItem(hotspot);
+		hotspot.centerItem();
 		
-		rect.addItemListener(new ItemListenerAdapter() {
+		hotspot.addItemListener(new ItemListenerAdapter() {
 			@Override
 			public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
 				String message = "Hotspot released: ";
@@ -372,10 +374,14 @@ public class StitcherApp extends AbstractStandaloneApp {
 						        item.setWorldLocation(itemWorldPos);
 						        targetFrame.getZOrderManager().bringToTop(item, null);    
 						        
-						        JMEFrame hsFrame = (HotSpotFrame) item.getParentItem();
-						        ((HotSpotFrame) hsFrame).addHotSpot(item);
-						        message = message + "on "+targetFrame.getName()+". Great!!";
-						        fillHotSpotRepo(frame);
+						        
+						        
+						        IFrame hsFrame = (IFrame) item.getParentItem();
+						        if( hsFrame instanceof HotSpotFrame) {
+						            ((HotSpotFrame) hsFrame).addHotSpot(item);
+						            message = message + "on "+targetFrame.getName()+". Great!!";
+						            fillHotSpotRepo(frame);
+						        }
 							}
 							
 						}
@@ -394,7 +400,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 			}
 		});
 		
-		BehaviourMaker.addBehaviour(rect, RotateTranslateScaleBehaviour.class);
+		BehaviourMaker.addBehaviour((IItem) hotspot, RotateTranslateScaleBehaviour.class);
 	}
 
 	/**
