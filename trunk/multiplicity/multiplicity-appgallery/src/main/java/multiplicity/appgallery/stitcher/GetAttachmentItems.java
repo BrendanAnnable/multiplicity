@@ -190,31 +190,40 @@ public class GetAttachmentItems extends Thread {
 								// check if we are dropping on a "background" frame
 								boolean firstFrameFound = false;
 								for (PickedSpatial pickedSpatial : spatialsList) {
-									if((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && !firstFrameFound ) {
+									if((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && firstFrameFound == false ) {
 										try {
 											Geometry geometry = (Geometry) pickedSpatial.getSpatial();
-											HotSpotFrame targetFrame = (HotSpotFrame) geometry.getParent();
 											
-											if(targetFrame.getName().contains("back-")) {
-												firstFrameFound = true;
-												IFrame frame = (IFrame) item.getParentItem();
-												frame.removeItem(item);
+											if( geometry.getParent() instanceof HotSpotFrame ){
+												HotSpotFrame targetFrame = (HotSpotFrame) geometry.getParent();
 												
-												Vector2f itemWorldPos = item.getWorldLocation();
-												targetFrame.addItem(item);
-										        item.setWorldLocation(itemWorldPos);
-										        targetFrame.getZOrderManager().bringToTop(item, null);    
-										        
-										        targetFrame.bringHotSpotsToTop();
-										        
-										        //BehaviourMaker.addBehaviour(item, RotateTranslateScaleBehaviour.class);
+												if(targetFrame.getName().contains("back-")) {
+													firstFrameFound = true;
+													IFrame frame = (IFrame) item.getParentItem();
+													frame.removeItem(item);
+													
+													Vector2f itemWorldPos = item.getWorldLocation();
+													targetFrame.addItem(item);
+											        item.setWorldLocation(itemWorldPos);
+											        targetFrame.getZOrderManager().bringToTop(item, null);    
+											        
+											        targetFrame.bringHotSpotsToTop();
+											        
+											        //BehaviourMaker.addBehaviour(item, RotateTranslateScaleBehaviour.class);
+												}
 											}
+											
 											
 										}
 										catch (Exception e) {
 											logger.debug("GetAttachmentItems: itemCursorReleased: Exception: "+e);
 										}
 									}
+									
+							
+								}
+								if(!firstFrameFound && offParent) {
+									item.centerItem();
 								}
 							}
 
