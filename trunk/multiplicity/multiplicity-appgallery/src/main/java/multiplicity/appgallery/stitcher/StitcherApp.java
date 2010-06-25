@@ -361,6 +361,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 					if (pickedSpatial.getSpatial().equals(((JMEFrame) item.getParentItem().getTreeRootSpatial()).getMaskGeometry())) {
 						offParent = false;
 						message = message + "on its parent. Nothing happens";
+						HotSpotFrame hsFrame = (HotSpotFrame) item.getParentItem();
+						hsFrame.connectHotSpots(hsFrame.getHotSpots().get(0), hsFrame.getHotSpots().get(1));
 					}
 					else if((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && !firstFrameFound ) {
 						try {
@@ -379,7 +381,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 						        IFrame hsFrame = (IFrame) item.getParentItem();
 						        if( hsFrame instanceof HotSpotFrame) {
-						            drawLineBetweenHotSpots(((HotSpotFrame) hsFrame).addHotSpot(item), ((HotSpotFrame) hsFrame).getHotSpots(), (HotSpotFrame)hsFrame);
+						            drawLineBetweenHotSpots(((HotSpotFrame) hsFrame).addHotSpot(item), (HotSpotFrame)hsFrame);
 						            message = message + "on "+targetFrame.getName()+". Great!!";
 						            fillHotSpotRepo(frame);
 						        }
@@ -400,23 +402,10 @@ public class StitcherApp extends AbstractStandaloneApp {
 				logger.info(message);
 			}
 
-			private void drawLineBetweenHotSpots(int addHotSpot, ArrayList<IHotSpotItem> arrayList, HotSpotFrame hsFrame) {
+			private void drawLineBetweenHotSpots(int addHotSpot, HotSpotFrame hsFrame) {
 				if(addHotSpot > 1) {
-					logger.info("let's draw some lines");
-					Vector3f[] vertices = new Vector3f[2];
-					IHotSpotItem ihotSpotItem1 = arrayList.get(0);
-					IHotSpotItem ihotSpotItem2 = arrayList.get(1);
-					
-					Vector2f xyHS1 = ihotSpotItem1.getRelativeLocation();
-					Vector2f xyHS2 = ihotSpotItem2.getRelativeLocation();
-					
-					vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
-					vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
-					Line line = new Line("link", vertices, null, null, null);
-					line.setMode(Mode.Connected);
-					line.setLineWidth(3f);
-					line.setSolidColor(ColorRGBA.red);		
-					hsFrame.attachChild(line);
+					logger.info("let's draw some lines");		
+					hsFrame.connectHotSpots(hsFrame.getHotSpots().get(0), hsFrame.getHotSpots().get(1));
 				}
 			}
 		});
