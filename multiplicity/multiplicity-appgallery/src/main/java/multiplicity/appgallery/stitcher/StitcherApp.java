@@ -280,7 +280,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         frame.addItem(item);
         item.setWorldLocation(itemWorldPos);
         frame.getZOrderManager().bringToTop(item, null);    
-//        BehaviourMaker.removeBehavior(item, RotateTranslateScaleBehaviour.class);
+        BehaviourMaker.removeBehavior(item, RotateTranslateScaleBehaviour.class);
         item.centerItem();
         
         this.getzOrderManager().bringToTop(frame, null);
@@ -338,6 +338,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 	    IHotSpotItem hotspot = this.getHotSpotContentFactory().createHotSpotItem("cr", UUID.randomUUID(), 20, 20);
 		hotspot.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
 		frame.addItem(hotspot);
+		hotspot.createCallBackHotSpotFrame();
 		hotspot.centerItem();
 		
 		hotspot.addItemListener(new ItemListenerAdapter() {

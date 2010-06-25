@@ -16,4 +16,6 @@ public interface IHotSpotItem extends IItem {
 
     public void setSolidBackgroundColour(Color color);
 
+	public void createCallBackHotSpotFrame();
+
 }

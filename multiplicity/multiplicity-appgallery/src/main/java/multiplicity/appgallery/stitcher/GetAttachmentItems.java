@@ -140,8 +140,7 @@ public class GetAttachmentItems extends Thread {
 
 				if (iAttachment.getIsValid()) {
 					try {
-						img = stitcher.getContentFactory().createImage("photo",
-								UUID.randomUUID());
+						img = stitcher.getContentFactory().createImage("photo", UUID.randomUUID());
 						img.setImage(file.toURI().toURL());
 					} catch (MalformedURLException e) {
 						logger.debug("MalformedURLException: " + e);
