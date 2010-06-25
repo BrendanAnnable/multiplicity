@@ -51,6 +51,7 @@ public class HotSpotFrame extends JMEFrame {
 			lines = new ArrayList<Line>();
 		}
 		
+		//get the location of the 2 hotspots relative to the parent frame
 		Vector2f xyHS1 = ihotSpotItem1.getRelativeLocation();
 		Vector2f xyHS2 = ihotSpotItem2.getRelativeLocation();
 		
@@ -59,7 +60,7 @@ public class HotSpotFrame extends JMEFrame {
 		vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
 		Line line = new Line("link", vertices, null, null, null);
 		line.setMode(Mode.Connected);
-		line.setLineWidth(3f);
+		line.setLineWidth(2f);
 		line.setSolidColor(ColorRGBA.red);		
 		this.attachChild(line);
 		lines.add(line);
