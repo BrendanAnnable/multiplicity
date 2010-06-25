@@ -32,10 +32,9 @@ public class HotSpotFrame extends JMEFrame {
 		this.hotSpots = hotSpots;
 	}
 
-	public int addHotSpot(IItem item) {
+	public void addHotSpot(IItem item) {
 		hotSpots.add((IHotSpotItem) item);
-
-		return hotSpots.size();
+		connectHotSpots();
 	}
 
 	public void bringHotSpotsToTop() {
@@ -64,7 +63,7 @@ public class HotSpotFrame extends JMEFrame {
 			vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
 			Line line = new Line("link", vertices, null, null, null);
 			line.setMode(Mode.Connected);
-			line.setLineWidth(2f);
+			line.setLineWidth(1f);
 			line.setSolidColor(ColorRGBA.red);		
 			this.attachChild(line);
 			lines.add(line);			

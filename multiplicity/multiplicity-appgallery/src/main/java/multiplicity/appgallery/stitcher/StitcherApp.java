@@ -378,7 +378,6 @@ public class StitcherApp extends AbstractStandaloneApp {
 						        IFrame hsFrame = (IFrame) item.getParentItem();
 						        if( hsFrame instanceof HotSpotFrame) {
 						            ((HotSpotFrame) hsFrame).addHotSpot(item);
-						            ((HotSpotFrame) hsFrame).connectHotSpots();
 						            message = message + "on "+targetFrame.getName()+". Great!!";
 						            fillHotSpotRepo(frame);
 						        }
