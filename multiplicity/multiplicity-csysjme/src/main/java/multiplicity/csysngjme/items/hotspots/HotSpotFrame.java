@@ -1,5 +1,7 @@
 package multiplicity.csysngjme.items.hotspots;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -10,6 +12,7 @@ import com.jme.scene.Line;
 import com.jme.scene.Line.Mode;
 
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEFrame;
@@ -47,7 +50,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	public void connectHotSpots() {
 		if(hotSpots.size() > 1) {
 			IHotSpotItem ihotSpotItem1 = hotSpots.get(0);
-			IHotSpotItem ihotSpotItem2 = hotSpots.get(1);
+			final IHotSpotItem ihotSpotItem2 = hotSpots.get(1);
 			
 			// TODO Auto-generated method stub
 			if(lines.size() > 0) {
@@ -62,12 +65,33 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 			Vector3f[] vertices = new Vector3f[2];
 			vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
 			vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
-			Line line = new Line("link", vertices, null, null, null);
+			final Line line = new Line("link", vertices, null, null, null);
 			line.setMode(Mode.Connected);
 			line.setLineWidth(1f);
 			line.setSolidColor(ColorRGBA.red);		
 			this.attachChild(line);
-			lines.add(line);			
+			lines.add(line);
+			
+			
+			ihotSpotItem1.addItemListener(new ItemListenerAdapter() {
+                
+                public void itemMoved(IItem item) {
+                    
+                    Vector2f xyHS1 = item.getRelativeLocation();
+                    Vector2f xyHS2 = ihotSpotItem2.getRelativeLocation();
+                    Vector3f[] vertices = new Vector3f[2];
+
+                    vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
+                    vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
+//                    line.reconstruct(vertices, null, null, null);
+                    
+                };
+                
+                
+                
+            } );
+			
+			
 		}
 	}
 }
