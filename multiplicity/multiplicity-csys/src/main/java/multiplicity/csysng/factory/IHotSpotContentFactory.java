@@ -8,7 +8,7 @@ import multiplicity.csysng.items.hotspot.IHotSpotItem;
 
 public interface IHotSpotContentFactory {
     
-    public IFrame createHotSpotFrame(String name, UUID uuid, int width, int height);
+    public IHotSpotFrame createHotSpotFrame(String name, UUID uuid, int width, int height);
 
     public IHotSpotItem createHotSpotItem(String name, UUID uuid, int width, int height);
 
