@@ -6,8 +6,8 @@ import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.factory.ContentItemFactoryUtil;
-import multiplicity.csysngjme.items.HotSpotItem;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
+import multiplicity.csysngjme.items.hotspots.HotSpotItem;
 
 public class HotSpotContentItemFactory implements IHotSpotContentFactory {
     

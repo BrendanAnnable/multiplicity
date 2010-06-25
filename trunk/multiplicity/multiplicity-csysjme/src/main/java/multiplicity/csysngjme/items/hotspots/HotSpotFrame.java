@@ -1,29 +1,22 @@
 package multiplicity.csysngjme.items.hotspots;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import com.jme.math.Vector2f;
-import com.jme.math.Vector3f;
-import com.jme.renderer.ColorRGBA;
-import com.jme.scene.Line;
-import com.jme.scene.Line.Mode;
-import com.jme.util.geom.BufferUtils;
-
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.events.ItemListenerAdapter;
+import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEFrame;
+
+import com.jme.scene.Line;
 
 public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	
 	private static final long serialVersionUID = 8114328886119432460L;
 	
-	protected ArrayList<IHotSpotItem> hotSpots = new ArrayList<IHotSpotItem>(); 
+	public ArrayList<IHotSpotItem> hotSpots = new ArrayList<IHotSpotItem>(); 
+	public ArrayList<IHotLink> hotLinks = new ArrayList<IHotLink>();
 	protected ArrayList<Line> lines = new ArrayList<Line>(); ;
 
 	public HotSpotFrame(String name, UUID uuid, int width, int height) {
@@ -40,7 +33,6 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 
 	public void addHotSpot(IItem item) {
 		hotSpots.add((IHotSpotItem) item);
-		connectHotSpots();
 	}
 
 	public void bringHotSpotsToTop() {
@@ -49,59 +41,22 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 		}
 	}
 
-	public void connectHotSpots() {
-		if(hotSpots.size() > 1) {
-			final IHotSpotItem ihotSpotItem1 = hotSpots.get(0);
-			final IHotSpotItem ihotSpotItem2 = hotSpots.get(1);
-			
-			//get the location of the 2 hotspots relative to the parent frame
-			Vector2f xyHS1 = ihotSpotItem1.getRelativeLocation();
-			Vector2f xyHS2 = ihotSpotItem2.getRelativeLocation();
-			
-			Vector3f[] vertices = new Vector3f[2];
-			vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
-			vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
-			final Line line = new Line("link", vertices, null, null, null);
-			line.setMode(Mode.Connected);
-			line.setLineWidth(1f);
-			line.setSolidColor(ColorRGBA.red);		
-			this.attachChild(line);			
-			
-			ihotSpotItem1.addItemListener(new ItemListenerAdapter() {
-                
-                public void itemMoved(IItem item) {
-                    
-                    Vector2f xyHS1 = item.getRelativeLocation();
-                    Vector2f xyHS2 = ihotSpotItem2.getRelativeLocation();
-                    Vector3f[] vertices = new Vector3f[2];
-
-                    vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
-                    vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
-                    
-                    FloatBuffer fBuffer = BufferUtils.createFloatBuffer(vertices);                    
-                    line.reconstruct(fBuffer, null, null, null);
-                    line.setSolidColor(ColorRGBA.red);	
-                };
-                       
-            } );
-			
-			ihotSpotItem2.addItemListener(new ItemListenerAdapter() {
-                
-                public void itemMoved(IItem item) {
-                    
-                    Vector2f xyHS1 = ihotSpotItem1.getRelativeLocation();
-                    Vector2f xyHS2 = item.getRelativeLocation();
-                    Vector3f[] vertices = new Vector3f[2];
-
-                    vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
-                    vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
-                    
-                    FloatBuffer fBuffer = BufferUtils.createFloatBuffer(vertices);                    
-                    line.reconstruct(fBuffer, null, null, null);
-                    line.setSolidColor(ColorRGBA.red);	
-                    
-                };
-            } );
-		}
+	public void addHotLink(IHotLink hotLink) {
+	    this.hotLinks.add(hotLink);
 	}
+	
+	public void removeHotLink(IHotLink hotLink) {
+	    if( !hotLinks.isEmpty() && hotLinks.contains(hotLink)) {
+	        hotLinks.remove(hotLink);
+	    }
+	        
+	}
+	
+    public void setHotLinks(ArrayList<IHotLink> hotLinks) {
+        this.hotLinks = hotLinks;
+    }
+
+    public ArrayList<IHotLink> getHotLinks() {
+        return hotLinks;
+    }
 }
