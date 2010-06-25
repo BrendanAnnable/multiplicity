@@ -3,35 +3,37 @@ package multiplicity.csysngjme.items.hotspots;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEFrame;
 
 public class HotSpotFrame extends JMEFrame {
 	
 	private static final long serialVersionUID = 8114328886119432460L;
 	
-	protected ArrayList<IColourRectangle> hotSpots = new ArrayList<IColourRectangle>(); 
+	protected ArrayList<IHotSpotItem> hotSpots = new ArrayList<IHotSpotItem>(); 
 
 	public HotSpotFrame(String name, UUID uuid, int width, int height) {
 		super(name, uuid, width, height);
 	}
 
-	public ArrayList<IColourRectangle> getHotSpots() {
+	public ArrayList<IHotSpotItem> getHotSpots() {
 		return hotSpots;
 	}
 	
-	public void setHotSpots(ArrayList<IColourRectangle> hotSpots) {
+	public void setHotSpots(ArrayList<IHotSpotItem> hotSpots) {
 		this.hotSpots = hotSpots;
 	}
 
-	public void addHotSpot(IItem item) {
-		hotSpots.add((IColourRectangle) item);
+	public int addHotSpot(IItem item) {
+		hotSpots.add((IHotSpotItem) item);
+
+		return hotSpots.size();
 	}
 
 	public void bringHotSpotsToTop() {
-		for (IColourRectangle iColourRectangle : hotSpots) {
-			this.getZOrderManager().bringToTop(iColourRectangle, null);   
+		for (IHotSpotItem iHotSpotItem : hotSpots) {
+			this.getZOrderManager().bringToTop(iHotSpotItem, null);   
 		}
 	}
 }
