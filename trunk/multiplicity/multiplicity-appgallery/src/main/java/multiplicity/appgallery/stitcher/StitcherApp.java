@@ -392,8 +392,10 @@ public class StitcherApp extends AbstractStandaloneApp {
 				
 				if(!firstFrameFound && offParent) {
 					item.centerItem();
-					HotSpotFrame hsFrame = (HotSpotFrame) item.getParentItem();
-					hsFrame.connectHotSpots(hsFrame.getHotSpots().get(0), hsFrame.getHotSpots().get(1));
+					IFrame hsFrame = (IFrame) item.getParentItem();
+			        if( hsFrame instanceof HotSpotFrame) {
+			        	((HotSpotFrame) hsFrame).connectHotSpots(((HotSpotFrame) hsFrame).getHotSpots().get(0), ((HotSpotFrame) hsFrame).getHotSpots().get(1));			        	
+			        }
 					message = message + "in the mist .... Let's place it back to the center of its mother frame.";
 				}
 				
