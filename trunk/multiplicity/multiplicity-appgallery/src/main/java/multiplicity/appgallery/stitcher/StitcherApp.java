@@ -44,6 +44,7 @@ import org.apache.log4j.Logger;
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
 import com.jme.scene.Geometry;
+import com.jme.scene.Line;
 import com.jme.scene.Node;
 import com.jme.system.DisplaySystem;
 
@@ -278,8 +279,6 @@ public class StitcherApp extends AbstractStandaloneApp {
 	        
 	        this.getzOrderManager().bringToTop(frame, null);
 	        
-	     
-	        
 	        return frame;
 	    }
 	   
@@ -391,7 +390,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 						offParent = false;
 						message = message + "on its parent. Nothing happens";
 						HotSpotFrame hsFrame = (HotSpotFrame) item.getParentItem();
-						hsFrame.connectHotSpots();
+						//hsFrame.connectHotSpots();
 					}
 					else if((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && !firstFrameFound ) {
 						try {
@@ -411,9 +410,11 @@ public class StitcherApp extends AbstractStandaloneApp {
 						        IFrame hsFrame = (IFrame) item.getParentItem();
 						        if( hsFrame instanceof HotSpotFrame) {
 						            ((HotSpotFrame) hsFrame).addHotSpot(item);
-						            
 						            HotSpotFrame hotSpotFrameContent = createNewHotSpotContentFrame();
+						            //((HotSpotFrame) hsFrame).connectHotSpots();
 						            ((HotSpotItem)item).setHotSpotFrameContent(hotSpotFrameContent);
+						            Line l = ((HotSpotItem)item).createLink();
+						            ((Node) stitcher.getOrthoNode()).attachChild(l);
 						            message = message + "on "+targetFrame.getName()+". Great!!";
 						            fillHotSpotRepo(frame);
 						        }
@@ -430,7 +431,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 					item.centerItem();
 					IFrame hsFrame = (IFrame) item.getParentItem();
 			        if( hsFrame instanceof HotSpotFrame) {
-			        	((HotSpotFrame) hsFrame).connectHotSpots();			        	
+			        	//((HotSpotFrame) hsFrame).connectHotSpots();			        	
 			        }
 					message = message + "in the mist .... Let's place it back to the center of its mother frame.";
 				}

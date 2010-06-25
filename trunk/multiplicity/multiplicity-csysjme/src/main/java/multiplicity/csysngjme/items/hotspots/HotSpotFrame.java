@@ -2,6 +2,7 @@ package multiplicity.csysngjme.items.hotspots;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Line;
 import com.jme.scene.Line.Mode;
+import com.jme.util.geom.BufferUtils;
 
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
@@ -49,14 +51,8 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 
 	public void connectHotSpots() {
 		if(hotSpots.size() > 1) {
-			IHotSpotItem ihotSpotItem1 = hotSpots.get(0);
+			final IHotSpotItem ihotSpotItem1 = hotSpots.get(0);
 			final IHotSpotItem ihotSpotItem2 = hotSpots.get(1);
-			
-			// TODO Auto-generated method stub
-			if(lines.size() > 0) {
-				this.detachChild(lines.get(0));
-				lines = new ArrayList<Line>();
-			}
 			
 			//get the location of the 2 hotspots relative to the parent frame
 			Vector2f xyHS1 = ihotSpotItem1.getRelativeLocation();
@@ -69,9 +65,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 			line.setMode(Mode.Connected);
 			line.setLineWidth(1f);
 			line.setSolidColor(ColorRGBA.red);		
-			this.attachChild(line);
-			lines.add(line);
-			
+			this.attachChild(line);			
 			
 			ihotSpotItem1.addItemListener(new ItemListenerAdapter() {
                 
@@ -83,15 +77,31 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 
                     vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
                     vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
-//                    line.reconstruct(vertices, null, null, null);
                     
+                    FloatBuffer fBuffer = BufferUtils.createFloatBuffer(vertices);                    
+                    line.reconstruct(fBuffer, null, null, null);
+                    line.setSolidColor(ColorRGBA.red);	
                 };
-                
-                
-                
+                       
             } );
 			
-			
+			ihotSpotItem2.addItemListener(new ItemListenerAdapter() {
+                
+                public void itemMoved(IItem item) {
+                    
+                    Vector2f xyHS1 = ihotSpotItem1.getRelativeLocation();
+                    Vector2f xyHS2 = item.getRelativeLocation();
+                    Vector3f[] vertices = new Vector3f[2];
+
+                    vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
+                    vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
+                    
+                    FloatBuffer fBuffer = BufferUtils.createFloatBuffer(vertices);                    
+                    line.reconstruct(fBuffer, null, null, null);
+                    line.setSolidColor(ColorRGBA.red);	
+                    
+                };
+            } );
 		}
 	}
 }

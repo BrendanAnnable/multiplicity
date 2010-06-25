@@ -2,6 +2,8 @@ package multiplicity.csysng.items.hotspot;
 
 import java.awt.Color;
 
+import com.jme.scene.Line;
+
 import multiplicity.csysng.items.IItem;
 
 public interface IHotSpotItem extends IItem {
@@ -16,6 +18,6 @@ public interface IHotSpotItem extends IItem {
 
 	public void createCallBackHotSpotFrame();
 
-    public void createLink();
+    public Line createLink();
 
 }

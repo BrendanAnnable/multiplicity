@@ -1,8 +1,12 @@
 package multiplicity.csysngjme.items;
 
-import java.awt.Color;
-import java.util.ArrayList;
+import java.nio.FloatBuffer;
 import java.util.UUID;
+
+import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.events.ItemListenerAdapter;
+import multiplicity.csysng.items.hotspot.IHotSpotFrame;
+import multiplicity.csysng.items.hotspot.IHotSpotItem;
 
 import org.apache.log4j.Logger;
 
@@ -11,15 +15,7 @@ import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Line;
 import com.jme.scene.Line.Mode;
-
-import multiplicity.csysng.behaviours.BehaviourMaker;
-import multiplicity.csysng.gfx.Gradient;
-import multiplicity.csysng.gfx.Gradient.GradientDirection;
-import multiplicity.csysng.items.IFrame;
-import multiplicity.csysng.items.hotspot.IHotSpotFrame;
-import multiplicity.csysng.items.hotspot.IHotSpotItem;
-import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
-import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
+import com.jme.util.geom.BufferUtils;
 
 public class HotSpotItem extends JMEColourRectangle implements IHotSpotItem {
 
@@ -62,11 +58,58 @@ public class HotSpotItem extends JMEColourRectangle implements IHotSpotItem {
     }
 
     @Override
-    public void createLink() {
-        
-//      '
-        
-        
+    public Line createLink() {
+
+		//get the location of the 2 hotspots relative to the parent frame
+		Vector2f xyHS1 = this.getRelativeLocation();
+		Vector2f xyHS2 = hotSpotFrameContent.getRelativeLocation();
+		
+		Vector3f[] vertices = new Vector3f[2];
+		vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
+		vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
+		final Line line = new Line("link", vertices, null, null, null);
+		line.setMode(Mode.Connected);
+		line.setLineWidth(1f);
+		line.setSolidColor(ColorRGBA.red);		
+		//this.attachChild(line);			
+		
+		this.addItemListener(new ItemListenerAdapter() {
+            
+            public void itemMoved(IItem item) {
+                
+                Vector2f xyHS1 = item.getRelativeLocation();
+                Vector2f xyHS2 = hotSpotFrameContent.getRelativeLocation();
+                Vector3f[] vertices = new Vector3f[2];
+
+                vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
+                vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
+                
+                FloatBuffer fBuffer = BufferUtils.createFloatBuffer(vertices);                    
+                line.reconstruct(fBuffer, null, null, null);
+                line.setSolidColor(ColorRGBA.red);	
+            };
+                   
+        } );
+		
+		hotSpotFrameContent.addItemListener(new ItemListenerAdapter() {
+            
+            public void itemMoved(IItem item) {
+                
+                Vector2f xyHS1 = getRelativeLocation();
+                Vector2f xyHS2 = item.getRelativeLocation();
+                Vector3f[] vertices = new Vector3f[2];
+
+                vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
+                vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
+                
+                FloatBuffer fBuffer = BufferUtils.createFloatBuffer(vertices);                    
+                line.reconstruct(fBuffer, null, null, null);
+                line.setSolidColor(ColorRGBA.red);	
+                
+            };
+        } );
+    	
+    	return line;
     }
 
     @Override
