@@ -12,12 +12,10 @@ public interface IHotSpotItem extends IItem {
 
     public boolean isOpen();
 
-    public IHotSpotItem getRelationHotSpot();
-
     public void setSolidBackgroundColour(Color color);
 
-	public void createCallBackHotSpotFrame();
+    public IHotLink createHotLink();
 
-    public Line createLink();
+    public void update();
 
 }
