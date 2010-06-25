@@ -12,10 +12,10 @@ public interface IHotSpotItem extends IItem {
 
     public IHotSpotItem getRelationHotSpot();
 
-    public void createLink(IHotSpotItem relationHotSpot);
-
     public void setSolidBackgroundColour(Color color);
 
 	public void createCallBackHotSpotFrame();
+
+    public void createLink();
 
 }

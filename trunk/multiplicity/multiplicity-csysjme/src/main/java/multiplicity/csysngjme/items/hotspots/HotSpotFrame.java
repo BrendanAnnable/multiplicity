@@ -10,10 +10,11 @@ import com.jme.scene.Line;
 import com.jme.scene.Line.Mode;
 
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEFrame;
 
-public class HotSpotFrame extends JMEFrame {
+public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	
 	private static final long serialVersionUID = 8114328886119432460L;
 	

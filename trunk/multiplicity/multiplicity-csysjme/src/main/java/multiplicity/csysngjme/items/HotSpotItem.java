@@ -1,16 +1,22 @@
 package multiplicity.csysngjme.items;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
+import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
+import com.jme.renderer.ColorRGBA;
+import com.jme.scene.Line;
+import com.jme.scene.Line.Mode;
 
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IFrame;
+import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
@@ -23,10 +29,16 @@ public class HotSpotItem extends JMEColourRectangle implements IHotSpotItem {
 	boolean isOpen;
     protected String link;
     IHotSpotItem relationHotSpot;
+    private IHotSpotFrame hotSpotFrameContent;
     
     
     public HotSpotItem(String name, UUID uuid, int width, int height) {
         super(name, uuid, width, height);
+    }
+
+    public HotSpotItem(IHotSpotFrame hotSpotFrameContent, String name, UUID uuid, int width, int height) {
+        super(name, uuid, width, height);
+        this.setHotSpotFrameContent(hotSpotFrameContent);
     }
 
     @Override
@@ -50,8 +62,11 @@ public class HotSpotItem extends JMEColourRectangle implements IHotSpotItem {
     }
 
     @Override
-    public void createLink(IHotSpotItem relationHotSpot) {
-        this.relationHotSpot = relationHotSpot;
+    public void createLink() {
+        
+//      '
+        
+        
     }
 
     @Override
@@ -74,6 +89,15 @@ public class HotSpotItem extends JMEColourRectangle implements IHotSpotItem {
 //        BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 //
 //        (this.getParent().getParent().getParent()).add(frame);
+    }
+
+    public void setHotSpotFrameContent(IHotSpotFrame hotSpotFrameContent) {
+        this.hotSpotFrameContent = hotSpotFrameContent;
+        this.createLink();
+    }
+
+    public IHotSpotFrame getHotSpotFrameContent() {
+        return hotSpotFrameContent;
     }
 
 }
