@@ -358,7 +358,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 						offParent = false;
 						message = message + "on its parent. Nothing happens";
 						HotSpotFrame hsFrame = (HotSpotFrame) item.getParentItem();
-						hsFrame.connectHotSpots(hsFrame.getHotSpots().get(0), hsFrame.getHotSpots().get(1));
+						hsFrame.connectHotSpots();
 					}
 					else if((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && !firstFrameFound ) {
 						try {
@@ -377,7 +377,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 						        IFrame hsFrame = (IFrame) item.getParentItem();
 						        if( hsFrame instanceof HotSpotFrame) {
-						            drawLineBetweenHotSpots(((HotSpotFrame) hsFrame).addHotSpot(item), (HotSpotFrame)hsFrame);
+						            ((HotSpotFrame) hsFrame).addHotSpot(item);
+						            ((HotSpotFrame) hsFrame).connectHotSpots();
 						            message = message + "on "+targetFrame.getName()+". Great!!";
 						            fillHotSpotRepo(frame);
 						        }
@@ -394,19 +395,12 @@ public class StitcherApp extends AbstractStandaloneApp {
 					item.centerItem();
 					IFrame hsFrame = (IFrame) item.getParentItem();
 			        if( hsFrame instanceof HotSpotFrame) {
-			        	((HotSpotFrame) hsFrame).connectHotSpots(((HotSpotFrame) hsFrame).getHotSpots().get(0), ((HotSpotFrame) hsFrame).getHotSpots().get(1));			        	
+			        	((HotSpotFrame) hsFrame).connectHotSpots();			        	
 			        }
 					message = message + "in the mist .... Let's place it back to the center of its mother frame.";
 				}
 				
 				logger.info(message);
-			}
-
-			private void drawLineBetweenHotSpots(int addHotSpot, HotSpotFrame hsFrame) {
-				if(addHotSpot > 1) {
-					logger.info("let's draw some lines");		
-					hsFrame.connectHotSpots(hsFrame.getHotSpots().get(0), hsFrame.getHotSpots().get(1));
-				}
 			}
 		});
 		

@@ -44,25 +44,30 @@ public class HotSpotFrame extends JMEFrame {
 		}
 	}
 
-	public void connectHotSpots(IHotSpotItem ihotSpotItem1, IHotSpotItem ihotSpotItem2) {
-		// TODO Auto-generated method stub
-		if(lines.size() > 0) {
-			this.detachChild(lines.get(0));
-			lines = new ArrayList<Line>();
+	public void connectHotSpots() {
+		if(hotSpots.size() > 1) {
+			IHotSpotItem ihotSpotItem1 = hotSpots.get(0);
+			IHotSpotItem ihotSpotItem2 = hotSpots.get(1);
+			
+			// TODO Auto-generated method stub
+			if(lines.size() > 0) {
+				this.detachChild(lines.get(0));
+				lines = new ArrayList<Line>();
+			}
+			
+			//get the location of the 2 hotspots relative to the parent frame
+			Vector2f xyHS1 = ihotSpotItem1.getRelativeLocation();
+			Vector2f xyHS2 = ihotSpotItem2.getRelativeLocation();
+			
+			Vector3f[] vertices = new Vector3f[2];
+			vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
+			vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
+			Line line = new Line("link", vertices, null, null, null);
+			line.setMode(Mode.Connected);
+			line.setLineWidth(2f);
+			line.setSolidColor(ColorRGBA.red);		
+			this.attachChild(line);
+			lines.add(line);			
 		}
-		
-		//get the location of the 2 hotspots relative to the parent frame
-		Vector2f xyHS1 = ihotSpotItem1.getRelativeLocation();
-		Vector2f xyHS2 = ihotSpotItem2.getRelativeLocation();
-		
-		Vector3f[] vertices = new Vector3f[2];
-		vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
-		vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
-		Line line = new Line("link", vertices, null, null, null);
-		line.setMode(Mode.Connected);
-		line.setLineWidth(2f);
-		line.setSolidColor(ColorRGBA.red);		
-		this.attachChild(line);
-		lines.add(line);
 	}
 }
