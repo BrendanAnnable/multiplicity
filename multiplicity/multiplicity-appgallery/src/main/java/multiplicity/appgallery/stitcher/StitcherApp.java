@@ -25,6 +25,7 @@ import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
+import multiplicity.csysngjme.items.HotSpotItem;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
@@ -255,6 +256,35 @@ public class StitcherApp extends AbstractStandaloneApp {
 	}
 
 	
+	   public HotSpotFrame createNewHotSpotContentFrame() {
+	        UUID uUID = UUID.randomUUID();
+	        
+	        //TODO: use width/height of app instead
+	        Float xPos = Integer.valueOf(-DisplaySystem.getDisplaySystem().getWidth()/2+(100+Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
+	        Float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight()/2-(100+Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
+	        
+	        
+	        HotSpotFrame frame = (HotSpotFrame) this.getHotSpotContentFactory().createHotSpotFrame("hotspotf-"+uUID, uUID, 200, 200);
+	        
+	        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
+	        frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
+	        frame.maintainBorderSizeDuringScale();
+	        frame.setRelativeLocation(new Vector2f(xPos, yPos));
+
+	        BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
+
+	        this.add(frame);
+	       
+	        
+	        this.getzOrderManager().bringToTop(frame, null);
+	        
+	     
+	        
+	        return frame;
+	    }
+	   
+	
+	
 	public void moveItemToNewFrame(IItem item, Vector2f atPosition, String frameName) {
 	    UUID uUID = UUID.randomUUID();
 	    
@@ -335,6 +365,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 	private void fillHotSpotRepo(IFrame frame) {
 	    
+	    
+	    
 	    IHotSpotItem hotspot = this.getHotSpotContentFactory().createHotSpotItem("cr", UUID.randomUUID(), 20, 20);
 		hotspot.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
 		frame.addItem(hotspot);
@@ -379,6 +411,9 @@ public class StitcherApp extends AbstractStandaloneApp {
 						        IFrame hsFrame = (IFrame) item.getParentItem();
 						        if( hsFrame instanceof HotSpotFrame) {
 						            ((HotSpotFrame) hsFrame).addHotSpot(item);
+						            
+						            HotSpotFrame hotSpotFrameContent = createNewHotSpotContentFrame();
+						            ((HotSpotItem)item).setHotSpotFrameContent(hotSpotFrameContent);
 						            message = message + "on "+targetFrame.getName()+". Great!!";
 						            fillHotSpotRepo(frame);
 						        }
