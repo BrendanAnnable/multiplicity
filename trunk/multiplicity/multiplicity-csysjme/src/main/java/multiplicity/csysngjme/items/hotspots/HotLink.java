@@ -2,6 +2,8 @@ package multiplicity.csysngjme.items.hotspots;
 
 import java.nio.FloatBuffer;
 
+import org.apache.log4j.Logger;
+
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
@@ -18,6 +20,7 @@ import com.jme.util.geom.BufferUtils;
 public class HotLink extends Line implements IHotLink {
     
 	public Vector3f[] vertices;
+	 private final static Logger logger = Logger.getLogger(HotLink.class.getName());
 
     public HotLink(Vector3f[] vertices) {
         super("Link", vertices, null, null, null);
@@ -30,18 +33,18 @@ public class HotLink extends Line implements IHotLink {
 	
 	
 	public void redrawSourceLocation(Vector2f vertex) {
-	    System.out.println("OLD source line loc " + vertices[0]  );
+	    logger.info("OLD source line loc " + vertices[0]  );
 	    vertices[0] = new Vector3f(vertex.x, vertex.y, 0f);
 	    this.redrawLine(vertices);
-	    System.out.println("New source line loc " + vertices[0]  );
+	    logger.info("New source line loc " + vertices[0]  );
 
 	}
 	
 	public void redrawTargetLocation(Vector2f vertex) {
-	    System.out.println("OLD targe line loc " + vertices[1]  );
+		logger.info("OLD targe line loc " + vertices[1]  );
 	    vertices[1] = new Vector3f(vertex.x, vertex.y, 0f);
 	    this.redrawLine(vertices);
-	    System.out.println("NEW targe line loc " + vertices[1]  );
+	    logger.info("NEW targe line loc " + vertices[1]  );
 	    
     }
 	
@@ -51,6 +54,6 @@ public class HotLink extends Line implements IHotLink {
 	public void redrawLine(Vector3f[] vertices) {
 	    FloatBuffer fBuffer = BufferUtils.createFloatBuffer(vertices);                    
         this.reconstruct(fBuffer, null, null, null);
-        this.setSolidColor(ColorRGBA.blue);  
+        this.setSolidColor(ColorRGBA.red);  
 	}
 }
