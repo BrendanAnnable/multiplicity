@@ -97,6 +97,8 @@ public class StitcherApp extends AbstractStandaloneApp {
     private int frameHeight = 600;
 
     private StitcherApp stitcher;
+    
+    private final int HOTSPOT_DIMENSION = 80;
 
     // when this is filled the first one is at the top of the z index
     ArrayList<IItem> zOrderedItems;
@@ -390,15 +392,14 @@ public class StitcherApp extends AbstractStandaloneApp {
                 // hotlinks
                 ArrayList<IHotSpotItem> hotSpots = frame.getHotSpots();
                 for (IHotSpotItem iHotSpotItem : hotSpots) {
-                    iHotSpotItem.update();
+                    iHotSpotItem.update(frame.getRelativeLocation());
                 }
             }
 
         });
     }
 
-    public void addItemsToFrame(List<IItem> items, Vector2f atPosition,
-            String frameName) {
+    public void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {
         UUID uUID = UUID.randomUUID();
         IFrame frame = this.getContentFactory().createFrame(frameName, uUID,
                 frameWidth, frameHeight);
@@ -427,7 +428,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     public void createHotSpotRepo() {
         UUID uUID = UUID.randomUUID();
         IFrame frame = this.getContentFactory().createFrame("hotspots", uUID,
-                60, 60);
+        		HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
 
         frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID
                 .randomUUID(), 5f, 5));
@@ -439,10 +440,10 @@ public class StitcherApp extends AbstractStandaloneApp {
 
         // TODO: use width/height of app instead
         Float xPos = Integer.valueOf(
-                DisplaySystem.getDisplaySystem().getWidth() / 2 - 60 / 2)
+                DisplaySystem.getDisplaySystem().getWidth() / 2 - HOTSPOT_DIMENSION / 2)
                 .floatValue();
         Float yPos = Integer.valueOf(
-                DisplaySystem.getDisplaySystem().getHeight() / 2 - 60 / 2)
+                DisplaySystem.getDisplaySystem().getHeight() / 2 - HOTSPOT_DIMENSION / 2)
                 .floatValue();
 
         frame.setRelativeLocation(new Vector2f(xPos, yPos));
@@ -458,7 +459,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     private void fillHotSpotRepo(IFrame frame) {
 
         IHotSpotItem hotspot = this.getHotSpotContentFactory()
-                .createHotSpotItem("cr", UUID.randomUUID(), 20, 20);
+                .createHotSpotItem("cr", UUID.randomUUID(), HOTSPOT_DIMENSION/2, HOTSPOT_DIMENSION/2);
         hotspot.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
         frame.addItem(hotspot);
         hotspot.centerItem();

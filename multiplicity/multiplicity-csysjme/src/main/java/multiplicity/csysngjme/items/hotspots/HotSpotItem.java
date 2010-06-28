@@ -53,13 +53,7 @@ public class HotSpotItem extends JMEColourRectangle implements IHotSpotItem {
         return isOpen;
     }
 
-    public void update() {
-       
-//        Vector2f world = this.getWorldLocation();
-//        this.setRelativeLocation(world);
-        Vector2f xyHS1 = this.getRelativeLocation();
-        hotLink.redrawSourceLocation(xyHS1);
-    }
+
     @Override
     public IHotLink createHotLink() {
 
@@ -118,5 +112,15 @@ public class HotSpotItem extends JMEColourRectangle implements IHotSpotItem {
     public IHotLink getHotLink() {
         return hotLink;
     }
+
+	@Override
+	public void update(Vector2f frameLocation) {
+		// TODO Auto-generated method stub
+		
+		Vector2f HSLocation = this.getRelativeLocation();
+
+      Vector2f xyHS1 = new Vector2f(frameLocation.x + HSLocation.x, frameLocation.y+HSLocation.y);
+      hotLink.redrawSourceLocation(xyHS1);
+	}
 
 }
