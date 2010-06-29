@@ -45,7 +45,7 @@ public abstract class JMEItem extends Node implements IItem {
 		setUserData(KEY_JMEITEMDATA, new JMEItemUserData(uuid));		
 		setRenderQueueMode(Renderer.QUEUE_ORTHO);
 		
-		final JMEItem instance = this;
+		final IItem instance = this;
 		dispatcher.addListener(new IMultiTouchEventListener() {			
 			@Override
 			public void cursorReleased(MultiTouchCursorEvent event) {
@@ -227,7 +227,7 @@ public abstract class JMEItem extends Node implements IItem {
 	
 	public boolean equals(Object obj) {
 		if(obj instanceof JMEItem) {
-			return ((JMEItem) obj).getUUID().equals(getUUID());
+			return ((IItem) obj).getUUID().equals(getUUID());
 		}
 		
 		return false;
@@ -239,6 +239,7 @@ public abstract class JMEItem extends Node implements IItem {
 	}
 	
 	private List<IBehaviour> behaviours = new ArrayList<IBehaviour>();	
+	
 	public void behaviourAdded(IBehaviour behaviour) {
 		behaviours.add(behaviour);
 	}

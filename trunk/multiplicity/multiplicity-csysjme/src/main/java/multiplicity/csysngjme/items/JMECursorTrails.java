@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.gfx.ColourUtils;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
@@ -190,4 +191,5 @@ public class JMECursorTrails extends JMEItem implements ICursorTrailsOverlay, IM
 		this.trailColour = ColourUtils.colourConvert(c);
 		solid  = true;
 	}
+
 }

@@ -67,4 +67,9 @@ public class MoveBetweenContainerBehaviour implements IBehaviour, IMultiTouchEve
 		
 	}
 
+    @Override
+    public void removeItemActingOn() {
+        // TODO Auto-generated method stub
+    }
+
 }
