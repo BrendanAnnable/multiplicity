@@ -4,6 +4,7 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.Vector;
@@ -47,6 +48,7 @@ public class GetAttachmentItems extends Thread {
 	private IPage iPage = null;
 	private StitcherApp stitcher;
 	private String parentContainerName;
+	private ArrayList<HotSpotFrame> highlightedFrames = new ArrayList<HotSpotFrame>();
 
 	public GetAttachmentItems(StitcherApp stitcherApp, IPage iPage,
 			Vector<IAttachment> attachments, List<IItem> items,
@@ -144,42 +146,103 @@ public class GetAttachmentItems extends Thread {
 						
 						@Override
 						public void itemCursorChanged(IItem item, MultiTouchCursorEvent event) {
+							String message = "item moved over: ";
+							boolean firstFrameFound = false;
+							boolean offParent = true;
 							Node s = (Node) stitcher.getOrthoNode();
 							Vector2f locStore = new Vector2f();
 							UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
+							
 							List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
 							
-							for (PickedSpatial pickedSpatial : spatialsList) {
-								if((pickedSpatial.getSpatial().toString()).equals("maskGeometry")) {
-									try {
-										Geometry geometry = (Geometry) pickedSpatial.getSpatial();
-										
-										if( geometry.getParent() instanceof HotSpotFrame ){
-											HotSpotFrame targetFrame = (HotSpotFrame) geometry.getParent();
+							if (item.getParentItem().getTreeRootSpatial() instanceof JMEFrame) {
+								JMEFrame frame = (JMEFrame) item.getParentItem().getTreeRootSpatial();
+								for (PickedSpatial pickedSpatial : spatialsList) {
+									if (pickedSpatial.getSpatial().equals(frame.getMaskGeometry())) {
+										offParent = false;
+										message = message + "it's parent frame SCANS.";
+									}
+								}
+							}
+							
+							if (parentContainerName.equals(stitcher.SCAN_NAME) && offParent) {
+								for (PickedSpatial pickedSpatial : spatialsList) {
+									if((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && firstFrameFound == false) {
+										try {
+											Geometry geometry = (Geometry) pickedSpatial.getSpatial();
 											
-											if(targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.SCAN_NAME)) {
-												JMERoundedRectangleBorder jMERoundedRectangleBorder = new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 3, 15);
-												jMERoundedRectangleBorder.setColor(new ColorRGBA(1f, 0f, 0f, 0.6f));
-												targetFrame.setBorder(jMERoundedRectangleBorder);
+											if( geometry.getParent() instanceof HotSpotFrame ){
+												HotSpotFrame targetFrame = (HotSpotFrame) geometry.getParent();
+												
+												if(targetFrame.getName().contains("hotspotf-") && !highlightedFrames.contains(targetFrame)) {
+													message = message + targetFrame.getName() + ": let's turn it red";
+													firstFrameFound = true;
+													targetFrame.setBorder(getHighlightedFrame());
+													highlightedFrames.add(targetFrame);
+												}
+												else if(highlightedFrames.contains(targetFrame)) {
+													message = message + "a hotspot frameprobably already red";
+												}
 											}
 										}
-										
-										
+										catch (Exception e) {
+											logger.debug("GetAttachmentItems: itemCursorReleased: Exception: "+e);
+										}
 									}
-									catch (Exception e) {
-										logger.debug("GetAttachmentItems: itemCursorReleased: Exception: "+e);
+								}
+							}
+							
+							if(!firstFrameFound && offParent) {
+								firstFrameFound = false;
+								message = message + "something else than a hotspotframe or the parent (i.e. the mist)";
+								
+								for (PickedSpatial pickedSpatial : spatialsList) {
+									if((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && firstFrameFound == false) {
+										try {
+											Geometry geometry = (Geometry) pickedSpatial.getSpatial();
+											
+											if( geometry.getParent() instanceof HotSpotFrame ){
+												HotSpotFrame targetFrame = (HotSpotFrame) geometry.getParent();
+												if(highlightedFrames.contains(targetFrame)) {
+													firstFrameFound = true;
+													targetFrame.setBorder(getNormalFrame());
+													highlightedFrames.remove(targetFrame);
+												}
+											}
+										}
+										catch (Exception e) {
+											logger.debug("GetAttachmentItems: itemCursorReleased: Exception: "+e);
+										}
 									}
 								}
 								
-						
+								if(!firstFrameFound) {
+									for (HotSpotFrame hotSpotFrame : highlightedFrames) {
+										hotSpotFrame.setBorder(getNormalFrame());
+									}
+									highlightedFrames = new ArrayList<HotSpotFrame>();
+								}
 							}
+							
+							logger.info(message);
+						}
+
+						private JMERoundedRectangleBorder getHighlightedFrame() {
+							JMERoundedRectangleBorder jMERoundedRectangleBorder = new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 3, 15);
+							jMERoundedRectangleBorder.setColor(new ColorRGBA(1f, 0f, 0f, 0.6f));
+							return jMERoundedRectangleBorder;
+						}
+						
+						private JMERoundedRectangleBorder getNormalFrame() {
+							JMERoundedRectangleBorder jMERoundedRectangleBorder = new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), stitcher.BORDER_THICKNESS, 15);
+							jMERoundedRectangleBorder.setColor(new ColorRGBA(1f, 1f, 1f, 0.6f));
+							return jMERoundedRectangleBorder;
 						}
 						
 						@Override
 						public void itemCursorPressed(IItem item,
 								MultiTouchCursorEvent event) {
-							logger.info("item pressed" + item.getBehaviours()
-									+ "parent: " + item.getParentItem());
+							logger.info("item pressed" + item.getBehaviours() + "parent: " + item.getParentItem());
 						}
 
 						@Override
@@ -245,7 +308,8 @@ public class GetAttachmentItems extends Thread {
 													((JMERectangularItem) item).setSize(stitcher.HOTSPOT_FRAME_DIMENSION, stitcher.HOTSPOT_FRAME_DIMENSION);
 													item.centerItem();
 											        targetFrame.getZOrderManager().bringToTop(item, null);    
-											        
+											        targetFrame.setBorder(getNormalFrame());
+											        highlightedFrames.remove(targetFrame);
 											        targetFrame.bringHotSpotsToTop();
 												}
 											}
