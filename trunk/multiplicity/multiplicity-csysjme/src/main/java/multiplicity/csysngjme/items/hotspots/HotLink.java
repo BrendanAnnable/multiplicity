@@ -2,27 +2,20 @@ package multiplicity.csysngjme.items.hotspots;
 
 import java.nio.FloatBuffer;
 
-import org.apache.log4j.Logger;
-
-import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
-import multiplicity.csysng.items.hotspot.IHotSpotFrame;
-import multiplicity.csysng.items.hotspot.IHotSpotItem;
 
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Line;
-import com.jme.scene.Line.Mode;
 import com.jme.util.geom.BufferUtils;
 
 public class HotLink extends Line implements IHotLink {
     
+	private static final long serialVersionUID = 1677415896709510948L;
 	public Vector3f[] vertices;
-	 private final static Logger logger = Logger.getLogger(HotLink.class.getName());
-
-    public HotLink(Vector3f[] vertices) {
+	
+	public HotLink(Vector3f[] vertices) {
         super("Link", vertices, null, null, null);
 	    this.vertices = vertices;
         this.setMode(Mode.Connected);
