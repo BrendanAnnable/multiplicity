@@ -19,6 +19,7 @@ import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
@@ -64,7 +65,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
     public final String SCAN_NAME = "scans";
 
-    private final Float BORDER_THICKNESS = 40f;
+    public final Float BORDER_THICKNESS = 40f;
 
     private final ArrayList<String> pageNames = new ArrayList<String>();
 
@@ -98,7 +99,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
     private StitcherApp stitcher;
     
-    private final int HOTSPOT_DIMENSION = 80;
+    public final int HOTSPOT_DIMENSION = 80;
     public final int HOTSPOT_FRAME_DIMENSION = 200;
 
     // when this is filled the first one is at the top of the z index
