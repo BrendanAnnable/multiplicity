@@ -33,19 +33,13 @@ public class HotLink extends Line implements IHotLink {
 	
 	
 	public void redrawSourceLocation(Vector2f vertex) {
-	    logger.info("OLD source line loc " + vertices[0]  );
 	    vertices[0] = new Vector3f(vertex.x, vertex.y, 0f);
 	    this.redrawLine(vertices);
-	    logger.info("New source line loc " + vertices[0]  );
-
 	}
 	
 	public void redrawTargetLocation(Vector2f vertex) {
-		logger.info("OLD targe line loc " + vertices[1]  );
-	    vertices[1] = new Vector3f(vertex.x, vertex.y, 0f);
+		vertices[1] = new Vector3f(vertex.x, vertex.y, 0f);
 	    this.redrawLine(vertices);
-	    logger.info("NEW targe line loc " + vertices[1]  );
-	    
     }
 	
 	/* (non-Javadoc)
