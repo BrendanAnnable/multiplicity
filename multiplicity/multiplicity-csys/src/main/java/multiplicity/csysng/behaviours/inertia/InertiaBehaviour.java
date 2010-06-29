@@ -75,4 +75,9 @@ public class InertiaBehaviour implements IBehaviour, IMultiTouchEventListener {
 		
 	}
 
+    @Override
+    public void removeItemActingOn() {
+        
+    }
+
 }

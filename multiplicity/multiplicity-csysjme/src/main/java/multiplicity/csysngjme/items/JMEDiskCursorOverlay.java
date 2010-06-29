@@ -16,6 +16,7 @@ import com.jme.scene.state.BlendState.SourceFunction;
 import com.jme.system.DisplaySystem;
 
 import multiplicity.jmeutils.UnitConversion;
+import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysngjme.zordering.GlobalZOrder;

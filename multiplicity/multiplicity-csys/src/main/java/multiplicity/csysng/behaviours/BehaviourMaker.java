@@ -32,7 +32,9 @@ public class BehaviourMaker {
             
             while(li.hasNext()) {
             	IBehaviour b = li.next();
+            	
             	if (b.getClass().equals(behaviourClass)) {
+            	    b.removeItemActingOn();
                     li.remove();
                 }
             }

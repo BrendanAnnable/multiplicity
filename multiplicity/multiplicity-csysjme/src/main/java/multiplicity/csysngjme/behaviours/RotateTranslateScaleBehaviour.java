@@ -31,6 +31,11 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 		this.item = item;
 		item.getMultiTouchDispatcher().addListener(this);
 	}	
+	
+    @Override
+    public void removeItemActingOn() {
+        this.item.getMultiTouchDispatcher().remove(this);        
+    }
 
 	@Override
 	public void cursorChanged(MultiTouchCursorEvent event) {
@@ -136,5 +141,7 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 		cursor2OldPos.y = cursor2Pos.y;
 		UnitConversion.tableToScreen(event.getPosition(), cursor2Pos);
 	}
+
+
 
 }

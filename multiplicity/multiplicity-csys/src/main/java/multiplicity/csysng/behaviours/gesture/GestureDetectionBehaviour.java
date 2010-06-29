@@ -86,4 +86,8 @@ public class GestureDetectionBehaviour implements IBehaviour, IMultiTouchEventLi
 		}
 	}
 
+    @Override
+    public void removeItemActingOn() {
+    }
+
 }

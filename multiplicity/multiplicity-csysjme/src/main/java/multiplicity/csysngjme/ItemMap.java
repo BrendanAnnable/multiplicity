@@ -23,7 +23,7 @@ public class ItemMap {
 		return itemMap.get(uuid);
 	}
 
-	public static void register(Spatial spatial, JMEItem item) {
+	public static void register(Spatial spatial, IItem item) {
 		JMEItemUserData id = new JMEItemUserData(item.getUUID());
 		spatial.setUserData(JMEItem.KEY_JMEITEMDATA, id);
 		List<IItem> list = itemMap.get(item.getUUID());
@@ -32,7 +32,7 @@ public class ItemMap {
 		itemMap.put(item.getUUID(), list);
 	}
 	
-	public static void unregister(Spatial spatial, JMEItem item) {
+	public static void unregister(Spatial spatial, IItem item) {
 		itemMap.remove(item.getUUID());		
 	}
 	

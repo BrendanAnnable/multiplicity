@@ -34,4 +34,9 @@ public class ButtonBehaviour implements IBehaviour {
 			});
 		}
 	}
+
+    @Override
+    public void removeItemActingOn() {
+        
+    }
 }
