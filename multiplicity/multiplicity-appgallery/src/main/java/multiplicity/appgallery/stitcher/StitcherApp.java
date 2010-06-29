@@ -388,15 +388,10 @@ public class StitcherApp extends AbstractStandaloneApp {
 
     public void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {
         UUID uUID = UUID.randomUUID();
-        IFrame frame = this.getContentFactory().createFrame(frameName, uUID,
-                frameWidth, frameHeight);
+        IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
 
-        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID
-                .randomUUID(), BORDER_THICKNESS, 15));
-        frame
-                .setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f,
-                        0.8f), new Color(0f, 0f, 0f, 0.8f),
-                        GradientDirection.VERTICAL));
+        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
+        frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
         frame.setRelativeLocation(atPosition);
         BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
@@ -414,24 +409,15 @@ public class StitcherApp extends AbstractStandaloneApp {
 
     public void createHotSpotRepo() {
         UUID uUID = UUID.randomUUID();
-        IFrame frame = this.getContentFactory().createFrame("hotspots", uUID,
-        		HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
+        IFrame frame = this.getContentFactory().createFrame("hotspots", uUID, HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
 
-        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID
-                .randomUUID(), 5f, 5));
-        frame
-                .setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f,
-                        0.8f), new Color(0f, 0f, 0f, 0.8f),
-                        GradientDirection.VERTICAL));
+        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 5f, 5));
+        frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f),GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
 
         // TODO: use width/height of app instead
-        Float xPos = Integer.valueOf(
-                DisplaySystem.getDisplaySystem().getWidth() / 2 - HOTSPOT_DIMENSION / 2)
-                .floatValue();
-        Float yPos = Integer.valueOf(
-                DisplaySystem.getDisplaySystem().getHeight() / 2 - HOTSPOT_DIMENSION / 2)
-                .floatValue();
+        Float xPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getWidth() / 2 - HOTSPOT_DIMENSION / 2).floatValue();
+        Float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - HOTSPOT_DIMENSION / 2).floatValue();
 
         frame.setRelativeLocation(new Vector2f(xPos, yPos));
 
@@ -489,13 +475,9 @@ public class StitcherApp extends AbstractStandaloneApp {
                                     ((IHotSpotFrame) hsFrame).addHotSpot(item);
                                     IHotSpotFrame hotSpotFrameContent = createNewHotSpotContentFrame();
                                     ((HotSpotItem) item).setHotSpotFrameContent(hotSpotFrameContent);
-                                    IHotLink l = ((HotSpotItem) item)
-                                            .createHotLink();
-                                    ((Node) stitcher.getOrthoNode())
-                                            .attachChild((Spatial) l);
-                                    message = message + "on "
-                                            + targetFrame.getName()
-                                            + ". Great!!";
+                                    IHotLink l = ((HotSpotItem) item).createHotLink();
+                                    ((Node) stitcher.getOrthoNode()).attachChild((Spatial) l);
+                                    message = message + "on " + targetFrame.getName() + ". Great!!";
                                     fillHotSpotRepo(frame);
                                 }
                             }

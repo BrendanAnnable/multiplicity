@@ -20,6 +20,7 @@ import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMERectangularItem;
+import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
 import multiplicity.csysngjme.picking.AccuratePickingUtility;
 import multiplicity.csysngjme.picking.PickedSpatial;
@@ -32,6 +33,7 @@ import no.uio.intermedia.snomobile.interfaces.IPage;
 import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
+import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Geometry;
 import com.jme.scene.Node;
 
@@ -96,33 +98,23 @@ public class GetAttachmentItems extends Thread {
 
 			if (iAttachment.isOfImageType()) {
 				IImage img = null;
-				File file = writeFileToLocalStorageDir(iAttachment.getName(),
-						iPage.getPageName());
+				File file = writeFileToLocalStorageDir(iAttachment.getName(), iPage.getPageName());
 
-				logger.info("File exists: " + file.exists() + " - "
-						+ iAttachment.getName() + " - " + iAttachment.getSize()
-						+ " - " + file.length());
+				logger.info("File exists: " + file.exists() + " - " + iAttachment.getName() + " - " + iAttachment.getSize() + " - " + file.length());
 				if (file.exists() == false) {
-					WikiUtility wikiUtility = new WikiUtility(
-							stitcher.wikiUser, stitcher.wikiPass,
-							stitcher.maxFileSize, iAttachment.getMimeType(),
-							iAttachment.getAbsoluteUrl());
+					WikiUtility wikiUtility = new WikiUtility(stitcher.wikiUser, stitcher.wikiPass, stitcher.maxFileSize, iAttachment.getMimeType(), iAttachment.getAbsoluteUrl());
 					try {
 						wikiUtility.start();
 						wikiUtility.join();
 					} catch (InterruptedException e) {
-						logger
-								.debug("getComments:  InterruptedException: "
-										+ e);
+						logger.debug("getComments:  InterruptedException: " + e);
 					}
 					Object resourceToDownload = wikiUtility.getResource();
 
 					if (resourceToDownload != null) {
 						iAttachment.setIsValid(true);
 						try {
-							ImageIO.write((RenderedImage) resourceToDownload,
-									iAttachment.getMimeType().substring(6),
-									file);
+							ImageIO.write((RenderedImage) resourceToDownload, iAttachment.getMimeType().substring(6), file);
 						} catch (IOException e) {
 							logger.debug("IOException: " + e);
 						}
@@ -149,6 +141,40 @@ public class GetAttachmentItems extends Thread {
 					img.setRelativeScale(0.8f);
 					img.setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
 					img.addItemListener(new ItemListenerAdapter() {
+						
+						@Override
+						public void itemCursorChanged(IItem item, MultiTouchCursorEvent event) {
+							Node s = (Node) stitcher.getOrthoNode();
+							Vector2f locStore = new Vector2f();
+							UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
+							List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
+							
+							for (PickedSpatial pickedSpatial : spatialsList) {
+								if((pickedSpatial.getSpatial().toString()).equals("maskGeometry")) {
+									try {
+										Geometry geometry = (Geometry) pickedSpatial.getSpatial();
+										
+										if( geometry.getParent() instanceof HotSpotFrame ){
+											HotSpotFrame targetFrame = (HotSpotFrame) geometry.getParent();
+											
+											if(targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.SCAN_NAME)) {
+												JMERoundedRectangleBorder jMERoundedRectangleBorder = new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 3, 15);
+												jMERoundedRectangleBorder.setColor(new ColorRGBA(1f, 0f, 0f, 0.6f));
+												targetFrame.setBorder(jMERoundedRectangleBorder);
+											}
+										}
+										
+										
+									}
+									catch (Exception e) {
+										logger.debug("GetAttachmentItems: itemCursorReleased: Exception: "+e);
+									}
+								}
+								
+						
+							}
+						}
+						
 						@Override
 						public void itemCursorPressed(IItem item,
 								MultiTouchCursorEvent event) {
@@ -182,9 +208,6 @@ public class GetAttachmentItems extends Thread {
 								}
 							}
 							
-							
-							
-
 							if (parentContainerName.equals(stitcher.BACKGROUND_NAME) && offParent) {
 								IFrame frame = (IFrame) item.getParentItem();
 								stitcher.moveItemToNewFrame(item, new Vector2f(0.0f, 0.0f), "back-" + item.getUUID());
@@ -211,18 +234,14 @@ public class GetAttachmentItems extends Thread {
 											        targetFrame.getZOrderManager().bringToTop(item, null);    
 											        
 											        targetFrame.bringHotSpotsToTop();
-											        
-											        //BehaviourMaker.addBehaviour(item, RotateTranslateScaleBehaviour.class);
 												}
 												else if(targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.SCAN_NAME)) {
 													firstFrameFound = true;
 													IFrame frame = (IFrame) item.getParentItem();
 													frame.removeItem(item);
 													
-													//Vector2f itemWorldPos = item.getWorldLocation();
 													targetFrame.addItem(item);
-											        //item.setWorldLocation(itemWorldPos);
-													item.setRelativeScale(1);
+													item.setRelativeScale(1.0f);
 													((JMERectangularItem) item).setSize(stitcher.HOTSPOT_FRAME_DIMENSION, stitcher.HOTSPOT_FRAME_DIMENSION);
 													item.centerItem();
 											        targetFrame.getZOrderManager().bringToTop(item, null);    
