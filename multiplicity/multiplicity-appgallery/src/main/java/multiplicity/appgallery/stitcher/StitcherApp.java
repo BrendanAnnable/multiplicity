@@ -99,6 +99,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     private StitcherApp stitcher;
     
     private final int HOTSPOT_DIMENSION = 80;
+    public final int HOTSPOT_FRAME_DIMENSION = 200;
 
     // when this is filled the first one is at the top of the z index
     ArrayList<IItem> zOrderedItems;
@@ -113,9 +114,9 @@ public class StitcherApp extends AbstractStandaloneApp {
     @Override
     public void onAppStart() {
         setHotSpotContentFactory(new HotSpotContentItemFactory());
-        pageNames.add(STENCIL_NAME);
+//        pageNames.add(STENCIL_NAME);
         pageNames.add(BACKGROUND_NAME);
-        // pageNames.add(SCAN_NAME);
+        pageNames.add(SCAN_NAME);
         populateFromWiki();
         loadContent(wikiPages);
 
@@ -133,21 +134,18 @@ public class StitcherApp extends AbstractStandaloneApp {
             this.wikiPass = prop.getProperty("DEFAULT_PASS");
             this.maxFileSize = Integer.valueOf(prop
                     .getProperty("MAX_ATTCHMENT_SIZE"));
-            stencilsPage = getWikiPage(prop, prop
-                    .getProperty("DEFAULT_WIKI_NAME"), prop
-                    .getProperty("REPOSITORY_WIKI_SPACE"), prop
-                    .getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
-            wikiPages.put(pageNames.get(0), stencilsPage);
+//            stencilsPage = getWikiPage(prop, prop
+//                    .getProperty("DEFAULT_WIKI_NAME"), prop
+//                    .getProperty("REPOSITORY_WIKI_SPACE"), prop
+//                    .getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
+//            wikiPages.put(pageNames.get(0), stencilsPage);
             backgroundsPage = getWikiPage(prop, prop
                     .getProperty("DEFAULT_WIKI_NAME"), prop
                     .getProperty("CLASS_WIKI_SPACE"), prop
                     .getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
-            wikiPages.put(pageNames.get(1), backgroundsPage);
-            // scansPage = getWikiPage(prop,
-            // prop.getProperty("DEFAULT_WIKI_NAME"),
-            // prop.getProperty("CLASS_WIKI_SPACE"),
-            // prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
-            // wikiPages.put(pageNames.get(2), scansPage);
+            wikiPages.put(pageNames.get(0), backgroundsPage);
+        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
+			wikiPages.put(pageNames.get(1), scansPage);
         } catch (IOException e) {
             logger.debug("setup:  IOException: " + e);
         }
@@ -301,24 +299,13 @@ public class StitcherApp extends AbstractStandaloneApp {
         UUID uUID = UUID.randomUUID();
 
         // TODO: use width/height of app instead
-        Float xPos = Integer.valueOf(
-                -DisplaySystem.getDisplaySystem().getWidth() / 2
-                        + (100 + Float.valueOf(BORDER_THICKNESS).intValue()))
-                .floatValue();
-        Float yPos = Integer.valueOf(
-                DisplaySystem.getDisplaySystem().getHeight() / 2
-                        - (100 + Float.valueOf(BORDER_THICKNESS).intValue()))
-                .floatValue();
+        Float xPos = Integer.valueOf(-DisplaySystem.getDisplaySystem().getWidth() / 2 + (HOTSPOT_FRAME_DIMENSION/2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
+        Float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_FRAME_DIMENSION/2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
 
-        IHotSpotFrame frame = (IHotSpotFrame) this.getHotSpotContentFactory()
-                .createHotSpotFrame("hotspotf-" + uUID, uUID, 200, 200);
+        IHotSpotFrame frame = (IHotSpotFrame) this.getHotSpotContentFactory().createHotSpotFrame("hotspotf-" + uUID, uUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
 
-        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID
-                .randomUUID(), BORDER_THICKNESS, 15));
-        frame
-                .setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f,
-                        0.8f), new Color(0f, 0f, 0f, 0.8f),
-                        GradientDirection.VERTICAL));
+        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
+        frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
         frame.setRelativeLocation(new Vector2f(xPos, yPos));
 
@@ -458,45 +445,34 @@ public class StitcherApp extends AbstractStandaloneApp {
 
     private void fillHotSpotRepo(IFrame frame) {
 
-        IHotSpotItem hotspot = this.getHotSpotContentFactory()
-                .createHotSpotItem("cr", UUID.randomUUID(), HOTSPOT_DIMENSION/2, HOTSPOT_DIMENSION/2);
+        IHotSpotItem hotspot = this.getHotSpotContentFactory().createHotSpotItem("cr", UUID.randomUUID(), HOTSPOT_DIMENSION/2, HOTSPOT_DIMENSION/2);
         hotspot.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
         frame.addItem(hotspot);
         hotspot.centerItem();
 
         hotspot.addItemListener(new ItemListenerAdapter() {
             @Override
-            public void itemCursorReleased(IItem item,
-                    MultiTouchCursorEvent event) {
+            public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
                 String message = "Hotspot released: ";
                 boolean offParent = true;
                 Node s = (Node) stitcher.getOrthoNode();
 
                 Vector2f locStore = new Vector2f();
-                UnitConversion.tableToScreen(event.getPosition().x, event
-                        .getPosition().y, locStore);
+                UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
 
-                List<PickedSpatial> spatialsList = AccuratePickingUtility
-                        .pickAllOrthogonal(s.getParent().getParent(), locStore);
+                List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
 
                 boolean firstFrameFound = false;
                 for (PickedSpatial pickedSpatial : spatialsList) {
-                    if (pickedSpatial.getSpatial().equals(
-                            ((JMEFrame) item.getParentItem()
-                                    .getTreeRootSpatial()).getMaskGeometry())) {
+                    if (pickedSpatial.getSpatial().equals(((JMEFrame) item.getParentItem().getTreeRootSpatial()).getMaskGeometry())) {
                         offParent = false;
                         message = message + "on its parent. Nothing happens";
-                        IHotSpotFrame hsFrame = (IHotSpotFrame) item
-                                .getParentItem();
-                        // hsFrame.connectHotSpots();
-                    } else if ((pickedSpatial.getSpatial().toString())
-                            .equals("maskGeometry")
-                            && !firstFrameFound) {
+                        IHotSpotFrame hsFrame = (IHotSpotFrame) item.getParentItem();
+                    }
+                    else if ((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && !firstFrameFound) {
                         try {
-                            Geometry geometry = (Geometry) pickedSpatial
-                                    .getSpatial();
-                            JMEFrame targetFrame = (JMEFrame) geometry
-                                    .getParent();
+                            Geometry geometry = (Geometry) pickedSpatial.getSpatial();
+                            JMEFrame targetFrame = (JMEFrame) geometry.getParent();
 
                             if (targetFrame.getName().contains("back-")) {
                                 firstFrameFound = true;
@@ -506,17 +482,13 @@ public class StitcherApp extends AbstractStandaloneApp {
                                 Vector2f itemWorldPos = item.getWorldLocation();
                                 targetFrame.addItem(item);
                                 item.setWorldLocation(itemWorldPos);
-                                targetFrame.getZOrderManager().bringToTop(item,
-                                        null);
+                                targetFrame.getZOrderManager().bringToTop(item, null);
 
                                 IFrame hsFrame = (IFrame) item.getParentItem();
                                 if (hsFrame instanceof HotSpotFrame) {
                                     ((IHotSpotFrame) hsFrame).addHotSpot(item);
                                     IHotSpotFrame hotSpotFrameContent = createNewHotSpotContentFrame();
-                                    // ((HotSpotFrame)
-                                    // hsFrame).connectHotSpots();
-                                    ((HotSpotItem) item)
-                                            .setHotSpotFrameContent(hotSpotFrameContent);
+                                    ((HotSpotItem) item).setHotSpotFrameContent(hotSpotFrameContent);
                                     IHotLink l = ((HotSpotItem) item)
                                             .createHotLink();
                                     ((Node) stitcher.getOrthoNode())
