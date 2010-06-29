@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.jme.bounding.OrthogonalBoundingBox;
 import com.jme.math.Vector2f;
 import com.jme.renderer.ColorRGBA;
+import com.jme.scene.Geometry;
 import com.jme.scene.Spatial;
 import com.jme.scene.state.BlendState;
 import com.jme.scene.state.BlendState.DestinationFunction;
@@ -133,5 +134,10 @@ public class JMERoundedRectangleBorder extends JMERectangularItem implements IBo
 	@Override
 	public Spatial getManipulableSpatial() {
 		return frame;
+	}
+
+	@Override
+	public void setColor(ColorRGBA color) {
+		((RoundedRectangleFrame) getManipulableSpatial()).setSolidColor(color);
 	}
 }
