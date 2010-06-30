@@ -3,6 +3,8 @@ package multiplicity.csysngjme.items;
 import java.awt.Color;
 import java.util.UUID;
 
+import com.jme.renderer.ColorRGBA;
+
 import multiplicity.csysng.items.IPalet;
 
 public class JMEPalet extends JMEColourCircle implements IPalet {
@@ -11,6 +13,11 @@ public class JMEPalet extends JMEColourCircle implements IPalet {
 	
 	public JMEPalet(String name, UUID uuid, float radius) {
 		super(name, uuid, radius);
+	}
+
+	public JMEPalet(String name, UUID uuid, float radius, ColorRGBA colorRGBA) {
+		super(name, uuid, radius, colorRGBA);
+		
 	}
 
 	private void addCloseButton() {
