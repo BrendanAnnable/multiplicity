@@ -22,5 +22,6 @@ public interface IHotSpotFrame extends IFrame {
     public void addHotSpot(IItem item);
 
     public void bringHotSpotsToTop();
-
+ 
+    public void bringPaletToTop();
 }

@@ -2,10 +2,9 @@ package multiplicity.csysng.items.hotspot;
 
 import java.awt.Color;
 
-import com.jme.math.Vector2f;
-import com.jme.scene.Line;
-
 import multiplicity.csysng.items.IItem;
+
+import com.jme.math.Vector2f;
 
 public interface IHotSpotItem extends IItem {
 

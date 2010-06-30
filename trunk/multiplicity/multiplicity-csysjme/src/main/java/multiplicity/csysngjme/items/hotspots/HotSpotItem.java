@@ -3,7 +3,6 @@ package multiplicity.csysngjme.items.hotspots;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
@@ -15,7 +14,6 @@ import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
-import com.jme.scene.Node;
 
 public class HotSpotItem extends JMEColourRectangle implements IHotSpotItem {
 

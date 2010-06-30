@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEFrame;
 
 import com.jme.scene.Line;
+import com.jme.scene.Spatial;
 
 public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	
@@ -59,4 +61,11 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
     public ArrayList<IHotLink> getHotLinks() {
         return hotLinks;
     }
+
+	@Override
+	public void bringPaletToTop() {
+		// TODO Auto-generated method stub
+		IPalet palet = (IPalet) this.getChild("palet");
+		this.getZOrderManager().bringToTop(palet, null);  
+	}
 }
