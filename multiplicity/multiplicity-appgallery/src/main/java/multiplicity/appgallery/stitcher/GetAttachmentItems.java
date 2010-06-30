@@ -316,6 +316,7 @@ public class GetAttachmentItems extends Thread {
 											        targetFrame.getZOrderManager().bringToTop(item, null);    
 											        
 											        targetFrame.bringHotSpotsToTop();
+											        targetFrame.bringPaletToTop();
 												}
 												else if(targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.SCAN_NAME)) {
 													firstFrameFound = true;
@@ -329,6 +330,7 @@ public class GetAttachmentItems extends Thread {
 													clearAllHighlightedHotSpotFrames();
 											        targetFrame.getZOrderManager().bringToTop(item, null);    
 											        targetFrame.bringHotSpotsToTop();
+											        targetFrame.bringPaletToTop();
 												}
 											}
 											

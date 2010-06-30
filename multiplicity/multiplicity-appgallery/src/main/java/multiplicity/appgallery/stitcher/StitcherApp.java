@@ -15,10 +15,12 @@ import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.gesture.GestureLibrary;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
+import multiplicity.csysng.factory.IPaletFactory;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
@@ -27,6 +29,7 @@ import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysngjme.factory.PaletItemFactory;
 import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEImage;
@@ -101,11 +104,14 @@ public class StitcherApp extends AbstractStandaloneApp {
     
     public final int HOTSPOT_DIMENSION = 80;
     public final int HOTSPOT_FRAME_DIMENSION = 200;
+    public final int PALET_DIMENSION = 150;
 
     // when this is filled the first one is at the top of the z index
     ArrayList<IItem> zOrderedItems;
 
     private IHotSpotContentFactory hotSpotContentFactory;
+    
+    private IPaletFactory paletFactory;
 
     public StitcherApp(IMultiTouchEventProducer mtInput) {
         super(mtInput);
@@ -115,6 +121,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     @Override
     public void onAppStart() {
         setHotSpotContentFactory(new HotSpotContentItemFactory());
+        setPaletFactory(new PaletItemFactory());
 //        pageNames.add(STENCIL_NAME);
         pageNames.add(BACKGROUND_NAME);
         pageNames.add(SCAN_NAME);
@@ -319,8 +326,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         return frame;
     }
 
-    public void moveItemToNewFrame(IItem item, Vector2f atPosition,
-            String frameName) {
+    public void moveItemToNewFrame(IItem item, Vector2f atPosition, String frameName) {
         UUID uUID = UUID.randomUUID();
 
         JMEImage bi = (JMEImage) item;
@@ -331,17 +337,10 @@ public class StitcherApp extends AbstractStandaloneApp {
         float newX = bi.getSize().x * localScale.x;
         float newY = bi.getSize().y * localScale.y;
 
-        IHotSpotFrame frame = this.getHotSpotContentFactory()
-                .createHotSpotFrame(frameName, uUID,
-                        Float.valueOf(newX).intValue(),
-                        Float.valueOf(newY).intValue());
+        IHotSpotFrame frame = this.getHotSpotContentFactory().createHotSpotFrame(frameName, uUID, Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
 
-        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID
-                .randomUUID(), BORDER_THICKNESS, 15));
-        frame
-                .setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f,
-                        0.8f), new Color(0f, 0f, 0f, 0.8f),
-                        GradientDirection.VERTICAL));
+        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
+        frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
         frame.setRelativeLocation(atPosition);
         BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
@@ -352,14 +351,19 @@ public class StitcherApp extends AbstractStandaloneApp {
         frame.addItem(item);
         item.setWorldLocation(itemWorldPos);
         frame.getZOrderManager().bringToTop(item, null);
-        BehaviourMaker
-                .removeBehavior(item, RotateTranslateScaleBehaviour.class);
+        BehaviourMaker.removeBehavior(item, RotateTranslateScaleBehaviour.class);
         item.centerItem();
 
+        //add the palet
+        UUID paluUID = UUID.randomUUID();
+        IPalet palet = this.getPaletFactory().createPaletItem("palet", paluUID, PALET_DIMENSION, PALET_DIMENSION);
+        frame.addItem(palet);
+        frame.getZOrderManager().bringToTop(palet, null);
+        palet.centerItem();
+        BehaviourMaker.addBehaviour(palet, RotateTranslateScaleBehaviour.class);
+        
         this.getzOrderManager().bringToTop(frame, null);
-
         frame.getZOrderManager().updateZOrdering();
-
         frame.addItemListener(new ItemListenerAdapter() {
 
             @Override
@@ -374,9 +378,10 @@ public class StitcherApp extends AbstractStandaloneApp {
                 for (IHotSpotItem iHotSpotItem : hotSpots) {
                     iHotSpotItem.update(frame.getRelativeLocation());
                 }
-            }
+           }
 
         });
+        
     }
 
     public void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {
@@ -538,12 +543,19 @@ public class StitcherApp extends AbstractStandaloneApp {
         SingleAppTableSystem.startSystem(StitcherApp.class);
     }
 
-    public void setHotSpotContentFactory(
-            IHotSpotContentFactory hotSpotContentFactory) {
+    public void setHotSpotContentFactory(IHotSpotContentFactory hotSpotContentFactory) {
         this.hotSpotContentFactory = hotSpotContentFactory;
     }
 
     public IHotSpotContentFactory getHotSpotContentFactory() {
         return hotSpotContentFactory;
     }
+
+	public IPaletFactory getPaletFactory() {
+		return paletFactory;
+	}
+
+	public void setPaletFactory(IPaletFactory paletFactory) {
+		this.paletFactory = paletFactory;
+	}
 }
