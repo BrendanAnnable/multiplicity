@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.util.UUID;
 
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.ILine;
 
 import com.jme.math.Vector2f;
 import com.jme.scene.Spatial;
