@@ -49,6 +49,7 @@ import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
+import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Geometry;
 import com.jme.scene.Line;
 import com.jme.scene.Node;
@@ -356,7 +357,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
         //add the palet
         UUID paluUID = UUID.randomUUID();
-        IPalet palet = this.getPaletFactory().createPaletItem("palet", paluUID, PALET_DIMENSION);
+        IPalet palet = this.getPaletFactory().createPaletItem("palet", paluUID, PALET_DIMENSION, new ColorRGBA(0f, 1f, 0f, 1f));
         frame.addItem(palet);
         frame.getZOrderManager().bringToTop(palet, null);
         palet.centerItem();

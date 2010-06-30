@@ -28,6 +28,13 @@ public class JMEColourCircle extends JMECircularItem {
 	}
 	
 
+	public JMEColourCircle(String name, UUID uuid, float radius, ColorRGBA colorRGBA) {
+		super(name, uuid);
+		this.diskRadius = radius;
+		this.diskColour = colorRGBA;
+	}
+
+
 	@Override
 	public void initializeGeometry() {
 		d = new Disk("disk", 2, 64, diskRadius);
