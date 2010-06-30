@@ -104,7 +104,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     
     public final int HOTSPOT_DIMENSION = 80;
     public final int HOTSPOT_FRAME_DIMENSION = 200;
-    public final int PALET_DIMENSION = 150;
+    public final int PALET_DIMENSION = 75;
 
     // when this is filled the first one is at the top of the z index
     ArrayList<IItem> zOrderedItems;
@@ -356,7 +356,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
         //add the palet
         UUID paluUID = UUID.randomUUID();
-        IPalet palet = this.getPaletFactory().createPaletItem("palet", paluUID, PALET_DIMENSION, PALET_DIMENSION);
+        IPalet palet = this.getPaletFactory().createPaletItem("palet", paluUID, PALET_DIMENSION);
         frame.addItem(palet);
         frame.getZOrderManager().bringToTop(palet, null);
         palet.centerItem();

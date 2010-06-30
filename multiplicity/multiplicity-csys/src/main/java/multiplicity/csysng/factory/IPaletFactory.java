@@ -6,5 +6,5 @@ import multiplicity.csysng.items.IPalet;
 
 public interface IPaletFactory {
 
-	public IPalet createPaletItem(String name, UUID uuid, int width, int height);
+	public IPalet createPaletItem(String name, UUID uuid, float radius);
 }

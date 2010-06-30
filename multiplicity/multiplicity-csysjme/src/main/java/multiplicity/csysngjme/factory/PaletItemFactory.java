@@ -9,8 +9,8 @@ import multiplicity.csysngjme.items.JMEPalet;
 public class PaletItemFactory implements IPaletFactory {
 
 	@Override
-	public IPalet createPaletItem(String name, UUID uuid, int width, int height) {
-		JMEPalet pi = new JMEPalet(name, uuid, width, height);
+	public IPalet createPaletItem(String name, UUID uuid, float radius) {
+		JMEPalet pi = new JMEPalet(name, uuid, radius);
         pi.initializeGeometry();
         return pi;
 	}
