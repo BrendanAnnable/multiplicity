@@ -1,7 +1,8 @@
 package multiplicity.csysng.items.events;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.events.MultiTouchCursorEvent;
@@ -9,7 +10,7 @@ import multiplicity.input.events.MultiTouchObjectEvent;
 
 public class MultiTouchEventDispatcher implements IMultiTouchEventListener {
 
-	protected List<IMultiTouchEventListener> items = new ArrayList<IMultiTouchEventListener>();
+	protected List<IMultiTouchEventListener> items = new CopyOnWriteArrayList<IMultiTouchEventListener>();
 	private boolean enabled = true;
 
 	public void setEnabled(boolean b) {		
@@ -37,9 +38,16 @@ public class MultiTouchEventDispatcher implements IMultiTouchEventListener {
 	@Override
 	public void cursorReleased(MultiTouchCursorEvent event) {
 		if(!enabled) return;
-			for(IMultiTouchEventListener item : items) {
-				item.cursorReleased(event);
-			}
+        for(IMultiTouchEventListener item : items) {
+            item.cursorReleased(event);
+        }
+//		ListIterator<IMultiTouchEventListener> li = items.listIterator();
+//		  while(li.hasNext()) {
+//		      IMultiTouchEventListener me = li.next();
+//              me.cursorReleased(event);
+//             
+//          }
+
 	}	
 
 	@Override
