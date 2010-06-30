@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 
 import multiplicity.app.utils.LocalStorageUtility;
 import multiplicity.csysng.behaviours.BehaviourMaker;
+import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
@@ -177,11 +178,21 @@ public class GetAttachmentItems extends Thread {
 												if(targetFrame.getName().contains("hotspotf-") && !highlightedFrames.contains(targetFrame)) {
 													message = message + targetFrame.getName() + ": let's turn it red";
 													firstFrameFound = true;
-													targetFrame.setBorder(getHighlightedFrame());
+													IBorder border = targetFrame.getBorder();
+													border.setColor(new ColorRGBA(1f, 0f, 0f, 0.6f));
+													//targetFrame.setBorder(getHighlightedFrame());
 													highlightedFrames.add(targetFrame);
 												}
 												else if(highlightedFrames.contains(targetFrame)) {
 													message = message + "a hotspot frameprobably already red";
+													for (HotSpotFrame hotSpotFrame : highlightedFrames) {
+														if(!hotSpotFrame.equals(targetFrame)) {
+															IBorder border = hotSpotFrame.getBorder();
+															border.setColor(new ColorRGBA(1f, 1f, 1f, 0.6f));
+//															hotSpotFrame.setBorder(getNormalFrame());
+															highlightedFrames.remove(hotSpotFrame);
+														}
+													}
 												}
 											}
 										}
@@ -205,7 +216,9 @@ public class GetAttachmentItems extends Thread {
 												HotSpotFrame targetFrame = (HotSpotFrame) geometry.getParent();
 												if(highlightedFrames.contains(targetFrame)) {
 													firstFrameFound = true;
-													targetFrame.setBorder(getNormalFrame());
+													IBorder border = targetFrame.getBorder();
+													border.setColor(new ColorRGBA(1f, 1f, 1f, 0.6f));
+//													targetFrame.setBorder(getNormalFrame());
 													highlightedFrames.remove(targetFrame);
 												}
 											}
@@ -217,14 +230,20 @@ public class GetAttachmentItems extends Thread {
 								}
 								
 								if(!firstFrameFound) {
-									for (HotSpotFrame hotSpotFrame : highlightedFrames) {
-										hotSpotFrame.setBorder(getNormalFrame());
-									}
-									highlightedFrames = new ArrayList<HotSpotFrame>();
+									clearAllHighlightedHotSpotFrames();
 								}
 							}
 							
 							logger.info(message);
+						}
+
+						private void clearAllHighlightedHotSpotFrames() {
+							for (HotSpotFrame hotSpotFrame : highlightedFrames) {
+								IBorder border = hotSpotFrame.getBorder();
+								border.setColor(new ColorRGBA(1f, 1f, 1f, 0.6f));
+//								hotSpotFrame.setBorder(getNormalFrame());
+							}
+							highlightedFrames = new ArrayList<HotSpotFrame>();
 						}
 
 						private JMERoundedRectangleBorder getHighlightedFrame() {
@@ -307,9 +326,8 @@ public class GetAttachmentItems extends Thread {
 													item.setRelativeScale(1.0f);
 													((JMERectangularItem) item).setSize(stitcher.HOTSPOT_FRAME_DIMENSION, stitcher.HOTSPOT_FRAME_DIMENSION);
 													item.centerItem();
+													clearAllHighlightedHotSpotFrames();
 											        targetFrame.getZOrderManager().bringToTop(item, null);    
-											        targetFrame.setBorder(getNormalFrame());
-											        highlightedFrames.remove(targetFrame);
 											        targetFrame.bringHotSpotsToTop();
 												}
 											}
