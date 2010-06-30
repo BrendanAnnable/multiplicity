@@ -431,7 +431,6 @@ public class StitcherApp extends AbstractStandaloneApp {
     private void fillHotSpotRepo(IFrame frame) {
 
         IHotSpotItem hotspot = this.getHotSpotContentFactory().createHotSpotItem("cr", UUID.randomUUID(), HOTSPOT_DIMENSION/2, HOTSPOT_DIMENSION/2);
-        hotspot.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
         frame.addItem(hotspot);
         hotspot.centerItem();
 

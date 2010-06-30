@@ -10,6 +10,7 @@ import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEFrame;
 
+import com.jme.renderer.Renderer;
 import com.jme.scene.Line;
 import com.jme.scene.Spatial;
 
@@ -19,7 +20,9 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	
 	public ArrayList<IHotSpotItem> hotSpots = new ArrayList<IHotSpotItem>(); 
 	public ArrayList<IHotLink> hotLinks = new ArrayList<IHotLink>();
-	protected ArrayList<Line> lines = new ArrayList<Line>(); ;
+	protected ArrayList<Line> lines = new ArrayList<Line>();
+
+    private boolean isVisable; ;
 
 	public HotSpotFrame(String name, UUID uuid, int width, int height) {
 		super(name, uuid, width, height);
@@ -68,4 +71,23 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 		IPalet palet = (IPalet) this.getChild("palet");
 		this.getZOrderManager().bringToTop(palet, null);  
 	}
+
+    @Override
+    public void setVisable(boolean isVisable) {
+        this.isVisable = isVisable;
+        
+        if( isVisable ) {
+            this.getManipulableSpatial().setRenderQueueMode(Renderer.QUEUE_ORTHO);
+            this.getMaskGeometry().setRenderQueueMode(Renderer.QUEUE_ORTHO);
+        } else {
+            this.getMaskGeometry().setRenderQueueMode(Renderer.QUEUE_TRANSPARENT);
+            this.getManipulableSpatial().setRenderQueueMode(Renderer.QUEUE_TRANSPARENT);
+
+        }
+    }
+
+    @Override
+    public boolean isVisable() {
+        return this.isVisable;
+    }
 }

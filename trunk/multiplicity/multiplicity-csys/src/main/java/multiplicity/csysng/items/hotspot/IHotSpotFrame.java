@@ -24,4 +24,8 @@ public interface IHotSpotFrame extends IFrame {
     public void bringHotSpotsToTop();
  
     public void bringPaletToTop();
+
+    public void setVisable(boolean b);
+    
+    public boolean isVisable();
 }

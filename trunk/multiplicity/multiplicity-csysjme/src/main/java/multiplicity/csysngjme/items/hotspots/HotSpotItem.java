@@ -1,34 +1,46 @@
 package multiplicity.csysngjme.items.hotspots;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import multiplicity.csysng.gfx.Gradient;
+import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEColourRectangle;
+import multiplicity.input.events.MultiTouchCursorEvent;
 
 import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
+import com.jme.renderer.Renderer;
 
 public class HotSpotItem extends JMEColourRectangle implements IHotSpotItem {
 
 	private static final long serialVersionUID = 3685342474539036654L;
 	private final static Logger logger = Logger.getLogger(HotSpotItem.class.getName());
 
-	boolean isOpen;
+	boolean isOpen = true;
     protected String link;
     IHotSpotItem relationHotSpot;
     private IHotSpotFrame hotSpotFrameContent;
     private IHotLink hotLink;
+    public int clickCount = 0;
     
     
     public HotSpotItem(String name, UUID uuid, int width, int height) {
         super(name, uuid, width, height);
+    }
+
+    private void init() {
+        setGradientBackground(new Gradient(
+                Color.RED, 
+                new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
     }
 
     public HotSpotItem(IHotSpotFrame hotSpotFrameContent, String name, UUID uuid, int width, int height) {
@@ -39,10 +51,30 @@ public class HotSpotItem extends JMEColourRectangle implements IHotSpotItem {
     @Override
     public void initializeGeometry() {
         super.initializeGeometry();
+        init();
+        
     }
     @Override
     public void setOpen(boolean isOpen) {
         this.isOpen = isOpen;
+        if( isOpen ) {
+            
+            setGradientBackground(new Gradient(
+                    Color.RED, 
+                    new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
+            
+           // this.setSolidBackgroundColour(Color.RED);
+            this.hotLink.setVisable(true);
+            hotSpotFrameContent.setVisable(true);
+        } else {
+            this.hotLink.setVisable(false);
+            
+            setGradientBackground(new Gradient(
+                    Color.WHITE, 
+                    new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
+           // this.setSolidBackgroundColour(Color.BLACK);
+            hotSpotFrameContent.setVisable(false);
+        }
     }
 
 
@@ -69,6 +101,16 @@ public class HotSpotItem extends JMEColourRectangle implements IHotSpotItem {
 
 		this.addItemListener(new ItemListenerAdapter() {
             
+		    public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
+		        HotSpotItem hs = (HotSpotItem) item;
+		        hs.clickCount++;
+		        if( hs.clickCount == 2 ) {
+		            hs.setOpen(!hs.isOpen);
+		            hs.clickCount = 0;
+		        }
+		    };
+		    
+		    
             public void itemMoved(IItem item) {
                 
                 Vector2f xyHS1 = item.getRelativeLocation();
