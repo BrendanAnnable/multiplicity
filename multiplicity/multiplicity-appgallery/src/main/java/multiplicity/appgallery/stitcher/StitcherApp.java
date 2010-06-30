@@ -371,12 +371,12 @@ public class StitcherApp extends AbstractStandaloneApp {
                 logger.debug("hot spot frame moved");
 
                 IHotSpotFrame frame = (IHotSpotFrame) item;
-
                 // update all the hotspotitems which will update all the
                 // hotlinks
                 ArrayList<IHotSpotItem> hotSpots = frame.getHotSpots();
                 for (IHotSpotItem iHotSpotItem : hotSpots) {
                     iHotSpotItem.update(frame.getRelativeLocation());
+                    frame.getZOrderManager().bringToTop(iHotSpotItem, null);
                 }
            }
 
@@ -441,6 +441,7 @@ public class StitcherApp extends AbstractStandaloneApp {
                 boolean offParent = true;
                 Node s = (Node) stitcher.getOrthoNode();
 
+                JMEFrame hotSpotRepo = (JMEFrame) item.getParentItem();
                 Vector2f locStore = new Vector2f();
                 UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
 
@@ -451,14 +452,14 @@ public class StitcherApp extends AbstractStandaloneApp {
                     if (pickedSpatial.getSpatial().equals(((JMEFrame) item.getParentItem().getTreeRootSpatial()).getMaskGeometry())) {
                         offParent = false;
                         message = message + "on its parent. Nothing happens";
-                        IHotSpotFrame hsFrame = (IHotSpotFrame) item.getParentItem();
+                        
                     }
                     else if ((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && !firstFrameFound) {
                         try {
                             Geometry geometry = (Geometry) pickedSpatial.getSpatial();
                             JMEFrame targetFrame = (JMEFrame) geometry.getParent();
 
-                            if (targetFrame.getName().contains("back-")) {
+                            if (targetFrame.getName().contains("back-")  && hotSpotRepo.getName().equals("hotspots")) {
                                 firstFrameFound = true;
                                 IFrame frame = (IFrame) item.getParentItem();
                                 frame.removeItem(item);
@@ -468,7 +469,7 @@ public class StitcherApp extends AbstractStandaloneApp {
                                 item.setWorldLocation(itemWorldPos);
                                 targetFrame.getZOrderManager().bringToTop(item, null);
 
-                                IFrame hsFrame = (IFrame) item.getParentItem();
+                                JMEFrame hsFrame = (JMEFrame) item.getParentItem();
                                 if (hsFrame instanceof HotSpotFrame) {
                                     ((IHotSpotFrame) hsFrame).addHotSpot(item);
                                     IHotSpotFrame hotSpotFrameContent = createNewHotSpotContentFrame();
