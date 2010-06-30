@@ -360,14 +360,6 @@ public class StitcherApp extends AbstractStandaloneApp {
 
         frame.getZOrderManager().updateZOrdering();
 
-        // IHotSpotFrame frame = (IHotSpotFrame)item;
-        //      
-        // //update all the hotspotitems which will update all the hotlinks
-        // ArrayList<IHotSpotItem> hotSpots = frame.getHotSpots();
-        // for (IHotSpotItem iHotSpotItem : hotSpots) {
-        // iHotSpotItem.update();
-        // }
-
         frame.addItemListener(new ItemListenerAdapter() {
 
             @Override
