@@ -337,7 +337,6 @@ public class StitcherApp extends AbstractStandaloneApp {
         float newY = bi.getSize().y * localScale.y;
 
         IHotSpotFrame frame = this.getHotSpotContentFactory().createHotSpotFrame(frameName, uUID, Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
-
         
         frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, new ColorRGBA(0f, 0f, 0f, 0f)));
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
@@ -372,6 +371,36 @@ public class StitcherApp extends AbstractStandaloneApp {
 		        parentFrame.bringHotSpotsToTop();
 		        parentFrame.bringPaletToTop();
 		    }
+        	
+        	@Override
+            public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
+        		String message = "Palet released: ";
+                boolean offParent = true;
+                Node s = (Node) stitcher.getOrthoNode();
+
+                Vector2f locStore = new Vector2f();
+                UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
+
+                List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
+                
+                HotSpotFrame paletParent = (HotSpotFrame) item.getParentItem();
+                
+                for (PickedSpatial pickedSpatial : spatialsList) {
+                    if (pickedSpatial.getSpatial().equals(((JMEFrame) paletParent.getTreeRootSpatial()).getMaskGeometry())) {
+                        offParent = false;
+                        message = message + "on its parent. Nothing happens";
+                    }
+                }
+
+                if (offParent) {
+                    item.centerItem();
+                    paletParent.bringHotSpotsToTop();
+                    paletParent.bringPaletToTop();
+                    message = message + "in the mist .... Let's place it back to the center of its mother frame.";
+                }
+
+                logger.info(message);
+        	}
 		});
         
         this.getzOrderManager().bringToTop(frame, null);
