@@ -107,7 +107,6 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 				}
 				
 				float relativeRotation = item.getRelativeRotation();
-				logger.info("item rot: "+relativeRotation);
 				parentFrame.setRelativeRotation(relativeRotation);
 				
 				parentFrame.bringHotSpotsToTop();
@@ -192,7 +191,6 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 
 	@Override
 	public void toggleLock() {
-		IBorder border = this.getBorder();
 		if(isLocked) {
 			//our frame is in lock mode, let's unlock it
 			this.getZOrderManager().sendToBottom(frameOverlay, null);
