@@ -123,7 +123,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         setPaletFactory(new PaletItemFactory());
 //        pageNames.add(STENCIL_NAME);
         pageNames.add(BACKGROUND_NAME);
-//        pageNames.add(SCAN_NAME);
+        pageNames.add(SCAN_NAME);
         populateFromWiki();
         loadContent(wikiPages);
 
@@ -151,8 +151,8 @@ public class StitcherApp extends AbstractStandaloneApp {
                     .getProperty("CLASS_WIKI_SPACE"), prop
                     .getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
             wikiPages.put(pageNames.get(0), backgroundsPage);
-//        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
-//			wikiPages.put(pageNames.get(2), scansPage);
+        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
+			wikiPages.put(pageNames.get(1), scansPage);
         } catch (IOException e) {
             logger.debug("setup:  IOException: " + e);
         }
@@ -338,7 +338,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 
         IHotSpotFrame frame = this.getHotSpotContentFactory().createHotSpotFrame(frameName, uUID, Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
 
-        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
+        
+        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, new ColorRGBA(0f, 0f, 0f, 0f)));
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
         frame.setRelativeLocation(atPosition);

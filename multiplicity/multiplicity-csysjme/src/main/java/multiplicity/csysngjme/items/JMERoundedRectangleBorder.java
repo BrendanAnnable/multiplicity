@@ -45,6 +45,11 @@ public class JMERoundedRectangleBorder extends JMERectangularItem implements IBo
 		setSize(width, height);
 	}
 
+	public JMERoundedRectangleBorder(String name, UUID uuid, float borderSize, int cornerDivisions, ColorRGBA colorRGBA) {
+		this(name, uuid, 1, 1, borderSize, cornerDivisions);
+		this.transparentWhite = colorRGBA;
+	}
+
 	@Override
 	public void initializeGeometry() {
 		setGeometry(borderSize, cornerDivisions);
