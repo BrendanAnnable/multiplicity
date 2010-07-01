@@ -78,9 +78,12 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 
     @Override
     public IHotLink createHotLink() {
-
-		//get the location of the 2 hotspots relative to the parent frame
-		Vector2f xyHS1 = this.getRelativeLocation();
+    	
+    	HotSpotFrame parentF = (HotSpotFrame) this.getParentItem();
+    	Vector2f parentFCoord = parentF.getRelativeLocation();
+		//get the worldlocation of hotspot
+		Vector2f xyHS1 = new Vector2f(this.getRelativeLocation().x + parentFCoord.x, this.getRelativeLocation().y + parentFCoord.y);
+		//get the worldlocation of hotspot
 		Vector2f xyHS2 = hotSpotFrameContent.getRelativeLocation();
 		
 		Vector3f[] vertices = new Vector3f[2];
@@ -130,7 +133,6 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 
     public void setHotSpotFrameContent(IHotSpotFrame hotSpotFrameContent) {
         this.hotSpotFrameContent = hotSpotFrameContent;
-        //this.createHotLink();
     }
 
     public IHotSpotFrame getHotSpotFrameContent() {
