@@ -12,8 +12,6 @@ public interface IHotSpotItem extends IItem {
 
     public boolean isOpen();
 
-    public void setSolidBackgroundColour(Color color);
-
     public IHotLink createHotLink();
 
     public void update(Vector2f vector2f);

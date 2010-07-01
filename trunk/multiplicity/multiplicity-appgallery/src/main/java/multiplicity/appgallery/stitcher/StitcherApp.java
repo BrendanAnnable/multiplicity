@@ -470,7 +470,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
     private void fillHotSpotRepo(IFrame frame) {
 
-        IHotSpotItem hotspot = this.getHotSpotContentFactory().createHotSpotItem("cr", UUID.randomUUID(), HOTSPOT_DIMENSION/2, HOTSPOT_DIMENSION/2);
+        IHotSpotItem hotspot = this.getHotSpotContentFactory().createHotSpotItem("cr", UUID.randomUUID(), PALET_DIMENSION/4, new ColorRGBA(1f, 0f, 0f, 0.6f));
         frame.addItem(hotspot);
         hotspot.centerItem();
 
@@ -499,7 +499,7 @@ public class StitcherApp extends AbstractStandaloneApp {
                             Geometry geometry = (Geometry) pickedSpatial.getSpatial();
                             JMEFrame targetFrame = (JMEFrame) geometry.getParent();
 
-                            if (targetFrame.getName().contains("back-")  && hotSpotRepo.getName().equals("hotspots")) {
+                            if ((targetFrame.getName().contains("back-")  && hotSpotRepo.getName().equals("hotspots")) || (hotSpotRepo.getName().equals("hotspots") && targetFrame.getName().contains("hotspotf-"))) {
                                 firstFrameFound = true;
                                 IFrame frame = (IFrame) item.getParentItem();
                                 frame.removeItem(item);

@@ -63,7 +63,7 @@ public class JMEColourCircle extends JMECircularItem {
 	}
 
 
-	public void changePalet(ColorRGBA colorRGBA) {
+	public void changeBackgroundColor(ColorRGBA colorRGBA) {
 		d.setSolidColor(colorRGBA);		
 	}
 

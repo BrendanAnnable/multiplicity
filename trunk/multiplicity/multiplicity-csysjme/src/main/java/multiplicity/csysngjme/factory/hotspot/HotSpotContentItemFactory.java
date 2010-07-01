@@ -9,6 +9,8 @@ import multiplicity.csysngjme.factory.ContentItemFactoryUtil;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
 import multiplicity.csysngjme.items.hotspots.HotSpotItem;
 
+import com.jme.renderer.ColorRGBA;
+
 public class HotSpotContentItemFactory implements IHotSpotContentFactory {
     
     @Override
@@ -18,20 +20,20 @@ public class HotSpotContentItemFactory implements IHotSpotContentFactory {
         frame.addTouchOverlay();
         return frame;
     }
-    
-    @Override
-    public IHotSpotItem createHotSpotItem(String name, UUID uuid, int width, int height) {
-        HotSpotItem hs = new HotSpotItem(name, uuid, width, height);
-        hs.initializeGeometry();
-        return hs;
-    }
 
-    @Override
-    public IHotSpotItem createHotSpotItem(IHotSpotFrame hotSpotFrameContent,
-            String name, UUID uuid, int width, int height) {
-        HotSpotItem hs = new HotSpotItem(hotSpotFrameContent,name, uuid, width, height);
-        hs.initializeGeometry();
-        return null;
-    }
+	@Override
+	public IHotSpotItem createHotSpotItem(String name, UUID uuid, float radius) {
+		HotSpotItem pi = new HotSpotItem(name, uuid, radius);
+        pi.initializeGeometry();
+        return pi;
+	}
+
+	@Override
+	public IHotSpotItem createHotSpotItem(String name, UUID uuid, float radius, ColorRGBA colorRGBA) {
+		HotSpotItem pi = new HotSpotItem(name, uuid, radius, colorRGBA);
+        pi.initializeGeometry();
+        return pi;
+	}
+
 
 }
