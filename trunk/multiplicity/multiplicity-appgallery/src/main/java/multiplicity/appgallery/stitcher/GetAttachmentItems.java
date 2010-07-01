@@ -293,6 +293,7 @@ public class GetAttachmentItems extends Thread {
 							
 							if (parentContainerName.equals(stitcher.BACKGROUND_NAME) && offParent) {
 								IFrame frame = (IFrame) item.getParentItem();
+								item.removeItemListener(this);
 								stitcher.moveItemToNewFrame(item, new Vector2f(0.0f, 0.0f), "back-" + item.getUUID());
 								frame.removeItem(item);
 							} else {

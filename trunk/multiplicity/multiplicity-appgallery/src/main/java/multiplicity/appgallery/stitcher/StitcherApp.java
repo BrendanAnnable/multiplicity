@@ -123,7 +123,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         setPaletFactory(new PaletItemFactory());
 //        pageNames.add(STENCIL_NAME);
         pageNames.add(BACKGROUND_NAME);
-        pageNames.add(SCAN_NAME);
+//        pageNames.add(SCAN_NAME);
         populateFromWiki();
         loadContent(wikiPages);
 
@@ -151,8 +151,8 @@ public class StitcherApp extends AbstractStandaloneApp {
                     .getProperty("CLASS_WIKI_SPACE"), prop
                     .getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
             wikiPages.put(pageNames.get(0), backgroundsPage);
-        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
-			wikiPages.put(pageNames.get(1), scansPage);
+//        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
+//			wikiPages.put(pageNames.get(1), scansPage);
         } catch (IOException e) {
             logger.debug("setup:  IOException: " + e);
         }
@@ -349,7 +349,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         Vector2f itemWorldPos = item.getWorldLocation();
         frame.addItem(item);
         item.setWorldLocation(itemWorldPos);
-        frame.getZOrderManager().bringToTop(item, null);
+        frame.getZOrderManager().sendToBottom(item, null);
         BehaviourMaker.removeBehavior(item, RotateTranslateScaleBehaviour.class);
         item.centerItem();
 

@@ -130,7 +130,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 
     public void setHotSpotFrameContent(IHotSpotFrame hotSpotFrameContent) {
         this.hotSpotFrameContent = hotSpotFrameContent;
-        this.createHotLink();
+        //this.createHotLink();
     }
 
     public IHotSpotFrame getHotSpotFrameContent() {
