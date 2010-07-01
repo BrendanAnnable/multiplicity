@@ -1,11 +1,10 @@
 package multiplicity.csysngjme.items;
 
-import java.awt.Color;
 import java.util.UUID;
 
-import com.jme.renderer.ColorRGBA;
-
 import multiplicity.csysng.items.IPalet;
+
+import com.jme.renderer.ColorRGBA;
 
 public class JMEPalet extends JMEColourCircle implements IPalet {
 
@@ -20,16 +19,6 @@ public class JMEPalet extends JMEColourCircle implements IPalet {
 		
 	}
 
-	private void addCloseButton() {
-		int width = (int) this.getSize().x/2;
-		int height = (int) this.getSize().y+40;
-		JMEColourRectangle jMEColourRectangle = new JMEColourRectangle("lock",UUID.randomUUID(), width , height);
-		jMEColourRectangle.initializeGeometry();
-		jMEColourRectangle.setSolidBackgroundColour(new Color(255,0,0));
-		this.addItem(jMEColourRectangle);
-		this.getZOrderManager().sendToBottom(jMEColourRectangle, null);
-	}
-
 	@Override
 	public void initializeGeometry() {
 		super.initializeGeometry();		
@@ -38,10 +27,10 @@ public class JMEPalet extends JMEColourCircle implements IPalet {
 	@Override
 	public void updatePalet(boolean locked) {
 		if(locked) {
-			super.changePalet(new ColorRGBA(0f, 0f, 0f, 1f));
+			super.changeBackgroundColor(new ColorRGBA(0f, 0f, 0f, 1f));
 		}
 		else {
-			super.changePalet(new ColorRGBA(0f, 1f, 0f, 1f));
+			super.changeBackgroundColor(new ColorRGBA(0f, 1f, 0f, 1f));
 		}
 	}
 }
