@@ -332,7 +332,7 @@ public class GetAttachmentItems extends Thread {
 											        targetFrame.getZOrderManager().bringToTop(item, null);    
 											        
 											        targetFrame.bringHotSpotsToTop();
-											        targetFrame.bringPaletToTop();
+//											        targetFrame.bringPaletToTop();
 												}
 											}
 											
