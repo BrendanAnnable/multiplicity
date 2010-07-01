@@ -352,6 +352,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         frame.getZOrderManager().bringToTop(item, null);
         BehaviourMaker.removeBehavior(item, RotateTranslateScaleBehaviour.class);
         item.centerItem();
+        //little trick to make sure palet and hotspots are always on top
         item.addItemListener(new ItemListenerAdapter() {
         	@Override
         	public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
