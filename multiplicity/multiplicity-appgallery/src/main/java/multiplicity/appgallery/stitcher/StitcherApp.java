@@ -104,6 +104,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     public final int HOTSPOT_DIMENSION = 80;
     public final int HOTSPOT_FRAME_DIMENSION = 200;
     public final int PALET_DIMENSION = 75;
+    public final int SMALLER_PALET_DIMENSION = 30;
 
     // when this is filled the first one is at the top of the z index
     ArrayList<IItem> zOrderedItems;
@@ -311,7 +312,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
         IHotSpotFrame frame = (IHotSpotFrame) this.getHotSpotContentFactory().createHotSpotFrame("hotspotf-" + uUID, uUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
 
-        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
+        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, new ColorRGBA(0f, 0f, 0f, 0f)));
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
         frame.setRelativeLocation(new Vector2f(xPos, yPos));
@@ -319,6 +320,56 @@ public class StitcherApp extends AbstractStandaloneApp {
         BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
         this.add(frame);
+        
+        //add the smaller palet, let's make it green ..
+        UUID paluUID = UUID.randomUUID();
+        IPalet palet = this.getPaletFactory().createPaletItem("palet", paluUID, SMALLER_PALET_DIMENSION, new ColorRGBA(0f, 1f, 0f, 1f));
+        frame.addItem(palet);
+        frame.getZOrderManager().bringToTop(palet, null);
+        palet.centerItem();
+        BehaviourMaker.addBehaviour(palet, RotateTranslateScaleBehaviour.class);
+        palet.addItemListener(new ItemListenerAdapter() {
+        	public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
+		        logger.info("palet clicked");
+		        IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
+		        parentFrame.toggleLock();
+		        
+		        ((IPalet)item).updatePalet(parentFrame.isLocked());
+		        
+		        parentFrame.bringHotSpotsToTop();
+		        parentFrame.bringPaletToTop();
+		    }
+        	
+        	@Override
+            public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
+        		String message = "Palet released: ";
+                boolean offParent = true;
+                Node s = (Node) stitcher.getOrthoNode();
+
+                Vector2f locStore = new Vector2f();
+                UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
+
+                List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
+                
+                HotSpotFrame paletParent = (HotSpotFrame) item.getParentItem();
+                
+                for (PickedSpatial pickedSpatial : spatialsList) {
+                    if (pickedSpatial.getSpatial().equals(((JMEFrame) paletParent.getTreeRootSpatial()).getMaskGeometry())) {
+                        offParent = false;
+                        message = message + "on its parent. Nothing happens";
+                    }
+                }
+
+                if (offParent) {
+                    item.centerItem();
+                    paletParent.bringHotSpotsToTop();
+                    paletParent.bringPaletToTop();
+                    message = message + "in the mist .... Let's place it back to the center of its mother frame.";
+                }
+
+                logger.info(message);
+        	}
+		});
 
         this.getzOrderManager().bringToTop(frame, null);
 
@@ -352,11 +403,10 @@ public class StitcherApp extends AbstractStandaloneApp {
         frame.getZOrderManager().bringToTop(item, null);
         BehaviourMaker.removeBehavior(item, RotateTranslateScaleBehaviour.class);
         item.centerItem();
-        //little trick to make sure palet and hotspots are always on top
         item.addItemListener(new ItemListenerAdapter() {
         	@Override
         	public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
-        		IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
+        		 IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
  		        parentFrame.bringHotSpotsToTop();
  		        parentFrame.bringPaletToTop();
         	}
@@ -437,8 +487,8 @@ public class StitcherApp extends AbstractStandaloneApp {
     public void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {
         UUID uUID = UUID.randomUUID();
         IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
-
-        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
+        
+        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));        	
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
         frame.setRelativeLocation(atPosition);
