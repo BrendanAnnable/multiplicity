@@ -349,9 +349,17 @@ public class StitcherApp extends AbstractStandaloneApp {
         Vector2f itemWorldPos = item.getWorldLocation();
         frame.addItem(item);
         item.setWorldLocation(itemWorldPos);
-        frame.getZOrderManager().sendToBottom(item, null);
+        frame.getZOrderManager().bringToTop(item, null);
         BehaviourMaker.removeBehavior(item, RotateTranslateScaleBehaviour.class);
         item.centerItem();
+        item.addItemListener(new ItemListenerAdapter() {
+        	@Override
+        	public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
+        		IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
+ 		        parentFrame.bringHotSpotsToTop();
+ 		        parentFrame.bringPaletToTop();
+        	}
+        });
 
         //add the palet, let's make it green ..
         UUID paluUID = UUID.randomUUID();
