@@ -25,6 +25,11 @@ public class RepositoryFrame extends JMEFrame implements IRepositoryFrame {
     }
     
     @Override
+    public void initializeGeometry() {
+        super.initializeGeometry();
+    }
+    
+    @Override
     public void close() {
         isOpen = false;
         this.setRelativeLocation(this.getCloseLocation());
