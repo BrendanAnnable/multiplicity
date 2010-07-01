@@ -67,4 +67,9 @@ public class JMEColourRectangle extends JMERectangularItem implements IColourRec
 	public void setSolidBackgroundColour(Color c) {
 		quad.setSolidColor(ColourUtils.colourConvert(c));		
 	}
+	
+	@Override
+	public void setSolidBackgroundColour(ColorRGBA colorRGBA) {
+		quad.setSolidColor(colorRGBA);		
+	}
 }

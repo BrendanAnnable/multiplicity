@@ -28,4 +28,10 @@ public interface IHotSpotFrame extends IFrame {
     public void setVisable(boolean b);
     
     public boolean isVisable();
+
+	public void setLocked(boolean isLocked);
+
+	public boolean isLocked();
+
+	public void toggleLock();
 }

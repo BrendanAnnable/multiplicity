@@ -19,6 +19,7 @@ import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IImage.AlphaStyle;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
+import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMERectangularItem;
@@ -185,7 +186,7 @@ public class GetAttachmentItems extends Thread {
 												}
 												else if(highlightedFrames.contains(targetFrame)) {
 													message = message + "a hotspot frameprobably already red";
-													for (HotSpotFrame hotSpotFrame : highlightedFrames) {
+													for (IHotSpotFrame hotSpotFrame : highlightedFrames) {
 														if(!hotSpotFrame.equals(targetFrame)) {
 															IBorder border = hotSpotFrame.getBorder();
 															border.setColor(new ColorRGBA(1f, 1f, 1f, 0.6f));
@@ -213,7 +214,7 @@ public class GetAttachmentItems extends Thread {
 											Geometry geometry = (Geometry) pickedSpatial.getSpatial();
 											
 											if( geometry.getParent() instanceof HotSpotFrame ){
-												HotSpotFrame targetFrame = (HotSpotFrame) geometry.getParent();
+												IHotSpotFrame targetFrame = (IHotSpotFrame) geometry.getParent();
 												if(highlightedFrames.contains(targetFrame)) {
 													firstFrameFound = true;
 													IBorder border = targetFrame.getBorder();
@@ -238,7 +239,7 @@ public class GetAttachmentItems extends Thread {
 						}
 
 						private void clearAllHighlightedHotSpotFrames() {
-							for (HotSpotFrame hotSpotFrame : highlightedFrames) {
+							for (IHotSpotFrame hotSpotFrame : highlightedFrames) {
 								IBorder border = hotSpotFrame.getBorder();
 								border.setColor(new ColorRGBA(1f, 1f, 1f, 0.6f));
 //								hotSpotFrame.setBorder(getNormalFrame());

@@ -34,7 +34,14 @@ public class JMEPalet extends JMEColourCircle implements IPalet {
 	public void initializeGeometry() {
 		super.initializeGeometry();		
 	}
-	
-	
 
+	@Override
+	public void updatePalet(boolean locked) {
+		if(locked) {
+			super.changePalet(new ColorRGBA(0f, 0f, 0f, 1f));
+		}
+		else {
+			super.changePalet(new ColorRGBA(0f, 1f, 0f, 1f));
+		}
+	}
 }
