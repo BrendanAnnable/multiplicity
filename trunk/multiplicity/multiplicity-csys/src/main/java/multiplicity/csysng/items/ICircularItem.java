@@ -1,6 +1,7 @@
 package multiplicity.csysng.items;
 
 import com.jme.math.Vector2f;
+import com.jme.renderer.ColorRGBA;
 
 public interface ICircularItem extends IItem {
 	public void setSize(float width, float height);

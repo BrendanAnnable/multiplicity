@@ -21,7 +21,6 @@ import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
-import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
@@ -51,7 +50,6 @@ import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Geometry;
-import com.jme.scene.Line;
 import com.jme.scene.Node;
 import com.jme.scene.Spatial;
 import com.jme.system.DisplaySystem;
@@ -125,7 +123,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         setPaletFactory(new PaletItemFactory());
 //        pageNames.add(STENCIL_NAME);
         pageNames.add(BACKGROUND_NAME);
-        pageNames.add(SCAN_NAME);
+//        pageNames.add(SCAN_NAME);
         populateFromWiki();
         loadContent(wikiPages);
 
@@ -153,8 +151,8 @@ public class StitcherApp extends AbstractStandaloneApp {
                     .getProperty("CLASS_WIKI_SPACE"), prop
                     .getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
             wikiPages.put(pageNames.get(0), backgroundsPage);
-        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
-			wikiPages.put(pageNames.get(1), scansPage);
+//        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
+//			wikiPages.put(pageNames.get(2), scansPage);
         } catch (IOException e) {
             logger.debug("setup:  IOException: " + e);
         }
@@ -355,13 +353,25 @@ public class StitcherApp extends AbstractStandaloneApp {
         BehaviourMaker.removeBehavior(item, RotateTranslateScaleBehaviour.class);
         item.centerItem();
 
-        //add the palet
+        //add the palet, let's make it green ..
         UUID paluUID = UUID.randomUUID();
         IPalet palet = this.getPaletFactory().createPaletItem("palet", paluUID, PALET_DIMENSION, new ColorRGBA(0f, 1f, 0f, 1f));
         frame.addItem(palet);
         frame.getZOrderManager().bringToTop(palet, null);
         palet.centerItem();
         BehaviourMaker.addBehaviour(palet, RotateTranslateScaleBehaviour.class);
+        palet.addItemListener(new ItemListenerAdapter() {
+        	public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
+		        logger.info("palet clicked");
+		        IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
+		        parentFrame.toggleLock();
+		        
+		        ((IPalet)item).updatePalet(parentFrame.isLocked());
+		        
+		        parentFrame.bringHotSpotsToTop();
+		        parentFrame.bringPaletToTop();
+		    }
+		});
         
         this.getzOrderManager().bringToTop(frame, null);
         frame.getZOrderManager().updateZOrdering();
