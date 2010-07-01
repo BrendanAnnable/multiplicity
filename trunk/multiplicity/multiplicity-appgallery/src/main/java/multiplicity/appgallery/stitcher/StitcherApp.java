@@ -422,21 +422,6 @@ public class StitcherApp extends AbstractStandaloneApp {
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
         frame.setRelativeLocation(atPosition);
-        frame.addItemListener(new ItemListenerAdapter(){
-            
-            @Override
-            public void itemCursorPressed(IItem item,
-                    MultiTouchCursorEvent event) {
-                //uncomment when ready
-//                IRepositoryFrame rf = (IRepositoryFrame) item;
-//                if( rf.isOpen() ){
-//                    rf.close();
-//                } else {
-//                    rf.open();
-//                }
-            }
-            
-        });
         BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
         this.add(frame);
@@ -503,26 +488,60 @@ public class StitcherApp extends AbstractStandaloneApp {
                             Geometry geometry = (Geometry) pickedSpatial.getSpatial();
                             JMEFrame targetFrame = (JMEFrame) geometry.getParent();
 
-                            if ((targetFrame.getName().contains("back-")  && hotSpotRepo.getName().equals("hotspots")) || (hotSpotRepo.getName().equals("hotspots") && targetFrame.getName().contains("hotspotf-"))) {
+                            if (targetFrame.getName().contains("back-")  && hotSpotRepo.getName().equals("hotspots")) {
                                 firstFrameFound = true;
-                                IFrame frame = (IFrame) item.getParentItem();
-                                frame.removeItem(item);
+                                IFrame originFrame = (IFrame) item.getParentItem();
+                                originFrame.removeItem(item);
 
                                 Vector2f itemWorldPos = item.getWorldLocation();
                                 targetFrame.addItem(item);
                                 item.setWorldLocation(itemWorldPos);
                                 targetFrame.getZOrderManager().bringToTop(item, null);
 
-                                JMEFrame hsFrame = (JMEFrame) item.getParentItem();
-                                if (hsFrame instanceof HotSpotFrame) {
-                                    ((IHotSpotFrame) hsFrame).addHotSpot(item);
-                                    IHotSpotFrame hotSpotFrameContent = createNewHotSpotContentFrame();
-                                    ((HotSpotItem) item).setHotSpotFrameContent(hotSpotFrameContent);
-                                    IHotLink l = ((HotSpotItem) item).createHotLink();
-                                    ((Node) stitcher.getOrthoNode()).attachChild((Spatial) l);
-                                    message = message + "on " + targetFrame.getName() + ". Great!!";
-                                    fillHotSpotRepo(frame);
-                                }
+//                                JMEFrame hsFrame = (JMEFrame) item.getParentItem();
+//                                if (hsFrame instanceof HotSpotFrame) {
+                                
+                                //add HS to the array attached to the frame
+                                ((IHotSpotFrame) targetFrame).addHotSpot(item);
+                                
+                                IHotSpotFrame hotSpotFrameContent = createNewHotSpotContentFrame();
+                                
+                                ((HotSpotItem) item).setHotSpotFrameContent(hotSpotFrameContent);
+                                
+                                IHotLink l = ((HotSpotItem) item).createHotLink();
+                                
+                                ((Node) stitcher.getOrthoNode()).attachChild((Spatial) l);
+                                
+                                message = message + "on " + targetFrame.getName() + ". Great!!";
+                                
+                                //create a new hotspot candidate
+                                fillHotSpotRepo(originFrame);
+//                            	}
+                            }
+                            else if( hotSpotRepo.getName().equals("hotspots") && targetFrame.getName().contains("hotspotf-") ) {
+                            	firstFrameFound = true;
+                                IFrame originFrame = (IFrame) item.getParentItem();
+                                originFrame.removeItem(item);
+                                
+                                Vector2f itemWorldPos = item.getWorldLocation();
+                                targetFrame.addItem(item);
+                                item.setWorldLocation(itemWorldPos);
+                                targetFrame.getZOrderManager().bringToTop(item, null);
+                                
+                        		((IHotSpotFrame) targetFrame).addHotSpot(item);
+                                
+                                IHotSpotFrame hotSpotFrameContent = createNewHotSpotContentFrame();
+                                
+                                ((HotSpotItem) item).setHotSpotFrameContent(hotSpotFrameContent);
+                                
+                                IHotLink l = ((HotSpotItem) item).createHotLink();
+                                
+                                ((Node) stitcher.getOrthoNode()).attachChild((Spatial) l);
+                                
+                                message = message + "on " + targetFrame.getName() + ". Great!!";
+                                
+                                //create a new hotspot candidate
+                                fillHotSpotRepo(originFrame);
                             }
 
                         } catch (Exception e) {
