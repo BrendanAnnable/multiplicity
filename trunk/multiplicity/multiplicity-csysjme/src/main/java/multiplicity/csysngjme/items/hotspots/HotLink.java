@@ -7,7 +7,6 @@ import multiplicity.csysng.items.hotspot.IHotLink;
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
-import com.jme.renderer.Renderer;
 import com.jme.scene.Line;
 import com.jme.util.geom.BufferUtils;
 
@@ -15,7 +14,6 @@ public class HotLink extends Line implements IHotLink {
     
 	private static final long serialVersionUID = 1677415896709510948L;
 	public Vector3f[] vertices;
-    private boolean isVisable;
 	
 	public HotLink(Vector3f[] vertices) {
         super("Link", vertices, null, null, null);
@@ -45,21 +43,18 @@ public class HotLink extends Line implements IHotLink {
         this.reconstruct(fBuffer, null, null, null);
         this.setSolidColor(ColorRGBA.red);  
 	}
-	
-	@Override
-    public void setVisable(boolean isVisable) {
-	    this.isVisable = isVisable;
-	    
-	    if( isVisable) {
-	        this.setRenderQueueMode(Renderer.QUEUE_ORTHO);
-	    } else {
-	        this.setRenderQueueMode(Renderer.QUEUE_TRANSPARENT);
-	        
-	    }
-	}
-	
-	@Override
+
+
+    @Override
     public boolean isVisable() {
-	    return isVisable;
-	}
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+
+    @Override
+    public void setVisable(boolean isVisable) {
+        // TODO Auto-generated method stub
+        
+    }
 }
