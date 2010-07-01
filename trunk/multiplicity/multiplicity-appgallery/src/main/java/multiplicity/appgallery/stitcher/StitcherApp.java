@@ -27,14 +27,18 @@ import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
+import multiplicity.csysng.items.repository.IRepositoryContentItemFactory;
+import multiplicity.csysng.items.repository.IRepositoryFrame;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.factory.PaletItemFactory;
+import multiplicity.csysngjme.factory.Repository.RepositoryContentItemFactory;
 import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
 import multiplicity.csysngjme.items.hotspots.HotSpotItem;
+import multiplicity.csysngjme.items.repository.RepositoryFrame;
 import multiplicity.csysngjme.picking.AccuratePickingUtility;
 import multiplicity.csysngjme.picking.PickedSpatial;
 import multiplicity.input.IMultiTouchEventProducer;
@@ -112,6 +116,8 @@ public class StitcherApp extends AbstractStandaloneApp {
     private IHotSpotContentFactory hotSpotContentFactory;
     
     private IPaletFactory paletFactory;
+    
+    private IRepositoryContentItemFactory repositoryFactory;
 
     public StitcherApp(IMultiTouchEventProducer mtInput) {
         super(mtInput);
@@ -122,7 +128,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     public void onAppStart() {
         setHotSpotContentFactory(new HotSpotContentItemFactory());
         setPaletFactory(new PaletItemFactory());
-//        pageNames.add(STENCIL_NAME);
+        pageNames.add(STENCIL_NAME);
         pageNames.add(BACKGROUND_NAME);
 //        pageNames.add(SCAN_NAME);
         populateFromWiki();
@@ -142,16 +148,16 @@ public class StitcherApp extends AbstractStandaloneApp {
             this.wikiPass = prop.getProperty("DEFAULT_PASS");
             this.maxFileSize = Integer.valueOf(prop
                     .getProperty("MAX_ATTCHMENT_SIZE"));
-//            stencilsPage = getWikiPage(prop, prop
-//                    .getProperty("DEFAULT_WIKI_NAME"), prop
-//                    .getProperty("REPOSITORY_WIKI_SPACE"), prop
-//                    .getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
-//            wikiPages.put(pageNames.get(0), stencilsPage);
+            stencilsPage = getWikiPage(prop, prop
+                    .getProperty("DEFAULT_WIKI_NAME"), prop
+                    .getProperty("REPOSITORY_WIKI_SPACE"), prop
+                    .getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
+            wikiPages.put(pageNames.get(0), stencilsPage);
             backgroundsPage = getWikiPage(prop, prop
                     .getProperty("DEFAULT_WIKI_NAME"), prop
                     .getProperty("CLASS_WIKI_SPACE"), prop
                     .getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
-            wikiPages.put(pageNames.get(0), backgroundsPage);
+            wikiPages.put(pageNames.get(1), backgroundsPage);
 //        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
 //			wikiPages.put(pageNames.get(1), scansPage);
         } catch (IOException e) {
@@ -175,88 +181,6 @@ public class StitcherApp extends AbstractStandaloneApp {
         smaker = new Grouper();
         this.getMultiTouchEventProducer().registerMultiTouchEventListener(
                 smaker);
-
-        // IImage bg = getContentFactory().createImage("backgroundimage",
-        // UUID.randomUUID());
-        // bg.setImage(StitcherApp.class.getResource("yellowflowers_1680x1050.png"));
-        // bg.centerItem();
-        // add(bg);
-
-        // //load the comments
-        // for (IComment comment : comments) {
-        // ILabel commentLabel = getContentFactory().createLabel("comment",
-        // UUID.randomUUID());
-        // commentLabel.setText(comment.getText());
-        // commentLabel.setFont(new Font("Myriad Pro", Font.BOLD, 24));
-        // commentLabel.setTextColour(Color.white);
-        // commentLabel.setRelativeLocation(new Vector2f(10, 10));
-        // ButtonBehaviour bb = (ButtonBehaviour)
-        // BehaviourMaker.addBehaviour(commentLabel, ButtonBehaviour.class);
-        // bb.addListener(new IButtonBehaviourListener() {
-        // @Override
-        // public void buttonClicked(IItem item) {
-        // System.out.println("click");
-        // }
-        //
-        // @Override
-        // public void buttonPressed(IItem item) {
-        // System.out.println("pressed");
-        //
-        // }
-        //
-        // @Override
-        // public void buttonReleased(IItem item) {
-        // System.out.println("released");
-        //
-        //
-        // }
-        //
-        // });
-        //
-        // BehaviourMaker.addBehaviour(commentLabel,
-        // RotateTranslateScaleBehaviour.class);
-        // BehaviourMaker.addBehaviour(commentLabel, InertiaBehaviour.class);
-        //
-        // // smaker.register(commentLabel);
-        // smaker.register(commentLabel, this);
-        //
-        // zOrderedItems.add(commentLabel);
-        // add(commentLabel);
-        // }
-        //
-        // //load the tags
-        // for( ITag tag : tags) {
-        // ILabel tagLabel = getContentFactory().createLabel("tag",
-        // UUID.randomUUID());
-        // tagLabel.setText(tag.getName());
-        // tagLabel.setFont(new Font("Myriad Pro", Font.BOLD, 18));
-        // tagLabel.setTextColour(Color.BLUE);
-        // tagLabel.setRelativeLocation(new Vector2f(10, 10));
-        // ButtonBehaviour bb = (ButtonBehaviour)
-        // BehaviourMaker.addBehaviour(tagLabel, ButtonBehaviour.class);
-        // bb.addListener(new IButtonBehaviourListener() {
-        // @Override
-        // public void buttonClicked(IItem item) {
-        // getzOrderManager().sendToBottom(item, null);
-        // }
-        //
-        // @Override
-        // public void buttonPressed(IItem item) {}
-        //
-        // @Override
-        // public void buttonReleased(IItem item) {}
-        //
-        // });
-        //
-        // BehaviourMaker.addBehaviour(tagLabel,
-        // RotateTranslateScaleBehaviour.class);
-        // BehaviourMaker.addBehaviour(tagLabel, InertiaBehaviour.class);
-        //
-        // smaker.register(tagLabel, this);
-        //
-        // zOrderedItems.add(tagLabel);
-        // add(tagLabel);
-        // }
 
         List<IItem> items = null;
         IPage iPage = null;
@@ -403,6 +327,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         frame.getZOrderManager().bringToTop(item, null);
         BehaviourMaker.removeBehavior(item, RotateTranslateScaleBehaviour.class);
         item.centerItem();
+        //little trick to make sure palet and hotspots are always on top
         item.addItemListener(new ItemListenerAdapter() {
         	@Override
         	public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
@@ -486,12 +411,32 @@ public class StitcherApp extends AbstractStandaloneApp {
 
     public void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {
         UUID uUID = UUID.randomUUID();
-        IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
         
-        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));        	
+        //RepositoryFrame frame = (RepositoryFrame) this.getRepositoryFactory().createRepositoryFrame(frameName, uUID, frameWidth, frameHeight);
+        //uncomment when ready
+//        frame.setOpenLocation(openLocation);
+//        frame.setCloseLocation(closeLocation);
+        IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
+
+        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
         frame.setRelativeLocation(atPosition);
+        frame.addItemListener(new ItemListenerAdapter(){
+            
+            @Override
+            public void itemCursorPressed(IItem item,
+                    MultiTouchCursorEvent event) {
+                //uncomment when ready
+//                IRepositoryFrame rf = (IRepositoryFrame) item;
+//                if( rf.isOpen() ){
+//                    rf.close();
+//                } else {
+//                    rf.open();
+//                }
+            }
+            
+        });
         BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
         this.add(frame);
@@ -658,4 +603,12 @@ public class StitcherApp extends AbstractStandaloneApp {
 	public void setPaletFactory(IPaletFactory paletFactory) {
 		this.paletFactory = paletFactory;
 	}
+
+    public void setRepositoryFactory(IRepositoryContentItemFactory repositoryFactory) {
+        this.repositoryFactory = repositoryFactory;
+    }
+
+    public IRepositoryContentItemFactory getRepositoryFactory() {
+        return repositoryFactory;
+    }
 }
