@@ -34,4 +34,6 @@ public interface IHotSpotFrame extends IFrame {
 	public boolean isLocked();
 
 	public void toggleLock();
+
+	public void sendOverlaytoBottom();
 }
