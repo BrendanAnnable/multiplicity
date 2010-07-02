@@ -85,6 +85,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     
     public final Float BORDER_THICKNESS = 40f;
     public final Float TOP_BOTTOM_REPO_HEIGHT = 300f;
+    public final Float RIGHT_LEFT_REPO_HEIGHT = 400f;
     public final int HOTSPOT_DIMENSION = 80;
     public final int HOTSPOT_FRAME_DIMENSION = 200;
     public final int PALET_DIMENSION = 75;
@@ -111,7 +112,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         setRepositoryFactory(new RepositoryContentItemFactory());
         pageNames.add(STENCIL_NAME);
         pageNames.add(BACKGROUND_NAME);
-//        pageNames.add(SCAN_NAME);
+        pageNames.add(SCAN_NAME);
         populateFromWiki();
         loadContent(wikiPages);
 
@@ -139,8 +140,8 @@ public class StitcherApp extends AbstractStandaloneApp {
                     .getProperty("CLASS_WIKI_SPACE"), prop
                     .getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
             wikiPages.put(pageNames.get(1), backgroundsPage);
-//        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
-//			wikiPages.put(pageNames.get(1), scansPage);
+        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
+			wikiPages.put(pageNames.get(2), scansPage);
         } catch (IOException e) {
             logger.debug("setup:  IOException: " + e);
         }
@@ -437,16 +438,26 @@ public class StitcherApp extends AbstractStandaloneApp {
         	frameClosePosition = new Vector2f(framePosition.x, framePosition.y + TOP_BOTTOM_REPO_HEIGHT);     
         	frame.setCloseLocation(frameClosePosition);        	
         }
-//        else if(frameName.equals(SCAN_NAME)) {
-//        	frame.setRelativeLocation(atPosition);
-//        	frame.setOpenLocation(atPosition);
-//        	frame.setCloseLocation(atPosition);    
-//        }
-//        else if(frameName.equals(STENCIL_NAME)) {
-//        	frame.setRelativeLocation(atPosition);
-//        	frame.setOpenLocation(atPosition);
-//        	frame.setCloseLocation(atPosition);    
-//        }
+        else if(frameName.equals(SCAN_NAME)) {
+        	frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 2*BORDER_THICKNESS, TOP_BOTTOM_REPO_HEIGHT);
+        	
+        	Float xPos = 0f;
+            Float yPos = Integer.valueOf((int) (DisplaySystem.getDisplaySystem().getHeight()/2 + (TOP_BOTTOM_REPO_HEIGHT/2 + BORDER_THICKNESS) - BORDER_THICKNESS)).floatValue();
+            framePosition = new Vector2f(xPos, yPos);        	
+        	frame.setOpenLocation(framePosition);
+        	frameClosePosition = new Vector2f(framePosition.x, framePosition.y - TOP_BOTTOM_REPO_HEIGHT);     
+        	frame.setCloseLocation(frameClosePosition);     
+        }
+        else if(frameName.equals(STENCIL_NAME)) {
+        	frame.setSize(RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 4*BORDER_THICKNESS);
+        	
+        	Float xPos = Integer.valueOf((int) (DisplaySystem.getDisplaySystem().getWidth()/2 + (RIGHT_LEFT_REPO_HEIGHT/2 + BORDER_THICKNESS) - BORDER_THICKNESS)).floatValue();
+            Float yPos = 0f;
+            framePosition = new Vector2f(xPos, yPos);        	
+        	frame.setOpenLocation(framePosition);
+        	frameClosePosition = new Vector2f(framePosition.x - RIGHT_LEFT_REPO_HEIGHT, framePosition.y);     
+        	frame.setCloseLocation(frameClosePosition);     
+        }
         
         for (IItem item : items) {
             item.setRelativeScale(0.5f);
