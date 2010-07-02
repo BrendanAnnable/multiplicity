@@ -95,7 +95,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 			
 			@Override
 			public void itemCursorChanged(IItem item, MultiTouchCursorEvent event) {
-				HotSpotFrame parentFrame = (HotSpotFrame) item.getParentItem();
+				IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
 				Vector2f frameOriginLocation = parentFrame.getRelativeLocation();
 				Vector2f itemDisplacement = item.getRelativeLocation();
 				parentFrame.setRelativeLocation(new Vector2f(frameOriginLocation.x + itemDisplacement.x, frameOriginLocation.y + itemDisplacement.y));
@@ -203,5 +203,10 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 		}
 		
 		this.setLocked(!isLocked);
+	}
+
+	@Override
+	public void sendOverlaytoBottom() {
+		this.getZOrderManager().sendToBottom(frameOverlay, null);
 	}
 }
