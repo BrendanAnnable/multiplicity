@@ -161,7 +161,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	}
 
     @Override
-    public void setVisable(boolean isVisable) {
+    public void setVisible(boolean isVisable) {
         this.isVisable = isVisable;
         
         if( isVisable ) {

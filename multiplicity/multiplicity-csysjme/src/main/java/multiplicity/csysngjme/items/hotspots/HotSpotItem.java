@@ -56,16 +56,16 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 //                    new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
 //            
            // this.setSolidBackgroundColour(Color.RED);
-            this.hotLink.setVisable(true);
-            hotSpotFrameContent.setVisable(true);
+            this.hotLink.setVisible(true);
+            hotSpotFrameContent.setVisible(true);
         } else {
-            this.hotLink.setVisable(false);
+            this.hotLink.setVisible(false);
             
 //            setGradientBackground(new Gradient(
 //                    Color.WHITE, 
 //                    new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
            // this.setSolidBackgroundColour(Color.BLACK);
-            hotSpotFrameContent.setVisable(false);
+            hotSpotFrameContent.setVisible(false);
         }
     }
 
