@@ -60,51 +60,31 @@ import com.jme.system.DisplaySystem;
 
 public class StitcherApp extends AbstractStandaloneApp {
 
-    private final static Logger logger = Logger.getLogger(StitcherApp.class
-            .getName());
-
+    private final static Logger logger = Logger.getLogger(StitcherApp.class.getName());
     public final String MULTIPLICITY_SPACE = "multiplicity";
-
     public final String STENCIL_NAME = "stencils";
-
     public final String BACKGROUND_NAME = "backgrounds";
-
     public final String SCAN_NAME = "scans";
-
-    public final Float BORDER_THICKNESS = 40f;
-
     private final ArrayList<String> pageNames = new ArrayList<String>();
-
     private IPage stencilsPage;
-
     private IPage backgroundsPage;
-
     private IPage scansPage;
-
     private HashMap<String, IPage> wikiPages;
-
     // private Vector<IComment> comments;
     private XWikiRestFulService wikiService;
-
     private Vector<IAttachment> attachments;
-
     // private Vector<ITag> tags;
     public String output_document_path = null;
-
     public String wikiUser = null;
-
     public String wikiPass = null;
-
     public Grouper smaker = null;
-
     public int maxFileSize = 0;
-
     private int frameWidth = 600;
-
     private int frameHeight = 600;
-
     private StitcherApp stitcher;
     
+    public final Float BORDER_THICKNESS = 40f;
+    public final Float TOP_BOTTOM_REPO_HEIGHT = 300f;
     public final int HOTSPOT_DIMENSION = 80;
     public final int HOTSPOT_FRAME_DIMENSION = 200;
     public final int PALET_DIMENSION = 75;
@@ -128,6 +108,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     public void onAppStart() {
         setHotSpotContentFactory(new HotSpotContentItemFactory());
         setPaletFactory(new PaletItemFactory());
+        setRepositoryFactory(new RepositoryContentItemFactory());
         pageNames.add(STENCIL_NAME);
         pageNames.add(BACKGROUND_NAME);
 //        pageNames.add(SCAN_NAME);
@@ -190,8 +171,7 @@ public class StitcherApp extends AbstractStandaloneApp {
             attachments = iPage.getAttachments();
             items = new ArrayList<IItem>();
 
-            getAttachmentItems = new GetAttachmentItems(this, iPage,
-                    attachments, items, pageNames.get(i));
+            getAttachmentItems = new GetAttachmentItems(this, iPage, attachments, items, pageNames.get(i));
             try {
                 getAttachmentItems.start();
                 getAttachmentItems.join();
@@ -201,8 +181,7 @@ public class StitcherApp extends AbstractStandaloneApp {
             }
 
             if (items != null) {
-                addItemsToFrame(getAttachmentItems.getItems(), new Vector2f(
-                        i * 5f, i * 5f), pageNames.get(i));
+                addItemsToFrame(getAttachmentItems.getItems(), new Vector2f(i * 5f, i * 5f), pageNames.get(i));
             }
         }
 
@@ -414,36 +393,61 @@ public class StitcherApp extends AbstractStandaloneApp {
     }
 
     public void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {
+    	Vector2f framePosition = null;
+    	Vector2f frameClosePosition = null;
         UUID uUID = UUID.randomUUID();
         
-        //RepositoryFrame frame = (RepositoryFrame) this.getRepositoryFactory().createRepositoryFrame(frameName, uUID, frameWidth, frameHeight);
+        RepositoryFrame frame = (RepositoryFrame) this.getRepositoryFactory().createRepositoryFrame(frameName, uUID, frameWidth, frameHeight);
         //uncomment when ready
-//        frame.setOpenLocation(openLocation);
-//        frame.setCloseLocation(closeLocation);
-        IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
+
+        
+//        IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
 
         frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
-        frame.setRelativeLocation(atPosition);
         frame.addItemListener(new ItemListenerAdapter(){
             
             @Override
             public void itemCursorPressed(IItem item,
                     MultiTouchCursorEvent event) {
                 //uncomment when ready
-//                IRepositoryFrame rf = (IRepositoryFrame) item;
-//                if( rf.isOpen() ){
-//                    rf.close();
-//                } else {
-//                    rf.open();
-//                }
+                IRepositoryFrame rf = (IRepositoryFrame) item;
+                if( rf.isOpen() ){
+                    rf.close();
+                } else {
+                    rf.open();
+                }
             }
             
         });
         BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
         this.add(frame);
+        
+        
+        
+        if(frameName.equals(BACKGROUND_NAME)) {
+        	frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 2*BORDER_THICKNESS, TOP_BOTTOM_REPO_HEIGHT);
+        	
+        	Float xPos = 0f;
+            Float yPos = Integer.valueOf((int) (-DisplaySystem.getDisplaySystem().getHeight()/2 - (TOP_BOTTOM_REPO_HEIGHT/2 + BORDER_THICKNESS) + BORDER_THICKNESS)).floatValue();
+            framePosition = new Vector2f(xPos, yPos);        	
+        	frame.setOpenLocation(framePosition);
+        	frameClosePosition = new Vector2f(framePosition.x, framePosition.y + TOP_BOTTOM_REPO_HEIGHT);     
+        	frame.setCloseLocation(frameClosePosition);        	
+        }
+//        else if(frameName.equals(SCAN_NAME)) {
+//        	frame.setRelativeLocation(atPosition);
+//        	frame.setOpenLocation(atPosition);
+//        	frame.setCloseLocation(atPosition);    
+//        }
+//        else if(frameName.equals(STENCIL_NAME)) {
+//        	frame.setRelativeLocation(atPosition);
+//        	frame.setOpenLocation(atPosition);
+//        	frame.setCloseLocation(atPosition);    
+//        }
+        
         for (IItem item : items) {
             item.setRelativeScale(0.5f);
             frame.addItem(item);
@@ -462,7 +466,6 @@ public class StitcherApp extends AbstractStandaloneApp {
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f),GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
 
-        // TODO: use width/height of app instead
         Float xPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getWidth() / 2 - HOTSPOT_DIMENSION / 2).floatValue();
         Float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - HOTSPOT_DIMENSION / 2).floatValue();
 
