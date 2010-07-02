@@ -2,14 +2,15 @@ package multiplicity.csysngjme.items.repository;
 
 import java.util.UUID;
 
-import com.jme.math.Vector2f;
-
 import multiplicity.csysng.items.repository.IRepositoryFrame;
 import multiplicity.csysngjme.items.JMEFrame;
 
+import com.jme.math.Vector2f;
+
 public class RepositoryFrame extends JMEFrame implements IRepositoryFrame {
 
-    private boolean isOpen = false;
+	private static final long serialVersionUID = 6646308702330551200L;
+	private boolean isOpen = false;
     private Vector2f openLocation;
     private Vector2f closeLocation;
     
