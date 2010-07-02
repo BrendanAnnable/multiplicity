@@ -5,8 +5,6 @@ import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
-import com.jme.math.Vector2f;
-
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
@@ -29,6 +27,8 @@ import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
+
+import com.jme.math.Vector2f;
 
 public class GalleryApp extends AbstractStandaloneApp {
 

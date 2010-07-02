@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.jme.math.Vector2f;
-
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.gfx.Gradient;
@@ -21,6 +19,8 @@ import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.data.CursorPositionRecord;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.input.events.MultiTouchObjectEvent;
+
+import com.jme.math.Vector2f;
 
 public class SelectionMaker implements IMultiTouchEventListener {
 

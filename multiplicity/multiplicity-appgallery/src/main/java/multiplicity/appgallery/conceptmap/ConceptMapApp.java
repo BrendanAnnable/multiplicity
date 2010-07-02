@@ -5,10 +5,6 @@ import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
-import com.jme.math.Vector2f;
-import com.jme.scene.Geometry;
-
-
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.appgallery.gallery.GalleryApp;
@@ -28,6 +24,9 @@ import multiplicity.csysngjme.animation.animelements.Fader;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
+
+import com.jme.math.Vector2f;
+import com.jme.scene.Geometry;
 
 public class ConceptMapApp extends AbstractStandaloneApp {
 
