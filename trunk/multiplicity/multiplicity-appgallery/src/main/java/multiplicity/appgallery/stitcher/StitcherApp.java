@@ -128,6 +128,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     public void onAppStart() {
         setHotSpotContentFactory(new HotSpotContentItemFactory());
         setPaletFactory(new PaletItemFactory());
+        setRepositoryFactory(new RepositoryContentItemFactory());
         pageNames.add(STENCIL_NAME);
         pageNames.add(BACKGROUND_NAME);
 //        pageNames.add(SCAN_NAME);
@@ -412,16 +413,32 @@ public class StitcherApp extends AbstractStandaloneApp {
     public void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {
         UUID uUID = UUID.randomUUID();
         
-        //RepositoryFrame frame = (RepositoryFrame) this.getRepositoryFactory().createRepositoryFrame(frameName, uUID, frameWidth, frameHeight);
+        RepositoryFrame frame = (RepositoryFrame) this.getRepositoryFactory().createRepositoryFrame(frameName, uUID, frameWidth, frameHeight);
         //uncomment when ready
 //        frame.setOpenLocation(openLocation);
 //        frame.setCloseLocation(closeLocation);
-        IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
+
+        //IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
 
         frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
         frame.setRelativeLocation(atPosition);
+        frame.addItemListener(new ItemListenerAdapter(){
+            
+            @Override
+            public void itemCursorPressed(IItem item,
+                    MultiTouchCursorEvent event) {
+                //uncomment when ready
+//                IRepositoryFrame rf = (IRepositoryFrame) item;
+//                if( rf.isOpen() ){
+//                    rf.close();
+//                } else {
+//                    rf.open();
+//                }
+            }
+            
+        });
         BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
         this.add(frame);
