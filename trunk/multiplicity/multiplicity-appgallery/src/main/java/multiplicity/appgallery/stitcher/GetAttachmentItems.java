@@ -16,8 +16,8 @@ import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
-import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IImage.AlphaStyle;
+import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
@@ -307,7 +307,7 @@ public class GetAttachmentItems extends Thread {
 											if( geometry.getParent() instanceof HotSpotFrame ){
 												HotSpotFrame targetFrame = (HotSpotFrame) geometry.getParent();
 												
-												if(targetFrame.getName().contains("back-") && (parentContainerName.equals(stitcher.SCAN_NAME) || parentContainerName.equals(stitcher.STENCIL_NAME))) {
+												if(!targetFrame.isLocked() && targetFrame.getName().contains("back-") && (parentContainerName.equals(stitcher.SCAN_NAME) || parentContainerName.equals(stitcher.STENCIL_NAME))) {
 													firstFrameFound = true;
 													IFrame frame = (IFrame) item.getParentItem();
 													frame.removeItem(item);
@@ -320,7 +320,7 @@ public class GetAttachmentItems extends Thread {
 											        targetFrame.bringHotSpotsToTop();
 											        targetFrame.bringPaletToTop();
 												}
-												else if(targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.SCAN_NAME)) {
+												else if(!targetFrame.isLocked() && targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.SCAN_NAME)) {
 													firstFrameFound = true;
 													IFrame frame = (IFrame) item.getParentItem();
 													frame.removeItem(item);

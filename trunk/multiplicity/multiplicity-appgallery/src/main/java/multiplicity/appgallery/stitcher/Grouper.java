@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
-
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.utils.XMLOperations;
 import multiplicity.csysng.behaviours.BehaviourMaker;
@@ -20,6 +18,8 @@ import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.data.CursorPositionRecord;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.input.events.MultiTouchObjectEvent;
+
+import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 

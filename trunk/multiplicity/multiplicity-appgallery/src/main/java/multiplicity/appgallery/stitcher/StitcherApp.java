@@ -128,7 +128,6 @@ public class StitcherApp extends AbstractStandaloneApp {
     public void onAppStart() {
         setHotSpotContentFactory(new HotSpotContentItemFactory());
         setPaletFactory(new PaletItemFactory());
-        setRepositoryFactory(new RepositoryContentItemFactory());
         pageNames.add(STENCIL_NAME);
         pageNames.add(BACKGROUND_NAME);
 //        pageNames.add(SCAN_NAME);
@@ -276,7 +275,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
                 List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
                 
-                HotSpotFrame paletParent = (HotSpotFrame) item.getParentItem();
+                IHotSpotFrame paletParent = (IHotSpotFrame) item.getParentItem();
                 
                 for (PickedSpatial pickedSpatial : spatialsList) {
                     if (pickedSpatial.getSpatial().equals(((JMEFrame) paletParent.getTreeRootSpatial()).getMaskGeometry())) {
@@ -332,9 +331,13 @@ public class StitcherApp extends AbstractStandaloneApp {
         item.addItemListener(new ItemListenerAdapter() {
         	@Override
         	public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
-        		 IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
- 		        parentFrame.bringHotSpotsToTop();
- 		        parentFrame.bringPaletToTop();
+				IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
+				parentFrame.getZOrderManager().sendToBottom(item, null);
+				if(!parentFrame.isLocked()) {
+					parentFrame.sendOverlaytoBottom();
+				}
+				parentFrame.bringHotSpotsToTop();
+				parentFrame.bringPaletToTop();
         	}
         });
 
@@ -413,12 +416,11 @@ public class StitcherApp extends AbstractStandaloneApp {
     public void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {
         UUID uUID = UUID.randomUUID();
         
-        RepositoryFrame frame = (RepositoryFrame) this.getRepositoryFactory().createRepositoryFrame(frameName, uUID, frameWidth, frameHeight);
+        //RepositoryFrame frame = (RepositoryFrame) this.getRepositoryFactory().createRepositoryFrame(frameName, uUID, frameWidth, frameHeight);
         //uncomment when ready
 //        frame.setOpenLocation(openLocation);
 //        frame.setCloseLocation(closeLocation);
-
-        //IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
+        IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
 
         frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
         frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
