@@ -47,7 +47,7 @@ public class HotLink extends Line implements IHotLink {
 	}
 	
 	@Override
-    public void setVisable(boolean isVisable) {
+    public void setVisible(boolean isVisable) {
 	    this.isVisable = isVisable;
 	    
 	    if( isVisable) {
@@ -59,7 +59,7 @@ public class HotLink extends Line implements IHotLink {
 	}
 	
 	@Override
-    public boolean isVisable() {
+    public boolean isVisible() {
 	    return isVisable;
 	}
 }

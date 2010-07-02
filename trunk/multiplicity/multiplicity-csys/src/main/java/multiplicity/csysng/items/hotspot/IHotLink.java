@@ -11,8 +11,8 @@ public interface IHotLink {
 
     public void redrawTargetLocation(Vector2f vertex);
 
-    public abstract boolean isVisable();
+    public boolean isVisible();
 
-    public abstract void setVisable(boolean isVisable);
+    public void setVisible(boolean isVisable);
 
 }
