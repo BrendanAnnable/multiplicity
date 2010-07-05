@@ -80,20 +80,10 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
     @Override
     public JMELine createHotLink() {
     	
-    	IHotSpotFrame parentF = (IHotSpotFrame) this.getParentItem();
-    	Vector2f parentFCoord = parentF.getRelativeLocation();
-		//get the worldlocation of hotspot
-		Vector2f xyHS1 = new Vector2f(this.getRelativeLocation().x + parentFCoord.x, this.getRelativeLocation().y + parentFCoord.y);
-		//get the worldlocation of hotspot
-		Vector2f xyHS2 = hotSpotFrameContent.getRelativeLocation();
-		
-		Vector3f[] vertices = new Vector3f[2];
-		vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
-		vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
-		
+    	Vector3f[] vertices = getLineVertices();		
 		
 		UUID uuid = UUID.randomUUID();
-		hotLink = new JMELine("line-"+uuid, uuid, vertices, colorRGBA, 4f);
+		hotLink = new JMELine("line-"+uuid, uuid, vertices, colorRGBA, 4f, this);
 		hotLink.initializeGeometry();
 		hotSpotFrameContent.addHotLink(hotLink);
 			
@@ -111,9 +101,8 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		    
 		    
             public void itemMoved(IItem item) {
-                
-                Vector2f xyHS1 = item.getRelativeLocation();
-                ((HotSpotItem)item).getHotLink().redrawTargetLocation(xyHS1);
+            	Vector3f[] vertices = getLineVertices();		
+                ((HotSpotItem)item).getHotLink().redrawLine(vertices);
                
             };
                    
@@ -122,19 +111,35 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		hotSpotFrameContent.addItemListener(new ItemListenerAdapter() {
             
             public void itemMoved(IItem item) {
-                
+                logger.info("HSF moved");
                 IHotSpotFrame frame = ((IHotSpotFrame)item);
-                
                 ArrayList<ILineItem> iLineItems = frame.getHotLinks();
                 
-                for (ILineItem iLine : iLineItems) {
-                	iLine.redrawTargetLocation(item.getRelativeLocation());
+                IHotSpotItem hsi = null;
+        		for (ILineItem iLine : iLineItems) {
+        			hsi = iLine.getHotSpotItem();
+        			Vector3f[] vertices = ((HotSpotItem) hsi).getLineVertices();
+                	iLine.redrawLine(vertices);
                 }
             };
         } );
     	
     	return hotLink;
     }
+
+	private Vector3f[] getLineVertices() {
+		IHotSpotFrame parentF = (IHotSpotFrame) this.getParentItem();
+    	Vector2f parentFCoord = parentF.getRelativeLocation();
+		//get the worldlocation of hotspot
+		Vector2f xyHS1 = new Vector2f(this.getRelativeLocation().x + parentFCoord.x, this.getRelativeLocation().y + parentFCoord.y);
+		//get the worldlocation of hotspot
+		Vector2f xyHS2 = hotSpotFrameContent.getRelativeLocation();
+		
+		Vector3f[] vertices = new Vector3f[2];
+		vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
+		vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
+		return vertices;
+	}
 
     public void setHotSpotFrameContent(IHotSpotFrame hotSpotFrameContent) {
         this.hotSpotFrameContent = hotSpotFrameContent;
