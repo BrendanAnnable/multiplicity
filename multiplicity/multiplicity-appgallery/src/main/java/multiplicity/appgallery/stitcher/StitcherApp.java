@@ -483,11 +483,11 @@ public class StitcherApp extends AbstractStandaloneApp {
     	float lowerBoundX = - frameSize.x/2 + imageSize.x/2;
     	float upperBoundX = frameSize.x/2 - imageSize.x/2;
     	
-    	float lowerBoundY = frameSize.y/2 - imageSize.y/2;
-    	float upperBoundY = - frameSize.y/2 + imageSize.y/2;
+    	float lowerBoundY = - frameSize.y/2 + imageSize.y/2;
+    	float upperBoundY = frameSize.y/2 - imageSize.y/2;
     	
-    	float posX = lowerBoundX + (int) ( Math.random()*(upperBoundX - lowerBoundX) );
-    	float posY = lowerBoundY + (int) ( Math.random()*(upperBoundY - lowerBoundY) );
+    	float posX = (float) (lowerBoundX + ( Math.random()*(upperBoundX - lowerBoundX) ));
+    	float posY = (float) (lowerBoundY + ( Math.random()*(upperBoundY - lowerBoundY) ));
     	
 		return new Vector2f(posX, posY);
 	}
