@@ -396,69 +396,60 @@ public class StitcherApp extends AbstractStandaloneApp {
     }
 
     public void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {
-    	Vector2f framePosition = null;
-    	Vector2f frameClosePosition = null;
+        Vector2f framePosition = null;
+        Vector2f frameClosePosition = null;
         UUID uUID = UUID.randomUUID();
         
         RepositoryFrame frame = (RepositoryFrame) this.getRepositoryFactory().createRepositoryFrame(frameName, uUID, frameWidth, frameHeight);
-        //uncomment when ready
-
-        
-//        IFrame frame = this.getContentFactory().createFrame(frameName, uUID, frameWidth, frameHeight);
-
-        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 15));
-        frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
+     
+        frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 1f), new Color(0f, 0f, 0f, 1f), GradientDirection.VERTICAL));
         frame.maintainBorderSizeDuringScale();
-        frame.addItemListener(new ItemListenerAdapter(){
-            
-            @Override
-            public void itemCursorPressed(IItem item,
-                    MultiTouchCursorEvent event) {
-                //uncomment when ready
-                IRepositoryFrame rf = (IRepositoryFrame) item;
-                if( rf.isOpen() ){
-                    rf.close();
-                } else {
-                    rf.open();
-                }
-            }
-            
-        });
-        BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
-
-        this.add(frame);
-        
-        
-        
+ 
         if(frameName.equals(BACKGROUND_NAME)) {
-        	frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 2*BORDER_THICKNESS, TOP_BOTTOM_REPO_HEIGHT);
-        	
-        	Float xPos = 0f;
+            frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
+            
+            Float xPos = 0f;
             Float yPos = Integer.valueOf((int) (-DisplaySystem.getDisplaySystem().getHeight()/2 - (TOP_BOTTOM_REPO_HEIGHT/2 + BORDER_THICKNESS) + BORDER_THICKNESS)).floatValue();
-            framePosition = new Vector2f(xPos, yPos);        	
-        	frame.setOpenLocation(framePosition);
-        	frameClosePosition = new Vector2f(framePosition.x, framePosition.y + TOP_BOTTOM_REPO_HEIGHT);     
-        	frame.setCloseLocation(frameClosePosition);        	
+            framePosition = new Vector2f(xPos, yPos);           
+            frame.setOpenLocation(framePosition);
+            frameClosePosition = new Vector2f(framePosition.x, framePosition.y + TOP_BOTTOM_REPO_HEIGHT);     
+            frame.setCloseLocation(frameClosePosition);   
+            frame.close();
+            JMERoundedRectangleBorder border = new JMERoundedRectangleBorder(
+                    "randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 0);
+            border.setColor(new ColorRGBA(.211f, .211f, .211f, 1f));   
+            frame.setBorder(border);
         }
         else if(frameName.equals(SCAN_NAME)) {
-        	frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 2*BORDER_THICKNESS, TOP_BOTTOM_REPO_HEIGHT);
-        	
-        	Float xPos = 0f;
+            frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
+            
+            Float xPos = 0f;
             Float yPos = Integer.valueOf((int) (DisplaySystem.getDisplaySystem().getHeight()/2 + (TOP_BOTTOM_REPO_HEIGHT/2 + BORDER_THICKNESS) - BORDER_THICKNESS)).floatValue();
-            framePosition = new Vector2f(xPos, yPos);        	
-        	frame.setOpenLocation(framePosition);
-        	frameClosePosition = new Vector2f(framePosition.x, framePosition.y - TOP_BOTTOM_REPO_HEIGHT);     
-        	frame.setCloseLocation(frameClosePosition);     
+            framePosition = new Vector2f(xPos, yPos);           
+            frame.setOpenLocation(framePosition);
+            frameClosePosition = new Vector2f(framePosition.x, framePosition.y - TOP_BOTTOM_REPO_HEIGHT);     
+            frame.setCloseLocation(frameClosePosition);
+            frame.close();
+            JMERoundedRectangleBorder border = new JMERoundedRectangleBorder(
+                    "randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 0);
+            border.setColor(new ColorRGBA(.211f, .211f, .211f, 1f));            
+            frame.setBorder(border);
         }
         else if(frameName.equals(STENCIL_NAME)) {
-        	frame.setSize(RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 4*BORDER_THICKNESS);
-        	
-        	Float xPos = Integer.valueOf((int) (DisplaySystem.getDisplaySystem().getWidth()/2 + (RIGHT_LEFT_REPO_HEIGHT/2 + BORDER_THICKNESS) - BORDER_THICKNESS)).floatValue();
+            frame.setSize(RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 10);
+            
+            Float xPos = Integer.valueOf((int) (DisplaySystem.getDisplaySystem().getWidth()/2 + (RIGHT_LEFT_REPO_HEIGHT/2 + BORDER_THICKNESS) - BORDER_THICKNESS)).floatValue();
             Float yPos = 0f;
-            framePosition = new Vector2f(xPos, yPos);        	
-        	frame.setOpenLocation(framePosition);
-        	frameClosePosition = new Vector2f(framePosition.x - RIGHT_LEFT_REPO_HEIGHT, framePosition.y);     
-        	frame.setCloseLocation(frameClosePosition);     
+            framePosition = new Vector2f(xPos, yPos);           
+            frame.setOpenLocation(framePosition);
+            frameClosePosition = new Vector2f(framePosition.x - RIGHT_LEFT_REPO_HEIGHT, framePosition.y);     
+            frame.setCloseLocation(frameClosePosition);
+            frame.close();
+
+            JMERoundedRectangleBorder border = new JMERoundedRectangleBorder(
+                    "randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 0);
+            border.setColor(new ColorRGBA(1f, 1f, 1f, 1f));
+            frame.setBorder(border);
         }
         
         for (IItem item : items) {
@@ -466,6 +457,9 @@ public class StitcherApp extends AbstractStandaloneApp {
             frame.addItem(item);
         }
 
+       
+        this.add(frame);
+        
         this.getzOrderManager().bringToTop(frame, null);
 
         // createXMLRepresentationForGroup(uUID, items);
