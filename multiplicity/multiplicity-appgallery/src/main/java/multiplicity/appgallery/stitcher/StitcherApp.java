@@ -35,7 +35,9 @@ import multiplicity.csysngjme.factory.Repository.RepositoryContentItemFactory;
 import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEImage;
+import multiplicity.csysngjme.items.JMELine;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
+import multiplicity.csysngjme.items.hotspots.HotLink;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
 import multiplicity.csysngjme.items.hotspots.HotSpotItem;
 import multiplicity.csysngjme.items.repository.RepositoryFrame;
@@ -55,7 +57,6 @@ import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Geometry;
 import com.jme.scene.Node;
-import com.jme.scene.Spatial;
 import com.jme.system.DisplaySystem;
 
 public class StitcherApp extends AbstractStandaloneApp {
@@ -66,6 +67,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     public final String BACKGROUND_NAME = "backgrounds";
     public final String SCAN_NAME = "scans";
     private final ArrayList<String> pageNames = new ArrayList<String>();
+    private final ArrayList<JMELine> hotspotConnections = new ArrayList<JMELine>();
     private IPage stencilsPage;
     private IPage backgroundsPage;
     private IPage scansPage;
@@ -541,9 +543,10 @@ public class StitcherApp extends AbstractStandaloneApp {
                                 
                                 ((HotSpotItem) item).setHotSpotFrameContent(hotSpotFrameContent);
                                 
-                                IHotLink l = ((HotSpotItem) item).createHotLink();
+                                JMELine l = ((HotSpotItem) item).createHotLink();
                                 
-                                ((Node) stitcher.getOrthoNode()).attachChild((Spatial) l);
+                                hotspotConnections.add((JMELine)l);
+                                ((Node) stitcher.getOrthoNode()).attachChild((JMELine) l);
                                 
                                 message = message + "on " + targetFrame.getName() + ". Great!!";
                                 
@@ -567,9 +570,9 @@ public class StitcherApp extends AbstractStandaloneApp {
                                 
                                 ((HotSpotItem) item).setHotSpotFrameContent(hotSpotFrameContent);
                                 
-                                IHotLink l = ((HotSpotItem) item).createHotLink();
-                                
-                                ((Node) stitcher.getOrthoNode()).attachChild((Spatial) l);
+                                JMELine l = ((HotSpotItem) item).createHotLink();
+                                hotspotConnections.add((JMELine)l);
+                                ((Node) stitcher.getOrthoNode()).attachChild((JMELine) l);
                                 
                                 message = message + "on " + targetFrame.getName() + ". Great!!";
                                 
@@ -591,16 +594,23 @@ public class StitcherApp extends AbstractStandaloneApp {
                     if (hsFrame instanceof HotSpotFrame) {
                         // ((HotSpotFrame) hsFrame).connectHotSpots();
                     }
-                    message = message
-                            + "in the mist .... Let's place it back to the center of its mother frame.";
+                    message = message + "in the mist .... Let's place it back to the center of its mother frame.";
                 }
+                
 
                 logger.info(message);
+                stitcher.bumpHotSpotConnections();
             }
+
         });
 
-        BehaviourMaker.addBehaviour((IItem) hotspot,
-                RotateTranslateScaleBehaviour.class);
+        BehaviourMaker.addBehaviour((IItem) hotspot, RotateTranslateScaleBehaviour.class);
+    }
+    
+    public void bumpHotSpotConnections() {
+    	for (JMELine jMELine : hotspotConnections) {
+			this.getzOrderManager().bringToTop((JMELine) jMELine, null);
+		}
     }
 
     /**

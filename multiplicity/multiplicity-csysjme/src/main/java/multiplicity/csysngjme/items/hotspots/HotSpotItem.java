@@ -1,15 +1,16 @@
 package multiplicity.csysngjme.items.hotspots;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.UUID;
 
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.ILineItem;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEColourCircle;
+import multiplicity.csysngjme.items.JMELine;
 import multiplicity.input.events.MultiTouchCursorEvent;
 
 import org.apache.log4j.Logger;
@@ -28,9 +29,9 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
     protected String link;
     IHotSpotItem relationHotSpot;
     private IHotSpotFrame hotSpotFrameContent;
-    private IHotLink hotLink;
+    private JMELine hotLink;
     public int clickCount = 0;
-    
+    private ColorRGBA colorRGBA = new ColorRGBA(1f, 0f, 0f, 1f);
 
     public HotSpotItem(String name, UUID uuid, float radius) {
 		super(name, uuid, radius);
@@ -38,7 +39,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 
 	public HotSpotItem(String name, UUID uuid, float radius, ColorRGBA colorRGBA) {
 		super(name, uuid, radius, colorRGBA);
-		
+		this.colorRGBA = colorRGBA;
 	}
 
     @Override
@@ -77,7 +78,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 
 
     @Override
-    public IHotLink createHotLink() {
+    public JMELine createHotLink() {
     	
     	IHotSpotFrame parentF = (IHotSpotFrame) this.getParentItem();
     	Vector2f parentFCoord = parentF.getRelativeLocation();
@@ -90,7 +91,10 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
 		vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
 		
-		hotLink = new HotLink(vertices);
+		
+		UUID uuid = UUID.randomUUID();
+		hotLink = new JMELine("line-"+uuid, uuid, vertices, colorRGBA, 4f);
+		hotLink.initializeGeometry();
 		hotSpotFrameContent.addHotLink(hotLink);
 			
 
@@ -109,7 +113,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
             public void itemMoved(IItem item) {
                 
                 Vector2f xyHS1 = item.getRelativeLocation();
-                ((HotSpotItem)item).getHotLink().redrawSourceLocation(xyHS1);
+                ((HotSpotItem)item).getHotLink().redrawTargetLocation(xyHS1);
                
             };
                    
@@ -121,8 +125,9 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
                 
                 IHotSpotFrame frame = ((IHotSpotFrame)item);
                 
-                ArrayList<IHotLink> hotLinks = frame.getHotLinks();
-                for (IHotLink iHotLink : hotLinks) {
+                ArrayList<ILineItem> hotLinks = frame.getHotLinks();
+                
+                for (ILineItem iHotLink : hotLinks) {
                     iHotLink.redrawTargetLocation(item.getRelativeLocation());
                 }
             };
@@ -139,11 +144,11 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
         return hotSpotFrameContent;
     }
 
-    public void setHotLink(IHotLink hotLink) {
+    public void setHotLink(JMELine hotLink) {
         this.hotLink = hotLink;
     }
 
-    public IHotLink getHotLink() {
+    public JMELine getHotLink() {
         return hotLink;
     }
 
@@ -154,7 +159,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		Vector2f HSLocation = this.getRelativeLocation();
 
       Vector2f xyHS1 = new Vector2f(frameLocation.x + HSLocation.x, frameLocation.y+HSLocation.y);
-      hotLink.redrawSourceLocation(xyHS1);
+      hotLink.redrawTargetLocation(xyHS1);
 	}
 
 }

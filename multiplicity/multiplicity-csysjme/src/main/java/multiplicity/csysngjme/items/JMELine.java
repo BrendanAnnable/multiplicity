@@ -1,115 +1,102 @@
 package multiplicity.csysngjme.items;
 
-import java.awt.Color;
-import java.awt.Font;
+import java.nio.FloatBuffer;
 import java.util.UUID;
 
-import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.ILine;
+import multiplicity.csysngjme.ItemMap;
+import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 
+import com.jme.bounding.OrthogonalBoundingBox;
 import com.jme.math.Vector2f;
+import com.jme.math.Vector3f;
+import com.jme.renderer.ColorRGBA;
+import com.jme.scene.Line;
 import com.jme.scene.Spatial;
+import com.jme.scene.state.BlendState;
+import com.jme.scene.state.BlendState.DestinationFunction;
+import com.jme.scene.state.BlendState.SourceFunction;
+import com.jme.system.DisplaySystem;
+import com.jme.util.geom.BufferUtils;
 
-public class JMELine extends JMEItem implements ILine {
+public class JMELine extends JMELineItem {
 
-    public JMELine(String name, UUID uuid) {
-        super(name, uuid);
-    }
+	private static final long serialVersionUID = -8078610021819270289L;
+	private Line l;
+	private BlendState diskBlend;	
+	private Vector3f[] vertices;
+	private ColorRGBA lineColour = new ColorRGBA(0f, 0f, 0f, 1f);
+	private float lineWidth = 4f;
 
-    @Override
-    protected void createZOrderManager() {
-        // TODO Auto-generated method stub
+	public JMELine(String name, UUID uuid, Vector3f[] vertices, ColorRGBA lineColour, float lineWidth) {
+		super(name, uuid);
+		this.vertices = vertices;
+		this.lineColour = lineColour;
+		this.lineWidth = lineWidth;
+	}
+	
+	@Override
+	public void initializeGeometry() {
+		l = new Line("Link", vertices, null, null, null);
+		l.setSolidColor(lineColour);
+		l.setLineWidth(lineWidth);
+		l.setAntialiased(true);
+		ItemMap.register(l, this);
+		l.setModelBound(new OrthogonalBoundingBox());
+		l.updateModelBound();
+		diskBlend = DisplaySystem.getDisplaySystem().getRenderer().createBlendState();
+		diskBlend.setSourceFunction(SourceFunction.SourceAlpha);
+		diskBlend.setDestinationFunction(DestinationFunction.OneMinusSourceAlpha);
+		diskBlend.setBlendEnabled(true);	
+		l.setRenderState(diskBlend);
+		attachChild(l);
+		updateModelBound();
+	}
+	
 
-    }
+	@Override
+	protected void createZOrderManager() {
+		zOrderManager = new SimpleZOrderManager(this);
+	}
 
-    @Override
-    public void initializeGeometry() {
-        // TODO Auto-generated method stub
+	@Override
+	public Spatial getManipulableSpatial() {
+		return l;
+	}
 
-    }
 
-    @Override
-    public Spatial getManipulableSpatial() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	public void changeBackgroundColor(ColorRGBA colorRGBA) {
+		l.setSolidColor(colorRGBA);		
+	}
 
-    @Override
-    public void setAnnotationEnabled(boolean isEnabled) {
-        // TODO Auto-generated method stub
-        
-    }
+	public void setVisible(boolean visible) {
+		if(visible) {
+			l.setSolidColor(lineColour);	
+		}
+		else {
+			l.setSolidColor(new ColorRGBA(0f, 0f, 0f, 0f));	
+		}
+	}
+	
+	@Override
+	public void redrawLine(Vector3f[] vertices) {
+	    FloatBuffer fBuffer = BufferUtils.createFloatBuffer(vertices);                    
+        l.reconstruct(fBuffer, null, null, null);
+        l.setSolidColor(lineColour);  
+	}
 
-    @Override
-    public void setArrowMode(int arrowMode) {
-        // TODO Auto-generated method stub
-        
-    }
 
-    @Override
-    public void setArrowsEnabled(boolean isEnabled) {
-        // TODO Auto-generated method stub
-        
-    }
+	@Override
+	public void redrawTargetLocation(Vector2f relativeLocation) {
+		FloatBuffer fBuffer = BufferUtils.createFloatBuffer(relativeLocation);                    
+		l.reconstruct(fBuffer, null, null, null);
+		l.setSolidColor(lineColour);  
+	}
 
-    @Override
-    public void setLineColour(Color lineColour) {
-        // TODO Auto-generated method stub
-        
-    }
+	public float getLineWidth() {
+		return lineWidth;
+	}
 
-    @Override
-    public void setLineMode(int lineMode) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setSourceItem(IItem sourceItem) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setSourceLocation(Vector2f sourceLocation) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setTargetItem(IItem targetItem) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setTargetLocation(Vector2f targetPoint) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setText(String text) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setTextColour(Color textColour) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setTextFont(Font textFont) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setWidth(float lineWidth) {
-        // TODO Auto-generated method stub
-        
-    }
-
+	public void setLineWidth(float lineWidth) {
+		this.lineWidth = lineWidth;
+	}
 }

@@ -236,13 +236,13 @@ public class GetAttachmentItems extends Thread {
 							}
 							
 							logger.info(message);
+							stitcher.bumpHotSpotConnections();
 						}
 
 						private void clearAllHighlightedHotSpotFrames() {
 							for (IHotSpotFrame hotSpotFrame : highlightedFrames) {
 								IBorder border = hotSpotFrame.getBorder();
 								border.setColor(new ColorRGBA(1f, 1f, 1f, 0.6f));
-//								hotSpotFrame.setBorder(getNormalFrame());
 							}
 							highlightedFrames = new ArrayList<HotSpotFrame>();
 						}
@@ -352,7 +352,7 @@ public class GetAttachmentItems extends Thread {
 							}
 
 							logger.info("cursor released caught event: " + item.getParentItem().getClass());
-
+							stitcher.bumpHotSpotConnections();
 						}
 					});
 
