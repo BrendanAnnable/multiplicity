@@ -12,6 +12,7 @@ import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Line;
+import com.jme.scene.Node;
 import com.jme.scene.Spatial;
 import com.jme.scene.state.BlendState;
 import com.jme.scene.state.BlendState.DestinationFunction;
@@ -28,6 +29,7 @@ public class JMELine extends JMELineItem {
 	private ColorRGBA lineColour = new ColorRGBA(0f, 0f, 0f, 1f);
 	private float lineWidth = 4f;
 	private HotSpotItem hotSpotItem = null;
+	private boolean visible = true;
 
 	public JMELine(String name, UUID uuid, Vector3f[] vertices, ColorRGBA lineColour, float lineWidth, HotSpotItem hotSpotItem) {
 		super(name, uuid);
@@ -72,6 +74,7 @@ public class JMELine extends JMELineItem {
 	}
 
 	public void setVisible(boolean visible) {
+		this.visible = visible;
 		if(visible) {
 			l.setSolidColor(lineColour);	
 		}
@@ -82,9 +85,11 @@ public class JMELine extends JMELineItem {
 	
 	@Override
 	public void redrawLine(Vector3f[] vertices) {
-	    FloatBuffer fBuffer = BufferUtils.createFloatBuffer(vertices);                    
-        l.reconstruct(fBuffer, null, null, null);
-        l.setSolidColor(lineColour);  
+		if(visible) {
+			FloatBuffer fBuffer = BufferUtils.createFloatBuffer(vertices);                    
+			l.reconstruct(fBuffer, null, null, null);
+			l.setSolidColor(lineColour);  			
+		}
 	}
 
 
