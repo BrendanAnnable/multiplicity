@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.Vector;
@@ -40,17 +41,16 @@ import com.jme.math.Vector2f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Geometry;
 import com.jme.scene.Node;
+import com.jme.scene.Spatial;
 
 public class GetAttachmentItems extends Thread {
 
-    private final static Logger logger = Logger
-            .getLogger(GetAttachmentItems.class.getName());
-
-    private Object obj = new Object();
+    private final static Logger logger = Logger.getLogger(GetAttachmentItems.class.getName());
 
     private Vector<IAttachment> attachments;
 
     private List<IItem> items = null;
+    private Vector<Object> itemsToReturn = null;
 
     private IPage iPage = null;
 
@@ -60,9 +60,7 @@ public class GetAttachmentItems extends Thread {
 
     private ArrayList<HotSpotFrame> highlightedFrames = new ArrayList<HotSpotFrame>();
 
-    public GetAttachmentItems(StitcherApp stitcherApp, IPage iPage,
-            Vector<IAttachment> attachments, List<IItem> items,
-            String parentContainerName) {
+    public GetAttachmentItems(StitcherApp stitcherApp, IPage iPage, Vector<IAttachment> attachments, List<IItem> items, String parentContainerName) {
         this.stitcher = stitcherApp;
         this.attachments = attachments;
         this.iPage = iPage;
@@ -82,9 +80,7 @@ public class GetAttachmentItems extends Thread {
      * @param Version
      */
     public File writeFileToLocalStorageDir(String filename, String dirName) {
-        String targetDirectory = LocalStorageUtility.getLocalWorkingDirectory(
-                stitcher.MULTIPLICITY_SPACE, "").getAbsolutePath()
-                + File.separatorChar + dirName;
+        String targetDirectory = LocalStorageUtility.getLocalWorkingDirectory(stitcher.MULTIPLICITY_SPACE, "").getAbsolutePath() + File.separatorChar + dirName;
         boolean canUpload = false;
         File savedFile = null;
         if (new File(targetDirectory).exists() == false) {
@@ -105,7 +101,7 @@ public class GetAttachmentItems extends Thread {
         return items;
     }
 
-    public IImage createFhotoImage(URL url) {
+    public IImage createPhotoImage(URL url) {
         
         
         IImage img;
@@ -124,12 +120,9 @@ public class GetAttachmentItems extends Thread {
                 boolean offParent = true;
                 Node s = (Node) stitcher.getOrthoNode();
                 Vector2f locStore = new Vector2f();
-                UnitConversion.tableToScreen(event.getPosition().x,
-                        event.getPosition().y, locStore);
+                UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
 
-                List<PickedSpatial> spatialsList = AccuratePickingUtility
-                        .pickAllOrthogonal(s.getParent()
-                                .getParent(), locStore);
+                List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
 
                 if (item.getParentItem().getTreeRootSpatial() instanceof JMEFrame) {
                     JMEFrame frame = (JMEFrame) item
@@ -319,7 +312,7 @@ public class GetAttachmentItems extends Thread {
                     if( item instanceof IImage) {
                         IImage imageItem = (IImage)item;
                         //create copy
-                        IImage copy = createFhotoImage(imageItem.getImageUrl());
+                        IImage copy = createPhotoImage(imageItem.getImageUrl());
                         frame.addItem(copy);
                     }
                     stitcher.moveItemToNewFrame(item, new Vector2f(0.0f, 0.0f), "back-" + item.getUUID());
@@ -424,21 +417,17 @@ public class GetAttachmentItems extends Thread {
     }
 
     public void run() {
+    	itemsToReturn = new Vector<Object>();
+    	
         for (IAttachment iAttachment : attachments) {
 
             if (iAttachment.isOfImageType()) {
                 IImage img = null;
-                File file = writeFileToLocalStorageDir(iAttachment.getName(),
-                        iPage.getPageName());
+                File file = writeFileToLocalStorageDir(iAttachment.getName(), iPage.getPageName());
 
-                logger.info("File exists: " + file.exists() + " - "
-                        + iAttachment.getName() + " - " + iAttachment.getSize()
-                        + " - " + file.length());
+                logger.info("File exists: " + file.exists() + " - " + iAttachment.getName() + " - " + iAttachment.getSize() + " - " + file.length());
                 if (file.exists() == false) {
-                    WikiUtility wikiUtility = new WikiUtility(
-                            stitcher.wikiUser, stitcher.wikiPass,
-                            stitcher.maxFileSize, iAttachment.getMimeType(),
-                            iAttachment.getAbsoluteUrl());
+                    WikiUtility wikiUtility = new WikiUtility(stitcher.wikiUser, stitcher.wikiPass, stitcher.maxFileSize, iAttachment.getMimeType(), iAttachment.getAbsoluteUrl());
                     try {
                         wikiUtility.start();
                         wikiUtility.join();
@@ -450,9 +439,7 @@ public class GetAttachmentItems extends Thread {
                     if (resourceToDownload != null) {
                         iAttachment.setIsValid(true);
                         try {
-                            ImageIO.write((RenderedImage) resourceToDownload,
-                                    iAttachment.getMimeType().substring(6),
-                                    file);
+                            ImageIO.write((RenderedImage) resourceToDownload, iAttachment.getMimeType().substring(6), file);
                         } catch (IOException e) {
                             logger.debug("IOException: " + e);
                         }
@@ -470,19 +457,45 @@ public class GetAttachmentItems extends Thread {
                 }
 
                 if (iAttachment.getIsValid()) {
-                    
+                	float calculatedScale = 0;
+                	Vector<Object> entryVector = new Vector<Object>();
+                	
                     if (iAttachment.getIsValid()) {
                         IImage i = null;
                         try {
-                            i = createFhotoImage(file.toURI().toURL());
+                            i = createPhotoImage(file.toURI().toURL());
+                            Vector2f size = ((JMERectangularItem) i).getSize();
+                            calculatedScale = getScale(size);
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
                         }
-                        items.add(i);
+                        entryVector.addElement(calculatedScale);
+                        entryVector.addElement(i);
+                        
+                        itemsToReturn.addElement(entryVector);
                     }
                 }
             }
         }
     }
+
+	private float getScale(Vector2f size) {
+		float scale = 0;
+		float width = size.x;
+		float height = size.y;
+		
+		if( (width/height) < 1) {
+			scale = stitcher.MAX_THUMBNAIL_SIDE_SIZE / width;
+		}
+		else {
+			scale = stitcher.MAX_THUMBNAIL_SIDE_SIZE / height;
+		}
+		
+		return scale;
+	}
+
+	public Vector<Object> getItemsToReturn() {
+		return itemsToReturn;
+	}
 
 }

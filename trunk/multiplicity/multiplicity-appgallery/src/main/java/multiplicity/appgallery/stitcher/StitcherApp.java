@@ -19,6 +19,7 @@ import multiplicity.csysng.factory.IPaletFactory;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IFrame;
+import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
@@ -71,7 +72,6 @@ public class StitcherApp extends AbstractStandaloneApp {
     private IPage stencilsPage;
     private IPage backgroundsPage;
     private IPage scansPage;
-    private HashMap<String, IPage> wikiPages;
     // private Vector<IComment> comments;
     private XWikiRestFulService wikiService;
     private Vector<IAttachment> attachments;
@@ -79,7 +79,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     public String output_document_path = null;
     public String wikiUser = null;
     public String wikiPass = null;
-    public Grouper smaker = null;
+    //public Grouper smaker = null;
     public int maxFileSize = 0;
     private int frameWidth = 600;
     private int frameHeight = 600;
@@ -92,6 +92,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     public final int HOTSPOT_FRAME_DIMENSION = 200;
     public final int PALET_DIMENSION = 75;
     public final int SMALLER_PALET_DIMENSION = 30;
+    public final int MAX_THUMBNAIL_SIDE_SIZE = 150;
 
     // when this is filled the first one is at the top of the z index
     ArrayList<IItem> zOrderedItems;
@@ -112,17 +113,17 @@ public class StitcherApp extends AbstractStandaloneApp {
         setHotSpotContentFactory(new HotSpotContentItemFactory());
         setPaletFactory(new PaletItemFactory());
         setRepositoryFactory(new RepositoryContentItemFactory());
-        pageNames.add(STENCIL_NAME);
+//        pageNames.add(STENCIL_NAME);
         pageNames.add(BACKGROUND_NAME);
-        pageNames.add(SCAN_NAME);
-        populateFromWiki();
-        loadContent(wikiPages);
+//        pageNames.add(SCAN_NAME);
+        HashMap<String, IPage> populateFromWiki = populateFromWiki();
+        loadContent(populateFromWiki);
 
     }
 
-    private void populateFromWiki() {
+    private HashMap<String, IPage> populateFromWiki() {
         Properties prop = new Properties();
-        wikiPages = new HashMap<String, IPage>();
+        HashMap<String, IPage> wikiPages = new HashMap<String, IPage>();
 
         try {
             prop
@@ -132,21 +133,23 @@ public class StitcherApp extends AbstractStandaloneApp {
             this.wikiPass = prop.getProperty("DEFAULT_PASS");
             this.maxFileSize = Integer.valueOf(prop
                     .getProperty("MAX_ATTCHMENT_SIZE"));
-            stencilsPage = getWikiPage(prop, prop
-                    .getProperty("DEFAULT_WIKI_NAME"), prop
-                    .getProperty("REPOSITORY_WIKI_SPACE"), prop
-                    .getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
-            wikiPages.put(pageNames.get(0), stencilsPage);
+//            stencilsPage = getWikiPage(prop, prop
+//                    .getProperty("DEFAULT_WIKI_NAME"), prop
+//                    .getProperty("REPOSITORY_WIKI_SPACE"), prop
+//                    .getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
+//            wikiPages.put(pageNames.get(0), stencilsPage);
             backgroundsPage = getWikiPage(prop, prop
                     .getProperty("DEFAULT_WIKI_NAME"), prop
                     .getProperty("CLASS_WIKI_SPACE"), prop
                     .getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
-            wikiPages.put(pageNames.get(1), backgroundsPage);
-        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
-			wikiPages.put(pageNames.get(2), scansPage);
+            wikiPages.put(pageNames.get(0), backgroundsPage);
+//        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
+//			wikiPages.put(pageNames.get(2), scansPage);
         } catch (IOException e) {
             logger.debug("setup:  IOException: " + e);
         }
+        
+        return wikiPages;
 
     }
 
@@ -162,9 +165,9 @@ public class StitcherApp extends AbstractStandaloneApp {
     private void loadContent(HashMap<String, IPage> wikiPages) {
 
         zOrderedItems = new ArrayList<IItem>();
-        smaker = new Grouper();
-        this.getMultiTouchEventProducer().registerMultiTouchEventListener(
-                smaker);
+        //smaker = new Grouper();
+//        this.getMultiTouchEventProducer().registerMultiTouchEventListener(
+//                smaker);
 
         List<IItem> items = null;
         IPage iPage = null;
@@ -184,7 +187,7 @@ public class StitcherApp extends AbstractStandaloneApp {
             }
 
             if (items != null) {
-                addItemsToFrame(getAttachmentItems.getItems(), new Vector2f(i * 5f, i * 5f), pageNames.get(i));
+                addItemsToFrame(getAttachmentItems.getItemsToReturn(), new Vector2f(i * 5f, i * 5f), pageNames.get(i));
             }
         }
 
@@ -285,6 +288,7 @@ public class StitcherApp extends AbstractStandaloneApp {
     public void moveItemToNewFrame(IItem item, Vector2f atPosition, String frameName) {
         UUID uUID = UUID.randomUUID();
 
+        item.setRelativeScale(1f);
         JMEImage bi = (JMEImage) item;
 
         // scale image.
@@ -395,7 +399,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         
     }
 
-    public void addItemsToFrame(List<IItem> items, Vector2f atPosition, String frameName) {
+    public void addItemsToFrame(Vector<Object> itemsToAdd, Vector2f atPosition, String frameName) {
         Vector2f framePosition = null;
         Vector2f frameClosePosition = null;
         UUID uUID = UUID.randomUUID();
@@ -452,11 +456,16 @@ public class StitcherApp extends AbstractStandaloneApp {
             frame.setBorder(border);
         }
         
-        for (IItem item : items) {
-            item.setRelativeScale(0.5f);
-            frame.addItem(item);
-        }
-
+        for (int i = 0; i < itemsToAdd.size(); i++) {
+        	Vector<Object> itemEntry = (Vector<Object>) itemsToAdd.elementAt(i);
+			
+        	IImage vecItem = (IImage) itemEntry.elementAt(1);
+        	float scale = (Float) itemEntry.elementAt(0);
+        	vecItem.setRelativeScale(scale);
+        	Vector2f position = generateRandomPosition(frame);
+			frame.addItem(vecItem);
+			vecItem.setRelativeLocation(position);
+		}
        
         this.add(frame);
         
@@ -465,7 +474,13 @@ public class StitcherApp extends AbstractStandaloneApp {
         // createXMLRepresentationForGroup(uUID, items);
     }
 
-    public void createHotSpotRepo() {
+    private Vector2f generateRandomPosition(RepositoryFrame frame) {
+		// TODO Auto-generated method stub
+    	Vector2f loc = new Vector2f(0f, 0f);
+		return loc;
+	}
+
+	public void createHotSpotRepo() {
         UUID uUID = UUID.randomUUID();
         IFrame frame = this.getContentFactory().createFrame("hotspots", uUID, HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
 
