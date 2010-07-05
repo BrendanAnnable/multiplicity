@@ -58,6 +58,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 //            
            // this.setSolidBackgroundColour(Color.RED);
             this.hotLink.setVisible(true);
+            this.hotLink.redrawLine(getLineVertices());
             hotSpotFrameContent.setVisible(true);
         } else {
             this.hotLink.setVisible(false);
@@ -110,7 +111,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		hotSpotFrameContent.addItemListener(new ItemListenerAdapter() {
             
             public void itemMoved(IItem item) {
-                logger.info("HSF moved");
+
                 IHotSpotFrame frame = ((IHotSpotFrame)item);
                 ArrayList<ILineItem> iLineItems = frame.getHotLinks();
                 
