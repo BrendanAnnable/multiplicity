@@ -37,6 +37,7 @@ import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMELine;
+import multiplicity.csysngjme.items.JMERectangularItem;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.csysngjme.items.hotspots.HotLink;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
@@ -113,9 +114,9 @@ public class StitcherApp extends AbstractStandaloneApp {
         setHotSpotContentFactory(new HotSpotContentItemFactory());
         setPaletFactory(new PaletItemFactory());
         setRepositoryFactory(new RepositoryContentItemFactory());
-//        pageNames.add(STENCIL_NAME);
+        pageNames.add(STENCIL_NAME);
         pageNames.add(BACKGROUND_NAME);
-//        pageNames.add(SCAN_NAME);
+        pageNames.add(SCAN_NAME);
         HashMap<String, IPage> populateFromWiki = populateFromWiki();
         loadContent(populateFromWiki);
 
@@ -133,18 +134,18 @@ public class StitcherApp extends AbstractStandaloneApp {
             this.wikiPass = prop.getProperty("DEFAULT_PASS");
             this.maxFileSize = Integer.valueOf(prop
                     .getProperty("MAX_ATTCHMENT_SIZE"));
-//            stencilsPage = getWikiPage(prop, prop
-//                    .getProperty("DEFAULT_WIKI_NAME"), prop
-//                    .getProperty("REPOSITORY_WIKI_SPACE"), prop
-//                    .getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
-//            wikiPages.put(pageNames.get(0), stencilsPage);
+            stencilsPage = getWikiPage(prop, prop
+                    .getProperty("DEFAULT_WIKI_NAME"), prop
+                    .getProperty("REPOSITORY_WIKI_SPACE"), prop
+                    .getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
+            wikiPages.put(pageNames.get(0), stencilsPage);
             backgroundsPage = getWikiPage(prop, prop
                     .getProperty("DEFAULT_WIKI_NAME"), prop
                     .getProperty("CLASS_WIKI_SPACE"), prop
                     .getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
-            wikiPages.put(pageNames.get(0), backgroundsPage);
-//        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
-//			wikiPages.put(pageNames.get(2), scansPage);
+            wikiPages.put(pageNames.get(1), backgroundsPage);
+        	scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
+			wikiPages.put(pageNames.get(2), scansPage);
         } catch (IOException e) {
             logger.debug("setup:  IOException: " + e);
         }
@@ -462,7 +463,7 @@ public class StitcherApp extends AbstractStandaloneApp {
         	IImage vecItem = (IImage) itemEntry.elementAt(1);
         	float scale = (Float) itemEntry.elementAt(0);
         	vecItem.setRelativeScale(scale);
-        	Vector2f position = generateRandomPosition(frame);
+        	Vector2f position = generateRandomPosition(frame, vecItem);
 			frame.addItem(vecItem);
 			vecItem.setRelativeLocation(position);
 		}
@@ -474,10 +475,21 @@ public class StitcherApp extends AbstractStandaloneApp {
         // createXMLRepresentationForGroup(uUID, items);
     }
 
-    private Vector2f generateRandomPosition(RepositoryFrame frame) {
+    private Vector2f generateRandomPosition(RepositoryFrame frame, IImage vecItem) {
 		// TODO Auto-generated method stub
-    	Vector2f loc = new Vector2f(0f, 0f);
-		return loc;
+    	Vector2f frameSize = frame.getSize();
+    	Vector2f imageSize = ((JMERectangularItem) vecItem).getSize();
+    	
+    	float lowerBoundX = - frameSize.x/2 + imageSize.x/2;
+    	float upperBoundX = frameSize.x/2 - imageSize.x/2;
+    	
+    	float lowerBoundY = frameSize.y/2 - imageSize.y/2;
+    	float upperBoundY = - frameSize.y/2 + imageSize.y/2;
+    	
+    	float posX = lowerBoundX + (int) ( Math.random()*(upperBoundX - lowerBoundX) );
+    	float posY = lowerBoundY + (int) ( Math.random()*(upperBoundY - lowerBoundY) );
+    	
+		return new Vector2f(posX, posY);
 	}
 
 	public void createHotSpotRepo() {
