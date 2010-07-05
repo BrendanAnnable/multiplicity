@@ -103,7 +103,6 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
             public void itemMoved(IItem item) {
             	Vector3f[] vertices = getLineVertices();		
                 ((HotSpotItem)item).getHotLink().redrawLine(vertices);
-               
             };
                    
         } );
@@ -121,6 +120,13 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
         			Vector3f[] vertices = ((HotSpotItem) hsi).getLineVertices();
                 	iLine.redrawLine(vertices);
                 }
+        		
+        		ArrayList<IHotSpotItem> hotSpots = frame.getHotSpots();
+        		for (IHotSpotItem iHotSpotItem : hotSpots) {
+        			Vector3f[] vertices = ((HotSpotItem) iHotSpotItem).getLineVertices();	
+                    ((HotSpotItem)iHotSpotItem).getHotLink().redrawLine(vertices);
+				}
+        		
             };
         } );
     	
