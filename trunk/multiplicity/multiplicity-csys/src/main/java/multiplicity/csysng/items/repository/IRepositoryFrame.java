@@ -4,18 +4,22 @@ import com.jme.math.Vector2f;
 
 public interface IRepositoryFrame {
 
-    public abstract boolean isOpen();
+    public boolean isOpen();
 
-    public abstract Vector2f getCloseLocation();
+    public Vector2f getCloseLocation();
 
-    public abstract void setCloseLocation(Vector2f closeLocation);
+    public void setCloseLocation(Vector2f closeLocation);
 
-    public abstract Vector2f getOpenLocation();
+    public Vector2f getOpenLocation();
 
-    public abstract void setOpenLocation(Vector2f openLocation);
+    public void setOpenLocation(Vector2f openLocation);
 
-    public abstract void open();
+    public void open();
 
-    public abstract void close();
+    public void close();
+    
+    public int tap();
 
+    public void resetTaps();
+    
 }
