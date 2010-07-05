@@ -1,14 +1,11 @@
 package multiplicity.csysngjme.items.hotspots;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
-
 import multiplicity.csysng.behaviours.BehaviourMaker;
-import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.ILineItem;
 import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.hotspot.IHotLink;
@@ -18,6 +15,8 @@ import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.items.JMEColourRectangle;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.input.events.MultiTouchCursorEvent;
+
+import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 import com.jme.renderer.ColorRGBA;
@@ -30,7 +29,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	private final static Logger logger = Logger.getLogger(HotSpotFrame.class.getName());
 	
 	public ArrayList<IHotSpotItem> hotSpots = new ArrayList<IHotSpotItem>(); 
-	public ArrayList<IHotLink> hotLinks = new ArrayList<IHotLink>();
+	public ArrayList<ILineItem> hotLinks = new ArrayList<ILineItem>();
 	protected ArrayList<Line> lines = new ArrayList<Line>();
 	protected boolean isLocked = false;
 	private JMEColourRectangle frameOverlay;
@@ -134,7 +133,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 		}
 	}
 
-	public void addHotLink(IHotLink hotLink) {
+	public void addHotLink(ILineItem hotLink) {
 	    this.hotLinks.add(hotLink);
 	}
 	
@@ -145,11 +144,12 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	        
 	}
 	
-    public void setHotLinks(ArrayList<IHotLink> hotLinks) {
+	@Override
+    public void setHotLinks(ArrayList<ILineItem> hotLinks) {
         this.hotLinks = hotLinks;
     }
 
-    public ArrayList<IHotLink> getHotLinks() {
+    public ArrayList<ILineItem> getHotLinks() {
         return hotLinks;
     }
 
