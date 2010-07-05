@@ -125,10 +125,10 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
                 
                 IHotSpotFrame frame = ((IHotSpotFrame)item);
                 
-                ArrayList<ILineItem> hotLinks = frame.getHotLinks();
+                ArrayList<ILineItem> iLineItems = frame.getHotLinks();
                 
-                for (ILineItem iHotLink : hotLinks) {
-                    iHotLink.redrawTargetLocation(item.getRelativeLocation());
+                for (ILineItem iLine : iLineItems) {
+                	iLine.redrawTargetLocation(item.getRelativeLocation());
                 }
             };
         } );
