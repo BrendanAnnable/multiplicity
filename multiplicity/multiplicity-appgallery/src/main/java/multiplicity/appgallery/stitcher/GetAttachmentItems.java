@@ -103,7 +103,7 @@ public class GetAttachmentItems extends Thread {
 		img = stitcher.getContentFactory().createImage("photo", UUID.randomUUID());
 		img.setImage(url);
 		BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
-		img.setRelativeScale(0.6f);
+		//img.setRelativeScale(0.6f);
 		img.setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
 		img.addItemListener(new ItemListenerAdapter() {
 
@@ -243,7 +243,12 @@ public class GetAttachmentItems extends Thread {
 						IImage imageItem = (IImage) item;
 						// create copy
 						IImage copy = createPhotoImage(imageItem.getImageUrl());
+						
+						float scale = (Float) getScale(((JMERectangularItem)copy).getSize());
+						copy.setRelativeScale(scale);
+						Vector2f position = stitcher.generateRandomPosition((JMEFrame) frame, copy);
 						frame.addItem(copy);
+						copy.setRelativeLocation(position);
 					}
 					stitcher.moveItemToNewFrame(item, new Vector2f(0.0f, 0.0f), "back-" + item.getUUID());
 					frame.removeItem(item);
