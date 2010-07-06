@@ -456,7 +456,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 		// createXMLRepresentationForGroup(uUID, items);
 	}
 
-	private Vector2f generateRandomPosition(RepositoryFrame frame, IImage vecItem) {
+	Vector2f generateRandomPosition(JMEFrame frame, IImage vecItem) {
 		Vector2f frameSize = frame.getSize();
 		Vector2f imageSize = ((JMERectangularItem) vecItem).getSize();
 
