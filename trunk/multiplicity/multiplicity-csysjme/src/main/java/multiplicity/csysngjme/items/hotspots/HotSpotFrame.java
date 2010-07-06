@@ -77,13 +77,11 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 			
 			@Override
 			public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
-				logger.info("item curs rel: ");
+				
 			}
 			
 			@Override
 			public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
@@ -208,5 +206,9 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	@Override
 	public void sendOverlaytoBottom() {
 		this.getZOrderManager().sendToBottom(frameOverlay, null);
+	}
+
+	public JMEColourRectangle getFrameOverlay() {
+		return frameOverlay;
 	}
 }

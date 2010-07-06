@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
+import multiplicity.app.utils.LocalStorageUtility;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.gesture.GestureLibrary;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
@@ -22,6 +23,7 @@ import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
+import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
@@ -32,6 +34,7 @@ import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.factory.PaletItemFactory;
 import multiplicity.csysngjme.factory.Repository.RepositoryContentItemFactory;
 import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
+import multiplicity.csysngjme.items.JMEColourRectangle;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMELine;
@@ -290,7 +293,61 @@ public class StitcherApp extends AbstractStandaloneApp {
 		frame.maintainBorderSizeDuringScale();
 		frame.setRelativeLocation(atPosition);
 		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
-
+		
+		JMEColourRectangle frameOverlay = ((HotSpotFrame) frame).getFrameOverlay();
+		frameOverlay.addItemListener(new IItemListener() {
+			
+			@Override
+			public void itemZOrderChanged(IItem item) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void itemScaled(IItem item) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void itemRotated(IItem item) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void itemMoved(IItem item) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
+				IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();				
+				parentFrame.bringHotSpotsToTop();
+				parentFrame.bringPaletToTop();
+				stitcher.bumpHotSpotConnections();
+			}
+			
+			@Override
+			public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void itemCursorChanged(IItem item, MultiTouchCursorEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		this.add(frame);
 
 		Vector2f itemWorldPos = item.getWorldLocation();
@@ -310,6 +367,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 				}
 				parentFrame.bringHotSpotsToTop();
 				parentFrame.bringPaletToTop();
+				stitcher.bumpHotSpotConnections();
 			}
 		});
 
@@ -330,6 +388,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 				parentFrame.bringHotSpotsToTop();
 				parentFrame.bringPaletToTop();
+				stitcher.bumpHotSpotConnections();
 			}
 
 			@Override
@@ -360,6 +419,9 @@ public class StitcherApp extends AbstractStandaloneApp {
 				}
 
 				logger.info(message);
+				paletParent.bringHotSpotsToTop();
+				paletParent.bringPaletToTop();
+				stitcher.bumpHotSpotConnections();
 			}
 		});
 
@@ -377,10 +439,10 @@ public class StitcherApp extends AbstractStandaloneApp {
 				ArrayList<IHotSpotItem> hotSpots = frame.getHotSpots();
 				for (IHotSpotItem iHotSpotItem : hotSpots) {
 					iHotSpotItem.update(frame.getRelativeLocation());
-					frame.getZOrderManager().bringToTop(iHotSpotItem, null);
 				}
+				frame.bringHotSpotsToTop();
+				stitcher.bumpHotSpotConnections();
 			}
-
 		});
 
 	}

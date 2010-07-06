@@ -21,6 +21,7 @@ import multiplicity.csysng.items.IImage.AlphaStyle;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
+import multiplicity.csysng.items.repository.IRepositoryFrame;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMERectangularItem;
@@ -226,7 +227,7 @@ public class GetAttachmentItems extends Thread {
 
 				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
 
-				if (item.getParentItem().getTreeRootSpatial() instanceof JMEFrame) {
+				if (item.getParentItem().getTreeRootSpatial() instanceof IRepositoryFrame) {
 					JMEFrame frame = (JMEFrame) item.getParentItem().getTreeRootSpatial();
 					for (PickedSpatial pickedSpatial : spatialsList) {
 						if (pickedSpatial.getSpatial().equals(frame.getMaskGeometry())) {
@@ -250,6 +251,7 @@ public class GetAttachmentItems extends Thread {
 						frame.addItem(copy);
 						copy.setRelativeLocation(position);
 					}
+					
 					stitcher.moveItemToNewFrame(item, new Vector2f(0.0f, 0.0f), "back-" + item.getUUID());
 					frame.removeItem(item);
 				} else {
@@ -290,7 +292,7 @@ public class GetAttachmentItems extends Thread {
 										targetFrame.getZOrderManager().bringToTop(item, null);
 
 										targetFrame.bringHotSpotsToTop();
-										// targetFrame.bringPaletToTop();
+										targetFrame.bringPaletToTop();
 									}
 								}
 
