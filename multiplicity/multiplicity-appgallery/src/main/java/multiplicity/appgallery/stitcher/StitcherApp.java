@@ -202,8 +202,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 		UUID uUID = UUID.randomUUID();
 
 		// TODO: use width/height of app instead
-		Float xPos = Integer.valueOf(-DisplaySystem.getDisplaySystem().getWidth() / 2 + (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
-		Float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
+		float xPos = Integer.valueOf(-DisplaySystem.getDisplaySystem().getWidth() / 2 + (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
+		float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
 
 		IHotSpotFrame frame = (IHotSpotFrame) this.getHotSpotContentFactory().createHotSpotFrame("hotspotf-" + uUID, uUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
 
@@ -438,6 +438,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 		}
 
 		for (int i = 0; i < itemsToAdd.size(); i++) {
+			@SuppressWarnings("unchecked")
 			Vector<Object> itemEntry = (Vector<Object>) itemsToAdd.elementAt(i);
 
 			IImage vecItem = (IImage) itemEntry.elementAt(1);
@@ -456,7 +457,6 @@ public class StitcherApp extends AbstractStandaloneApp {
 	}
 
 	private Vector2f generateRandomPosition(RepositoryFrame frame, IImage vecItem) {
-		// TODO Auto-generated method stub
 		Vector2f frameSize = frame.getSize();
 		Vector2f imageSize = ((JMERectangularItem) vecItem).getSize();
 
