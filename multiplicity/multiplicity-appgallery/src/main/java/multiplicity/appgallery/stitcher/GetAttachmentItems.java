@@ -129,7 +129,7 @@ public class GetAttachmentItems extends Thread {
 					}
 				}
 
-				if (parentContainerName.equals(stitcher.SCAN_NAME) && offParent) {
+				if (parentContainerName.equals(stitcher.SCAN_NAME) && offParent || parentContainerName.equals(stitcher.STENCIL_NAME) && offParent) {
 					for (PickedSpatial pickedSpatial : spatialsList) {
 						if ((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && firstFrameFound == false) {
 							try {
@@ -293,6 +293,20 @@ public class GetAttachmentItems extends Thread {
 
 										targetFrame.bringHotSpotsToTop();
 										targetFrame.bringPaletToTop();
+									} else if (!targetFrame.isLocked() && targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.STENCIL_NAME)) {
+					                       firstFrameFound = true;
+	                                        IFrame frame = (IFrame) item.getParentItem();
+	                                        frame.removeItem(item);
+
+	                                        targetFrame.addItem(item);
+	                                        item.setRelativeScale(1.0f);
+	                                        ((JMERectangularItem) item).setSize(stitcher.HOTSPOT_FRAME_DIMENSION, stitcher.HOTSPOT_FRAME_DIMENSION);
+	                                        item.centerItem();
+	                                        clearAllHighlightedHotSpotFrames();
+	                                        targetFrame.getZOrderManager().bringToTop(item, null);
+
+	                                        targetFrame.bringHotSpotsToTop();
+	                                        targetFrame.bringPaletToTop();
 									}
 								}
 

@@ -1,6 +1,6 @@
 package multiplicity.csysngjme.items.hotspots;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import multiplicity.csysng.items.IItem;
@@ -109,7 +109,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 			public void itemMoved(IItem item) {
 
 				IHotSpotFrame frame = ((IHotSpotFrame) item);
-				ArrayList<ILineItem> iLineItems = frame.getHotLinks();
+				List<ILineItem> iLineItems = frame.getHotLinks();
 
 				IHotSpotItem hsi = null;
 				for (ILineItem iLine : iLineItems) {
@@ -118,7 +118,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 					iLine.redrawLine(vertices);
 				}
 
-				ArrayList<IHotSpotItem> hotSpots = frame.getHotSpots();
+				List<IHotSpotItem> hotSpots = frame.getHotSpots();
 				for (IHotSpotItem iHotSpotItem : hotSpots) {
 					Vector3f[] vertices = ((HotSpotItem) iHotSpotItem).getLineVertices();
 					((HotSpotItem) iHotSpotItem).getHotLink().redrawLine(vertices);
