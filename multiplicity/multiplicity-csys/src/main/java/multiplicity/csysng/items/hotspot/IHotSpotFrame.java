@@ -5,6 +5,7 @@ import java.util.List;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.ILineItem;
+import multiplicity.csysng.items.IPalet;
 
 public interface IHotSpotFrame extends IFrame {
 
@@ -37,4 +38,6 @@ public interface IHotSpotFrame extends IFrame {
 	public void toggleLock();
 
 	public void sendOverlaytoBottom();
+
+    public IPalet getPalet();
 }

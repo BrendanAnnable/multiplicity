@@ -37,7 +37,7 @@ public class JMEPalet extends JMEColourCircle implements IPalet {
 
     @Override
     public int tap() {
-        return taps++;
+        return ++taps;
     }
 
     @Override
