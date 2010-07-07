@@ -1,7 +1,8 @@
 package multiplicity.csysngjme.items.hotspots;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.items.IItem;
@@ -28,9 +29,9 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	private static final long serialVersionUID = 8114328886119432460L;
 	private final static Logger logger = Logger.getLogger(HotSpotFrame.class.getName());
 	
-	public ArrayList<IHotSpotItem> hotSpots = new ArrayList<IHotSpotItem>(); 
-	public ArrayList<ILineItem> hotLinks = new ArrayList<ILineItem>();
-	protected ArrayList<Line> lines = new ArrayList<Line>();
+	public List<IHotSpotItem> hotSpots = new CopyOnWriteArrayList<IHotSpotItem>(); 
+	public List<ILineItem> hotLinks = new CopyOnWriteArrayList<ILineItem>();
+	protected List<Line> lines = new CopyOnWriteArrayList<Line>();
 	protected boolean isLocked = false;
 	private JMEColourRectangle frameOverlay;
 	private float oldRotation = 0f;
@@ -113,11 +114,11 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 		});
 	}
 
-	public ArrayList<IHotSpotItem> getHotSpots() {
+	public List<IHotSpotItem> getHotSpots() {
 		return hotSpots;
 	}
 	
-	public void setHotSpots(ArrayList<IHotSpotItem> hotSpots) {
+	public void setHotSpots(List<IHotSpotItem> hotSpots) {
 		this.hotSpots = hotSpots;
 	}
 
@@ -143,11 +144,11 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	}
 	
 	@Override
-    public void setHotLinks(ArrayList<ILineItem> hotLinks) {
+    public void setHotLinks(List<ILineItem> hotLinks) {
         this.hotLinks = hotLinks;
     }
 
-    public ArrayList<ILineItem> getHotLinks() {
+    public List<ILineItem> getHotLinks() {
         return hotLinks;
     }
 

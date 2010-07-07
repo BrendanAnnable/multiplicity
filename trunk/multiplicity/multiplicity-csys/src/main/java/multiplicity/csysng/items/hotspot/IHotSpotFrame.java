@@ -1,6 +1,6 @@
 package multiplicity.csysng.items.hotspot;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
@@ -12,13 +12,13 @@ public interface IHotSpotFrame extends IFrame {
 
     public void removeHotLink(IHotLink hotLink);
 
-    public void setHotLinks(ArrayList<ILineItem> hotLinks);
+    public void setHotLinks(List<ILineItem> hotLinks);
 
-    public ArrayList<ILineItem> getHotLinks();
+    public List<ILineItem> getHotLinks();
 
-    public ArrayList<IHotSpotItem> getHotSpots();
+    public List<IHotSpotItem> getHotSpots();
 
-    public void setHotSpots(ArrayList<IHotSpotItem> hotSpots);
+    public void setHotSpots(List<IHotSpotItem> hotSpots);
 
     public void addHotSpot(IItem item);
 
