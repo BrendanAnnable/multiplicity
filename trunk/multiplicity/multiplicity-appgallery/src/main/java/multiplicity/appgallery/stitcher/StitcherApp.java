@@ -12,7 +12,6 @@ import java.util.Vector;
 
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
-import multiplicity.app.utils.LocalStorageUtility;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.gesture.GestureLibrary;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
@@ -68,8 +67,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 	public final String STENCIL_NAME = "stencils";
 	public final String BACKGROUND_NAME = "backgrounds";
 	public final String SCAN_NAME = "scans";
-	private final ArrayList<String> pageNames = new ArrayList<String>();
-	private final ArrayList<JMELine> hotspotConnections = new ArrayList<JMELine>();
+	private final List<String> pageNames = new ArrayList<String>();
+	private final List<JMELine> hotspotConnections = new ArrayList<JMELine>();
 	private IPage stencilsPage;
 	private IPage backgroundsPage;
 	private IPage scansPage;
@@ -97,7 +96,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 	public final float INITIAL_DROP_SCALE = 0.5f;
 
 	// when this is filled the first one is at the top of the z index
-	ArrayList<IItem> zOrderedItems;
+	List<IItem> zOrderedItems;
 
 	private IHotSpotContentFactory hotSpotContentFactory;
 
@@ -228,14 +227,18 @@ public class StitcherApp extends AbstractStandaloneApp {
 		BehaviourMaker.addBehaviour(palet, RotateTranslateScaleBehaviour.class);
 		palet.addItemListener(new ItemListenerAdapter() {
 			public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
-				logger.info("palet clicked");
-				IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
-				parentFrame.toggleLock();
-
-				((IPalet) item).updatePalet(parentFrame.isLocked());
-
-				parentFrame.bringHotSpotsToTop();
-				parentFrame.bringPaletToTop();
+			    IPalet palet = (IPalet) item;
+			    int taps = palet.tap();
+				logger.info("palet clicked " + taps);
+				
+				
+                if (taps == 2) {
+                    IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
+                    parentFrame.toggleLock();
+                    palet.updatePalet(parentFrame.isLocked());
+                    parentFrame.bringHotSpotsToTop();
+                    parentFrame.bringPaletToTop();
+                }
 			}
 
 			@Override
@@ -436,7 +439,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 				IHotSpotFrame frame = (IHotSpotFrame) item;
 				// update all the hotspotitems which will update all the
 				// hotlinks
-				ArrayList<IHotSpotItem> hotSpots = frame.getHotSpots();
+				List<IHotSpotItem> hotSpots = frame.getHotSpots();
 				for (IHotSpotItem iHotSpotItem : hotSpots) {
 					iHotSpotItem.update(frame.getRelativeLocation());
 				}
