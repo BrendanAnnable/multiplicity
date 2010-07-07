@@ -238,6 +238,7 @@ public class StitcherApp extends AbstractStandaloneApp {
                     palet.updatePalet(parentFrame.isLocked());
                     parentFrame.bringHotSpotsToTop();
                     parentFrame.bringPaletToTop();
+                    palet.resetTaps();
                 }
 			}
 
@@ -384,14 +385,27 @@ public class StitcherApp extends AbstractStandaloneApp {
 		palet.addItemListener(new ItemListenerAdapter() {
 			public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
 				logger.info("palet clicked");
-				IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
-				parentFrame.toggleLock();
+				
+				
+		        IPalet palet = (IPalet) item;
+                int taps = palet.tap();
+                logger.info("palet clicked " + taps);
+                
+                
+                if (taps == 2) {
+                    IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
+                    parentFrame.toggleLock();
 
-				((IPalet) item).updatePalet(parentFrame.isLocked());
+                    palet.updatePalet(parentFrame.isLocked());
 
-				parentFrame.bringHotSpotsToTop();
-				parentFrame.bringPaletToTop();
-				stitcher.bumpHotSpotConnections();
+                    parentFrame.bringHotSpotsToTop();
+                    parentFrame.bringPaletToTop();
+                    stitcher.bumpHotSpotConnections();
+                    palet.resetTaps();
+                }
+				
+				
+			
 			}
 
 			@Override
@@ -405,7 +419,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
 
-				HotSpotFrame paletParent = (HotSpotFrame) item.getParentItem();
+				IHotSpotFrame paletParent = (IHotSpotFrame) item.getParentItem();
 
 				for (PickedSpatial pickedSpatial : spatialsList) {
 					if (pickedSpatial.getSpatial().equals(((JMEFrame) paletParent.getTreeRootSpatial()).getMaskGeometry())) {

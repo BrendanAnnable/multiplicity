@@ -198,14 +198,6 @@ public class GetAttachmentItems extends Thread {
 				stitcher.bumpHotSpotConnections();
 			}
 
-			private void clearAllHighlightedHotSpotFrames() {
-				for (IHotSpotFrame hotSpotFrame : highlightedFrames) {
-					IBorder border = hotSpotFrame.getBorder();
-					border.setColor(new ColorRGBA(1f, 1f, 1f, 0.6f));
-				}
-				highlightedFrames = new ArrayList<HotSpotFrame>();
-			}
-
 			@Override
 			public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
 				logger.info("item pressed" + item.getBehaviours() + "parent: " + item.getParentItem());
@@ -281,49 +273,30 @@ public class GetAttachmentItems extends Thread {
 										targetFrame.bringPaletToTop();
 									} else if (!targetFrame.isLocked() && targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.SCAN_NAME)) {
 										firstFrameFound = true;
-										IFrame frame = (IFrame) item.getParentItem();
-										frame.removeItem(item);
-
-										targetFrame.addItem(item);
-										item.setRelativeScale(1.0f);
-										((JMERectangularItem) item).setSize(stitcher.HOTSPOT_FRAME_DIMENSION, stitcher.HOTSPOT_FRAME_DIMENSION);
-										item.centerItem();
-										clearAllHighlightedHotSpotFrames();
-										targetFrame.getZOrderManager().bringToTop(item, null);
-
-										targetFrame.bringHotSpotsToTop();
-										targetFrame.bringPaletToTop();
+										dropOnHotSpotFrame(item, targetFrame);
 									} else if (!targetFrame.isLocked() && targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.STENCIL_NAME)) {
 					                       firstFrameFound = true;
-	                                        IFrame frame = (IFrame) item.getParentItem();
-	                                        frame.removeItem(item);
-
-	                                        targetFrame.addItem(item);
-	                                        item.setRelativeScale(1.0f);
-	                                        ((JMERectangularItem) item).setSize(stitcher.HOTSPOT_FRAME_DIMENSION, stitcher.HOTSPOT_FRAME_DIMENSION);
-	                                        item.centerItem();
-	                                        clearAllHighlightedHotSpotFrames();
-	                                        targetFrame.getZOrderManager().bringToTop(item, null);
-
-	                                        targetFrame.bringHotSpotsToTop();
-	                                        targetFrame.bringPaletToTop();
-									}
-								}
+					                       dropOnHotSpotFrame(item, targetFrame);
+									} else if (!targetFrame.isLocked() && targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.BACKGROUND_NAME)) {
+                                        firstFrameFound = true;
+                                        dropOnHotSpotFrame(item, targetFrame);
+									}// if
+								}// if
 
 							} catch (Exception e) {
 								logger.debug("GetAttachmentItems: itemCursorReleased: Exception: " + e);
-							}
-						}
+							}// try
+						}// if
 
-					}
+					}// for
 					// image was dragged off of the frame DELETE
 					if (!firstFrameFound && offParent) {
 						logger.info("delete image moved off the frame");
 
 						IFrame frame = (IFrame) item.getParentItem();
 						frame.removeItem(item);
-					}
-				}
+					}// if
+				}// if
 
 				logger.info("cursor released caught event: " + item.getParentItem().getClass());
 				stitcher.bumpHotSpotConnections();
@@ -332,7 +305,34 @@ public class GetAttachmentItems extends Thread {
 
 		return img;
 	}
+	
+    private void clearAllHighlightedHotSpotFrames() {
+        for (IHotSpotFrame hotSpotFrame : highlightedFrames) {
+            IBorder border = hotSpotFrame.getBorder();
+            border.setColor(new ColorRGBA(1f, 1f, 1f, 0.6f));
+        }
+        highlightedFrames = new ArrayList<HotSpotFrame>();
+    }
 
+	protected void dropOnHotSpotFrame(IItem item, IHotSpotFrame hotSpotFrame) {
+        IFrame frame = (IFrame) item.getParentItem();
+        frame.removeItem(item);
+
+        hotSpotFrame.addItem(item);
+        item.setRelativeScale(1.0f);
+        ((JMERectangularItem) item).setSize(stitcher.HOTSPOT_FRAME_DIMENSION, stitcher.HOTSPOT_FRAME_DIMENSION);
+        item.centerItem();
+        clearAllHighlightedHotSpotFrames();
+        hotSpotFrame.getZOrderManager().bringToTop(item, null);
+
+       
+        hotSpotFrame.setLocked(true);
+        hotSpotFrame.getPalet().updatePalet(hotSpotFrame.isLocked());
+        hotSpotFrame.bringHotSpotsToTop();
+        hotSpotFrame.bringPaletToTop();
+        stitcher.bumpHotSpotConnections();
+	}
+	
 	public void run() {
 		itemsToReturn = new Vector<Object>();
 
