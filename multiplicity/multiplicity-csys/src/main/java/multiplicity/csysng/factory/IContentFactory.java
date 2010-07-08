@@ -4,9 +4,11 @@ import java.util.UUID;
 
 import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IColourRectangle;
+import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.ILabel;
+import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 
@@ -24,4 +26,6 @@ public interface IContentFactory {
 	public ICursorOverlay createCursorOverlay(String string, UUID randomUUID);
 	public ICursorTrailsOverlay createCursorTrailsOverlay(String string, UUID randomUUID);
 	public IColourRectangle createColourRectangle(String string, UUID randomUUID, int width, int height);
+	public IEditableText createEditableText(String name, UUID randomUUID);
+	public IKeyboard createKeyboard(String string, UUID randomUUID);
 }
