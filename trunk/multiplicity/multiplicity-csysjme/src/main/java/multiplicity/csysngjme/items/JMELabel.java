@@ -36,7 +36,7 @@ public class JMELabel extends JMERectangularItem implements ILabel {
 	private TextureState ts;
 	private Quad textQuad;
 	private Font font;
-	private String text;
+	protected String text;
 	private BlendState blendState;
 	private Color textColor;
 	private Color transparentBackgroundColor;
@@ -79,7 +79,7 @@ public class JMELabel extends JMERectangularItem implements ILabel {
      * @param scaleFactors is set to the factors needed to adjust texture coords
      * to the next-power-of-two- sized resulting image
      */
-    private BufferedImage getImage(Vector2f imageSize, Vector2f contentSize){
+    protected BufferedImage getImage(Vector2f imageSize, Vector2f contentSize){
         BufferedImage tmp0 = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D) tmp0.getGraphics();
         Font drawFont = font;
@@ -110,7 +110,7 @@ public class JMELabel extends JMERectangularItem implements ILabel {
         return tmp0;
     }
     
-    private void createQuad(float height){
+    protected void createQuad(float height){
     	textQuad = new Quad(getName() + "_quad");
     	textQuad.setModelBound(new OrthogonalBoundingBox());
     	textQuad.updateModelBound();
@@ -126,7 +126,7 @@ public class JMELabel extends JMERectangularItem implements ILabel {
         update();
     }
     
-	private void update() {
+	protected void update() {
 		Vector2f imageSize = new Vector2f();
 		Vector2f contentSize = new Vector2f();
 		

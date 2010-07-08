@@ -5,19 +5,22 @@ import java.util.UUID;
 import multiplicity.csysng.factory.IContentFactory;
 import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IColourRectangle;
+import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.ILabel;
+import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysngjme.items.JMEColourRectangle;
 import multiplicity.csysngjme.items.JMECursorTrails;
 import multiplicity.csysngjme.items.JMEDiskCursorOverlay;
+import multiplicity.csysngjme.items.JMEEditableText;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEImage;
+import multiplicity.csysngjme.items.JMEKeyboard;
 import multiplicity.csysngjme.items.JMELabel;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
-import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
 
 
 public class JMEContentItemFactory extends ContentItemFactoryUtil implements IContentFactory {
@@ -73,4 +76,19 @@ public class JMEContentItemFactory extends ContentItemFactoryUtil implements ICo
 		rect.initializeGeometry();
 		return rect;
 	}
+
+	@Override
+	public IEditableText createEditableText(String name, UUID uuid) {
+		JMEEditableText text = new JMEEditableText(name, uuid);
+		text.initializeGeometry();
+		return text;
+	}
+	
+	@Override
+	public IKeyboard createKeyboard(String name, UUID uuid) {
+		JMEKeyboard kb = new JMEKeyboard(name, uuid);
+		kb.initializeGeometry();
+		return kb;
+	}
+	
 }

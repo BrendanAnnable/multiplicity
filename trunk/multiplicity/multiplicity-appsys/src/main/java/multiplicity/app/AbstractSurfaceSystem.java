@@ -1,5 +1,6 @@
 package multiplicity.app;
 
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -213,6 +214,10 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		if(updateSceneMonitor) {
 			SceneMonitor.getMonitor().updateViewer(tpf);
 		}
+	}
+	
+	public void addToUpdateCycle(Callable<?> callable) {
+		GameTaskQueueManager.getManager().getQueue(GameTaskQueue.UPDATE).enqueue(callable);
 	}
 
 	protected void render( float interpolation ) {

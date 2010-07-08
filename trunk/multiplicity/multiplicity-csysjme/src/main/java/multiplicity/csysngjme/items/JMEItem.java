@@ -209,7 +209,14 @@ public abstract class JMEItem extends Node implements IItem {
 		itemListeners.remove(itemListener);
 	}
 	
+	/**
+	 * Subclasses should use initializeGeometry to create
+	 * the geometry/content. Content should be added by
+	 * using attachChild()
+	 */
 	public abstract void initializeGeometry();
+	
+	
 	protected abstract void createZOrderManager();
 	
 	public IZOrderManager getZOrderManager() {

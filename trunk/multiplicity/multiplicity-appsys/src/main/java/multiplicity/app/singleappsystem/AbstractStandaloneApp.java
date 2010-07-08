@@ -3,6 +3,7 @@ package multiplicity.app.singleappsystem;
 import java.util.ArrayList;
 import java.util.List;
 
+import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.csysng.factory.IContentFactory;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.zorder.IZOrderManager;
@@ -22,6 +23,7 @@ public abstract class AbstractStandaloneApp {
 	protected IContentFactory contentFactory;
 	protected IZOrderManager zOrderManager;
 	private IMultiTouchEventProducer mtInput;
+	private AbstractSurfaceSystem surfaceSystem;
 
 	public AbstractStandaloneApp(IMultiTouchEventProducer producer) {
 		this.mtInput = producer;
@@ -80,5 +82,13 @@ public abstract class AbstractStandaloneApp {
 
 	public IZOrderManager getzOrderManager() {
 		return zOrderManager;
+	}
+
+	public void setSurfaceSystem(AbstractSurfaceSystem surfaceSystem) {
+		this.surfaceSystem = surfaceSystem;
+	}
+
+	public AbstractSurfaceSystem getSurfaceSystem() {
+		return surfaceSystem;
 	}
 }

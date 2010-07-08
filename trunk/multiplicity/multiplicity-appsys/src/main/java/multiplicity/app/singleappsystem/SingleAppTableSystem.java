@@ -37,7 +37,8 @@ public class SingleAppTableSystem extends AbstractSurfaceSystem {
 		try {
 			Constructor<? extends AbstractStandaloneApp> con = appClass.getConstructor(IMultiTouchEventProducer.class);
 			AbstractStandaloneApp app = con.newInstance(producer);
-			tableSystemOrtho.attachChild(app.getOrthoNode());			
+			tableSystemOrtho.attachChild(app.getOrthoNode());		
+			app.setSurfaceSystem(this);
 			app.onAppStart();						
 		} catch (SecurityException e) {
 			// TODO propagate?
