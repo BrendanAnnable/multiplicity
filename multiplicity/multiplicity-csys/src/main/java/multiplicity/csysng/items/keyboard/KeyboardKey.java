@@ -7,6 +7,7 @@ public class KeyboardKey {
 	private String string_rep = "";
 	private int keyCode;
 	private Shape keyShape;
+	private boolean modifierFlag = false;
 	
 	public KeyboardKey(String string, int keyCode, Shape keyShape) {
 		this.string_rep = string;
@@ -56,5 +57,13 @@ public class KeyboardKey {
 	
 	public int getMaxY() {
 		return (int) keyShape.getBounds2D().getMaxY();
+	}
+
+	public void setModifier(boolean modifierFlag) {
+		this.modifierFlag = modifierFlag;
+	}
+
+	public boolean isModifier() {
+		return modifierFlag;
 	}
 }

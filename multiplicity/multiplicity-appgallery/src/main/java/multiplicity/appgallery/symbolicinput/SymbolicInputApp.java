@@ -13,12 +13,15 @@ import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.appgallery.gallery.GalleryApp;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.keyboard.KeyboardBehaviour;
-import multiplicity.csysng.behaviours.keyboard.MultiTouchKeyboardListener;
 import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.keyboard.IKeyboard;
+import multiplicity.csysng.items.keyboard.IKeyboardRenderer;
+import multiplicity.csysng.items.keyboard.KeyboardDefinition;
 import multiplicity.csysng.items.keyboard.KeyboardKey;
+import multiplicity.csysng.items.keyboard.IMultiTouchKeyboardListener;
 import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardDefinition;
+import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRenderer;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.input.IMultiTouchEventProducer;
 
@@ -43,25 +46,34 @@ public class SymbolicInputApp extends AbstractStandaloneApp {
 		zOrderManager.bringToTop(label2, null);
 		
 		final IKeyboard kb = contentFactory.createKeyboard("kb", UUID.randomUUID());
-		kb.setKeyboardDefinition(new SimpleAlphaKeyboardDefinition());
+		KeyboardDefinition kbd = new SimpleAlphaKeyboardDefinition();
+		kb.setKeyboardDefinition(kbd);
+		IKeyboardRenderer keyboardRenderer = new SimpleAlphaKeyboardRenderer(kbd);
+		kb.setKeyboardRenderer(keyboardRenderer);
 		kb.setRelativeLocation(new Vector2f(0, -200));
 		KeyboardBehaviour kbb = (KeyboardBehaviour) BehaviourMaker.addBehaviour(kb, KeyboardBehaviour.class);
-		kbb.addListener(new MultiTouchKeyboardListener() {
+		kbb.addListener(keyboardRenderer);
+		kbb.addListener(new IMultiTouchKeyboardListener() {
 			
 			@Override
 			public void keyReleased(KeyboardKey k) {
+				System.out.println(k.getKeyCode());
 				if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-					// something...
+					label2.removeChar();
 				}else if(k.getKeyCode() == KeyEvent.VK_ENTER) {
+					// something...
+				}else if(k.getKeyCode() == KeyEvent.VK_SHIFT) {
 					// something...
 				}else{				
 					String txt = KeyEvent.getKeyText(k.getKeyCode());
 					label2.appendChar(txt.charAt(0));
 				}
+				kb.reDrawKeyboard();
 			}
 			
 			@Override
 			public void keyPressed(KeyboardKey k) {
+				kb.reDrawKeyboard();
 			}
 		});
 		

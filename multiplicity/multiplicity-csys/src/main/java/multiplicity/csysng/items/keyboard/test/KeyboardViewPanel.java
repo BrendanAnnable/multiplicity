@@ -1,6 +1,7 @@
 package multiplicity.csysng.items.keyboard.test;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
@@ -19,7 +20,7 @@ public class KeyboardViewPanel extends JPanel {
 
 	public void paintComponent(Graphics g) {
 		clear(g);
-		kir.draw(g);
+		kir.drawKeyboard((Graphics2D)g);
 	}
 	
 	protected void clear(Graphics g) {
