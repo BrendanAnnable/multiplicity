@@ -4,8 +4,8 @@ import java.awt.geom.Rectangle2D;
 import java.util.UUID;
 
 import multiplicity.csysng.items.keyboard.IKeyboard;
+import multiplicity.csysng.items.keyboard.IKeyboardRenderer;
 import multiplicity.csysng.items.keyboard.KeyboardDefinition;
-import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRenderer;
 import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 
@@ -27,6 +27,7 @@ public class JMEKeyboard extends JMERectangularItem implements IKeyboard {
 	private Texture2D texture;
 	private ImageGraphics graphics;
 	private KeyboardDefinition keyboardDefinition;
+	private IKeyboardRenderer keyboardRenderer;
 
 	public JMEKeyboard(String name, UUID uuid) {
 		super(name, uuid);
@@ -42,7 +43,7 @@ public class JMEKeyboard extends JMERectangularItem implements IKeyboard {
 		imageQuad = new Quad(name + "_quad", 32, 32);
 		imageQuad.setModelBound(new OrthogonalBoundingBox());
 		ItemMap.register(imageQuad, this);
-		
+
 		textureState = DisplaySystem.getDisplaySystem().getRenderer().createTextureState();
 		textureState.setCorrectionType(TextureState.CorrectionType.Perspective);		
 		imageQuad.setRenderState(textureState);
@@ -53,7 +54,7 @@ public class JMEKeyboard extends JMERectangularItem implements IKeyboard {
 
 		attachChild(imageQuad);
 	}
-	
+
 	@Override
 	public Spatial getManipulableSpatial() {
 		return imageQuad;
@@ -62,11 +63,11 @@ public class JMEKeyboard extends JMERectangularItem implements IKeyboard {
 	@Override
 	public void setKeyboardDefinition(KeyboardDefinition kd) {
 		this.keyboardDefinition = kd;
-		
+
 		Rectangle2D bounds = kd.getBounds();
-		
+
 		graphics = ImageGraphics.createInstance((int)bounds.getMaxX(), (int)bounds.getMaxY(),0);	
-		
+
 		texture.setImage( graphics.getImage() );
 		texture.setScale( new Vector3f( 1f, -1f, 1 ) );		
 		textureState.setTexture( texture );
@@ -76,16 +77,31 @@ public class JMEKeyboard extends JMERectangularItem implements IKeyboard {
 		imageQuad.updateModelBound();
 		imageQuad.updateGeometricState(0f, true);
 		imageQuad.updateRenderState();
-		
-		SimpleAlphaKeyboardRenderer kir = new SimpleAlphaKeyboardRenderer(kd);
-		kir.draw(graphics);
-		
-		graphics.update(texture, false);
+
+		if(keyboardRenderer != null) {
+			keyboardRenderer.drawKeyboard(graphics);		
+			graphics.update(texture, false);
+		}
 	}
 
 	@Override
 	public KeyboardDefinition getKeyboardDefinition() {
 		return keyboardDefinition;
+	}
+
+	@Override
+	public void setKeyboardRenderer(IKeyboardRenderer keyboardRenderer) {
+		this.keyboardRenderer = keyboardRenderer;
+		keyboardRenderer.drawKeyboard(graphics);		
+		graphics.update(texture, false);
+	}
+
+	@Override
+	public void reDrawKeyboard() {
+		if(keyboardRenderer != null) {
+			keyboardRenderer.drawKeyboard(graphics);		
+			graphics.update(texture, false);
+		}
 	}
 
 }
