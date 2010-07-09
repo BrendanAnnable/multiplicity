@@ -15,4 +15,10 @@ public interface IHotSpotItem extends IItem {
 
     public void update(Vector2f vector2f);
 
+    public  IHotSpotFrame getHotSpotFrameContent();
+
+    public  void setHotSpotFrameContent(IHotSpotFrame hotSpotFrameContent);
+
+    public  void initializeGeometry();
+
 }
