@@ -23,14 +23,14 @@ public class HotSpotContentItemFactory implements IHotSpotContentFactory {
 
 	@Override
 	public IHotSpotItem createHotSpotItem(String name, UUID uuid, float radius) {
-		HotSpotItem pi = new HotSpotItem(name, uuid, radius);
+		IHotSpotItem pi = new HotSpotItem(name, uuid, radius);
         pi.initializeGeometry();
         return pi;
 	}
 
 	@Override
 	public IHotSpotItem createHotSpotItem(String name, UUID uuid, float radius, ColorRGBA colorRGBA) {
-		HotSpotItem pi = new HotSpotItem(name, uuid, radius, colorRGBA);
+		IHotSpotItem pi = new HotSpotItem(name, uuid, radius, colorRGBA);
         pi.initializeGeometry();
         return pi;
 	}

@@ -13,14 +13,14 @@ public class RepositoryContentItemFactory implements IRepositoryContentItemFacto
 
     @Override
     public IRepositoryFrame createRepositoryFrame(String name, UUID uuid, int width, int height) {
-        RepositoryFrame frame = new RepositoryFrame(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height);
+        IRepositoryFrame frame = new RepositoryFrame(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height);
         frame.initializeGeometry();
         return frame;
     }
     
     @Override
     public IRepositoryFrame createRepositoryFrame(String name, UUID uuid, int width, int height, Vector2f openLocation, Vector2f closeLocation) {
-       RepositoryFrame frame = new RepositoryFrame(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height, openLocation, closeLocation);
+       IRepositoryFrame frame = new RepositoryFrame(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height, openLocation, closeLocation);
        frame.initializeGeometry();
        return frame;
     }
