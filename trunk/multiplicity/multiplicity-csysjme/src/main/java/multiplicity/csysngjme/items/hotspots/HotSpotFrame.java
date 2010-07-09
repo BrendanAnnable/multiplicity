@@ -212,4 +212,9 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	public JMEColourRectangle getFrameOverlay() {
 		return frameOverlay;
 	}
+	
+	@Override
+    public IPalet getPalet() {
+	    return (IPalet) this.getChild("palet");
+	}
 }
