@@ -3,8 +3,8 @@ package multiplicity.csysng.items.keyboard.test;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import multiplicity.csysng.items.keyboard.KeyboardDefinition;
 import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardDefinition;
+import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
 
 public class TestKeyboard {
 	

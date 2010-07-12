@@ -4,8 +4,8 @@ import java.awt.geom.Rectangle2D;
 import java.util.UUID;
 
 import multiplicity.csysng.items.keyboard.IKeyboard;
-import multiplicity.csysng.items.keyboard.IKeyboardRenderer;
-import multiplicity.csysng.items.keyboard.KeyboardDefinition;
+import multiplicity.csysng.items.keyboard.IKeyboardGraphicsRenderer;
+import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
 import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 
@@ -27,7 +27,7 @@ public class JMEKeyboard extends JMERectangularItem implements IKeyboard {
 	private Texture2D texture;
 	private ImageGraphics graphics;
 	private KeyboardDefinition keyboardDefinition;
-	private IKeyboardRenderer keyboardRenderer;
+	private IKeyboardGraphicsRenderer keyboardRenderer;
 
 	public JMEKeyboard(String name, UUID uuid) {
 		super(name, uuid);
@@ -79,7 +79,7 @@ public class JMEKeyboard extends JMERectangularItem implements IKeyboard {
 		imageQuad.updateRenderState();
 
 		if(keyboardRenderer != null) {
-			keyboardRenderer.drawKeyboard(graphics);		
+			keyboardRenderer.drawKeyboard(graphics, false, false, false);		
 			graphics.update(texture, false);
 		}
 	}
@@ -90,16 +90,16 @@ public class JMEKeyboard extends JMERectangularItem implements IKeyboard {
 	}
 
 	@Override
-	public void setKeyboardRenderer(IKeyboardRenderer keyboardRenderer) {
+	public void setKeyboardRenderer(IKeyboardGraphicsRenderer keyboardRenderer) {
 		this.keyboardRenderer = keyboardRenderer;
-		keyboardRenderer.drawKeyboard(graphics);		
+		keyboardRenderer.drawKeyboard(graphics, false, false, false);		
 		graphics.update(texture, false);
 	}
 
 	@Override
-	public void reDrawKeyboard() {
+	public void reDrawKeyboard(boolean shiftDown, boolean altDown, boolean ctlDown) {
 		if(keyboardRenderer != null) {
-			keyboardRenderer.drawKeyboard(graphics);		
+			keyboardRenderer.drawKeyboard(graphics, shiftDown, altDown, ctlDown);		
 			graphics.update(texture, false);
 		}
 	}

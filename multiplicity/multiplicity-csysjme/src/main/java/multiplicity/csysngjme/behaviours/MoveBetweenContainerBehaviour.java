@@ -1,16 +1,9 @@
 package multiplicity.csysngjme.behaviours;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
-
-import com.jme.system.DisplaySystem;
 
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysngjme.items.JMEItem;
-import multiplicity.csysngjme.picking.AccuratePickingUtility;
-import multiplicity.csysngjme.picking.PickedSpatial;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.input.events.MultiTouchObjectEvent;

@@ -1,4 +1,4 @@
-package multiplicity.csysng.items.keyboard;
+package multiplicity.csysng.items.keyboard.defs.simple;
 
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
@@ -6,7 +6,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KeyMaker {
+import multiplicity.csysng.items.keyboard.model.CharacterKey;
+import multiplicity.csysng.items.keyboard.model.KeyboardKey;
+
+public class SimpleAlphaKeyboardKeyMaker {
 	public static List<KeyboardKey> createSquareKeysLine(String keysOnePerChar, int width, int height, int leftIndent, int topIndent, int gapBetweenKeys) {
 		List<KeyboardKey> keys = new ArrayList<KeyboardKey>();
 		
@@ -17,8 +20,9 @@ public class KeyMaker {
 				code = getKeyCode(keyChar);
 				int x = leftIndent + (i * (width + gapBetweenKeys));
 				int y = topIndent;
-				Rectangle2D rect = new Rectangle2D.Float(x, y, width, height);
-				KeyboardKey k = new KeyboardKey(keyChar + "", code, rect);
+				Rectangle2D rect = new Rectangle2D.Float(x, y, width, height);				
+				KeyboardKey k = new KeyboardKey(new CharacterKey(keyChar + "", code), rect);
+				// add for upper case/shift
 				keys.add(k);
 			} catch (SecurityException e) {
 				e.printStackTrace();

@@ -5,8 +5,8 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-import multiplicity.csysng.items.keyboard.KeyboardDefinition;
 import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRenderer;
+import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
 
 public class KeyboardViewPanel extends JPanel {
 	private static final long serialVersionUID = 2179702392158132563L;
@@ -20,7 +20,7 @@ public class KeyboardViewPanel extends JPanel {
 
 	public void paintComponent(Graphics g) {
 		clear(g);
-		kir.drawKeyboard((Graphics2D)g);
+		kir.drawKeyboard((Graphics2D)g, false, false, false);
 	}
 	
 	protected void clear(Graphics g) {

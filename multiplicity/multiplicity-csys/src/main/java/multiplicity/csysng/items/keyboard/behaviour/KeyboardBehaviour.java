@@ -1,4 +1,4 @@
-package multiplicity.csysng.behaviours.keyboard;
+package multiplicity.csysng.items.keyboard.behaviour;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import com.jme.math.Vector3f;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.keyboard.IKeyboard;
-import multiplicity.csysng.items.keyboard.KeyboardKey;
-import multiplicity.csysng.items.keyboard.IMultiTouchKeyboardListener;
+import multiplicity.csysng.items.keyboard.model.KeyModifiers;
+import multiplicity.csysng.items.keyboard.model.KeyboardKey;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.input.events.MultiTouchEvent;
@@ -24,6 +24,9 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 	private IKeyboard item;
 	private List<IMultiTouchKeyboardListener> listeners = new ArrayList<IMultiTouchKeyboardListener>();
 	private Map<Long,KeyboardKey> trackedKeyPresses = new HashMap<Long,KeyboardKey>();
+	private boolean shiftDown = false;
+	private boolean ctlDown = false;
+	private boolean altDown = false;
 
 	@Override
 	public void removeItemActingOn() {
@@ -55,8 +58,13 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 		if(kk != null) {
 			KeyboardKey newKey = getKeyUnderEvent(event);
 			if(newKey == null || !(newKey.getKeyCode() == kk.getKeyCode())) {
+				
+				if(kk.getModifiers() == KeyModifiers.SHIFT) {
+					shiftDown = false;
+				}
+				
 				for(IMultiTouchKeyboardListener kl : listeners) {
-					kl.keyReleased(kk);
+					kl.keyReleased(kk, shiftDown, altDown, ctlDown);
 				}
 			}
 		}
@@ -72,11 +80,12 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 	public void cursorPressed(MultiTouchCursorEvent event) {
 		KeyboardKey kk = getKeyUnderEvent(event);
 		if(kk != null) {
-			if(kk.isModifier()) {
+			if(kk.getModifiers() == KeyModifiers.SHIFT) {
+				shiftDown = true;
 				trackedKeyPresses.put(event.getCursorID(), kk);
 			}
 			for(IMultiTouchKeyboardListener kl : listeners) {
-				kl.keyPressed(kk);
+				kl.keyPressed(kk, shiftDown, altDown, ctlDown);
 			}
 
 		}		
@@ -86,8 +95,11 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 	public void cursorReleased(MultiTouchCursorEvent event) {
 		KeyboardKey kk = getKeyUnderEvent(event);
 		if(kk != null) {
+			if(kk.getModifiers() == KeyModifiers.SHIFT) {
+				shiftDown = false;
+			}
 			for(IMultiTouchKeyboardListener kl : listeners) {
-				kl.keyReleased(kk);
+				kl.keyReleased(kk, shiftDown, altDown, ctlDown);
 			}
 		}
 
