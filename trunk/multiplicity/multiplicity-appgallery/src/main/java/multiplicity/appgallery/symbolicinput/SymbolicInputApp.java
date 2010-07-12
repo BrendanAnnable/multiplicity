@@ -12,16 +12,17 @@ import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.appgallery.gallery.GalleryApp;
 import multiplicity.csysng.behaviours.BehaviourMaker;
-import multiplicity.csysng.behaviours.keyboard.KeyboardBehaviour;
 import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.keyboard.IKeyboard;
-import multiplicity.csysng.items.keyboard.IKeyboardRenderer;
-import multiplicity.csysng.items.keyboard.KeyboardDefinition;
-import multiplicity.csysng.items.keyboard.KeyboardKey;
-import multiplicity.csysng.items.keyboard.IMultiTouchKeyboardListener;
+import multiplicity.csysng.items.keyboard.IKeyboardGraphicsRenderer;
+import multiplicity.csysng.items.keyboard.behaviour.IMultiTouchKeyboardListener;
+import multiplicity.csysng.items.keyboard.behaviour.KeyboardBehaviour;
 import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardDefinition;
 import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRenderer;
+import multiplicity.csysng.items.keyboard.model.KeyModifiers;
+import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
+import multiplicity.csysng.items.keyboard.model.KeyboardKey;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.input.IMultiTouchEventProducer;
 
@@ -48,7 +49,7 @@ public class SymbolicInputApp extends AbstractStandaloneApp {
 		final IKeyboard kb = contentFactory.createKeyboard("kb", UUID.randomUUID());
 		KeyboardDefinition kbd = new SimpleAlphaKeyboardDefinition();
 		kb.setKeyboardDefinition(kbd);
-		IKeyboardRenderer keyboardRenderer = new SimpleAlphaKeyboardRenderer(kbd);
+		IKeyboardGraphicsRenderer keyboardRenderer = new SimpleAlphaKeyboardRenderer(kbd);
 		kb.setKeyboardRenderer(keyboardRenderer);
 		kb.setRelativeLocation(new Vector2f(0, -200));
 		KeyboardBehaviour kbb = (KeyboardBehaviour) BehaviourMaker.addBehaviour(kb, KeyboardBehaviour.class);
@@ -56,24 +57,26 @@ public class SymbolicInputApp extends AbstractStandaloneApp {
 		kbb.addListener(new IMultiTouchKeyboardListener() {
 			
 			@Override
-			public void keyReleased(KeyboardKey k) {
-				System.out.println(k.getKeyCode());
+			public void keyReleased(KeyboardKey k, boolean shiftDown, boolean altDown, boolean ctlDown) {
 				if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 					label2.removeChar();
 				}else if(k.getKeyCode() == KeyEvent.VK_ENTER) {
-					// something...
-				}else if(k.getKeyCode() == KeyEvent.VK_SHIFT) {
-					// something...
-				}else{				
-					String txt = KeyEvent.getKeyText(k.getKeyCode());
-					label2.appendChar(txt.charAt(0));
+					// ignore
+				}else if(k.getModifiers() == KeyModifiers.NONE) {				
+					if(shiftDown) {
+						String txt = KeyEvent.getKeyText(k.getKeyCode()).toUpperCase();
+						label2.appendChar(txt.charAt(0));
+					}else{
+						String txt = KeyEvent.getKeyText(k.getKeyCode()).toLowerCase();
+						label2.appendChar(txt.charAt(0));
+					}
 				}
-				kb.reDrawKeyboard();
+				kb.reDrawKeyboard(shiftDown, altDown, ctlDown);
 			}
 			
 			@Override
-			public void keyPressed(KeyboardKey k) {
-				kb.reDrawKeyboard();
+			public void keyPressed(KeyboardKey k, boolean shiftDown, boolean altDown, boolean ctlDown) {
+				kb.reDrawKeyboard(shiftDown, altDown, ctlDown);
 			}
 		});
 		

@@ -1,4 +1,4 @@
-package multiplicity.csysng.items.keyboard;
+package multiplicity.csysng.items.keyboard.model;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 public class KeyboardDefinition {
 	
@@ -35,10 +36,10 @@ public class KeyboardDefinition {
 	public Rectangle2D getBounds() {
 		Rectangle2D rect = new Rectangle2D.Float();
 		if(keysCollection.size() > 0) {
-			rect.setRect(keysCollection.get(0).getBounds());
+			rect.setRect(keysCollection.get(0).getKeyShape().getBounds());
 		}
 		for(KeyboardKey k : keysCollection) {
-			rect = rect.createUnion(k.getBounds());
+			rect = rect.createUnion(k.getKeyShape().getBounds());
 		}
 		rect.setRect(rect.getX(), rect.getY(), rect.getWidth() + rect.getMinX(), rect.getHeight() + rect.getMinY());
 		return rect;
@@ -46,7 +47,7 @@ public class KeyboardDefinition {
 
 	public KeyboardKey getKeyAt(Point2D p) {
 		for(KeyboardKey k : keysCollection) {
-			if(k.getBounds().contains(p)) {
+			if(k.getKeyShape().contains(p)) {
 				return k;
 			}
 		}
