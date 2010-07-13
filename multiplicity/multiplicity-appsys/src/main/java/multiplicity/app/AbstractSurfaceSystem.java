@@ -10,6 +10,7 @@ import multiplicity.app.utils.MultiTouchInputUtility;
 import multiplicity.app.utils.StatsUtility;
 import multiplicity.config.developer.DeveloperPreferences;
 import multiplicity.config.display.DisplayPreferences;
+import multiplicity.config.display.DisplayPreferences.Stereo3DMode;
 import multiplicity.csysng.animation.AnimationSystem;
 import multiplicity.csysngjme.picking.PickedItemDispatcher;
 import multiplicity.input.IMultiTouchEventProducer;
@@ -85,6 +86,7 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 			display.setMinStencilBits( dp.getStencilBits() );
 			display.setMinAlphaBits( dp.getAlphaBits() );
 			display.setMinSamples( dp.getMinimumAntiAliasSamples() );
+			display.setStereo3DEnabled(dp.getStereo3DMode() == Stereo3DMode.STEREO_BUFFER);
 			display.createWindow(
 					dp.getWidth(), dp.getHeight(), 
 					dp.getBitsPerPixel(), display.getFrequency(), dp.getFullScreen());
