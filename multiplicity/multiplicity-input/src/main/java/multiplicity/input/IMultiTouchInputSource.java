@@ -32,6 +32,8 @@
 
 package multiplicity.input;
 
+import multiplicity.input.exceptions.MultiTouchInputException;
+
 /**
  * Generic type for multi-touch input services.  Allows for the registration
  * and de-registration of listeners to multi-touch events, as defined in
@@ -49,8 +51,9 @@ public interface IMultiTouchInputSource {
 	 * can use this input source without any
 	 * tedious mucking about.
 	 * @param tpf
+	 * @throws MultiTouchInputException 
 	 */
-	public void update(float tpf);
+	public void update(float tpf) throws MultiTouchInputException;
 	
 	/**
 	 * Register the listener to receive multi-touch events, as defined in

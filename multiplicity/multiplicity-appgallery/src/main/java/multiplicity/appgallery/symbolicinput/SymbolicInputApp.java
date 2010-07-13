@@ -60,6 +60,7 @@ public class SymbolicInputApp extends AbstractStandaloneApp {
 			public void keyReleased(KeyboardKey k, boolean shiftDown, boolean altDown, boolean ctlDown) {
 				if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 					label2.removeChar();
+					
 				}else if(k.getKeyCode() == KeyEvent.VK_ENTER) {
 					// ignore
 				}else if(k.getModifiers() == KeyModifiers.NONE) {				

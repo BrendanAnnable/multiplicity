@@ -87,7 +87,7 @@ public class XMLOperations {
 	 */
 	private Document createDocument() {
         Document document = DocumentHelper.createDocument();
-        Element root = document.addElement( "root" );
+        //Element root = document.addElement( "root" );
 
         return document;
     }

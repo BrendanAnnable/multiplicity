@@ -42,6 +42,8 @@ import com.jme.math.Vector2f;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.IMultiTouchInputSource;
 import multiplicity.input.events.MultiTouchCursorEvent;
+import multiplicity.input.exceptions.MultiTouchInputException;
+import multiplicity.input.luminja.exceptions.LuminSystemException;
 import multiplicity.input.utils.ClickDetector;
 
 import de.evoluce.multitouch.adapter.java.BlobJ;
@@ -70,12 +72,11 @@ public class LuminMultiTouchInput implements IMultiTouchInputSource {
 		ja = new JavaAdapter("localhost");
 	}
 
-	private void process() {
+	private void process() throws MultiTouchInputException {
 		try {
 			currentBlobs = ja.getBlobsOfNextFrame().mBlobs;
 		} catch (Exception e) {
-			// TODO propagate
-			e.printStackTrace();
+			throw new LuminSystemException(e);			
 		}
 
 		Vector2f pos = new Vector2f();
@@ -147,7 +148,8 @@ public class LuminMultiTouchInput implements IMultiTouchInputSource {
 		this.samePositionTolerance = samePositionTolerance;
 	}
 
-	public void update(float tpf) {
+	@Override
+	public void update(float tpf) throws MultiTouchInputException {
 		process();
 	}
 
