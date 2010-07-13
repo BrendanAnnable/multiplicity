@@ -19,7 +19,7 @@ import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
  *
  */
 public interface IContentFactory {
-	public IFrame createFrame(String name, UUID uuid, int width, int height);
+	public IFrame createFrame(String name, UUID uuid, float width, float height);
 	public IBorder createRoundedBorder(String name, UUID uuid, float width, float height, float borderSize, int cornerDivisions);
 	public IImage createImage(String name, UUID randomUUID);
 	public ILabel createLabel(String name, UUID randomUUID);

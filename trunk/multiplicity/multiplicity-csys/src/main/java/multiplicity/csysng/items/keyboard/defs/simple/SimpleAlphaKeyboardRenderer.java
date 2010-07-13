@@ -1,12 +1,14 @@
 package multiplicity.csysng.items.keyboard.defs.simple;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 
@@ -16,9 +18,13 @@ import multiplicity.csysng.items.keyboard.model.KeyboardKey;
 
 public class SimpleAlphaKeyboardRenderer implements IKeyboardGraphicsRenderer {
 	
-	private Font keyboardFont = new Font("Arial", Font.BOLD, 12);
+	private Font keyboardFont = new Font("Arial", Font.BOLD, 24);
 	private FontMetrics fontMetrics;
 	private KeyboardDefinition kbd;
+	private GradientPaint bgGradientPaint;
+	private Stroke keyStroke = new BasicStroke(3.0f,                     // Line width
+            BasicStroke.CAP_ROUND,    // End-cap style
+            BasicStroke.JOIN_ROUND);
 	
 	public SimpleAlphaKeyboardRenderer(KeyboardDefinition kbd) {
 		this.kbd = kbd;
@@ -27,18 +33,22 @@ public class SimpleAlphaKeyboardRenderer implements IKeyboardGraphicsRenderer {
 	@Override
 	public void drawKeyboard(Graphics2D g2d, boolean shiftDown, boolean altDown, boolean ctlDown) {
 		
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		//g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		if(fontMetrics == null) {
 			fontMetrics = g2d.getFontMetrics(keyboardFont);
 		}
-
-		g2d.setColor(Color.white);
+		bgGradientPaint = new GradientPaint(0, (float)kbd.getBounds().getMaxY()/3, Color.white, 0, (float)kbd.getBounds().getMaxY(), Color.lightGray);
+		g2d.setPaint(bgGradientPaint);
 		g2d.fillRect(0, 0, (int)kbd.getBounds().getMaxX(), (int)kbd.getBounds().getMaxY());
 		g2d.setColor(Color.black);
 		
 		for(KeyboardKey k : kbd.getKeysIterator()) {				
-			Point p = getShapeCenter(k.getKeyShape());			
+			Point p = getShapeCenter(k.getKeyShape());
+			g2d.setColor(Color.white);
+			g2d.fill(k.getKeyShape());
+			g2d.setStroke(keyStroke); // Vertex join style);
+			g2d.setColor(Color.darkGray);
 			g2d.draw(k.getKeyShape());				
 			g2d.setFont(keyboardFont);
 			if(shiftDown) {

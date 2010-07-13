@@ -74,6 +74,7 @@ public class JMEKeyboard extends JMERectangularItem implements IKeyboard {
 		textureState.apply();		
 
 		imageQuad.updateGeometry((float)bounds.getMaxX(), (float)bounds.getMaxY());
+		setSize((float)bounds.getMaxX(), (float)bounds.getMaxY());
 		imageQuad.updateModelBound();
 		imageQuad.updateGeometricState(0f, true);
 		imageQuad.updateRenderState();
