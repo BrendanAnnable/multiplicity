@@ -17,8 +17,6 @@ import multiplicity.csysngjme.items.JMEColourRectangle;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.input.events.MultiTouchCursorEvent;
 
-import org.apache.log4j.Logger;
-
 import com.jme.math.Vector2f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.renderer.Renderer;
@@ -27,14 +25,14 @@ import com.jme.scene.Line;
 public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	
 	private static final long serialVersionUID = 8114328886119432460L;
-	private final static Logger logger = Logger.getLogger(HotSpotFrame.class.getName());
+//	private final static Logger logger = Logger.getLogger(HotSpotFrame.class.getName());
 	
 	public List<IHotSpotItem> hotSpots = new CopyOnWriteArrayList<IHotSpotItem>(); 
 	public List<ILineItem> hotLinks = new CopyOnWriteArrayList<ILineItem>();
 	protected List<Line> lines = new CopyOnWriteArrayList<Line>();
 	protected boolean isLocked = false;
 	private JMEColourRectangle frameOverlay;
-	private float oldRotation = 0f;
+//	private float oldRotation = 0f;
 
     private boolean isVisable; ;
 

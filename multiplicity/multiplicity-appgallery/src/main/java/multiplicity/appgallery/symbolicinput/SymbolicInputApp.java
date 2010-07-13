@@ -13,6 +13,7 @@ import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.appgallery.gallery.GalleryApp;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.items.IEditableText;
+import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.csysng.items.keyboard.IKeyboardGraphicsRenderer;
@@ -24,6 +25,7 @@ import multiplicity.csysng.items.keyboard.model.KeyModifiers;
 import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
 import multiplicity.csysng.items.keyboard.model.KeyboardKey;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
 
 public class SymbolicInputApp extends AbstractStandaloneApp {
@@ -40,18 +42,18 @@ public class SymbolicInputApp extends AbstractStandaloneApp {
 		label2.setText("abc");
 		label2.setFont(new Font("Myriad Pro", Font.BOLD, 48*4));
 		label2.setTextColour(Color.white);
-		label2.setRelativeLocation(new Vector2f(10, 100));
+		label2.setRelativeLocation(new Vector2f(0, 200));
 		label2.setCursorAt(3);
 		BehaviourMaker.addBehaviour(label2, RotateTranslateScaleBehaviour.class);		
 		add(label2);
 		zOrderManager.bringToTop(label2, null);
+		
 		
 		final IKeyboard kb = contentFactory.createKeyboard("kb", UUID.randomUUID());
 		KeyboardDefinition kbd = new SimpleAlphaKeyboardDefinition();
 		kb.setKeyboardDefinition(kbd);
 		IKeyboardGraphicsRenderer keyboardRenderer = new SimpleAlphaKeyboardRenderer(kbd);
 		kb.setKeyboardRenderer(keyboardRenderer);
-		kb.setRelativeLocation(new Vector2f(0, -200));
 		KeyboardBehaviour kbb = (KeyboardBehaviour) BehaviourMaker.addBehaviour(kb, KeyboardBehaviour.class);
 		kbb.addListener(keyboardRenderer);
 		kbb.addListener(new IMultiTouchKeyboardListener() {
@@ -81,11 +83,15 @@ public class SymbolicInputApp extends AbstractStandaloneApp {
 			}
 		});
 		
-		add(kb);
+		IFrame framewrap = contentFactory.createFrame("keyboardFrame", UUID.randomUUID(), kb.getSize().x, kb.getSize().y);		
+		framewrap.setBorder(new JMERoundedRectangleBorder("keyboardFrameBorder", UUID.randomUUID(), 20f, 8));
+		framewrap.maintainBorderSizeDuringScale();
+		framewrap.addItem(kb);
+		framewrap.setRelativeLocation(new Vector2f(0f, -200f));
+		add(framewrap);		
+		BehaviourMaker.addBehaviour(framewrap, RotateTranslateScaleBehaviour.class);
 		
-		zOrderManager.bringToTop(kb, null);
-		
-
+		zOrderManager.bringToTop(framewrap, null);
 	}
 	
 	private void createBackground() {

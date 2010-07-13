@@ -29,7 +29,7 @@ public class JMEContentItemFactory extends ContentItemFactoryUtil implements ICo
 	}
 	
 	@Override
-	public IFrame createFrame(String name, UUID uuid, int width, int height) {
+	public IFrame createFrame(String name, UUID uuid, float width, float height) {
 		JMEFrame frame = new JMEFrame(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height);
 		frame.initializeGeometry();
 		return frame;

@@ -10,7 +10,12 @@ public class JMEEditableText extends JMELabel implements IEditableText {
 
 	public JMEEditableText(String name, UUID uuid) {
 		super(name, uuid);
-		
+	}
+	
+	@Override
+	public void setText(String newText) {
+		super.setText(newText);
+		this.cursorIndex = newText.length();
 	}
 
 	@Override

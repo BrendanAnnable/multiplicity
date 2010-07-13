@@ -69,7 +69,7 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 		freeStencilValue(stencilValue);
 	}
 
-	public JMEFrame(String name, UUID uuid, int width, int height) {
+	public JMEFrame(String name, UUID uuid, float width, float height) {
 		super(name, uuid);
 		setSize(width, height);
 	}
