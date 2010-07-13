@@ -638,7 +638,7 @@ public class LWJGLDisplaySystem extends DisplaySystem {
      */
     public PixelFormat getFormat() {
         return new PixelFormat( bpp, alphaBits, depthBits,
-                stencilBits, samples );
+                stencilBits, samples, 0, 0, 0, stereo3DEnabled );
     }
 
     @Override

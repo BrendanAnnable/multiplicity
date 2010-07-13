@@ -146,6 +146,8 @@ public abstract class DisplaySystem {
      * Contrast value of display - default is 1.0f. 0->infinity
      */
     protected float contrast = 1;
+    
+    protected boolean stereo3DEnabled;
 
     private static final Map<String, SystemProvider> systemProviderMap = new HashMap<String, SystemProvider>();
             
@@ -671,6 +673,10 @@ public abstract class DisplaySystem {
     public void setMinSamples(int samples) {
         this.samples = samples;
     }
+    
+	public void setStereo3DEnabled(boolean enabled) {
+		this.stereo3DEnabled = enabled;		
+	}
 
     /**
      * Returns the brightness last requested by this display.
@@ -926,5 +932,7 @@ public abstract class DisplaySystem {
      * @param locY
      */
     public abstract void moveWindowTo(int locX, int locY);
+
+
 }
 
