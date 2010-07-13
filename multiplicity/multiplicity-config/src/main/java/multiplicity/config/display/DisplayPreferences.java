@@ -22,6 +22,13 @@ public class DisplayPreferences implements PreferencesItem {
 	private static final String DISPLAY_RENDERER = "DISPLAY_RENDERER";
 	private static final String DISPLAY_SHAPE = "DISPLAY_SHAPE";
 	private static final String DISPLAY_DEFAULT_SHAPE = "DISPLAY_DEFAULT_SHAPE";
+	private static final String DISPLAY_STEREO_MODE = "DISPLAY_STEREO_MODE";
+	
+	public enum Stereo3DMode {
+		NONE,
+		ANAGLYPH,
+		STEREO_BUFFER
+	}
 	
 	
 	public DisplayPreferences() {}
@@ -133,5 +140,11 @@ public class DisplayPreferences implements PreferencesItem {
 		return prefs.getBoolean(DISPLAY_DEFAULT_SHAPE, true);
 	}
 
-
+	public void setStereo3DMode(Stereo3DMode mode) {
+		prefs.put(DISPLAY_STEREO_MODE, mode.toString());
+	}
+	
+	public Stereo3DMode getStereo3DMode() {
+		return Stereo3DMode.valueOf(prefs.get(DISPLAY_STEREO_MODE, Stereo3DMode.NONE.toString()));
+	}
 }
