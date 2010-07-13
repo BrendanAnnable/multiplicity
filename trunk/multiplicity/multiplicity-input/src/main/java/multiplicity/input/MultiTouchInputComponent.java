@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.jme.math.Vector2f;
 
@@ -55,18 +56,19 @@ import multiplicity.jmeutils.UnitConversion;
  *
  */
 public class MultiTouchInputComponent implements IMultiTouchEventListener, IMultiTouchEventProducer {
-	
+	private static final Logger log = Logger.getLogger(MultiTouchInputComponent.class.getName());
 	private List<IMultiTouchEventListener> listeners = new ArrayList<IMultiTouchEventListener>();
+	private List<IDispatchedMultiTouchEventExceptionListener> exceptionListeners = new ArrayList<IDispatchedMultiTouchEventExceptionListener>();
 	private List<IMultiTouchInputFilter> filters = new ArrayList<IMultiTouchInputFilter>();
 	private IMultiTouchInputSource source;
 	private boolean isMultiTouchInputEnabled = true;
 	private Map<Long, List<CursorPositionRecord>> cursorTrails = new HashMap<Long,List<CursorPositionRecord>>();
-	
+
 	public MultiTouchInputComponent(IMultiTouchInputSource source) {
 		this.source = source;
 		source.registerMultiTouchEventListener(this);
 	}
-	
+
 	public boolean isMultiTouchInputEnabled() {
 		return isMultiTouchInputEnabled;
 	}
@@ -79,7 +81,7 @@ public class MultiTouchInputComponent implements IMultiTouchEventListener, IMult
 		this.source = source;
 		source.registerMultiTouchEventListener(filters.get(0));		
 	}
-	
+
 	/**
 	 * Add a multi-touch input filter. The filter will be added at the
 	 * end of the current (possibly empty) filter queue. The filter
@@ -112,11 +114,11 @@ public class MultiTouchInputComponent implements IMultiTouchEventListener, IMult
 			filters.add(filter);
 		}
 	}
-	
+
 	private IMultiTouchInputFilter getLastFilter() {
 		return filters.get(filters.size()-1);
 	}
-	
+
 	public boolean isFilterActive(Class<? extends IMultiTouchInputFilter> filter) {
 		for(IMultiTouchInputFilter f : filters) {
 			if(f.getClass().equals(filter)) {
@@ -125,7 +127,7 @@ public class MultiTouchInputComponent implements IMultiTouchEventListener, IMult
 		}
 		return false;
 	}
-	
+
 	public List<Class<? extends IMultiTouchInputFilter>> getActiveFilterClasses() {
 		List<Class<? extends IMultiTouchInputFilter>> classes = new ArrayList<Class<? extends IMultiTouchInputFilter>>();
 		for(IMultiTouchInputFilter f : filters) {
@@ -137,11 +139,11 @@ public class MultiTouchInputComponent implements IMultiTouchEventListener, IMult
 	public void registerMultiTouchEventListener(IMultiTouchEventListener listener) {
 		if(!listeners.contains(listener)) listeners.add(listener);
 	}
-	
+
 	public void registerMultiTouchEventListener(IMultiTouchEventListener listener, int index) {
 		if(!listeners.contains(listener)) listeners.add(index, listener);
 	}
-	
+
 	public void unregisterMultiTouchEventListener(IMultiTouchEventListener listener) {
 		listeners.remove(listener);
 	}
@@ -150,22 +152,30 @@ public class MultiTouchInputComponent implements IMultiTouchEventListener, IMult
 
 	public void cursorChanged(MultiTouchCursorEvent event) {
 		if (!this.isMultiTouchInputEnabled) return;
-		
+
 		List<CursorPositionRecord> trail = cursorTrails.get(event.getCursorID());
 		Vector2f loc = new Vector2f();
 		UnitConversion.tableToScreen(event.getPosition(), loc);
 		trail.add(new CursorPositionRecord(loc, System.currentTimeMillis()));
 		event.setPositionHistory(trail);
-		
+
 		for(IMultiTouchEventListener l : listeners) {
-			l.cursorChanged(event);
+			try{
+				l.cursorChanged(event);
+			}catch(Throwable t) {
+				notifyListenersOfException(t);
+			}
 		}		
 	}
 
 	public void cursorClicked(MultiTouchCursorEvent event) {
 		if (!this.isMultiTouchInputEnabled) return;
 		for(IMultiTouchEventListener l : listeners) {
-			l.cursorClicked(event);
+			try {
+				l.cursorClicked(event);
+			}catch(Throwable t) {
+				notifyListenersOfException(t);
+			}
 		}
 	}
 
@@ -177,42 +187,84 @@ public class MultiTouchInputComponent implements IMultiTouchEventListener, IMult
 		trail.add(new CursorPositionRecord(loc, System.currentTimeMillis()));
 		cursorTrails.put(event.getCursorID(), trail);
 		event.setPositionHistory(trail);
-		
+
 		for(IMultiTouchEventListener l : listeners) {
-			l.cursorPressed(event);
+			try{
+				l.cursorPressed(event);
+			}catch(Throwable t) {
+				notifyListenersOfException(t);
+			}
 		}
 	}
 
 	public void cursorReleased(MultiTouchCursorEvent event) {
 		if (!this.isMultiTouchInputEnabled) return;
-		
+
 		List<CursorPositionRecord> trail = cursorTrails.remove(event.getCursorID());
 		event.setPositionHistory(trail);
 		cursorTrails.remove(event.getCursorID());
-		
-		for(IMultiTouchEventListener l : listeners) {
-			l.cursorReleased(event);
+
+		for(IMultiTouchEventListener l : listeners) {	
+			try {
+				l.cursorReleased(event);
+			}catch(Throwable t) {
+				notifyListenersOfException(t);
+			}
 		}
 	}
 
 	public void objectAdded(MultiTouchObjectEvent event) {
 		if (!this.isMultiTouchInputEnabled) return;
 		for(IMultiTouchEventListener l : listeners) {
-			l.objectAdded(event);
+			try {
+				l.objectAdded(event);
+			}catch(Throwable t) {
+				notifyListenersOfException(t);
+			}
 		}		
 	}
 
 	public void objectChanged(MultiTouchObjectEvent event) {
 		if (!this.isMultiTouchInputEnabled) return;
 		for(IMultiTouchEventListener l : listeners) {
-			l.objectChanged(event);
+			try {
+				l.objectChanged(event);
+			}catch(Throwable t) {
+				notifyListenersOfException(t);
+			}
 		}	
 	}
 
 	public void objectRemoved(MultiTouchObjectEvent event) {
 		if (!this.isMultiTouchInputEnabled) return;
 		for(IMultiTouchEventListener l : listeners) {
-			l.objectRemoved(event);
+			try{
+				l.objectRemoved(event);
+			}catch(Throwable t) {
+				notifyListenersOfException(t);
+			}
+		}
+	}
+
+	@Override
+	public void registerMultiTouchExceptionListener(IDispatchedMultiTouchEventExceptionListener listener) {
+		if(!exceptionListeners.contains(listener)) this.exceptionListeners.add(listener);		
+	}
+
+	private void notifyListenersOfException(Throwable t) {
+		if(exceptionListeners.size() < 1) {
+			// we dont' have anybody interested in exceptions, so
+			// should log
+			log.severe("Exception occurred" + t.getMessage());
+			StringBuffer sb = new StringBuffer();
+			for(StackTraceElement elem : t.getStackTrace()) {
+				sb.append("   " + elem.toString() + "\n");
+			}
+			log.severe("  Stack tace follows:\n" + sb);
+		}else{
+			for(IDispatchedMultiTouchEventExceptionListener l : exceptionListeners) {
+				l.dispatchedMultiTouchEventException(t);
+			}
 		}
 	}
 }

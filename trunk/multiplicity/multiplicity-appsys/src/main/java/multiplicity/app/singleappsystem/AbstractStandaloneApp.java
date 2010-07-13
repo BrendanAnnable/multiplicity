@@ -3,6 +3,8 @@ package multiplicity.app.singleappsystem;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.csysng.factory.IContentFactory;
 import multiplicity.csysng.items.IItem;
@@ -11,6 +13,7 @@ import multiplicity.csysngjme.factory.JMEContentItemFactory;
 import multiplicity.csysngjme.zordering.NestedZOrderManager;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.IMultiTouchEventProducer;
+import multiplicity.input.exceptions.MultiTouchInputException;
 
 import com.jme.renderer.Renderer;
 import com.jme.scene.Node;
@@ -18,6 +21,8 @@ import com.jme.scene.Spatial;
 import com.jme.system.DisplaySystem;
 
 public abstract class AbstractStandaloneApp {
+	private final static Logger log = Logger.getLogger(AbstractStandaloneApp.class.getName());	
+	
 	protected Node orthoNode;
 	protected List<IItem> items = new ArrayList<IItem>();
 	protected IContentFactory contentFactory;
@@ -75,6 +80,10 @@ public abstract class AbstractStandaloneApp {
 	}
 
 	public abstract void onAppStart();
+	
+	public void notifyMultiTouchInputException(MultiTouchInputException e) {
+		log.error("Error with multitouch input.", e);
+	}
 
 	public IContentFactory getContentFactory() {
 		return contentFactory;
@@ -91,4 +100,5 @@ public abstract class AbstractStandaloneApp {
 	public AbstractSurfaceSystem getSurfaceSystem() {
 		return surfaceSystem;
 	}
+
 }

@@ -3,8 +3,11 @@ package multiplicity.app.singleappsystem;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.apache.log4j.Logger;
+
 import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.input.IMultiTouchEventProducer;
+import multiplicity.input.exceptions.MultiTouchInputException;
 
 import com.jme.input.InputHandler;
 import com.jme.input.MouseInput;
@@ -14,14 +17,25 @@ import com.jme.scene.Spatial.CullHint;
 import com.jme.scene.state.RenderState.StateType;
 
 public class SingleAppTableSystem extends AbstractSurfaceSystem {
-
+	private final static Logger log = Logger.getLogger(SingleAppTableSystem.class.getName());	
 	private Node tableSystemOrtho;
 	private Class<? extends AbstractStandaloneApp> appClass;
+	private AbstractStandaloneApp app;
 
 	public SingleAppTableSystem(Class<? extends AbstractStandaloneApp> appClass) {
 		super();
 		this.appClass = appClass;
 	}
+	
+	@Override
+	protected void notifyMultiTouchInputException(MultiTouchInputException e) {
+		if(app != null) {
+			app.notifyMultiTouchInputException(e);
+		}else{
+			log.error("Error with multitouch input system", e);
+		}
+	}
+
 
 	protected void initSurfaceSystem(IMultiTouchEventProducer producer) {
 		rootNode.setCullHint(CullHint.Never);
@@ -36,7 +50,7 @@ public class SingleAppTableSystem extends AbstractSurfaceSystem {
 		
 		try {
 			Constructor<? extends AbstractStandaloneApp> con = appClass.getConstructor(IMultiTouchEventProducer.class);
-			AbstractStandaloneApp app = con.newInstance(producer);
+			 app = con.newInstance(producer);
 			tableSystemOrtho.attachChild(app.getOrthoNode());		
 			app.setSurfaceSystem(this);
 			app.onAppStart();						

@@ -15,6 +15,7 @@ import multiplicity.csysngjme.picking.PickedItemDispatcher;
 import multiplicity.input.IMultiTouchEventProducer;
 import multiplicity.input.IMultiTouchInputSource;
 import multiplicity.input.MultiTouchInputComponent;
+import multiplicity.input.exceptions.MultiTouchInputException;
 
 import com.acarter.scenemonitor.SceneMonitor;
 import com.jme.app.BaseGame;
@@ -120,7 +121,6 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 	
 	
 	private void setupMultiTouchInput() {		
-//		JMEDirectSimulator jmeDirect = new JMEDirectSimulator(display.getRenderer().getWidth(), display.getRenderer().getHeight());
 		inputSource = MultiTouchInputUtility.getInputSource();
 		mtInput = new MultiTouchInputComponent(inputSource);
 		pickedItemDispatcher = new PickedItemDispatcher(rootNode);
@@ -193,7 +193,13 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		/** Update tpf to time per frame according to the Timer. */
 		tpf = timer.getTimePerFrame();
 
-		if(inputSource != null) inputSource.update(tpf);
+		if(inputSource != null) {			
+			try {
+				inputSource.update(tpf);
+			} catch (MultiTouchInputException e) {
+				notifyMultiTouchInputException(e);
+			}
+		}
 		input.update( tpf );
 		
 		AnimationSystem.getInstance().update(tpf);
@@ -216,6 +222,7 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		}
 	}
 	
+
 	public void addToUpdateCycle(Callable<?> callable) {
 		GameTaskQueueManager.getManager().getQueue(GameTaskQueue.UPDATE).enqueue(callable);
 	}
@@ -275,6 +282,8 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 
 
 	protected abstract void initSurfaceSystem(IMultiTouchEventProducer producer);
+	protected abstract void notifyMultiTouchInputException(MultiTouchInputException e);
+
 
 	public Node 	getRootNode() 					{ return rootNode; }
 
