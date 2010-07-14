@@ -2,7 +2,7 @@ package multiplicity.csysng.items;
 
 import java.net.URL;
 
-public interface IImage extends IItem {
+public interface IImage extends IRectangularItem {
 	public void setImage(URL imageResoure);
 	public void setImage(URL resource, float scale);
 	public URL getImageUrl();
