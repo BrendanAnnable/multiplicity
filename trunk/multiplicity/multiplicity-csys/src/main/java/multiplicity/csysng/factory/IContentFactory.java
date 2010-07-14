@@ -11,6 +11,7 @@ import multiplicity.csysng.items.ILabel;
 import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
+import multiplicity.csysng.threedee.IThreeDeeContent;
 
 /**
  * Factory (see Factory pattern) for creating items in the content system.
@@ -28,4 +29,5 @@ public interface IContentFactory {
 	public IColourRectangle createColourRectangle(String string, UUID randomUUID, int width, int height);
 	public IEditableText createEditableText(String name, UUID randomUUID);
 	public IKeyboard createKeyboard(String string, UUID randomUUID);
+	public IThreeDeeContent createThreeDeeContent(String string, UUID randomUUID);
 }

@@ -9,18 +9,26 @@ import java.util.UUID;
 import com.jme.scene.Spatial;
 
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.threedee.IThreeDeeContent;
 import multiplicity.csysngjme.items.JMEItem;
 import multiplicity.csysngjme.picking.JMEItemUserData;
+import multiplicity.csysngjme.threedee.JMEThreeDeeContent;
 
 public class ItemMap {
 	private static Map<UUID, List<IItem>> itemMap;
+	private static Map<UUID, List<IThreeDeeContent>> item3DMap;
 	
 	static {
 		itemMap = new HashMap<UUID, List<IItem>>();
+		item3DMap = new HashMap<UUID, List<IThreeDeeContent>>();
 	}
 
 	public static List<IItem> getItem(UUID uuid) {
 		return itemMap.get(uuid);
+	}
+	
+	public static List<IThreeDeeContent> getThreeD(UUID uuid) {
+		return item3DMap.get(uuid);
 	}
 
 	public static void register(Spatial spatial, IItem item) {
@@ -32,8 +40,21 @@ public class ItemMap {
 		itemMap.put(item.getUUID(), list);
 	}
 	
+	public static void register(Spatial spatial, IThreeDeeContent threeD) {
+		JMEItemUserData id = new JMEItemUserData(threeD.getUUID());
+		spatial.setUserData(JMEThreeDeeContent.KEY_JMETHREEDEEITEMDATA, id);
+		List<IThreeDeeContent> list = item3DMap.get(threeD.getUUID());
+		if(list == null) list = new ArrayList<IThreeDeeContent>();
+		list.add(threeD);
+		item3DMap.put(threeD.getUUID(), list);
+	}
+	
 	public static void unregister(Spatial spatial, IItem item) {
 		itemMap.remove(item.getUUID());		
+	}
+	
+	public static void unregister(Spatial spatial, IThreeDeeContent threeD) {
+		itemMap.remove(threeD.getUUID());
 	}
 	
 	public static String view() {
