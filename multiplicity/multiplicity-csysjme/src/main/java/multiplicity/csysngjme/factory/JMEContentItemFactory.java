@@ -12,6 +12,7 @@ import multiplicity.csysng.items.ILabel;
 import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
+import multiplicity.csysng.threedee.IThreeDeeContent;
 import multiplicity.csysngjme.items.JMEColourRectangle;
 import multiplicity.csysngjme.items.JMECursorTrails;
 import multiplicity.csysngjme.items.JMEDiskCursorOverlay;
@@ -21,6 +22,7 @@ import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMEKeyboard;
 import multiplicity.csysngjme.items.JMELabel;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
+import multiplicity.csysngjme.threedee.JMEThreeDeeContent;
 
 
 public class JMEContentItemFactory extends ContentItemFactoryUtil implements IContentFactory {
@@ -89,6 +91,11 @@ public class JMEContentItemFactory extends ContentItemFactoryUtil implements ICo
 		JMEKeyboard kb = new JMEKeyboard(name, uuid);
 		kb.initializeGeometry();
 		return kb;
+	}
+
+	@Override
+	public IThreeDeeContent createThreeDeeContent(String name, UUID uuid) {
+		return new JMEThreeDeeContent(name, uuid);
 	}
 	
 }

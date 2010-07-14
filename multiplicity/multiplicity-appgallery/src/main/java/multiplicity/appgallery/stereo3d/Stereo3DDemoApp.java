@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
+import com.jme.bounding.BoundingSphere;
 import com.jme.math.Vector2f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.scene.shape.Torus;
@@ -18,6 +19,8 @@ import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.ILabel;
+import multiplicity.csysng.threedee.IThreeDeeContent;
+import multiplicity.csysng.threedee.interaction.RotateInteraction;
 import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
@@ -33,11 +36,18 @@ public class Stereo3DDemoApp extends AbstractStandaloneApp {
 		Torus t = new Torus("torus", 64, 32, 5, 15);
 		t.setSolidColor(ColorRGBA.red);
 		t.setLocalTranslation(0, 0, -50f);
+		t.setModelBound(new BoundingSphere());
+		t.updateModelBound();
 		MaterialState ms=DisplaySystem.getDisplaySystem().getRenderer().createMaterialState();
 		ms.setAmbient(ColorRGBA.blue);
 		t.setRenderState(ms);
-		getThreeDNode().attachChild(t);
 		t.updateRenderState();
+		
+		IThreeDeeContent threeD = contentFactory.createThreeDeeContent("threedee", UUID.randomUUID());
+		threeD.setSpatial(t);
+		addThreeDeeItem(threeD);
+		
+		threeD.getMultiTouchDispatcher().addListener(new RotateInteraction(t));
 		
 		ILabel label2 = contentFactory.createLabel("label", UUID.randomUUID());
 		label2.setText("Stereo 3D Demonstration");
