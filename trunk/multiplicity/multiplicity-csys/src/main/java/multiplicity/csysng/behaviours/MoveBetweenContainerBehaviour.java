@@ -1,8 +1,7 @@
-package multiplicity.csysngjme.behaviours;
+package multiplicity.csysng.behaviours;
 
 import org.apache.log4j.Logger;
 
-import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IItem;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.events.MultiTouchCursorEvent;

@@ -8,6 +8,7 @@ import java.util.UUID;
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
+import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.behaviours.button.ButtonBehaviour;
 import multiplicity.csysng.behaviours.button.IButtonBehaviourListener;
 import multiplicity.csysng.behaviours.gesture.GestureDetectionBehaviour;
@@ -24,7 +25,6 @@ import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.ILabel;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
-import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
 
