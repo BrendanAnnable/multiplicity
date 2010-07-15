@@ -12,6 +12,7 @@ import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.appgallery.gallery.GalleryApp;
 import multiplicity.csysng.behaviours.BehaviourMaker;
+import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
@@ -24,8 +25,6 @@ import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRendere
 import multiplicity.csysng.items.keyboard.model.KeyModifiers;
 import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
 import multiplicity.csysng.items.keyboard.model.KeyboardKey;
-import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
-import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
 
 public class SymbolicInputApp extends AbstractStandaloneApp {
@@ -84,7 +83,6 @@ public class SymbolicInputApp extends AbstractStandaloneApp {
 		});
 		
 		IFrame framewrap = contentFactory.createFrame("keyboardFrame", UUID.randomUUID(), kb.getSize().x, kb.getSize().y);		
-		framewrap.setBorder(new JMERoundedRectangleBorder("keyboardFrameBorder", UUID.randomUUID(), 20f, 8));
 		framewrap.maintainBorderSizeDuringScale();
 		framewrap.addItem(kb);
 		framewrap.setRelativeLocation(new Vector2f(0f, -200f));

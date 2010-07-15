@@ -10,6 +10,7 @@ import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.appgallery.gallery.GalleryApp;
 import multiplicity.csysng.animation.AnimationSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
+import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.behaviours.gesture.GestureDetectionBehaviour;
 import multiplicity.csysng.behaviours.gesture.GestureLibrary;
 import multiplicity.csysng.behaviours.gesture.GestureMatch;
@@ -21,7 +22,6 @@ import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.ILabel;
 import multiplicity.csysngjme.animation.animelements.Fader;
-import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
 

@@ -1,10 +1,9 @@
-package multiplicity.csysngjme.behaviours;
+package multiplicity.csysng.behaviours;
 
 import com.jme.math.FastMath;
 import com.jme.math.Vector2f;
 
 import multiplicity.jmeutils.UnitConversion;
-import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IItem;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.events.MultiTouchCursorEvent;

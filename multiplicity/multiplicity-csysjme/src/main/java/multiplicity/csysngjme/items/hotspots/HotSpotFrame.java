@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import multiplicity.csysng.behaviours.BehaviourMaker;
+import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.ILineItem;
 import multiplicity.csysng.items.IPalet;
@@ -12,7 +13,6 @@ import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
-import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.items.JMEColourRectangle;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.input.events.MultiTouchCursorEvent;
