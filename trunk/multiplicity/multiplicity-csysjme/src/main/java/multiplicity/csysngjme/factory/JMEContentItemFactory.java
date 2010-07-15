@@ -97,5 +97,10 @@ public class JMEContentItemFactory extends ContentItemFactoryUtil implements ICo
 	public IThreeDeeContent createThreeDeeContent(String name, UUID uuid) {
 		return new JMEThreeDeeContent(name, uuid);
 	}
+
+	@Override
+	public IBorder createRoundedRectangleBorder(String name, UUID uuid, float width, int cornerSegments) {
+		return new JMERoundedRectangleBorder(name, uuid, width, cornerSegments);
+	}
 	
 }
