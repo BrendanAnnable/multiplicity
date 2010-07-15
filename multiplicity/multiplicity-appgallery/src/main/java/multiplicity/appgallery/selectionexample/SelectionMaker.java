@@ -59,7 +59,6 @@ public class SelectionMaker implements IMultiTouchEventListener {
 			boolean selected = contains(history, new Vector2f(item.getWorldLocation()), 50, 50, 100);
 			if(selected) { 
 			    selectedItems.add(item);
-				System.out.println(item.getManipulableSpatial().getName() + " is selected!");
 			}
 		}
 		

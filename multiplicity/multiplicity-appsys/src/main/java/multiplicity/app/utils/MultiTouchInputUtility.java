@@ -1,5 +1,7 @@
 package multiplicity.app.utils;
 
+import java.util.logging.Logger;
+
 import com.jme.input.MouseInput;
 import com.jme.system.DisplaySystem;
 
@@ -13,6 +15,7 @@ import multiplicity.input.tuio.TUIOMultiTouchInput;
 
 public class MultiTouchInputUtility {
 	
+	private static final Logger log = Logger.getLogger(MultiTouchInputUtility.class.getName());
 
 	public static IMultiTouchInputSource getInputSource() {
 		TableConfigPrefsItem tablePrefs = new TableConfigPrefsItem();
@@ -20,7 +23,7 @@ public class MultiTouchInputUtility {
 		DisplaySystem display = DisplaySystem.getDisplaySystem();
 		IMultiTouchInputSource multiTouchInput = null;
 		
-		System.out.println(tabletype);
+		log.info("Table type: " + tabletype.toString());
 		
 		switch(tabletype) {
 		

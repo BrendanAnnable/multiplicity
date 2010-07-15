@@ -4,6 +4,8 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import multiplicity.app.render.StereoRenderPass;
+import multiplicity.app.render.StereoRenderPass.StereoMode;
 import multiplicity.app.utils.CameraUtility;
 import multiplicity.app.utils.KeyboardInputUtility;
 import multiplicity.app.utils.MultiTouchInputUtility;
@@ -26,11 +28,14 @@ import com.jme.input.InputHandler;
 import com.jme.input.KeyInput;
 import com.jme.input.MouseInput;
 import com.jme.input.joystick.JoystickInput;
+import com.jme.light.DirectionalLight;
 import com.jme.light.PointLight;
 import com.jme.math.Vector3f;
 import com.jme.renderer.Camera;
 import com.jme.renderer.ColorRGBA;
 import com.jme.renderer.Renderer;
+import com.jme.renderer.pass.BasicPassManager;
+import com.jme.renderer.pass.RenderPass;
 import com.jme.scene.Node;
 import com.jme.scene.Spatial;
 import com.jme.scene.state.LightState;
@@ -51,11 +56,16 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 
 	private static final Logger logger = Logger.getLogger(AbstractSurfaceSystem.class.getName());
 	protected Camera cam;
-	protected Node rootNode;
+	protected BasicPassManager renderPassManager;	
 	protected InputHandler input;
 	protected Timer timer;
+	
+	protected Node rootNode;
+	protected Node orthoNode;
 	protected Node statNode;
 	protected Node graphNode;
+	
+	
 	protected float tpf;
 	protected boolean showDepth = false;
 	protected boolean showBounds = false;
@@ -95,7 +105,7 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 					+ display.getDisplayVendor() + " - "
 					+ display.getDisplayRenderer() + " - "
 					+ display.getDisplayAPIVersion());
-
+			
 			cam = display.getRenderer().createCamera( display.getWidth(), display.getHeight() );
 		} catch ( JmeException e ) {
 			logger.log(Level.SEVERE, "Could not create displaySystem", e);
@@ -120,17 +130,18 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		display.setTitle( className );
 	}
 
-	
-	
+
+
 	private void setupMultiTouchInput() {		
 		inputSource = MultiTouchInputUtility.getInputSource();
 		mtInput = new MultiTouchInputComponent(inputSource);
-		pickedItemDispatcher = new PickedItemDispatcher(rootNode);
+		pickedItemDispatcher = new PickedItemDispatcher(orthoNode, rootNode);
 		mtInput.registerMultiTouchEventListener(pickedItemDispatcher);
 	}
 
 	protected void initGame() {
-		rootNode = new Node( "rootNode" );
+		rootNode = new Node(AbstractSurfaceSystem.class.getSimpleName() + "_rootNode");
+		orthoNode = new Node(AbstractSurfaceSystem.class.getSimpleName() + "_orthoNode");
 		wireState = display.getRenderer().createWireframeState();
 		wireState.setEnabled( false );
 		rootNode.setRenderState( wireState );
@@ -157,21 +168,44 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 			stats.setupStats();
 		}
 
-		PointLight light = new PointLight();
-		light.setDiffuse( new ColorRGBA( 0.75f, 0.75f, 0.75f, 0.75f ) );
-		light.setAmbient( new ColorRGBA( 0.5f, 0.5f, 0.5f, 1.0f ) );
-		light.setLocation( new Vector3f( 100, 100, 100 ) );
-		light.setEnabled( true );
+		//		PointLight light = new PointLight();
+		//		light.setDiffuse( new ColorRGBA( 0f, 0.0f, 0.75f, 0.75f ) );
+		//		light.setAmbient( new ColorRGBA( 0.0f, 0.0f, 0.5f, 1.0f ) );
+		//		light.setLocation( new Vector3f( -500, 100, 600 ) );
+		//		light.setEnabled( true );
+
+		DirectionalLight dr = new DirectionalLight();
+		dr.setEnabled(true);
+		dr.setDiffuse(new ColorRGBA(1.0f, 1.0f, 1.0f, 1.0f));
+		dr.setAmbient(new ColorRGBA(.2f, .2f, .2f, .3f));
+		dr.setDirection(new Vector3f(0.5f, -0.4f, 0).normalizeLocal());
+		dr.setShadowCaster(true);
+
+		PointLight pl = new PointLight();
+		pl.setEnabled(true);
+		pl.setDiffuse(new ColorRGBA(.7f, .7f, .7f, 1.0f));
+		pl.setAmbient(new ColorRGBA(.25f, .25f, .25f, .25f));
+		pl.setLocation(new Vector3f(0,500,0));
+		pl.setShadowCaster(true);
+
+		DirectionalLight dr2 = new DirectionalLight();
+		dr2.setEnabled(true);
+		dr2.setDiffuse(new ColorRGBA(1.0f, 1.0f, 1.0f, 1.0f));
+		dr2.setAmbient(new ColorRGBA(.2f, .2f, .2f, .4f));
+		dr2.setDirection(new Vector3f(-0.2f, -0.3f, .2f).normalizeLocal());
+		dr2.setShadowCaster(true);
 
 		lightState = display.getRenderer().createLightState();
-		lightState.setEnabled( true );
-		lightState.attach( light );
+		lightState.detachAll();
+		
 		rootNode.setRenderState( lightState );
+		lightState.setEnabled( true );		
+		lightState.setTwoSidedLighting(false);
+		lightState.attach( dr );
+		lightState.attach( dr2 );
 
 		setupMultiTouchInput();
 		initSurfaceSystem(mtInput);
-
-		timer.reset();
 
 		rootNode.updateGeometricState( 0.0f, true );
 		rootNode.updateRenderState();
@@ -179,12 +213,33 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		statNode.updateRenderState();
 
 		if(new DeveloperPreferences().getShowSceneMonitor()) {
-			SceneMonitor.getMonitor().registerNode(rootNode, "Root Node");
+			SceneMonitor.getMonitor().registerNode(rootNode);
+			SceneMonitor.getMonitor().registerNode(orthoNode);
 			SceneMonitor.getMonitor().showViewer(true);
 			updateSceneMonitor = true;
 		}
 
+		renderPassManager = new BasicPassManager();
+		RenderPass rootPass = null;
+
+		Stereo3DMode stereo3DMode = new DisplayPreferences().getStereo3DMode();
+		if(stereo3DMode != Stereo3DMode.NONE) {
+			StereoRenderPass srp = new StereoRenderPass(rootNode);
+			if(stereo3DMode == Stereo3DMode.ANAGLYPH) srp.setStereoMode(StereoMode.ANAGLYPH);
+			if(stereo3DMode == Stereo3DMode.STEREO_BUFFER) srp.setStereoMode(StereoMode.STEREO_BUFFER);
+			rootPass = srp;			
+		}else{
+			rootPass = new RenderPass();
+		}
+
+		rootPass.add(rootNode);
 		
+		RenderPass orthoRenderPass = new RenderPass();
+		orthoRenderPass.add(orthoNode);
+//		orthoRenderPass.add(statNode);
+		
+		renderPassManager.add(rootPass);
+		renderPassManager.add(orthoRenderPass);
 		
 		timer.reset();
 	}
@@ -203,9 +258,9 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 			}
 		}
 		input.update( tpf );
-		
+
 		AnimationSystem.getInstance().update(tpf);
-		
+
 		if (Debug.stats) {
 			StatCollector.update();
 		}
@@ -216,14 +271,16 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		if ( !pause ) {
 			simpleUpdate();
 			rootNode.updateGeometricState(tpf, true);
+			orthoNode.updateGeometricState(tpf, true);
 			statNode.updateGeometricState(tpf, true);
+			renderPassManager.updatePasses(tpf);
 		}
 
 		if(updateSceneMonitor) {
 			SceneMonitor.getMonitor().updateViewer(tpf);
 		}
 	}
-	
+
 
 	public void addToUpdateCycle(Callable<?> callable) {
 		GameTaskQueueManager.getManager().getQueue(GameTaskQueue.UPDATE).enqueue(callable);
@@ -234,8 +291,9 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		r.clearBuffers();
 		r.clearStencilBuffer();
 		GameTaskQueueManager.getManager().getQueue(GameTaskQueue.RENDER).execute();
-		r.draw(rootNode);
-		r.draw(statNode);
+
+		renderPassManager.renderPasses(display.getRenderer());
+
 		doDebug(r);
 		simpleRender();
 	}
@@ -243,6 +301,7 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 	protected void doDebug(Renderer r) {
 		if(showBounds) {
 			Debugger.drawBounds( rootNode, r, true );
+			Debugger.drawBounds( orthoNode, r, true );
 		}
 
 		if(showNormals) {
