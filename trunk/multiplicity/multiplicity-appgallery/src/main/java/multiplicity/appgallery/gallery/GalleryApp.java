@@ -128,9 +128,7 @@ public class GalleryApp extends AbstractStandaloneApp {
 		ButtonBehaviour bb = (ButtonBehaviour) BehaviourMaker.addBehaviour(label2, ButtonBehaviour.class);
 		bb.addListener(new IButtonBehaviourListener() {
 			@Override
-			public void buttonClicked(IItem item) {
-				System.out.println("click");					
-			}
+			public void buttonClicked(IItem item) {}
 
 			@Override
 			public void buttonPressed(IItem item) {}

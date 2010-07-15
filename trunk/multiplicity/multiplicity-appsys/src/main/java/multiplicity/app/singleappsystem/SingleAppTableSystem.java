@@ -26,7 +26,7 @@ public class SingleAppTableSystem extends AbstractSurfaceSystem {
 		super();
 		this.appClass = appClass;
 	}
-	
+
 	@Override
 	protected void notifyMultiTouchInputException(MultiTouchInputException e) {
 		if(app != null) {
@@ -39,20 +39,22 @@ public class SingleAppTableSystem extends AbstractSurfaceSystem {
 
 	protected void initSurfaceSystem(IMultiTouchEventProducer producer) {
 		rootNode.setCullHint(CullHint.Never);
-		rootNode.clearRenderState(StateType.Light);
-				
+
 		tableSystemOrtho = new Node("singleapptablesystem[ortho]"); // node holds all ORTHO/2D content
+		tableSystemOrtho.setCullHint(CullHint.Never);
 		tableSystemOrtho.setRenderQueueMode(Renderer.QUEUE_ORTHO);
-		rootNode.attachChild(tableSystemOrtho);
-		
+		tableSystemOrtho.clearRenderState(StateType.Light);
+		orthoNode.attachChild(tableSystemOrtho);
+
 		input = new InputHandler();
 		MouseInput.get().setCursorVisible(true);
-		
+
 		try {
 			Constructor<? extends AbstractStandaloneApp> con = appClass.getConstructor(IMultiTouchEventProducer.class);
-			 app = con.newInstance(producer);
-			tableSystemOrtho.attachChild(app.getOrthoNode());		
+			app = con.newInstance(producer);
 			app.setSurfaceSystem(this);
+			rootNode.attachChild(app.getThreeDNode());
+			tableSystemOrtho.attachChild(app.getOrthoNode());			
 			app.onAppStart();						
 		} catch (SecurityException e) {
 			// TODO propagate?
@@ -74,7 +76,7 @@ public class SingleAppTableSystem extends AbstractSurfaceSystem {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void startSystem(Class<? extends AbstractStandaloneApp> appClass) throws SecurityException, NoSuchMethodException, IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		SingleAppTableSystem tg = new SingleAppTableSystem(appClass);
 		tg.setConfigShowMode(ConfigShowMode.NeverShow);

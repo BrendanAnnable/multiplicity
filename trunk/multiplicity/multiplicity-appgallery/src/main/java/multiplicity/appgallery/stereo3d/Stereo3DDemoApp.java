@@ -59,8 +59,6 @@ public class Stereo3DDemoApp extends AbstractStandaloneApp {
 		IImage img = contentFactory.createImage("photo", UUID.randomUUID());
 		img.setImage(GalleryApp.class.getResource("aotn.jpg"));
 			
-		
-		System.out.println(img.getSize());
 		IFrame frame = contentFactory.createFrame("frame", UUID.randomUUID(), img.getWidth(), img.getHeight());		
 		frame.setBorder(new JMERoundedRectangleBorder("frameborder", UUID.randomUUID(), 20f, 8));		
 		frame.maintainBorderSizeDuringScale();

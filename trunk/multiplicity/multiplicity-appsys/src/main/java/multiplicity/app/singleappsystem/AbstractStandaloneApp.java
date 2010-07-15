@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.csysng.factory.IContentFactory;
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.threedee.IThreeDeeContent;
 import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.factory.JMEContentItemFactory;
 import multiplicity.csysngjme.zordering.NestedZOrderManager;
@@ -24,6 +25,7 @@ public abstract class AbstractStandaloneApp {
 	private final static Logger log = Logger.getLogger(AbstractStandaloneApp.class.getName());	
 	
 	protected Node orthoNode;
+	protected Node threeDNode;
 	protected List<IItem> items = new ArrayList<IItem>();
 	protected IContentFactory contentFactory;
 	protected IZOrderManager zOrderManager;
@@ -33,6 +35,7 @@ public abstract class AbstractStandaloneApp {
 	public AbstractStandaloneApp(IMultiTouchEventProducer producer) {
 		this.mtInput = producer;
 		orthoNode = new Node(this.getClass().getName() + "_orthonode");
+		threeDNode = new Node(this.getClass().getName() + "_3dnode");
 		// by convention, put 0,0 in the middle of the display
 		Renderer r = DisplaySystem.getDisplaySystem().getRenderer();
 		orthoNode.setLocalTranslation(r.getWidth() / 2, r.getHeight() / 2, 0);
@@ -52,12 +55,20 @@ public abstract class AbstractStandaloneApp {
 	public Spatial getOrthoNode() {
 		return orthoNode;
 	}
+	
+	public Node getThreeDNode() {
+		return threeDNode;
+	}
 
 	public void add(IItem item) {
 		orthoNode.attachChild(item.getTreeRootSpatial());
 		items.add(item);
 		getzOrderManager().registerForZOrdering(item);
 		orthoNode.updateGeometricState(0f, true);
+	}
+	
+	public void addThreeDeeItem(IThreeDeeContent item) {
+		getThreeDNode().attachChild(item.getSpatial());
 	}
 	
 	public void remove(List<IItem> items) {
@@ -100,5 +111,7 @@ public abstract class AbstractStandaloneApp {
 	public AbstractSurfaceSystem getSurfaceSystem() {
 		return surfaceSystem;
 	}
+
+
 
 }
