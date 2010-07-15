@@ -358,7 +358,7 @@ public class DisplayPreferencesPanel extends javax.swing.JPanel implements Prefe
 		stencilBits.setText("" + prefs.getStencilBits());
 		depthBits.setText("" + prefs.getDepthBits());
 		displayShapeFile.setText(prefs.getDisplayShape());
-		stereo3DSelector.setSelectedItem(prefs.getStereo3DMode());
+		stereo3DSelector.setSelectedItem(prefs.getStereo3DMode().toString());
 		defaultDisplayShape.setSelected(prefs.getUseDefaultShapeFlag());
 	}
 
