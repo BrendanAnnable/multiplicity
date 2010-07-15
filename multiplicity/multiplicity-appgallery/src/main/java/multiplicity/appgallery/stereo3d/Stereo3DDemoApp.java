@@ -22,7 +22,6 @@ import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.ILabel;
 import multiplicity.csysng.threedee.IThreeDeeContent;
 import multiplicity.csysng.threedee.interaction.RotateInteraction;
-import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
 
 public class Stereo3DDemoApp extends AbstractStandaloneApp {
@@ -60,7 +59,7 @@ public class Stereo3DDemoApp extends AbstractStandaloneApp {
 		img.setImage(GalleryApp.class.getResource("aotn.jpg"));
 			
 		IFrame frame = contentFactory.createFrame("frame", UUID.randomUUID(), img.getWidth(), img.getHeight());		
-		frame.setBorder(new JMERoundedRectangleBorder("frameborder", UUID.randomUUID(), 20f, 8));		
+		frame.setBorder(contentFactory.createRoundedRectangleBorder("frameborder", UUID.randomUUID(), 20f, 8));		
 		frame.maintainBorderSizeDuringScale();
 		frame.addItem(img);
 		frame.setRelativeScale(0.25f);

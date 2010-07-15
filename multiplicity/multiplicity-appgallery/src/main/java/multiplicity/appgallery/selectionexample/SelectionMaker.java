@@ -9,12 +9,12 @@ import java.util.UUID;
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysng.factory.IContentFactory;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.ILabel;
-import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.data.CursorPositionRecord;
 import multiplicity.input.events.MultiTouchCursorEvent;
@@ -26,8 +26,10 @@ public class SelectionMaker implements IMultiTouchEventListener {
 
 	private List<IItem> registeredItems = new ArrayList<IItem>();
     private AbstractStandaloneApp app;
+	private IContentFactory contentFactory;
 
-	public SelectionMaker() {
+	public SelectionMaker(IContentFactory contentFactory) {
+		this.contentFactory = contentFactory;
 	}
 	
 	@Override
@@ -127,7 +129,7 @@ public class SelectionMaker implements IMultiTouchEventListener {
 
     private void addItemsToFrame(List<IItem> items) {     
         IFrame frame = app.getContentFactory().createFrame("randomframe", UUID.randomUUID(), 800, 600);      
-        frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1f, 8));
+        frame.setBorder(contentFactory.createRoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1f, 8));
         frame.setGradientBackground(new Gradient(
                 new Color(0.5f, 0.5f, 0.5f, 0.8f), 
                 new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));

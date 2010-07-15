@@ -22,7 +22,6 @@ import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.ILabel;
 import multiplicity.csysngjme.animation.animelements.Fader;
-import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
 
 import com.jme.math.Vector2f;
@@ -62,7 +61,7 @@ public class ConceptMapApp extends AbstractStandaloneApp {
 
 	protected void createNewNode() {
 		IFrame frame = contentFactory.createFrame("randomframe", UUID.randomUUID(), 160, 70);		
-		frame.setBorder(new JMERoundedRectangleBorder("frameborder", UUID.randomUUID(), 10f, 8));
+		frame.setBorder(contentFactory.createRoundedRectangleBorder("frameborder", UUID.randomUUID(), 10f, 8));
 		frame.setGradientBackground(new Gradient(
 				new Color(0.5f, 0.5f, 0.5f, 1f), 
 				new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));

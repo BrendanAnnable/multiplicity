@@ -25,7 +25,6 @@ import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.ILabel;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
-import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
 
 import com.jme.math.Vector2f;
@@ -90,7 +89,7 @@ public class GalleryApp extends AbstractStandaloneApp {
 
 	private void addNestedFrameExample() {
 		IFrame framewrap = contentFactory.createFrame("superframe", UUID.randomUUID(), 800, 500);		
-		framewrap.setBorder(new JMERoundedRectangleBorder("superframeborder", UUID.randomUUID(), 20f, 8));
+		framewrap.setBorder(contentFactory.createRoundedRectangleBorder("superframeborder", UUID.randomUUID(), 20f, 8));
 		framewrap.setGradientBackground(new Gradient(
 				new Color(0.5f, 0.5f, 0.5f, 0.8f), 
 				new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
@@ -99,7 +98,7 @@ public class GalleryApp extends AbstractStandaloneApp {
 		BehaviourMaker.addBehaviour(framewrap, RotateTranslateScaleBehaviour.class);
 
 		IFrame f = contentFactory.createFrame("innerframe", UUID.randomUUID(), 200, 100);		
-		f.setBorder(new JMERoundedRectangleBorder("innerframeborder", UUID.randomUUID(), 20f, 8));
+		f.setBorder(contentFactory.createRoundedRectangleBorder("innerframeborder", UUID.randomUUID(), 20f, 8));
 		f.setGradientBackground(new Gradient(
 				new Color(0.5f, 0.5f, 0.5f, 0.8f), 
 				new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
@@ -112,7 +111,7 @@ public class GalleryApp extends AbstractStandaloneApp {
 
 	private void addRandomFrame(String photoResource) {		
 		IFrame frame = contentFactory.createFrame("randomframe", UUID.randomUUID(), 400, 200);		
-		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 20f, 8));
+		frame.setBorder(contentFactory.createRoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 20f, 8));
 		frame.setGradientBackground(new Gradient(
 				new Color(0.5f, 0.5f, 0.5f, 0.8f), 
 				new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));

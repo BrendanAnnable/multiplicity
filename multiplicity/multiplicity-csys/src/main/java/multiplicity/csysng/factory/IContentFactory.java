@@ -30,4 +30,5 @@ public interface IContentFactory {
 	public IEditableText createEditableText(String name, UUID randomUUID);
 	public IKeyboard createKeyboard(String string, UUID randomUUID);
 	public IThreeDeeContent createThreeDeeContent(String string, UUID randomUUID);
+	public IBorder createRoundedRectangleBorder(String string, UUID randomUUID, float widht, int cornerSegments);
 }

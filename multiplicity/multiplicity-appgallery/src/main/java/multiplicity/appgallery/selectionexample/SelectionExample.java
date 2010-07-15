@@ -41,7 +41,7 @@ public class SelectionExample extends AbstractStandaloneApp {
         trails.setFadingColour(Color.white);
         add(trails);
         
-        SelectionMaker smaker = new SelectionMaker();
+        SelectionMaker smaker = new SelectionMaker(contentFactory);
         this.getMultiTouchEventProducer().registerMultiTouchEventListener(smaker);
         addDefaultSelectableLabel("Abc", 200, 200, smaker);
         addDefaultSelectableLabel("Def", 260, 200, smaker);
