@@ -24,6 +24,7 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 	private int cursorCount = 0;
 	private long cursor1ID = Long.MAX_VALUE;
 	private long cursor2ID = Long.MAX_VALUE;
+	private boolean scaleDisabled = false;
 	
 	@Override
 	public void setItemActingOn(IItem item) {
@@ -69,7 +70,7 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 		float newLength = cursor2Pos.subtract(cursor1Pos).length();
 		float scaleChange = newLength / oldLength;
 
-		if(item.getRelativeScale() * scaleChange < minScale || item.getRelativeScale() * scaleChange > maxScale) {
+		if(scaleDisabled  || item.getRelativeScale() * scaleChange < minScale || item.getRelativeScale() * scaleChange > maxScale) {
 			scaleChange = 1f;
 		}
 		
@@ -90,6 +91,14 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 
 	private void applySingleCursorTransform() {
 		item.setWorldLocation(item.getWorldLocation().add(cursor1Pos.subtract(cursor1OldPos)));		
+	}
+	
+	public void setScaleEnabled(boolean b) {
+		scaleDisabled = !b;
+	}
+	
+	public boolean isScaleEnabled() {
+		return !scaleDisabled;
 	}
 
 	@Override
