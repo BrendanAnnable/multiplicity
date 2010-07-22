@@ -64,6 +64,7 @@ public abstract class AbstractStandaloneApp {
 		orthoNode.attachChild(item.getTreeRootSpatial());
 		items.add(item);
 		getzOrderManager().registerForZOrdering(item);
+		getzOrderManager().updateZOrdering();
 		orthoNode.updateGeometricState(0f, true);
 	}
 	
