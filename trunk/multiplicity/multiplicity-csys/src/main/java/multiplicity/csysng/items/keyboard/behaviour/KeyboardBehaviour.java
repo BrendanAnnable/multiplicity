@@ -79,7 +79,7 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 	@Override
 	public void cursorPressed(MultiTouchCursorEvent event) {
 		KeyboardKey kk = getKeyUnderEvent(event);
-		if(kk != null) {
+		if(kk != null && kk.isEnabled()) {
 			if(kk.getModifiers() == KeyModifiers.SHIFT) {
 				shiftDown = true;
 				trackedKeyPresses.put(event.getCursorID(), kk);
@@ -94,7 +94,7 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 	@Override
 	public void cursorReleased(MultiTouchCursorEvent event) {
 		KeyboardKey kk = getKeyUnderEvent(event);
-		if(kk != null) {
+		if(kk != null && kk.isEnabled()) {
 			if(kk.getModifiers() == KeyModifiers.SHIFT) {
 				shiftDown = false;
 			}

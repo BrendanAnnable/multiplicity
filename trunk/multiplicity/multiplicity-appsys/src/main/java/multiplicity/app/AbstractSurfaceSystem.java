@@ -213,8 +213,11 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		statNode.updateRenderState();
 
 		if(new DeveloperPreferences().getShowSceneMonitor()) {
-			SceneMonitor.getMonitor().registerNode(rootNode);
-			SceneMonitor.getMonitor().registerNode(orthoNode);
+			SceneMonitor.getMonitor().unregisterAllNodes();
+			SceneMonitor.getMonitor().registerNode(orthoNode, "AbstractSurfaceSystem ortho node");
+			//TODO: doesn't seem like SceneMonitor wants to register more than one node?
+			//SceneMonitor.getMonitor().registerNode(rootNode, "AbstractSurfaceSystem 3d node");
+			
 			SceneMonitor.getMonitor().showViewer(true);
 			updateSceneMonitor = true;
 		}
@@ -236,7 +239,7 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		
 		RenderPass orthoRenderPass = new RenderPass();
 		orthoRenderPass.add(orthoNode);
-//		orthoRenderPass.add(statNode);
+		orthoRenderPass.add(statNode);
 		
 		renderPassManager.add(rootPass);
 		renderPassManager.add(orthoRenderPass);

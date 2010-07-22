@@ -86,6 +86,7 @@ public class SymbolicInputApp extends AbstractStandaloneApp {
 		framewrap.maintainBorderSizeDuringScale();
 		framewrap.addItem(kb);
 		framewrap.setRelativeLocation(new Vector2f(0f, -200f));
+		framewrap.setBorder(contentFactory.createRoundedRectangleBorder("innerframeborder", UUID.randomUUID(), 20f, 8));
 		add(framewrap);		
 		BehaviourMaker.addBehaviour(framewrap, RotateTranslateScaleBehaviour.class);
 		
