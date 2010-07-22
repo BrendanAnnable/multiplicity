@@ -90,7 +90,7 @@ public abstract class JMEItem extends Node implements IItem {
 	@Override
 	public void setWorldLocation(Vector2f newLoc) {
 		in.set(newLoc.x, newLoc.y, 0);
-		this.getParent().worldToLocal(in, getLocalTranslation());
+		this.getParent().worldToLocal(in, getLocalTranslation());		
 		
 		for(IItemListener l : itemListeners) {
 			l.itemMoved(this);
@@ -141,10 +141,16 @@ public abstract class JMEItem extends Node implements IItem {
 		}
 	}
 
-
 	@Override
 	public float getRelativeRotation() {
 		return angle;
+	}
+	
+	private Vector3f worldRotationStore = new Vector3f();
+	@Override
+	public float getWorldRotationDegrees() {
+		getWorldRotation().toAngleAxis(worldRotationStore);
+		return worldRotationStore.z;
 	}
 
 	@Override

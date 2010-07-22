@@ -29,7 +29,8 @@ public interface IItem {
 	public Vector2f convertWorldVelocityToLocalVelocity(Vector2f loc);
 	public void centerItem();	
 	public void setRelativeRotation(float angle);
-	public float getRelativeRotation();	
+	public float getRelativeRotation();
+	public float getWorldRotationDegrees();
 	public void setRelativeScale(float scale);
 	public float getRelativeScale();
 	
@@ -48,4 +49,6 @@ public interface IItem {
 	
 	public void behaviourAdded(IBehaviour behaviour);
 	public List<IBehaviour> getBehaviours();
+
+	
 }

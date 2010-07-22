@@ -134,6 +134,7 @@ public class JMELabel extends JMERectangularItem implements ILabel {
 		float yscale = contentSize.y / imageSize.y;
         textQuad.updateGeometry(contentSize.x, contentSize.y);
         setSize(contentSize.x, contentSize.y);
+        textQuad.updateGeometricState(0f, true);
         textQuad.updateModelBound();
         Vector2f[] texCoords={
                 new Vector2f(0,1),
@@ -149,6 +150,7 @@ public class JMELabel extends JMERectangularItem implements ILabel {
         ts.setTexture(tex);
         ts.setEnabled(true);
         textQuad.updateRenderState();
+        
 	}
 
 	@Override
@@ -169,5 +171,10 @@ public class JMELabel extends JMERectangularItem implements ILabel {
 	@Override
 	public Spatial getManipulableSpatial() {
 		return textQuad;
+	}
+
+	@Override
+	public String getText() {
+		return text;
 	}
 }

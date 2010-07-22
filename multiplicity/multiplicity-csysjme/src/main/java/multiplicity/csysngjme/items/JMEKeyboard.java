@@ -10,8 +10,9 @@ import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 
 import com.jme.bounding.OrthogonalBoundingBox;
-import com.jme.image.Texture;
 import com.jme.image.Texture2D;
+import com.jme.image.Texture.MagnificationFilter;
+import com.jme.image.Texture.MinificationFilter;
 import com.jme.image.Texture.WrapMode;
 import com.jme.math.Vector3f;
 import com.jme.scene.Spatial;
@@ -48,8 +49,8 @@ public class JMEKeyboard extends JMERectangularItem implements IKeyboard {
 		textureState.setCorrectionType(TextureState.CorrectionType.Perspective);		
 		imageQuad.setRenderState(textureState);
 		texture = new Texture2D();
-		texture.setMinificationFilter(Texture.MinificationFilter.NearestNeighborNoMipMaps);
-		texture.setMagnificationFilter(Texture.MagnificationFilter.Bilinear);
+		texture.setMinificationFilter(MinificationFilter.BilinearNoMipMaps);
+		texture.setMagnificationFilter(MagnificationFilter.Bilinear);
 		texture.setWrap(WrapMode.Repeat);
 
 		attachChild(imageQuad);

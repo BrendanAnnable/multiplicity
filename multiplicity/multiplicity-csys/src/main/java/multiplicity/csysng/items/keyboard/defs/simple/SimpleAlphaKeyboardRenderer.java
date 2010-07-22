@@ -45,10 +45,10 @@ public class SimpleAlphaKeyboardRenderer implements IKeyboardGraphicsRenderer {
 		
 		for(KeyboardKey k : kbd.getKeysIterator()) {				
 			Point p = getShapeCenter(k.getKeyShape());
-			g2d.setColor(Color.white);
+			g2d.setColor(k.getBackgroundColour());
 			g2d.fill(k.getKeyShape());
 			g2d.setStroke(keyStroke); // Vertex join style);
-			g2d.setColor(Color.darkGray);
+			g2d.setColor(k.getKeyTextColour());
 			g2d.draw(k.getKeyShape());				
 			g2d.setFont(keyboardFont);
 			if(shiftDown) {
