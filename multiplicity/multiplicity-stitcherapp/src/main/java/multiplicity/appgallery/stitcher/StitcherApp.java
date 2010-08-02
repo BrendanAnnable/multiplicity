@@ -34,7 +34,7 @@ import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysng.items.repository.IRepositoryContentItemFactory;
 import multiplicity.csysng.items.repository.IRepositoryFrame;
 import multiplicity.csysngjme.animation.animelements.Fader;
-import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.factory.PaletItemFactory;
 import multiplicity.csysngjme.factory.Repository.RepositoryContentItemFactory;
 import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
