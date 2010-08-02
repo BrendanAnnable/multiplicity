@@ -22,7 +22,7 @@ import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.repository.IRepositoryFrame;
-import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMERectangularItem;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;

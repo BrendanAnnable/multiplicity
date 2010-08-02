@@ -12,7 +12,7 @@ import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysngjme.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.data.CursorPositionRecord;
