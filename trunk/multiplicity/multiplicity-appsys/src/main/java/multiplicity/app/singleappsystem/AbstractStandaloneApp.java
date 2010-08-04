@@ -6,11 +6,17 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import multiplicity.app.AbstractSurfaceSystem;
+import multiplicity.csysng.ContentSystem;
+import multiplicity.csysng.IUpdateable;
+import multiplicity.csysng.animation.AnimationSystem;
+import multiplicity.csysng.display.DisplayManager;
+import multiplicity.csysng.draganddrop.DragAndDropSystem;
 import multiplicity.csysng.factory.IContentFactory;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.threedee.IThreeDeeContent;
 import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.factory.JMEContentItemFactory;
+import multiplicity.csysngjme.picking.ContentSystemPicker;
 import multiplicity.csysngjme.zordering.NestedZOrderManager;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.IMultiTouchEventProducer;
@@ -18,7 +24,6 @@ import multiplicity.input.exceptions.MultiTouchInputException;
 
 import com.jme.renderer.Renderer;
 import com.jme.scene.Node;
-import com.jme.scene.Spatial;
 import com.jme.system.DisplaySystem;
 
 public abstract class AbstractStandaloneApp {
@@ -27,21 +32,30 @@ public abstract class AbstractStandaloneApp {
 	protected Node orthoNode;
 	protected Node threeDNode;
 	protected List<IItem> items = new ArrayList<IItem>();
-	protected IContentFactory contentFactory;
 	protected IZOrderManager zOrderManager;
 	private IMultiTouchEventProducer mtInput;
 	private AbstractSurfaceSystem surfaceSystem;
 
-	public AbstractStandaloneApp(IMultiTouchEventProducer producer) {
+	public AbstractStandaloneApp(AbstractSurfaceSystem surfaceSystem, IMultiTouchEventProducer producer) {
+		this.surfaceSystem = surfaceSystem;
 		this.mtInput = producer;
 		orthoNode = new Node(this.getClass().getName() + "_orthonode");
 		threeDNode = new Node(this.getClass().getName() + "_3dnode");
 		// by convention, put 0,0 in the middle of the display
 		Renderer r = DisplaySystem.getDisplaySystem().getRenderer();
 		orthoNode.setLocalTranslation(r.getWidth() / 2, r.getHeight() / 2, 0);
-		contentFactory = new JMEContentItemFactory();
 		zOrderManager = new NestedZOrderManager(null, 500);
-		getzOrderManager().setItemZOrder(0);
+		getZOrderManager().setItemZOrder(0);	
+		
+		ContentSystem csys = ContentSystem.getContentSystem(); 
+		csys.setContentFactory(new JMEContentItemFactory());
+		csys.setDragAndDropSystem(DragAndDropSystem.getInstance());
+		csys.setPickSystem(new ContentSystemPicker(orthoNode));
+		csys.setAnimationSystem(AnimationSystem.getInstance());
+		csys.setDisplayManager(new DisplayManager());		
+		csys.getDragAndDropSystem().setPickSystemForApp(csys.getPickSystem());
+		csys.getDisplayManager().setDisplayDimensions(r.getWidth(), r.getHeight());
+		
 	}
 
 	public IMultiTouchEventProducer getMultiTouchEventProducer() {
@@ -51,8 +65,16 @@ public abstract class AbstractStandaloneApp {
 	public void registerForMultiTouch(IMultiTouchEventListener listener) {
 		mtInput.registerMultiTouchEventListener(listener);
 	}
+	
+	public void registerForUpdating(IUpdateable updateable) {
+		surfaceSystem.registerForUpdating(updateable);
+	}
+	
+	public void unregisterForUpdating(IUpdateable updateable) {
+		surfaceSystem.unregisterForUpdating(updateable);
+	}
 
-	public Spatial getOrthoNode() {
+	public Node getOrthoNode() {
 		return orthoNode;
 	}
 	
@@ -63,8 +85,8 @@ public abstract class AbstractStandaloneApp {
 	public void add(IItem item) {
 		orthoNode.attachChild(item.getTreeRootSpatial());
 		items.add(item);
-		getzOrderManager().registerForZOrdering(item);
-		getzOrderManager().updateZOrdering();
+		getZOrderManager().registerForZOrdering(item);
+		getZOrderManager().updateZOrdering();
 		orthoNode.updateGeometricState(0f, true);
 	}
 	
@@ -87,7 +109,7 @@ public abstract class AbstractStandaloneApp {
 	public void remove(IItem i) {
 		orthoNode.detachChild(i.getTreeRootSpatial());
 		items.remove(i);
-		getzOrderManager().unregisterForZOrdering(i);
+		getZOrderManager().unregisterForZOrdering(i);
 		orthoNode.updateGeometricState(0f, true);
 	}
 
@@ -98,21 +120,15 @@ public abstract class AbstractStandaloneApp {
 	}
 
 	public IContentFactory getContentFactory() {
-		return contentFactory;
+		return ContentSystem.getContentSystem().getContentFactory();
 	}
 
-	public IZOrderManager getzOrderManager() {
+	public IZOrderManager getZOrderManager() {
 		return zOrderManager;
-	}
-
-	public void setSurfaceSystem(AbstractSurfaceSystem surfaceSystem) {
-		this.surfaceSystem = surfaceSystem;
 	}
 
 	public AbstractSurfaceSystem getSurfaceSystem() {
 		return surfaceSystem;
 	}
-
-
 
 }

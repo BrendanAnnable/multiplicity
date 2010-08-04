@@ -90,7 +90,11 @@ public abstract class JMEItem extends Node implements IItem {
 	@Override
 	public void setWorldLocation(Vector2f newLoc) {
 		in.set(newLoc.x, newLoc.y, 0);
-		this.getParent().worldToLocal(in, getLocalTranslation());		
+		if(this.getParent() == null) {
+			getLocalTranslation().set(newLoc.x, newLoc.y, 0f);
+		}else{
+			this.getParent().worldToLocal(in, getLocalTranslation());
+		}
 		
 		for(IItemListener l : itemListeners) {
 			l.itemMoved(this);
@@ -106,6 +110,7 @@ public abstract class JMEItem extends Node implements IItem {
 	
 	@Override
 	public Vector2f getWorldLocation() {
+		if(this.getParent() == null) return getRelativeLocation();
 		this.getParent().localToWorld(getLocalTranslation(), out);
 		return new Vector2f(out.x, out.y);
 	}
