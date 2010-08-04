@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import multiplicity.app.singleappsystem.AbstractStandaloneApp;
+import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
@@ -23,9 +23,9 @@ import com.jme.math.Vector2f;
 public class SelectionMaker implements IMultiTouchEventListener {
 
 	private List<IItem> registeredItems = new ArrayList<IItem>();
-	private AbstractStandaloneApp app;
+	private AbstractMultiplicityApp app;
 
-	public SelectionMaker(AbstractStandaloneApp app) {
+	public SelectionMaker(AbstractMultiplicityApp app) {
 		this.app = app;
 	}
 
@@ -92,7 +92,7 @@ public class SelectionMaker implements IMultiTouchEventListener {
 		if(!registeredItems.contains(item)) registeredItems.add(item);		
 	}
 
-	public void register(IItem item, AbstractStandaloneApp app) {
+	public void register(IItem item, AbstractMultiplicityApp app) {
 		if(!registeredItems.contains(item)) registeredItems.add(item);
 	}
 

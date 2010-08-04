@@ -41,9 +41,11 @@ import com.jme.renderer.pass.BasicPassManager;
 import com.jme.renderer.pass.RenderPass;
 import com.jme.scene.Node;
 import com.jme.scene.Spatial;
+import com.jme.scene.Spatial.CullHint;
 import com.jme.scene.state.LightState;
 import com.jme.scene.state.WireframeState;
 import com.jme.scene.state.ZBufferState;
+import com.jme.scene.state.RenderState.StateType;
 import com.jme.system.DisplaySystem;
 import com.jme.system.JmeException;
 import com.jme.util.Debug;
@@ -63,8 +65,8 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 	protected InputHandler input;
 	protected Timer timer;
 
-	protected Node rootNode;
-	protected Node orthoNode;
+	private Node surfaceSystem3DNode;
+	private Node surfaceSystemOrthoNode;
 	protected Node statNode;
 	protected Node graphNode;
 
@@ -134,21 +136,30 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		display.setTitle( className );
 	}
 
-
+	public Node getSurfaceSystemOrthoNode() {
+		return surfaceSystemOrthoNode;
+	}
 
 	private void setupMultiTouchInput() {		
 		inputSource = MultiTouchInputUtility.getInputSource();
 		mtInput = new MultiTouchInputComponent(inputSource);
-		pickedItemDispatcher = new PickedItemDispatcher(orthoNode, rootNode);
+		pickedItemDispatcher = new PickedItemDispatcher(surfaceSystemOrthoNode, surfaceSystem3DNode);
 		mtInput.registerMultiTouchEventListener(pickedItemDispatcher);
 	}
 
 	protected void initGame() {
-		rootNode = new Node(AbstractSurfaceSystem.class.getSimpleName() + "_rootNode");
-		orthoNode = new Node(AbstractSurfaceSystem.class.getSimpleName() + "_orthoNode");
+		surfaceSystem3DNode = new Node(AbstractSurfaceSystem.class.getSimpleName() + "_rootNode");
+		surfaceSystemOrthoNode = new Node(AbstractSurfaceSystem.class.getSimpleName() + "_orthoNode");
+		surfaceSystemOrthoNode.setCullHint(CullHint.Never);
+		surfaceSystemOrthoNode.setRenderQueueMode(Renderer.QUEUE_ORTHO);
+		surfaceSystemOrthoNode.clearRenderState(StateType.Light);		
+		// by convention, put 0,0 in the middle of the display
+		Renderer r = DisplaySystem.getDisplaySystem().getRenderer();
+		surfaceSystemOrthoNode.setLocalTranslation(r.getWidth() / 2, r.getHeight() / 2, 0);
+		
 		wireState = display.getRenderer().createWireframeState();
 		wireState.setEnabled( false );
-		rootNode.setRenderState( wireState );
+		surfaceSystem3DNode.setRenderState( wireState );
 
 		/**
 		 * Create a ZBuffer to display pixels closest to the camera above
@@ -157,7 +168,8 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		ZBufferState buf = display.getRenderer().createZBufferState();
 		buf.setEnabled( true );
 		buf.setFunction( ZBufferState.TestFunction.LessThanOrEqualTo );
-		rootNode.setRenderState( buf );
+		surfaceSystem3DNode.setRenderState( buf );
+		surfaceSystem3DNode.setCullHint(CullHint.Never);
 
 		statNode = new Node( "Stats node" );
 		statNode.setCullHint( Spatial.CullHint.Never );
@@ -202,7 +214,7 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		lightState = display.getRenderer().createLightState();
 		lightState.detachAll();
 
-		rootNode.setRenderState( lightState );
+		surfaceSystem3DNode.setRenderState( lightState );
 		lightState.setEnabled( true );		
 		lightState.setTwoSidedLighting(false);
 		lightState.attach( dr );
@@ -211,14 +223,14 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		setupMultiTouchInput();
 		initSurfaceSystem(mtInput);
 
-		rootNode.updateGeometricState( 0.0f, true );
-		rootNode.updateRenderState();
+		surfaceSystem3DNode.updateGeometricState( 0.0f, true );
+		surfaceSystem3DNode.updateRenderState();
 		statNode.updateGeometricState( 0.0f, true );
 		statNode.updateRenderState();
 
 		if(new DeveloperPreferences().getShowSceneMonitor()) {
 			SceneMonitor.getMonitor().unregisterAllNodes();
-			SceneMonitor.getMonitor().registerNode(orthoNode, "AbstractSurfaceSystem ortho node");
+			SceneMonitor.getMonitor().registerNode(surfaceSystemOrthoNode, "AbstractSurfaceSystem ortho node");
 			//TODO: doesn't seem like SceneMonitor wants to register more than one node?
 			//SceneMonitor.getMonitor().registerNode(rootNode, "AbstractSurfaceSystem 3d node");
 
@@ -231,7 +243,7 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 
 		Stereo3DMode stereo3DMode = new DisplayPreferences().getStereo3DMode();
 		if(stereo3DMode != Stereo3DMode.NONE) {
-			StereoRenderPass srp = new StereoRenderPass(rootNode);
+			StereoRenderPass srp = new StereoRenderPass(surfaceSystem3DNode);
 			if(stereo3DMode == Stereo3DMode.ANAGLYPH) srp.setStereoMode(StereoMode.ANAGLYPH);
 			if(stereo3DMode == Stereo3DMode.STEREO_BUFFER) srp.setStereoMode(StereoMode.STEREO_BUFFER);
 			rootPass = srp;			
@@ -239,10 +251,10 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 			rootPass = new RenderPass();
 		}
 
-		rootPass.add(rootNode);
+		rootPass.add(surfaceSystem3DNode);
 
 		RenderPass orthoRenderPass = new RenderPass();
-		orthoRenderPass.add(orthoNode);
+		orthoRenderPass.add(surfaceSystemOrthoNode);
 		orthoRenderPass.add(statNode);
 
 		renderPassManager.add(rootPass);
@@ -292,8 +304,8 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 
 		if ( !pause ) {
 			simpleUpdate();
-			rootNode.updateGeometricState(tpf, true);
-			orthoNode.updateGeometricState(tpf, true);
+			surfaceSystem3DNode.updateGeometricState(tpf, true);
+			surfaceSystemOrthoNode.updateGeometricState(tpf, true);
 			statNode.updateGeometricState(tpf, true);
 			renderPassManager.updatePasses(tpf);
 		}
@@ -340,13 +352,13 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 
 	protected void doDebug(Renderer r) {
 		if(showBounds) {
-			Debugger.drawBounds( rootNode, r, true );
-			Debugger.drawBounds( orthoNode, r, true );
+			Debugger.drawBounds( surfaceSystem3DNode, r, true );
+			Debugger.drawBounds( surfaceSystemOrthoNode, r, true );
 		}
 
 		if(showNormals) {
-			Debugger.drawNormals( rootNode, r );
-			Debugger.drawTangents( rootNode, r );
+			Debugger.drawNormals( surfaceSystem3DNode, r );
+			Debugger.drawTangents( surfaceSystem3DNode, r );
 		}
 
 		if (showDepth) {
@@ -386,16 +398,16 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 	protected abstract void notifyMultiTouchInputException(MultiTouchInputException e);
 
 
-	public Node 	getRootNode() 					{ return rootNode; }
+	public Node 	getSurfaceSystem3DNode() 		{ return surfaceSystem3DNode; }
 
 	public boolean 	isPaused() 						{ return pause; }
 	public void 	setPaused(boolean b) 			{ this.pause = b; }
 
 	public boolean 	isDrawingWireframe() 			{ return wireState.isEnabled(); }
-	public void 	setDrawingWireframe(boolean b) 	{ wireState.setEnabled(b); rootNode.updateRenderState(); }
+	public void 	setDrawingWireframe(boolean b) 	{ wireState.setEnabled(b); surfaceSystem3DNode.updateRenderState(); }
 
 	public boolean 	isLightingEnabled()				{ return lightState.isEnabled(); }
-	public void 	setLightingEnabled(boolean b) 	{ lightState.setEnabled(b); rootNode.updateRenderState(); }
+	public void 	setLightingEnabled(boolean b) 	{ lightState.setEnabled(b); surfaceSystem3DNode.updateRenderState(); }
 
 	public boolean 	isDrawingBounding() 			{ return showBounds; }
 	public void 	setDrawingBounding(boolean b) 	{ showBounds = b; }

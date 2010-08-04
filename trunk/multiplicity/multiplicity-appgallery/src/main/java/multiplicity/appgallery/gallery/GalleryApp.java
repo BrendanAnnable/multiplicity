@@ -5,9 +5,9 @@ import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
+import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
-import multiplicity.app.singleappsystem.AbstractStandaloneApp;
-import multiplicity.app.singleappsystem.SingleAppTableSystem;
+import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.behaviours.button.ButtonBehaviour;
@@ -30,7 +30,7 @@ import multiplicity.input.IMultiTouchEventProducer;
 
 import com.jme.math.Vector2f;
 
-public class GalleryApp extends AbstractStandaloneApp {
+public class GalleryApp extends AbstractMultiplicityApp {
 
 	public GalleryApp(AbstractSurfaceSystem ass, IMultiTouchEventProducer mtInput) {
 		super(ass, mtInput);
@@ -152,7 +152,7 @@ public class GalleryApp extends AbstractStandaloneApp {
 	}
 
 	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-		SingleAppTableSystem.startSystem(GalleryApp.class);
+		SingleAppMultiplicitySurfaceSystem.startSystem(GalleryApp.class);
 	}
 }
 

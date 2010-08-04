@@ -1,33 +1,25 @@
-package multiplicity.app.singleappsystem;
+package multiplicity.app;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.IUpdateable;
-import multiplicity.csysng.animation.AnimationSystem;
-import multiplicity.csysng.display.DisplayManager;
-import multiplicity.csysng.draganddrop.DragAndDropSystem;
 import multiplicity.csysng.factory.IContentFactory;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.threedee.IThreeDeeContent;
 import multiplicity.csysng.zorder.IZOrderManager;
-import multiplicity.csysngjme.factory.JMEContentItemFactory;
-import multiplicity.csysngjme.picking.ContentSystemPicker;
 import multiplicity.csysngjme.zordering.NestedZOrderManager;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.IMultiTouchEventProducer;
 import multiplicity.input.exceptions.MultiTouchInputException;
 
-import com.jme.renderer.Renderer;
 import com.jme.scene.Node;
-import com.jme.system.DisplaySystem;
 
-public abstract class AbstractStandaloneApp {
-	private final static Logger log = Logger.getLogger(AbstractStandaloneApp.class.getName());	
+public abstract class AbstractMultiplicityApp {
+	private final static Logger log = Logger.getLogger(AbstractMultiplicityApp.class.getName());	
 	
 	protected Node orthoNode;
 	protected Node threeDNode;
@@ -36,26 +28,14 @@ public abstract class AbstractStandaloneApp {
 	private IMultiTouchEventProducer mtInput;
 	private AbstractSurfaceSystem surfaceSystem;
 
-	public AbstractStandaloneApp(AbstractSurfaceSystem surfaceSystem, IMultiTouchEventProducer producer) {
+	public AbstractMultiplicityApp(AbstractSurfaceSystem surfaceSystem, IMultiTouchEventProducer producer) {
 		this.surfaceSystem = surfaceSystem;
 		this.mtInput = producer;
 		orthoNode = new Node(this.getClass().getName() + "_orthonode");
 		threeDNode = new Node(this.getClass().getName() + "_3dnode");
-		// by convention, put 0,0 in the middle of the display
-		Renderer r = DisplaySystem.getDisplaySystem().getRenderer();
-		orthoNode.setLocalTranslation(r.getWidth() / 2, r.getHeight() / 2, 0);
+		
 		zOrderManager = new NestedZOrderManager(null, 500);
 		getZOrderManager().setItemZOrder(0);	
-		
-		ContentSystem csys = ContentSystem.getContentSystem(); 
-		csys.setContentFactory(new JMEContentItemFactory());
-		csys.setDragAndDropSystem(DragAndDropSystem.getInstance());
-		csys.setPickSystem(new ContentSystemPicker(orthoNode));
-		csys.setAnimationSystem(AnimationSystem.getInstance());
-		csys.setDisplayManager(new DisplayManager());		
-		csys.getDragAndDropSystem().setPickSystemForApp(csys.getPickSystem());
-		csys.getDisplayManager().setDisplayDimensions(r.getWidth(), r.getHeight());
-		
 	}
 
 	public IMultiTouchEventProducer getMultiTouchEventProducer() {

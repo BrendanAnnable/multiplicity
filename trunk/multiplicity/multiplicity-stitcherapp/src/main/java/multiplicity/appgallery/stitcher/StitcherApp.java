@@ -10,9 +10,9 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.Vector;
 
+import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
-import multiplicity.app.singleappsystem.AbstractStandaloneApp;
-import multiplicity.app.singleappsystem.SingleAppTableSystem;
+import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.factory.IPaletFactory;
@@ -59,7 +59,7 @@ import com.jme.scene.Geometry;
 import com.jme.scene.Node;
 import com.jme.system.DisplaySystem;
 
-public class StitcherApp extends AbstractStandaloneApp {
+public class StitcherApp extends AbstractMultiplicityApp {
 
 	private final static Logger logger = Logger.getLogger(StitcherApp.class.getName());
 	public final String MULTIPLICITY_SPACE = "multiplicity";
@@ -746,7 +746,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 	}
 
 	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-		SingleAppTableSystem.startSystem(StitcherApp.class);
+		SingleAppMultiplicitySurfaceSystem.startSystem(StitcherApp.class);
 	}
 
 	public void setHotSpotContentFactory(IHotSpotContentFactory hotSpotContentFactory) {

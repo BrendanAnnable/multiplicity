@@ -5,9 +5,9 @@ import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
+import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
-import multiplicity.app.singleappsystem.AbstractStandaloneApp;
-import multiplicity.app.singleappsystem.SingleAppTableSystem;
+import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
 import multiplicity.appgallery.gallery.GalleryApp;
 import multiplicity.csysng.animation.AnimationSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
@@ -28,7 +28,7 @@ import multiplicity.input.IMultiTouchEventProducer;
 import com.jme.math.Vector2f;
 import com.jme.scene.Geometry;
 
-public class ConceptMapApp extends AbstractStandaloneApp {
+public class ConceptMapApp extends AbstractMultiplicityApp {
 
     /**
      * test again
@@ -115,7 +115,7 @@ public class ConceptMapApp extends AbstractStandaloneApp {
 	 * @throws InvocationTargetException
 	 */
 	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-		SingleAppTableSystem.startSystem(ConceptMapApp.class);
+		SingleAppMultiplicitySurfaceSystem.startSystem(ConceptMapApp.class);
 	}
 
 }

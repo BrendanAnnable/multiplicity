@@ -8,9 +8,9 @@ import java.util.UUID;
 
 import com.jme.math.Vector2f;
 
+import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
-import multiplicity.app.singleappsystem.AbstractStandaloneApp;
-import multiplicity.app.singleappsystem.SingleAppTableSystem;
+import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
 import multiplicity.appgallery.gallery.GalleryApp;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
@@ -28,7 +28,7 @@ import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
 import multiplicity.csysng.items.keyboard.model.KeyboardKey;
 import multiplicity.input.IMultiTouchEventProducer;
 
-public class SymbolicInputApp extends AbstractStandaloneApp {
+public class SymbolicInputApp extends AbstractMultiplicityApp {
 
 	public SymbolicInputApp(AbstractSurfaceSystem ass, IMultiTouchEventProducer producer) {
 		super(ass, producer);
@@ -117,7 +117,7 @@ public class SymbolicInputApp extends AbstractStandaloneApp {
 	 * @throws InvocationTargetException
 	 */
 	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-		SingleAppTableSystem.startSystem(SymbolicInputApp.class);
+		SingleAppMultiplicitySurfaceSystem.startSystem(SymbolicInputApp.class);
 	}
 
 }
