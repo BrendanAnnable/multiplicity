@@ -12,6 +12,7 @@ import com.jme.scene.shape.Torus;
 import com.jme.scene.state.MaterialState;
 import com.jme.system.DisplaySystem;
 
+import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.appgallery.gallery.GalleryApp;
@@ -26,8 +27,8 @@ import multiplicity.input.IMultiTouchEventProducer;
 
 public class Stereo3DDemoApp extends AbstractStandaloneApp {
 
-	public Stereo3DDemoApp(IMultiTouchEventProducer producer) {
-		super(producer);
+	public Stereo3DDemoApp(AbstractSurfaceSystem ass, IMultiTouchEventProducer producer) {
+		super(ass, producer);
 	}
 
 	@Override
@@ -42,24 +43,24 @@ public class Stereo3DDemoApp extends AbstractStandaloneApp {
 		t.setRenderState(ms);
 		t.updateRenderState();
 		
-		IThreeDeeContent threeD = contentFactory.createThreeDeeContent("threedee", UUID.randomUUID());
+		IThreeDeeContent threeD = getContentFactory().createThreeDeeContent("threedee", UUID.randomUUID());
 		threeD.setSpatial(t);
 		addThreeDeeItem(threeD);
 		
 		threeD.getMultiTouchDispatcher().addListener(new RotateInteraction(t));
 		
-		ILabel label2 = contentFactory.createLabel("label", UUID.randomUUID());
+		ILabel label2 = getContentFactory().createLabel("label", UUID.randomUUID());
 		label2.setText("Stereo 3D Demonstration");
 		label2.setFont(new Font("Helvetica", Font.BOLD, 24));
 		label2.setTextColour(Color.white);
 		label2.setRelativeLocation(new Vector2f(-300, 300));
 		add(label2);
 		
-		IImage img = contentFactory.createImage("photo", UUID.randomUUID());
+		IImage img = getContentFactory().createImage("photo", UUID.randomUUID());
 		img.setImage(GalleryApp.class.getResource("aotn.jpg"));
 			
-		IFrame frame = contentFactory.createFrame("frame", UUID.randomUUID(), img.getWidth(), img.getHeight());		
-		frame.setBorder(contentFactory.createRoundedRectangleBorder("frameborder", UUID.randomUUID(), 20f, 8));		
+		IFrame frame = getContentFactory().createFrame("frame", UUID.randomUUID(), img.getWidth(), img.getHeight());		
+		frame.setBorder(getContentFactory().createRoundedRectangleBorder("frameborder", UUID.randomUUID(), 20f, 8));		
 		frame.maintainBorderSizeDuringScale();
 		frame.addItem(img);
 		frame.setRelativeScale(0.25f);

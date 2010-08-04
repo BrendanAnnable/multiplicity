@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
+import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.appgallery.gallery.GalleryApp;
@@ -34,8 +35,8 @@ public class ConceptMapApp extends AbstractStandaloneApp {
      * 
      * @param producer
      */
-	public ConceptMapApp(IMultiTouchEventProducer producer) {
-		super(producer);
+	public ConceptMapApp(AbstractSurfaceSystem surfacesystem, IMultiTouchEventProducer producer) {
+		super(surfacesystem, producer);
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class ConceptMapApp extends AbstractStandaloneApp {
 	 * 
 	 */
 	private void addInstruction() {
-		ILabel instruction = contentFactory.createLabel("instruction", UUID.randomUUID());
+		ILabel instruction = getContentFactory().createLabel("instruction", UUID.randomUUID());
 		instruction.setText("Draw a C shape, but in reverse...");
 		instruction.setFont(new Font("Arial Narrow", Font.PLAIN, 14));
 		instruction.setRelativeLocation(new Vector2f(0, 0));
@@ -60,15 +61,15 @@ public class ConceptMapApp extends AbstractStandaloneApp {
 	}
 
 	protected void createNewNode() {
-		IFrame frame = contentFactory.createFrame("randomframe", UUID.randomUUID(), 160, 70);		
-		frame.setBorder(contentFactory.createRoundedRectangleBorder("frameborder", UUID.randomUUID(), 10f, 8));
+		IFrame frame = getContentFactory().createFrame("randomframe", UUID.randomUUID(), 160, 70);		
+		frame.setBorder(getContentFactory().createRoundedRectangleBorder("frameborder", UUID.randomUUID(), 10f, 8));
 		frame.setGradientBackground(new Gradient(
 				new Color(0.5f, 0.5f, 0.5f, 1f), 
 				new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
 		add(frame);
 		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
-		ILabel label2 = contentFactory.createLabel("label", UUID.randomUUID());
+		ILabel label2 = getContentFactory().createLabel("label", UUID.randomUUID());
 		label2.setText("<New Node>");
 		label2.setFont(new Font("Arial", Font.PLAIN, 18));
 		label2.setTextColour(Color.white);
@@ -79,7 +80,7 @@ public class ConceptMapApp extends AbstractStandaloneApp {
 	}
 	
 	private void createGesturableBackground() {
-		IImage bg = contentFactory.createImage("backgroundimage", UUID.randomUUID());
+		IImage bg = getContentFactory().createImage("backgroundimage", UUID.randomUUID());
 		bg.setImage(GalleryApp.class.getResource("yellowflowers_1680x1050.png"));
 		bg.centerItem();
 		add(bg);		

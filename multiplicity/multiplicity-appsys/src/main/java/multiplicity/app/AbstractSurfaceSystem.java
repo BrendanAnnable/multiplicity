@@ -1,5 +1,7 @@
 package multiplicity.app;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,6 +15,7 @@ import multiplicity.app.utils.StatsUtility;
 import multiplicity.config.developer.DeveloperPreferences;
 import multiplicity.config.display.DisplayPreferences;
 import multiplicity.config.display.DisplayPreferences.Stereo3DMode;
+import multiplicity.csysng.IUpdateable;
 import multiplicity.csysng.animation.AnimationSystem;
 import multiplicity.csysngjme.picking.PickedItemDispatcher;
 import multiplicity.input.IMultiTouchEventProducer;
@@ -59,13 +62,13 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 	protected BasicPassManager renderPassManager;	
 	protected InputHandler input;
 	protected Timer timer;
-	
+
 	protected Node rootNode;
 	protected Node orthoNode;
 	protected Node statNode;
 	protected Node graphNode;
-	
-	
+
+
 	protected float tpf;
 	protected boolean showDepth = false;
 	protected boolean showBounds = false;
@@ -80,6 +83,7 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 	protected MultiTouchInputComponent mtInput;
 	protected PickedItemDispatcher pickedItemDispatcher;
 	protected IMultiTouchInputSource inputSource;
+	protected List<IUpdateable> itemsForUpdating = new ArrayList<IUpdateable>();
 
 	public AbstractSurfaceSystem() {
 		keyInput = new KeyboardInputUtility(this);		
@@ -105,7 +109,7 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 					+ display.getDisplayVendor() + " - "
 					+ display.getDisplayRenderer() + " - "
 					+ display.getDisplayAPIVersion());
-			
+
 			cam = display.getRenderer().createCamera( display.getWidth(), display.getHeight() );
 		} catch ( JmeException e ) {
 			logger.log(Level.SEVERE, "Could not create displaySystem", e);
@@ -197,7 +201,7 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 
 		lightState = display.getRenderer().createLightState();
 		lightState.detachAll();
-		
+
 		rootNode.setRenderState( lightState );
 		lightState.setEnabled( true );		
 		lightState.setTwoSidedLighting(false);
@@ -217,7 +221,7 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 			SceneMonitor.getMonitor().registerNode(orthoNode, "AbstractSurfaceSystem ortho node");
 			//TODO: doesn't seem like SceneMonitor wants to register more than one node?
 			//SceneMonitor.getMonitor().registerNode(rootNode, "AbstractSurfaceSystem 3d node");
-			
+
 			SceneMonitor.getMonitor().showViewer(true);
 			updateSceneMonitor = true;
 		}
@@ -236,14 +240,14 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		}
 
 		rootPass.add(rootNode);
-		
+
 		RenderPass orthoRenderPass = new RenderPass();
 		orthoRenderPass.add(orthoNode);
 		orthoRenderPass.add(statNode);
-		
+
 		renderPassManager.add(rootPass);
 		renderPassManager.add(orthoRenderPass);
-		
+
 		timer.reset();
 	}
 
@@ -263,6 +267,21 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		input.update( tpf );
 
 		AnimationSystem.getInstance().update(tpf);
+
+
+		for(IUpdateable updateItem : itemsForUpdating) {
+			try {
+				updateItem.update(tpf);
+			} catch (Exception ex) {
+				logger.warning("Updatable item " + updateItem + " had problems updating: " + ex.toString());				
+				StringBuffer trace = new StringBuffer();
+				for(StackTraceElement ste : ex.getStackTrace()) {
+					trace.append("  " + ste.toString() + "\n");
+				}
+				logger.warning(trace.toString());
+			}
+		}
+
 
 		if (Debug.stats) {
 			StatCollector.update();
@@ -285,8 +304,26 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 	}
 
 
+	/**
+	 * Add generic tasks to the update cycle.
+	 * @param callable
+	 */
 	public void addToUpdateCycle(Callable<?> callable) {
 		GameTaskQueueManager.getManager().getQueue(GameTaskQueue.UPDATE).enqueue(callable);
+	}
+
+	/**
+	 * Add updateable tasks to the update cycle.
+	 * @param updateable
+	 */
+	public void registerForUpdating(IUpdateable updateable) {
+		if(!itemsForUpdating.contains(updateable)) {
+			itemsForUpdating.add(updateable);
+		}
+	}
+
+	public void unregisterForUpdating(IUpdateable updateable) {
+		itemsForUpdating.remove(updateable);
 	}
 
 	protected void render( float interpolation ) {

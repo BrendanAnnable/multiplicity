@@ -1,7 +1,6 @@
 package multiplicity.appgallery.stitcher;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -11,11 +10,10 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.Vector;
 
+import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
-import multiplicity.csysng.animation.AnimationSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
-import multiplicity.csysng.behaviours.gesture.GestureLibrary;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.factory.IPaletFactory;
 import multiplicity.csysng.gfx.Gradient;
@@ -23,7 +21,6 @@ import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.ILabel;
 import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
@@ -33,7 +30,6 @@ import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysng.items.repository.IRepositoryContentItemFactory;
 import multiplicity.csysng.items.repository.IRepositoryFrame;
-import multiplicity.csysngjme.animation.animelements.Fader;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.factory.PaletItemFactory;
 import multiplicity.csysngjme.factory.Repository.RepositoryContentItemFactory;
@@ -45,7 +41,6 @@ import multiplicity.csysngjme.items.JMELine;
 import multiplicity.csysngjme.items.JMERectangularItem;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
-import multiplicity.csysngjme.items.repository.RepositoryFrame;
 import multiplicity.csysngjme.picking.AccuratePickingUtility;
 import multiplicity.csysngjme.picking.PickedSpatial;
 import multiplicity.input.IMultiTouchEventProducer;
@@ -108,8 +103,8 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 	private IRepositoryContentItemFactory repositoryFactory;
 
-	public StitcherApp(IMultiTouchEventProducer mtInput) {
-		super(mtInput);
+	public StitcherApp(AbstractSurfaceSystem ass, IMultiTouchEventProducer mtInput) {
+		super(ass, mtInput);
 		stitcher = this;
 	}
 
@@ -300,7 +295,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 			}
 		});
 
-		this.getzOrderManager().bringToTop(frame, null);
+		this.getZOrderManager().bringToTop(frame, null);
 
 		return frame;
 	}
@@ -469,7 +464,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 			}
 		});
 
-		this.getzOrderManager().bringToTop(frame, null);
+		this.getZOrderManager().bringToTop(frame, null);
 		frame.getZOrderManager().updateZOrdering();
 		frame.addItemListener(new ItemListenerAdapter() {
 
@@ -557,7 +552,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 		this.add(frame);
 
-		this.getzOrderManager().bringToTop(frame, null);
+		this.getZOrderManager().bringToTop(frame, null);
 
 		// createXMLRepresentationForGroup(uUID, items);
 	}
@@ -594,7 +589,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 		this.add(frame);
 		fillHotSpotRepo(frame);
 
-		this.getzOrderManager().bringToTop(frame, null);
+		this.getZOrderManager().bringToTop(frame, null);
 
 		// createXMLRepresentationForGroup(uUID, items);
 	}
@@ -716,7 +711,7 @@ public class StitcherApp extends AbstractStandaloneApp {
 
 	public void bumpHotSpotConnections() {
 		for (JMELine jMELine : hotspotConnections) {
-			this.getzOrderManager().bringToTop(jMELine, null);
+			this.getZOrderManager().bringToTop(jMELine, null);
 		}
 	}
 

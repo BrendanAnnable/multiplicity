@@ -161,13 +161,13 @@ public class Grouper implements IMultiTouchEventListener {
 			frame.addItem(item);
 			item.setWorldLocation(itemWorldPos);
 		}
-		app.getzOrderManager().bringToTop(frame, null);
+		app.getZOrderManager().bringToTop(frame, null);
 		
 		createXMLRepresentationForGroup(uUID, items);
 	}
 
 	private void createXMLRepresentationForGroup(UUID uUID, List<IItem> items) {
-		XMLOperations xmlOperations = new XMLOperations(uUID, items);
+		new XMLOperations(uUID, items);
 	}
 
 }

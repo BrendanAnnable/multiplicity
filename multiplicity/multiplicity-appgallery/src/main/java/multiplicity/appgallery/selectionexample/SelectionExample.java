@@ -5,8 +5,11 @@ import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
+import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
+import multiplicity.csysng.behaviours.BehaviourMaker;
+import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.ILabel;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
@@ -18,8 +21,8 @@ import com.jme.math.Vector2f;
 
 public class SelectionExample extends AbstractStandaloneApp {
 
-	public SelectionExample(IMultiTouchEventProducer producer) {
-		super(producer);
+	public SelectionExample(AbstractSurfaceSystem ass, IMultiTouchEventProducer producer) {
+		super(ass, producer);
 	}
 
 	@Override
@@ -41,13 +44,13 @@ public class SelectionExample extends AbstractStandaloneApp {
         trails.setFadingColour(Color.white);
         add(trails);
         
-        SelectionMaker smaker = new SelectionMaker(contentFactory);
+        SelectionMaker smaker = new SelectionMaker(this);
         this.getMultiTouchEventProducer().registerMultiTouchEventListener(smaker);
         addDefaultSelectableLabel("Abc", 200, 200, smaker);
         addDefaultSelectableLabel("Def", 260, 200, smaker);
         
-        getzOrderManager().sendToBottom(bg, null);
-        getzOrderManager().neverBringToTop(bg);
+        getZOrderManager().sendToBottom(bg, null);
+        getZOrderManager().neverBringToTop(bg);
 	}
 	
 	private void addDefaultSelectableLabel(String content, float x, float y, SelectionMaker sm) {
@@ -57,11 +60,12 @@ public class SelectionExample extends AbstractStandaloneApp {
 		lbl.setFont(new Font("Arial", Font.PLAIN, 24));
 		lbl.setSize(200, 100);
 		lbl.setTextColour(Color.red);
+		BehaviourMaker.addBehaviour(lbl, RotateTranslateScaleBehaviour.class);
 		
 		add(lbl);
 		sm.register(lbl);
 		
-		getzOrderManager().bringToTop(lbl, null);
+		getZOrderManager().bringToTop(lbl, null);
 	}
 	
 	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {

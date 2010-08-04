@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
+import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
@@ -31,8 +32,8 @@ import com.jme.math.Vector2f;
 
 public class GalleryApp extends AbstractStandaloneApp {
 
-	public GalleryApp(IMultiTouchEventProducer mtInput) {
-		super(mtInput);
+	public GalleryApp(AbstractSurfaceSystem ass, IMultiTouchEventProducer mtInput) {
+		super(ass, mtInput);
 	}
 
 	@Override
@@ -41,12 +42,12 @@ public class GalleryApp extends AbstractStandaloneApp {
 	}
 
 	private void loadContent() {
-		IImage bg = contentFactory.createImage("backgroundimage", UUID.randomUUID());
+		IImage bg = getContentFactory().createImage("backgroundimage", UUID.randomUUID());
 		bg.setImage(GalleryApp.class.getResource("yellowflowers_1680x1050.png"));
 		bg.centerItem();
 		add(bg);
 
-		IColourRectangle rect = contentFactory.createColourRectangle("cr", UUID.randomUUID(), 100, 50);
+		IColourRectangle rect = getContentFactory().createColourRectangle("cr", UUID.randomUUID(), 100, 50);
 		rect.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
 		add(rect);
 		BehaviourMaker.addBehaviour(rect, RotateTranslateScaleBehaviour.class);
@@ -67,11 +68,11 @@ public class GalleryApp extends AbstractStandaloneApp {
 			}
 		});
 
-		ICursorOverlay cursors = contentFactory.createCursorOverlay("cursorOverlay", UUID.randomUUID());
+		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
 		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());		
 		add(cursors);
 
-		ICursorTrailsOverlay trails = contentFactory.createCursorTrailsOverlay("trails", UUID.randomUUID());
+		ICursorTrailsOverlay trails = getContentFactory().createCursorTrailsOverlay("trails", UUID.randomUUID());
 		trails.respondToItem(bg);
 		trails.setFadingColour(Color.white);
 		add(trails);
@@ -88,8 +89,8 @@ public class GalleryApp extends AbstractStandaloneApp {
 	}
 
 	private void addNestedFrameExample() {
-		IFrame framewrap = contentFactory.createFrame("superframe", UUID.randomUUID(), 800, 500);		
-		framewrap.setBorder(contentFactory.createRoundedRectangleBorder("superframeborder", UUID.randomUUID(), 20f, 8));
+		IFrame framewrap = getContentFactory().createFrame("superframe", UUID.randomUUID(), 800, 500);		
+		framewrap.setBorder(getContentFactory().createRoundedRectangleBorder("superframeborder", UUID.randomUUID(), 20f, 8));
 		framewrap.setGradientBackground(new Gradient(
 				new Color(0.5f, 0.5f, 0.5f, 0.8f), 
 				new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
@@ -97,8 +98,8 @@ public class GalleryApp extends AbstractStandaloneApp {
 		add(framewrap);
 		BehaviourMaker.addBehaviour(framewrap, RotateTranslateScaleBehaviour.class);
 
-		IFrame f = contentFactory.createFrame("innerframe", UUID.randomUUID(), 200, 100);		
-		f.setBorder(contentFactory.createRoundedRectangleBorder("innerframeborder", UUID.randomUUID(), 20f, 8));
+		IFrame f = getContentFactory().createFrame("innerframe", UUID.randomUUID(), 200, 100);		
+		f.setBorder(getContentFactory().createRoundedRectangleBorder("innerframeborder", UUID.randomUUID(), 20f, 8));
 		f.setGradientBackground(new Gradient(
 				new Color(0.5f, 0.5f, 0.5f, 0.8f), 
 				new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
@@ -110,8 +111,8 @@ public class GalleryApp extends AbstractStandaloneApp {
 	}
 
 	private void addRandomFrame(String photoResource) {		
-		IFrame frame = contentFactory.createFrame("randomframe", UUID.randomUUID(), 400, 200);		
-		frame.setBorder(contentFactory.createRoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 20f, 8));
+		IFrame frame = getContentFactory().createFrame("randomframe", UUID.randomUUID(), 400, 200);		
+		frame.setBorder(getContentFactory().createRoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 20f, 8));
 		frame.setGradientBackground(new Gradient(
 				new Color(0.5f, 0.5f, 0.5f, 0.8f), 
 				new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
@@ -119,7 +120,7 @@ public class GalleryApp extends AbstractStandaloneApp {
 		add(frame);
 		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
-		ILabel label2 = contentFactory.createLabel("label", UUID.randomUUID());
+		ILabel label2 = getContentFactory().createLabel("label", UUID.randomUUID());
 		label2.setText("MultiTouch");
 		label2.setFont(new Font("Myriad Pro", Font.BOLD, 24));
 		label2.setTextColour(Color.white);
@@ -140,7 +141,7 @@ public class GalleryApp extends AbstractStandaloneApp {
 
 		frame.addItem(label2);
 
-		IImage img = contentFactory.createImage("photo", UUID.randomUUID());
+		IImage img = getContentFactory().createImage("photo", UUID.randomUUID());
 		img.setImage(GalleryApp.class.getResource(photoResource));
 		img.setRelativeScale(0.8f);
 		BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);

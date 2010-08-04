@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.jme.math.Vector2f;
 
+import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.AbstractStandaloneApp;
 import multiplicity.app.singleappsystem.SingleAppTableSystem;
 import multiplicity.appgallery.gallery.GalleryApp;
@@ -29,15 +30,15 @@ import multiplicity.input.IMultiTouchEventProducer;
 
 public class SymbolicInputApp extends AbstractStandaloneApp {
 
-	public SymbolicInputApp(IMultiTouchEventProducer producer) {
-		super(producer);
+	public SymbolicInputApp(AbstractSurfaceSystem ass, IMultiTouchEventProducer producer) {
+		super(ass, producer);
 	}
 
 	@Override
 	public void onAppStart() {
 		createBackground();
 		
-		final IEditableText label2 = contentFactory.createEditableText("label", UUID.randomUUID());
+		final IEditableText label2 = getContentFactory().createEditableText("label", UUID.randomUUID());
 		label2.setText("abc");
 		label2.setFont(new Font("Myriad Pro", Font.BOLD, 48*4));
 		label2.setTextColour(Color.white);
@@ -48,7 +49,7 @@ public class SymbolicInputApp extends AbstractStandaloneApp {
 		zOrderManager.bringToTop(label2, null);
 		
 		
-		final IKeyboard kb = contentFactory.createKeyboard("kb", UUID.randomUUID());
+		final IKeyboard kb = getContentFactory().createKeyboard("kb", UUID.randomUUID());
 		KeyboardDefinition kbd = new SimpleAlphaKeyboardDefinition();
 		kb.setKeyboardDefinition(kbd);
 		IKeyboardGraphicsRenderer keyboardRenderer = new SimpleAlphaKeyboardRenderer(kbd);
@@ -82,11 +83,11 @@ public class SymbolicInputApp extends AbstractStandaloneApp {
 			}
 		});
 		
-		IFrame framewrap = contentFactory.createFrame("keyboardFrame", UUID.randomUUID(), kb.getSize().x, kb.getSize().y);		
+		IFrame framewrap = getContentFactory().createFrame("keyboardFrame", UUID.randomUUID(), kb.getSize().x, kb.getSize().y);		
 		framewrap.maintainBorderSizeDuringScale();
 		framewrap.addItem(kb);
 		framewrap.setRelativeLocation(new Vector2f(0f, -200f));
-		framewrap.setBorder(contentFactory.createRoundedRectangleBorder("innerframeborder", UUID.randomUUID(), 20f, 8));
+		framewrap.setBorder(getContentFactory().createRoundedRectangleBorder("innerframeborder", UUID.randomUUID(), 20f, 8));
 		add(framewrap);		
 		BehaviourMaker.addBehaviour(framewrap, RotateTranslateScaleBehaviour.class);
 		
@@ -94,7 +95,7 @@ public class SymbolicInputApp extends AbstractStandaloneApp {
 	}
 	
 	private void createBackground() {
-		IImage bg = contentFactory.createImage("backgroundimage", UUID.randomUUID());
+		IImage bg = getContentFactory().createImage("backgroundimage", UUID.randomUUID());
 		bg.setImage(GalleryApp.class.getResource("yellowflowers_1680x1050.png"));
 		bg.centerItem();
 		add(bg);		

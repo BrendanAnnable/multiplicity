@@ -35,9 +35,10 @@ package multiplicity.csysng.animation;
 import java.util.ArrayList;
 import java.util.List;
 
+import multiplicity.csysng.IUpdateable;
 import multiplicity.csysng.animation.elements.AnimationElement;
 
-public class AnimationSystem {
+public class AnimationSystem implements IUpdateable {
 
 	private static AnimationSystem instance;
 
@@ -52,6 +53,7 @@ public class AnimationSystem {
 
 	private AnimationSystem() {}
 
+	@Override
 	public void update(float timePerFrameSeconds) {
 		List<AnimationElement> scheduledForRemoval = new ArrayList<AnimationElement>();
 		

@@ -50,9 +50,8 @@ public class SingleAppTableSystem extends AbstractSurfaceSystem {
 		MouseInput.get().setCursorVisible(true);
 
 		try {
-			Constructor<? extends AbstractStandaloneApp> con = appClass.getConstructor(IMultiTouchEventProducer.class);
-			app = con.newInstance(producer);
-			app.setSurfaceSystem(this);
+			Constructor<? extends AbstractStandaloneApp> con = appClass.getConstructor(AbstractSurfaceSystem.class, IMultiTouchEventProducer.class);
+			app = con.newInstance(this, producer);
 			rootNode.attachChild(app.getThreeDNode());
 			tableSystemOrtho.attachChild(app.getOrthoNode());			
 			app.onAppStart();						

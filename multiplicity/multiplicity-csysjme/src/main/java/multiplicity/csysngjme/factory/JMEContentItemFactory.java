@@ -9,6 +9,7 @@ import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.ILabel;
+import multiplicity.csysng.items.ILinkingLine;
 import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
@@ -21,6 +22,7 @@ import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMEKeyboard;
 import multiplicity.csysngjme.items.JMELabel;
+import multiplicity.csysngjme.items.JMELinkingLine;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.csysngjme.threedee.JMEThreeDeeContent;
 
@@ -101,6 +103,13 @@ public class JMEContentItemFactory extends ContentItemFactoryUtil implements ICo
 	@Override
 	public IBorder createRoundedRectangleBorder(String name, UUID uuid, float width, int cornerSegments) {
 		return new JMERoundedRectangleBorder(name, uuid, width, cornerSegments);
+	}
+
+	@Override
+	public ILinkingLine createLinkingLine(String name, UUID uuid) {
+		JMELinkingLine line = new JMELinkingLine(name, uuid);
+		line.initializeGeometry();
+		return line;
 	}
 	
 }
