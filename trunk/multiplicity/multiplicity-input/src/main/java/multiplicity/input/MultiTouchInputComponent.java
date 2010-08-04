@@ -255,7 +255,7 @@ public class MultiTouchInputComponent implements IMultiTouchEventListener, IMult
 		if(exceptionListeners.size() < 1) {
 			// we dont' have anybody interested in exceptions, so
 			// should log
-			log.severe("Exception occurred" + t.getMessage());
+			log.severe("Exception occurred: " + t.toString());
 			StringBuffer sb = new StringBuffer();
 			for(StackTraceElement elem : t.getStackTrace()) {
 				sb.append("   " + elem.toString() + "\n");
