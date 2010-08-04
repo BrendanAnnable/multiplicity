@@ -15,6 +15,7 @@ import com.jme.system.DisplaySystem;
 import multiplicity.csysng.gfx.ColourUtils;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.items.IColourRectangle;
+import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.utils.JMEUtils;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
@@ -49,8 +50,8 @@ public class JMEColourRectangle extends JMERectangularItem implements IColourRec
 
 	
 	@Override
-	protected void createZOrderManager() {
-		zOrderManager = new SimpleZOrderManager(this);
+	protected IZOrderManager createZOrderManager() {
+		return new SimpleZOrderManager(this);
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import com.jme.system.DisplaySystem;
 
 import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.scene.RoundedRectangleFrame;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
@@ -131,8 +132,8 @@ public class JMERoundedRectangleBorder extends JMERectangularItem implements IBo
 	}
 
 	@Override
-	protected void createZOrderManager() {
-		zOrderManager = new SimpleZOrderManager(this);
+	protected IZOrderManager createZOrderManager() {
+		return new SimpleZOrderManager(this);
 	}
 
 	@Override

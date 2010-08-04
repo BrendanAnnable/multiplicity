@@ -35,7 +35,7 @@ public abstract class JMEItem extends Node implements IItem {
 	protected UUID uuid;
 	protected Quaternion rot = new Quaternion();
 	protected float angle;
-	protected IZOrderManager zOrderManager;
+	private IZOrderManager zOrderManager;
 	private String itemName;
 
 	public JMEItem(String name, UUID uuid) {
@@ -74,7 +74,7 @@ public abstract class JMEItem extends Node implements IItem {
 			@Override public void objectAdded(MultiTouchObjectEvent event) {}
 		});
 		
-				
+		zOrderManager = createZOrderManager();
 	}
 	
 
@@ -228,10 +228,9 @@ public abstract class JMEItem extends Node implements IItem {
 	public abstract void initializeGeometry();
 	
 	
-	protected abstract void createZOrderManager();
+	protected abstract IZOrderManager createZOrderManager();
 	
 	public IZOrderManager getZOrderManager() {
-		if(zOrderManager == null) createZOrderManager();
 		return zOrderManager;
 	}
 	

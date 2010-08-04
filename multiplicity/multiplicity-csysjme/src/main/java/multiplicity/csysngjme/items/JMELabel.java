@@ -26,6 +26,7 @@ import com.jme.util.TextureManager;
 import com.jme.util.geom.BufferUtils;
 
 import multiplicity.csysng.items.ILabel;
+import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 
@@ -164,8 +165,8 @@ public class JMELabel extends JMERectangularItem implements ILabel {
 	}
 
 	@Override
-	protected void createZOrderManager() {
-		zOrderManager = new SimpleZOrderManager(this);
+	protected IZOrderManager createZOrderManager() {
+		return new SimpleZOrderManager(this);
 	}
 
 	@Override

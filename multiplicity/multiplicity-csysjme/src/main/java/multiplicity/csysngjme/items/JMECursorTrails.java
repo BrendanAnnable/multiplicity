@@ -11,6 +11,7 @@ import java.util.UUID;
 import multiplicity.csysng.gfx.ColourUtils;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
+import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.zordering.GlobalZOrder;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 import multiplicity.input.IMultiTouchEventListener;
@@ -158,8 +159,8 @@ public class JMECursorTrails extends JMEItem implements ICursorTrailsOverlay, IM
 	}
 
 	@Override
-	protected void createZOrderManager() {
-		zOrderManager = new SimpleZOrderManager(this);
+	protected IZOrderManager createZOrderManager() {
+		return new SimpleZOrderManager(this);
 	}
 
 	@Override

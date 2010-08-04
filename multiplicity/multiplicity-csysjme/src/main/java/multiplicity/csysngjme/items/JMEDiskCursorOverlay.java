@@ -18,6 +18,7 @@ import com.jme.system.DisplaySystem;
 import multiplicity.jmeutils.UnitConversion;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
+import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.zordering.GlobalZOrder;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 import multiplicity.input.IMultiTouchEventListener;
@@ -140,8 +141,8 @@ public class JMEDiskCursorOverlay extends JMEItem implements ICursorOverlay, IMu
 	}
 
 	@Override
-	protected void createZOrderManager() {
-		zOrderManager = new SimpleZOrderManager(this);		
+	protected IZOrderManager createZOrderManager() {
+		return new SimpleZOrderManager(this);		
 	}
 
 
