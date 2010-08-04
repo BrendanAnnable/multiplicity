@@ -39,7 +39,7 @@ public class KeyboardInputUtility {
 		}
 		if ( KeyBindingManager.getKeyBindingManager().isValidCommand("step", true ) ) {
 			app.simpleUpdate();
-			app.getRootNode().updateGeometricState(tpf, true);
+			app.getSurfaceSystem3DNode().updateGeometricState(tpf, true);
 		}
 
 		if ( KeyBindingManager.getKeyBindingManager().isValidCommand("toggle_wire", false ) ) {
@@ -48,7 +48,7 @@ public class KeyboardInputUtility {
 
 		if ( KeyBindingManager.getKeyBindingManager().isValidCommand("toggle_lights", false ) ) {
 			app.setLightingEnabled(!app.isLightingEnabled());
-			app.getRootNode().updateRenderState();
+			app.getSurfaceSystem3DNode().updateRenderState();
 		}
 
 		if ( KeyBindingManager.getKeyBindingManager().isValidCommand("toggle_bounds", false ) ) {

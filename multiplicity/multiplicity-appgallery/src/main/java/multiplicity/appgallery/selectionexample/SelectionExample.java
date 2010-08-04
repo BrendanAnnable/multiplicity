@@ -5,9 +5,9 @@ import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
+import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
-import multiplicity.app.singleappsystem.AbstractStandaloneApp;
-import multiplicity.app.singleappsystem.SingleAppTableSystem;
+import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.items.IImage;
@@ -19,7 +19,7 @@ import multiplicity.input.IMultiTouchEventProducer;
 import com.jme.math.Vector2f;
 
 
-public class SelectionExample extends AbstractStandaloneApp {
+public class SelectionExample extends AbstractMultiplicityApp {
 
 	public SelectionExample(AbstractSurfaceSystem ass, IMultiTouchEventProducer producer) {
 		super(ass, producer);
@@ -69,7 +69,7 @@ public class SelectionExample extends AbstractStandaloneApp {
 	}
 	
 	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-		SingleAppTableSystem.startSystem(SelectionExample.class);
+		SingleAppMultiplicitySurfaceSystem.startSystem(SelectionExample.class);
 	}
 
 }

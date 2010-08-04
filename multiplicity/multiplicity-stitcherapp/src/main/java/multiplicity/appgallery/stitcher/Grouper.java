@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import multiplicity.app.singleappsystem.AbstractStandaloneApp;
+import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.utils.XMLOperations;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.gfx.Gradient;
@@ -28,7 +28,7 @@ public class Grouper implements IMultiTouchEventListener {
 	private static final Logger logger = Logger.getLogger(Grouper.class.getName());
 	
 	private List<IItem> registeredItems = new ArrayList<IItem>();
-	private AbstractStandaloneApp app;
+	private AbstractMultiplicityApp app;
 
 	public Grouper() {
 	}
@@ -136,7 +136,7 @@ public class Grouper implements IMultiTouchEventListener {
 				&& (startEndDistance < startEndTolerance);
 	}
 
-	public void register(IItem item, AbstractStandaloneApp app) {
+	public void register(IItem item, AbstractMultiplicityApp app) {
 		if (!registeredItems.contains(item))
 			registeredItems.add(item);
 		this.app = app;
