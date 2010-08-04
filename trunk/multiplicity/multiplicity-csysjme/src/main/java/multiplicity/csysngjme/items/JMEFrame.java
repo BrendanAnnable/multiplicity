@@ -10,6 +10,7 @@ import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
+import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.picking.JMEItemUserData;
 import multiplicity.csysngjme.utils.JMEUtils;
@@ -97,8 +98,7 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 	}
 
 	private FrameZOrderManager getFrameZOrderManager() {
-		if(zOrderManager == null) createZOrderManager();
-		return (FrameZOrderManager)zOrderManager;
+		return (FrameZOrderManager) getZOrderManager();
 	}
 
 	private void setupStencil() {
@@ -168,7 +168,7 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 				}
 			}
 		});
-		zOrderManager.updateZOrdering();
+		getFrameZOrderManager().updateZOrdering();
 		updateRenderState();		
 	}
 
@@ -242,8 +242,8 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 	}
 
 	@Override
-	protected void createZOrderManager() {
-		zOrderManager = new FrameZOrderManager(this, 50);
+	protected IZOrderManager createZOrderManager() {
+		return new FrameZOrderManager(this, 50);
 	}
 
 	public Spatial getMaskGeometry() {

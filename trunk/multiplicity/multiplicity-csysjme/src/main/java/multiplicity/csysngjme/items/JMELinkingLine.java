@@ -8,6 +8,7 @@ import multiplicity.csysng.gfx.ColourUtils;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.ILinkingLine;
 import multiplicity.csysng.items.events.IItemListener;
+import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 import multiplicity.input.events.MultiTouchCursorEvent;
 
@@ -34,8 +35,8 @@ public class JMELinkingLine extends JMEItem implements ILinkingLine, IItemListen
 	}
 
 	@Override
-	protected void createZOrderManager() {
-		zOrderManager = new SimpleZOrderManager(this);		
+	protected IZOrderManager createZOrderManager() {
+		return new SimpleZOrderManager(this);		
 	}
 
 	@Override

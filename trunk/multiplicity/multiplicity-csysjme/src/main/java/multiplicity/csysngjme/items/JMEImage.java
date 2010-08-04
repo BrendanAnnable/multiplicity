@@ -15,6 +15,7 @@ import com.jme.system.DisplaySystem;
 import com.jme.util.TextureManager;
 
 import multiplicity.csysng.items.IImage;
+import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 
@@ -121,8 +122,8 @@ public class JMEImage extends JMERectangularItem implements IImage {
 	}
 
 	@Override
-	protected void createZOrderManager() {
-		zOrderManager = new SimpleZOrderManager(this);
+	protected IZOrderManager createZOrderManager() {
+		return new SimpleZOrderManager(this);
 	}
 
 	@Override

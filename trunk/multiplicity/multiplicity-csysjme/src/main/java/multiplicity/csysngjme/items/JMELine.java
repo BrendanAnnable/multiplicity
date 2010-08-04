@@ -3,6 +3,7 @@ package multiplicity.csysngjme.items;
 import java.nio.FloatBuffer;
 import java.util.UUID;
 
+import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.items.hotspots.HotSpotItem;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
@@ -58,8 +59,8 @@ public class JMELine extends JMELineItem {
 	
 
 	@Override
-	protected void createZOrderManager() {
-		zOrderManager = new SimpleZOrderManager(this);
+	protected IZOrderManager createZOrderManager() {
+		return new SimpleZOrderManager(this);
 	}
 
 	@Override

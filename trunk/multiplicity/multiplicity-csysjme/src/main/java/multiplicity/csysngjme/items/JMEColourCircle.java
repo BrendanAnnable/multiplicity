@@ -2,6 +2,7 @@ package multiplicity.csysngjme.items;
 
 import java.util.UUID;
 
+import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 
@@ -53,8 +54,8 @@ public class JMEColourCircle extends JMECircularItem {
 	
 
 	@Override
-	protected void createZOrderManager() {
-		zOrderManager = new SimpleZOrderManager(this);
+	protected IZOrderManager createZOrderManager() {
+		return new SimpleZOrderManager(this);
 	}
 
 	@Override

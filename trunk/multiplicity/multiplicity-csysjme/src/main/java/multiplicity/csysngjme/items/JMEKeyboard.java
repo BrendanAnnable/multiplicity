@@ -6,6 +6,7 @@ import java.util.UUID;
 import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.csysng.items.keyboard.IKeyboardGraphicsRenderer;
 import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
+import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 
@@ -35,8 +36,8 @@ public class JMEKeyboard extends JMERectangularItem implements IKeyboard {
 	}
 
 	@Override
-	protected void createZOrderManager() {
-		zOrderManager = new SimpleZOrderManager(this);
+	protected IZOrderManager createZOrderManager() {
+		return new SimpleZOrderManager(this);
 	}
 
 	@Override
