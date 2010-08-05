@@ -67,8 +67,8 @@ public class DoubleFingerSimCursor extends AbstractSimCursor {
 	IndividualCursor[] cursorInfo = new IndividualCursor[2];
 	private float dy = 1;
 	private float dx = 1;
-	private Point firstCursorPosition;
-	private Point secondCursorPosition;
+	private Point firstCursorPosition = new Point();
+	private Point secondCursorPosition = new Point();
 	private Point centralPoint = new Point();
 	private int screenWidth;
 	private int screenHeight;
@@ -126,7 +126,7 @@ public class DoubleFingerSimCursor extends AbstractSimCursor {
 		mouseScreenX = x;
 		mouseScreenY = y;
 		if(buttonNumber == AbstractSimCursor.MOUSE_BUTTON_RIGHT && mode == MODE_INITIAL_DISTANCE) {
-			this.secondCursorPosition = new Point(x, y);
+			this.secondCursorPosition.setLocation(x, y);
 			radius = (int) (firstCursorPosition.distance(secondCursorPosition)/2f);			
 			updatePositionInfo();
 			angle = -Math.atan(dy/dx) + Math.PI/2;
