@@ -13,6 +13,7 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 
 import multiplicity.app.utils.LocalStorageUtility;
+import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IFrame;
@@ -23,6 +24,7 @@ import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.repository.IRepositoryFrame;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysng.behaviours.inertia.InertiaBehaviour;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMERectangularItem;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
@@ -111,14 +113,29 @@ public class GetAttachmentItems extends Thread {
         return false;
 	    
 	}
+	public boolean isOnRepository(IItem item) {
+	        
+	        if( item instanceof IRepositoryFrame ) {
+	            return true;
+	        }
+	        
+	        if(item.getParentItem() != null){
+	            isOnRepository(item.getParentItem());
+	        }
+	        
+	        return false;
+	        
+	}
+	   
 	public IImage createPhotoImage(URL url) {
 
 		IImage img;
 		img = stitcher.getContentFactory().createImage("photo", UUID.randomUUID());
 		img.setImage(url);
-		BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
 		//img.setRelativeScale(0.6f);
 		img.setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
+	    BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
+
 		img.addItemListener(new ItemListenerAdapter() {
 
 			@Override
@@ -130,26 +147,34 @@ public class GetAttachmentItems extends Thread {
 				Vector2f locStore = new Vector2f();
 				UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
 
-				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
+//				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
 
+				List<IItem> findItemsOnTableAtPosition = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(locStore);
+				
 				if (item.getParentItem().getTreeRootSpatial() instanceof JMEFrame) {
 					JMEFrame frame = (JMEFrame) item.getParentItem().getTreeRootSpatial();
-					for (PickedSpatial pickedSpatial : spatialsList) {
-						if (pickedSpatial.getSpatial().equals(frame.getMaskGeometry())) {
-							offParent = false;
-							message = message + "it's parent frame SCANS.";
-						}
+					for (IItem pickedItem : findItemsOnTableAtPosition) {
+					    
+					    if( pickedItem.equals(frame)) {
+					        offParent = false;
+                            message = message + "it's parent frame SCANS.";
+					    }
+					    
+//						if (pickedSpatial.getSpatial().equals(frame.getMaskGeometry())) {
+//							offParent = false;
+//							message = message + "it's parent frame SCANS.";
+//						}
 					}
 				}
 
 				if (parentContainerName.equals(stitcher.SCAN_NAME) && offParent || parentContainerName.equals(stitcher.STENCIL_NAME) && offParent) {
-					for (PickedSpatial pickedSpatial : spatialsList) {
-						if ((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && firstFrameFound == false) {
+					for (IItem foundItem : findItemsOnTableAtPosition) {
+						if (foundItem instanceof JMEFrame && firstFrameFound == false) {
 							try {
-								Geometry geometry = (Geometry) pickedSpatial.getSpatial();
+								Geometry geometry = (Geometry) foundItem.getManipulableSpatial();
 
-								if (geometry.getParent() instanceof HotSpotFrame) {
-									HotSpotFrame targetFrame = (HotSpotFrame) geometry.getParent();
+								if (foundItem instanceof HotSpotFrame) {
+									HotSpotFrame targetFrame = (HotSpotFrame)foundItem;
 
 									if (targetFrame.getName().contains("hotspotf-") && !highlightedFrames.contains(targetFrame)) {
 										message = message + targetFrame.getName() + ": let's turn it red";
@@ -181,13 +206,12 @@ public class GetAttachmentItems extends Thread {
 					firstFrameFound = false;
 					message = message + "something else than a hotspotframe or the parent (i.e. the mist)";
 
-					for (PickedSpatial pickedSpatial : spatialsList) {
-						if ((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && firstFrameFound == false) {
+					for (IItem foundItem : findItemsOnTableAtPosition) {
+						if (foundItem instanceof JMEFrame && firstFrameFound == false) {
 							try {
-								Geometry geometry = (Geometry) pickedSpatial.getSpatial();
 
-								if (geometry.getParent() instanceof HotSpotFrame) {
-									IHotSpotFrame targetFrame = (IHotSpotFrame) geometry.getParent();
+								if (foundItem instanceof HotSpotFrame) {
+									IHotSpotFrame targetFrame = (IHotSpotFrame)foundItem;
 									if (highlightedFrames.contains(targetFrame)) {
 										firstFrameFound = true;
 										IBorder border = targetFrame.getBorder();
@@ -230,19 +254,22 @@ public class GetAttachmentItems extends Thread {
 				Vector2f locStore = new Vector2f();
 				UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
 
-				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
+                List<IItem> findItemsOnTableAtPosition = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(locStore);
+
+                
+//				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
 
 				if (releasedItem.getParentItem() instanceof IRepositoryFrame) {
 				    IRepositoryFrame repositoryFrame = (IRepositoryFrame) releasedItem.getParentItem();
-					for (PickedSpatial pickedSpatial : spatialsList) {
+					for (IItem foundItem : findItemsOnTableAtPosition) {
 					    
 //					    if( isOnRepository(pickedSpatial.getSpatial())) {
 //					        offParent = false;
 //					        break;
 //					    }
-					    if( pickedSpatial.getSpatial().getParent() instanceof IRepositoryFrame) {
+					    if( foundItem.getParentItem() instanceof IRepositoryFrame) {
 					        offParent = false;
-					    } else if( isOnRepository(pickedSpatial.getSpatial())) {
+					    } else if( isOnRepository(foundItem)) {
                             offParent = false;
                         }
 //						if (pickedSpatial.getSpatial().equals(frame.getMaskGeometry())) {
@@ -276,13 +303,13 @@ public class GetAttachmentItems extends Thread {
 					// check if we are dropping on a "background"
 					// frame
 					boolean firstFrameFound = false;
-					for (PickedSpatial pickedSpatial : spatialsList) {
-						if ((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && firstFrameFound == false) {
+					for (IItem foundItem : findItemsOnTableAtPosition) {
+						if (foundItem instanceof IFrame && firstFrameFound == false) {
 							try {
-								Geometry geometry = (Geometry) pickedSpatial.getSpatial();
+								Geometry geometry = (Geometry) foundItem.getManipulableSpatial();
 
-								if (geometry.getParent() instanceof HotSpotFrame) {
-									HotSpotFrame targetFrame = (HotSpotFrame) geometry.getParent();
+								if (foundItem instanceof HotSpotFrame) {
+									HotSpotFrame targetFrame = (HotSpotFrame)foundItem;
 
 									if (!targetFrame.isLocked() && targetFrame.getName().contains("back-") && (parentContainerName.equals(stitcher.SCAN_NAME) || parentContainerName.equals(stitcher.STENCIL_NAME))) {
 										firstFrameFound = true;
@@ -325,9 +352,10 @@ public class GetAttachmentItems extends Thread {
 				}// if
 
 				logger.info("cursor released caught event: " + releasedItem.getParentItem().getClass());
-				stitcher.bumpHotSpotConnections();
+				//stitcher.bumpHotSpotConnections();
 			}
 		});
+
 
 		return img;
 	}

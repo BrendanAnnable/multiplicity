@@ -13,6 +13,7 @@ import java.util.Vector;
 import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
+import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.factory.IPaletFactory;
@@ -273,12 +274,12 @@ public class StitcherApp extends AbstractMultiplicityApp {
 				Vector2f locStore = new Vector2f();
 				UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
 
-				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
-
+				List<IItem> items = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(locStore);
 				IHotSpotFrame paletParent = (IHotSpotFrame) item.getParentItem();
 
-				for (PickedSpatial pickedSpatial : spatialsList) {
-					if (pickedSpatial.getSpatial().equals(((JMEFrame) paletParent.getTreeRootSpatial()).getMaskGeometry())) {
+				for (IItem foundItem : items) {
+				    
+				    if (foundItem.getParentItem() != null && foundItem.getParentItem().equals(item.getParentItem())) {
 						offParent = false;
 						message = message + "on its parent. Nothing happens";
 					}
@@ -439,16 +440,20 @@ public class StitcherApp extends AbstractMultiplicityApp {
 				Vector2f locStore = new Vector2f();
 				UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
 
-				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
+//				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
 
+                List<IItem> items = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(locStore);
+
+                
 				IHotSpotFrame paletParent = (IHotSpotFrame) item.getParentItem();
 
-				for (PickedSpatial pickedSpatial : spatialsList) {
-					if (pickedSpatial.getSpatial().equals(((JMEFrame) paletParent.getTreeRootSpatial()).getMaskGeometry())) {
-						offParent = false;
-						message = message + "on its parent. Nothing happens";
-					}
-				}
+                for (IItem foundItem : items) {
+                    
+                    if (foundItem.getParentItem() != null && foundItem.getParentItem().equals(item.getParentItem())) {
+                        offParent = false;
+                        message = message + "on its parent. Nothing happens";
+                    }
+                }
 
 				if (offParent) {
 					item.centerItem();
@@ -611,18 +616,20 @@ public class StitcherApp extends AbstractMultiplicityApp {
 				Vector2f locStore = new Vector2f();
 				UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
 
-				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
+//				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
 
+                List<IItem> findItemsOnTableAtPosition = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(locStore);
+
+                
 				boolean firstFrameFound = false;
-				for (PickedSpatial pickedSpatial : spatialsList) {
-					if (pickedSpatial.getSpatial().equals(((JMEFrame) item.getParentItem().getTreeRootSpatial()).getMaskGeometry())) {
+				for (IItem foundItem : findItemsOnTableAtPosition) {
+					if (foundItem.getParentItem() != null && foundItem.getParentItem().equals(item.getParentItem())) {
 						offParent = false;
 						message = message + "on its parent. Nothing happens";
 
-					} else if ((pickedSpatial.getSpatial().toString()).equals("maskGeometry") && !firstFrameFound) {
+					} else if (foundItem instanceof IFrame && !firstFrameFound) {
 						try {
-							Geometry geometry = (Geometry) pickedSpatial.getSpatial();
-							JMEFrame targetFrame = (JMEFrame) geometry.getParent();
+							JMEFrame targetFrame = (JMEFrame)foundItem;
 
 							if (targetFrame.getName().contains("back-") && hotSpotRepo.getName().equals("hotspots")) {
 								firstFrameFound = true;
