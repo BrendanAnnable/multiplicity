@@ -89,12 +89,14 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		this.addItemListener(new ItemListenerAdapter() {
 
 			public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
-				HotSpotItem hs = (HotSpotItem) item;
-				hs.clickCount++;
-				if (hs.clickCount == 2) {
-					hs.setOpen(!hs.isOpen);
-					hs.clickCount = 0;
-				}
+			    
+			    //this allow hotspots to hide/unhide
+//				HotSpotItem hs = (HotSpotItem) item;
+//				hs.clickCount++;
+//				if (hs.clickCount == 2) {
+//					hs.setOpen(!hs.isOpen);
+//					hs.clickCount = 0;
+//				}
 			};
 
 			public void itemMoved(IItem item) {
