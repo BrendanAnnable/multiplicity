@@ -78,7 +78,10 @@ public abstract class JMEItem extends Node implements IItem {
 	}
 	
 
-
+	public String getName() {
+	    return name;
+	    
+	}
 	public UUID getUUID() {
 		return uuid;
 	}
