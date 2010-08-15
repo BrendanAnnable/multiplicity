@@ -154,7 +154,11 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	public void bringPaletToTop() {
 		// TODO Auto-generated method stub
 		IPalet palet = (IPalet) this.getChild("palet");
+		if(isLocked() == false ) {
+		    sendOverlayToBottom();
+		}
 		this.getZOrderManager().bringToTop(palet, null);  
+		
 	}
 
     @Override
@@ -184,6 +188,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	@Override
 	public void setLocked(boolean isLocked) {
 		this.isLocked = isLocked;
+		this.toggleLock();
 	}
 
 	@Override
@@ -198,13 +203,16 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 			this.getZOrderManager().bringToTop(frameOverlay, null);
 			border.setColor(new ColorRGBA(0f, 0f, 0f, 0f));
 		}
-		
-		this.setLocked(!isLocked);
 	}
 
 	@Override
-	public void sendOverlaytoBottom() {
+	public void sendOverlayToBottom() {
 		this.getZOrderManager().sendToBottom(frameOverlay, null);
+	}
+	
+	@Override
+	public void sendOverlayToTop() {
+	    this.getZOrderManager().bringToTop(frameOverlay, null);
 	}
 
 	public JMEColourRectangle getFrameOverlay() {

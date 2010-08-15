@@ -2,7 +2,7 @@ package multiplicity.csysng.items;
 
 public interface IPalet extends IItem {
 
-	public void updatePalet(boolean locked);
+	public void lockPalet(boolean locked);
 	
 	public int tap();
 	

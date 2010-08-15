@@ -37,7 +37,8 @@ public interface IHotSpotFrame extends IFrame {
 
 	public void toggleLock();
 
-	public void sendOverlaytoBottom();
-
     public IPalet getPalet();
+
+    public void sendOverlayToTop();
+    public void sendOverlayToBottom();
 }
