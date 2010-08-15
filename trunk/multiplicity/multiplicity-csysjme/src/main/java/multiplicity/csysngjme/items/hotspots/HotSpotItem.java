@@ -6,14 +6,13 @@ import java.util.UUID;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.ILineItem;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
-//import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEColourCircle;
 import multiplicity.csysngjme.items.JMELine;
 import multiplicity.input.events.MultiTouchCursorEvent;
 
-//import org.apache.log4j.Logger;
+import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
@@ -22,7 +21,7 @@ import com.jme.renderer.ColorRGBA;
 public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 
 	private static final long serialVersionUID = 3685342474539036654L;
-//	private final static Logger logger = Logger.getLogger(HotSpotItem.class.getName());
+	private final static Logger logger = Logger.getLogger(HotSpotItem.class.getName());
 
 	boolean isOpen = true;
 	protected String link;
@@ -86,6 +85,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		hotLink.initializeGeometry();
 		hotSpotFrameContent.addHotLink(hotLink);
 
+		
 		this.addItemListener(new ItemListenerAdapter() {
 
 			public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
