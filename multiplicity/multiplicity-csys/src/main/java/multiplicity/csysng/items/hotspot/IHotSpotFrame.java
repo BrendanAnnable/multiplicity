@@ -41,4 +41,7 @@ public interface IHotSpotFrame extends IFrame {
 
     public void sendOverlayToTop();
     public void sendOverlayToBottom();
+
+    public void addPalet(IPalet palet);
+
 }
