@@ -304,10 +304,8 @@ public class GetAttachmentItems extends Thread {
 					// frame
 					boolean firstFrameFound = false;
 					for (IItem foundItem : findItemsOnTableAtPosition) {
-						if (foundItem instanceof IFrame && firstFrameFound == false) {
+						if (foundItem instanceof JMEFrame && firstFrameFound == false) {
 							try {
-								Geometry geometry = (Geometry) foundItem.getManipulableSpatial();
-
 								if (foundItem instanceof HotSpotFrame) {
 									HotSpotFrame targetFrame = (HotSpotFrame)foundItem;
 
@@ -322,8 +320,8 @@ public class GetAttachmentItems extends Thread {
 										releasedItem.setWorldLocation(itemWorldPos);
 										targetFrame.getZOrderManager().bringToTop(releasedItem, null);
 
-										targetFrame.bringHotSpotsToTop();
 										targetFrame.bringPaletToTop();
+										targetFrame.bringHotSpotsToTop();
 									} else if (!targetFrame.isLocked() && targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.SCAN_NAME)) {
 										firstFrameFound = true;
 										dropOnHotSpotFrame(releasedItem, targetFrame);
@@ -377,14 +375,13 @@ public class GetAttachmentItems extends Thread {
         ((JMERectangularItem) item).setSize(stitcher.HOTSPOT_FRAME_DIMENSION, stitcher.HOTSPOT_FRAME_DIMENSION);
         item.centerItem();
         clearAllHighlightedHotSpotFrames();
-        hotSpotFrame.getZOrderManager().bringToTop(item, null);
-
-       
         hotSpotFrame.setLocked(true);
-        hotSpotFrame.getPalet().updatePalet(hotSpotFrame.isLocked());
-        hotSpotFrame.bringHotSpotsToTop();
+        hotSpotFrame.getPalet().lockPalet(hotSpotFrame.isLocked());
         hotSpotFrame.bringPaletToTop();
-        stitcher.bumpHotSpotConnections();
+        hotSpotFrame.bringHotSpotsToTop();
+        hotSpotFrame.getZOrderManager().sendToBottom(item, null);
+
+//        stitcher.bumpHotSpotConnections();
 	}
 	
 	public void run() {
