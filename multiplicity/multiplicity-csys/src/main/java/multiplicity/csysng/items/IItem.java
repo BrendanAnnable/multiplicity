@@ -16,7 +16,7 @@ public interface IItem {
 	
 	public void setParentItem(IItem parent);
 	public IItem getParentItem();	
-	
+	public String getName();
 	public MultiTouchEventDispatcher getMultiTouchDispatcher();
 	
 	public void addItemListener(IItemListener itemListener);
