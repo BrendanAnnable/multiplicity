@@ -249,8 +249,6 @@ public class GetAttachmentItems extends Thread {
 			public void itemCursorReleased(IItem releasedItem, MultiTouchCursorEvent event) {
 				boolean offParent = true;
 
-				Node s = (Node) stitcher.getOrthoNode();
-
 				Vector2f locStore = new Vector2f();
 				UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
 
@@ -297,8 +295,9 @@ public class GetAttachmentItems extends Thread {
 						copy.setRelativeLocation(position);
 					}
 					
-					stitcher.moveItemToNewFrame(releasedItem, new Vector2f(0.0f, 0.0f), "back-" + releasedItem.getUUID());
 					frame.removeItem(releasedItem);
+					stitcher.createNewFrame(releasedItem, new Vector2f(0.0f, 0.0f), "back-" + releasedItem.getUUID(), true);
+					
 				} else {
 					// check if we are dropping on a "background"
 					// frame
