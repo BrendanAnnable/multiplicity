@@ -2,6 +2,7 @@ package multiplicity.csysng.factory;
 
 import java.util.UUID;
 
+import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 
@@ -14,5 +15,7 @@ public interface IHotSpotContentFactory {
     public IHotSpotItem createHotSpotItem(String name, UUID uuid, float radius);
 
 	public IHotSpotItem createHotSpotItem(String name, UUID uuid, float radius, ColorRGBA colorRGBA);
+
+    public IHotSpotText createEditableHotSpotText(String name, UUID uuid);
 
 }

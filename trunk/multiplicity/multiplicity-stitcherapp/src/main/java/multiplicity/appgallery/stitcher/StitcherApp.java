@@ -1,6 +1,7 @@
 package multiplicity.appgallery.stitcher;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -20,7 +21,9 @@ import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.factory.IPaletFactory;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
+import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IFrame;
+import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
@@ -150,6 +153,15 @@ public class StitcherApp extends AbstractMultiplicityApp {
 
 	private void loadContent(final HashMap<String, IPage> wikiPages) {
         
+        IImage bg = getContentFactory().createImage("backgroundimage",
+                UUID.randomUUID());
+        bg.setImage(StitcherApp.class
+                .getResource("bluebackground.png"));
+        bg.centerItem();
+        add(bg);
+        zOrderManager.sendToBottom(bg, null);
+        zOrderManager.neverBringToTop(bg);
+	        
         zOrderedItems = new ArrayList<IItem>();
         
         Runnable runnable = new Runnable() {
@@ -198,11 +210,11 @@ public class StitcherApp extends AbstractMultiplicityApp {
 		add(trails);
 	}
 
-    public IHotSpotFrame createNewHotSpotContentFrame() {
-		return createNewFrame(null, null, "hotspotf-", false);
+    public IHotSpotFrame createNewHotSpotContentFrame(String type) {
+		return createNewFrame(null, null, "hotspotf-", false, type);
 	}
 
-	public IHotSpotFrame createNewFrame(IItem backgroundImage,Vector2f atPosition, String frameName, boolean isBackground) {
+	public IHotSpotFrame createNewFrame(IItem backgroundImage,Vector2f atPosition, String frameName, boolean isBackground, String type) {
 	    IHotSpotFrame newHotSpotFrame = null;
 
 	       
@@ -221,73 +233,10 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	        newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 	        newHotSpotFrame.maintainBorderSizeDuringScale();
 	        newHotSpotFrame.setRelativeLocation(atPosition);
-	    } else {
+
+	        BehaviourMaker.addBehaviour(newHotSpotFrame, RotateTranslateScaleBehaviour.class);
+	        this.add(newHotSpotFrame);
 	        
-	        UUID randomUUID = UUID.randomUUID();
-	        float xPos = Integer.valueOf(-DisplaySystem.getDisplaySystem().getWidth() / 2 + (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
-	        float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
-
-	        newHotSpotFrame = (IHotSpotFrame) this.getHotSpotContentFactory().createHotSpotFrame(frameName + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
-
-	        newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, new ColorRGBA(0f, 0f, 0f, 0f)));
-	        newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
-	        newHotSpotFrame.maintainBorderSizeDuringScale();
-	        newHotSpotFrame.setRelativeLocation(new Vector2f(xPos, yPos));
-	    }
-	    
-	    BehaviourMaker.addBehaviour(newHotSpotFrame, RotateTranslateScaleBehaviour.class);
-	    this.add(newHotSpotFrame);
-	    
-	    //set up the palet
-        IPalet palet = this.getPaletFactory().createPaletItem("palet",  UUID.randomUUID(), PALET_DIMENSION, new ColorRGBA(0f, 1f, 0f, 1f));
-        newHotSpotFrame.addPalet(palet);
-        palet.centerItem();
-        BehaviourMaker.addBehaviour(palet, RotateTranslateScaleBehaviour.class);
-        palet.addItemListener(new ItemListenerAdapter() {
-            
-            @Override
-            public void itemCursorPressed(IItem item,
-                    MultiTouchCursorEvent event) {
-                super.itemCursorPressed(item, event);
-                IPalet palet = (IPalet) item;
-                paletPressed(palet);
-            }
-
-            @Override
-            public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
-                 super.itemCursorReleased(item, event);
-                 paletReleased(item, event);
-            }
-        });
-
-        newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
-
-            @Override
-            public void itemMoved(IItem item) {
-                super.itemMoved(item);
-                logger.debug("hot spot frame moved - " + item.getName());
-
-                IHotSpotFrame frame = (IHotSpotFrame) item;
-                // update all the hotspotitems which will update all the
-                // hotlinks
-                List<IHotSpotItem> hotSpots = frame.getHotSpots();
-                for (IHotSpotItem iHotSpotItem : hotSpots) {
-                    iHotSpotItem.update(frame.getRelativeLocation());
-                }
-                
-                //background frame news to bump up these up
-                if( item.getName().contains("back")) {
-                    stitcher.bumpHotSpotConnections();
-                }
-                
-                frame.bringHotSpotsToTop();
-                frame.bringPaletToTop();
-                
-               
-            }
-        });
-        
-        if( isBackground ) {
             Vector2f itemWorldPos = backgroundImage.getWorldLocation();
             newHotSpotFrame.addItem(backgroundImage);
             backgroundImage.setWorldLocation(itemWorldPos);
@@ -309,14 +258,113 @@ public class StitcherApp extends AbstractMultiplicityApp {
                     stitcher.bumpHotSpotConnections();
                 }
             });
-        }
+	    } else if( type != null && type.equals(IMAGE) ){
+	        
+	        UUID randomUUID = UUID.randomUUID();
+	        float xPos = Integer.valueOf(-DisplaySystem.getDisplaySystem().getWidth() / 2 + (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
+	        float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
 
-        newHotSpotFrame.bringPaletToTop();
-        getZOrderManager().bringToTop(newHotSpotFrame, null);
-        newHotSpotFrame.getZOrderManager().updateZOrdering();
+	        newHotSpotFrame = (IHotSpotFrame) this.getHotSpotContentFactory().createHotSpotFrame(frameName + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
 
-        return newHotSpotFrame;
+	        newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, new ColorRGBA(0f, 0f, 0f, 0f)));
+	        newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
+	        newHotSpotFrame.maintainBorderSizeDuringScale();
+	        newHotSpotFrame.setRelativeLocation(new Vector2f(xPos, yPos));
+
+	        BehaviourMaker.addBehaviour(newHotSpotFrame, RotateTranslateScaleBehaviour.class);
+	        this.add(newHotSpotFrame);
+	    } else if((type != null && type.equals(TEXT))) {
+	         
+	         final IHotSpotText hotspotLabel = getHotSpotContentFactory().createEditableHotSpotText("HotSpotLabel", UUID.randomUUID());
+	         hotspotLabel.setText("Replace Me");
+	         hotspotLabel.setFont(new Font("Myriad Pro", Font.BOLD, 48*2));
+	         hotspotLabel.setTextColour(Color.white);
+	         hotspotLabel.setRelativeLocation(new Vector2f(0, 200));
+	         hotspotLabel.setCursorAt(3);
+	         BehaviourMaker.addBehaviour(hotspotLabel, RotateTranslateScaleBehaviour.class);       
+	         add(hotspotLabel);
+	         hotspotLabel.addItemListener(new ItemListenerAdapter() {
+
+	                @Override
+	                public void itemMoved(IItem item) {
+	                    super.itemMoved(item);
+	                    hotspotFrameMove(item);
+	                }
+	            });
+	         return hotspotLabel;
+	     }
+	       
+	     
 	    
+	    
+	    if( isBackground || (type != null && type.equals(IMAGE) )){
+	        //set up the palet
+	        IPalet palet = this.getPaletFactory().createPaletItem("palet",  UUID.randomUUID(), PALET_DIMENSION, new ColorRGBA(0f, 1f, 0f, 1f));
+	        newHotSpotFrame.addPalet(palet);
+	        palet.centerItem();
+	        BehaviourMaker.addBehaviour(palet, RotateTranslateScaleBehaviour.class);
+	        palet.addItemListener(new ItemListenerAdapter() {
+	            
+	            @Override
+	            public void itemCursorPressed(IItem item,
+	                    MultiTouchCursorEvent event) {
+	                super.itemCursorPressed(item, event);
+	                IPalet palet = (IPalet) item;
+	                paletPressed(palet);
+	            }
+
+	            @Override
+	            public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
+	                 super.itemCursorReleased(item, event);
+	                 paletReleased(item, event);
+	            }
+	        });
+	        
+	        newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
+
+	            @Override
+	            public void itemMoved(IItem item) {
+	                super.itemMoved(item);
+	                hotspotFrameMove(item);
+	                IHotSpotFrame frame = (IHotSpotFrame) item;
+	                frame.bringPaletToTop();
+	                
+	               
+	            }
+	        });
+	        
+	        newHotSpotFrame.bringPaletToTop();
+	        getZOrderManager().bringToTop(newHotSpotFrame, null);
+	        newHotSpotFrame.getZOrderManager().updateZOrdering();
+	        
+	        return newHotSpotFrame;
+	    }
+	    
+   
+
+	    return null;
+
+       
+	    
+	}
+	
+	protected void hotspotFrameMove(IItem item){
+	    logger.debug("hot spot frame moved - " + item.getName());
+
+        IHotSpotFrame frame = (IHotSpotFrame) item;
+        // update all the hotspotitems which will update all the
+        // hotlinks
+        List<IHotSpotItem> hotSpots = frame.getHotSpots();
+        for (IHotSpotItem iHotSpotItem : hotSpots) {
+            iHotSpotItem.update(frame.getRelativeLocation());
+        }
+        
+        //background frame news to bump up these up
+        if( item.getName().contains("back")) {
+            stitcher.bumpHotSpotConnections();
+        }
+        
+        frame.bringHotSpotsToTop();
 	}
 
 	protected void paletReleased(IItem item, MultiTouchCursorEvent event) {
@@ -518,6 +566,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	        colorRGBA = new ColorRGBA(1f, 0f, 0f, 0.6f);
 	    }
 		IHotSpotItem hotspot = this.getHotSpotContentFactory().createHotSpotItem("cr", UUID.randomUUID(), HOTSPOT_DIMENSION / 4, colorRGBA);
+		hotspot.setType(type);
 		frame.addItem(hotspot);
 		hotspot.centerItem();
 
@@ -550,7 +599,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 						try {
 							JMEFrame targetFrame = (JMEFrame)foundItem;
 
-							if (targetFrame.getName().contains("back-") && hotSpotRepo.getName().equals("hotspots")) {
+							if ( hotSpotRepo.getName().equals("hotspots") && (targetFrame.getName().contains("back-") ||  targetFrame.getName().contains("hotspotf-")) ) {
 								firstFrameFound = true;
 								IFrame originFrame = (IFrame) item.getParentItem();
 								originFrame.removeItem(item);
@@ -564,7 +613,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 								IHotSpotItem hsItem = (IHotSpotItem)item;
 								((IHotSpotFrame) targetFrame).addHotSpot(item);
 
-								IHotSpotFrame hotSpotFrameContent = createNewHotSpotContentFrame();
+								IHotSpotFrame hotSpotFrameContent = createNewHotSpotContentFrame(hsItem.getType());
 
 								hsItem.setHotSpotFrameContent(hotSpotFrameContent);
 
@@ -576,33 +625,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 								message = message + "on " + targetFrame.getName() + ". Great!!";
 
 								// create a new hotspot candidate
-								fillHotSpotRepo(originFrame,IMAGE);
-							} else if (hotSpotRepo.getName().equals("hotspots") && targetFrame.getName().contains("hotspotf-")) {
-								firstFrameFound = true;
-								IFrame originFrame = (IFrame) item.getParentItem();
-								originFrame.removeItem(item);
-
-								Vector2f itemWorldPos = item.getWorldLocation();
-								targetFrame.addItem(item);
-								item.setWorldLocation(itemWorldPos);
-								targetFrame.getZOrderManager().bringToTop(item, null);
-
-								
-								((IHotSpotFrame) targetFrame).addHotSpot(item);
-
-								IHotSpotFrame hotSpotFrameContent = createNewHotSpotContentFrame();
-                                IHotSpotItem hsItem = (IHotSpotItem)item;
-
-								hsItem.setHotSpotFrameContent(hotSpotFrameContent);
-
-								JMELine l = (JMELine) hsItem.createHotLink();
-								hotspotConnections.add((JMELine) l);
-								stitcher.add((JMELine) l);
-
-								message = message + "on " + targetFrame.getName() + ". Great!!";
-
-								// create a new hotspot candidate
-								fillHotSpotRepo(originFrame,IMAGE);
+								fillHotSpotRepo(originFrame,hsItem.getType());
 							}
 
 						} catch (Exception e) {
