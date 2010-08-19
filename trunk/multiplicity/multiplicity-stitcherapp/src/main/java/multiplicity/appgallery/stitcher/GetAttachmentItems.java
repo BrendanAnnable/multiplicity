@@ -306,7 +306,7 @@ public class GetAttachmentItems extends Thread {
 						if (foundItem instanceof JMEFrame && firstFrameFound == false) {
 							try {
 								if (foundItem instanceof HotSpotFrame) {
-									HotSpotFrame targetFrame = (HotSpotFrame)foundItem;
+									IHotSpotFrame targetFrame = (IHotSpotFrame)foundItem;
 
 									if (!targetFrame.isLocked() && targetFrame.getName().contains("back-") && (parentContainerName.equals(stitcher.SCAN_NAME) || parentContainerName.equals(stitcher.STENCIL_NAME))) {
 										firstFrameFound = true;

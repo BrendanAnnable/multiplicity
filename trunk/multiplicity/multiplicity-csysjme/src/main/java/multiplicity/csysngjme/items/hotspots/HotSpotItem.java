@@ -88,20 +88,24 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		
 		this.addItemListener(new ItemListenerAdapter() {
 
+		    @Override
+		    public void itemRotated(IItem item) {
+		        super.itemRotated(item);
+		        redrawHotlink(item);
+		    }
+		    @Override
+		    public void itemScaled(IItem item) {
+		        super.itemScaled(item);
+		        redrawHotlink(item);
+		    }
 			public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
-			    
-			    //this allow hotspots to hide/unhide
-//				HotSpotItem hs = (HotSpotItem) item;
-//				hs.clickCount++;
-//				if (hs.clickCount == 2) {
-//					hs.setOpen(!hs.isOpen);
-//					hs.clickCount = 0;
-//				}
+			    super.itemCursorClicked(item, event);
+			    redrawHotlink(item);
 			};
 
 			public void itemMoved(IItem item) {
-				Vector3f[] vertices = getLineVertices();
-				((HotSpotItem) item).getHotLink().redrawLine(vertices);
+			    super.itemMoved(item);
+			    redrawHotlink(item);
 			};
 
 		});
@@ -130,6 +134,12 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		});
 
 		return hotLink;
+	}
+	
+	@Override
+    public void redrawHotlink(IItem item) {
+	    Vector3f[] vertices = getLineVertices();
+        ((HotSpotItem) item).getHotLink().redrawLine(vertices);
 	}
 
 	private Vector3f[] getLineVertices() {

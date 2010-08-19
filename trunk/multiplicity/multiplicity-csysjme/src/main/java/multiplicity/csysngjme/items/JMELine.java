@@ -3,9 +3,9 @@ package multiplicity.csysngjme.items;
 import java.nio.FloatBuffer;
 import java.util.UUID;
 
+import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.ItemMap;
-import multiplicity.csysngjme.items.hotspots.HotSpotItem;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 
 import com.jme.bounding.OrthogonalBoundingBox;
@@ -28,10 +28,10 @@ public class JMELine extends JMELineItem {
 	private Vector3f[] vertices;
 	private ColorRGBA lineColour = new ColorRGBA(0f, 0f, 0f, 1f);
 	private float lineWidth = 4f;
-	private HotSpotItem hotSpotItem = null;
+	private IHotSpotItem hotSpotItem = null;
 	private boolean visible = true;
 
-	public JMELine(String name, UUID uuid, Vector3f[] vertices, ColorRGBA lineColour, float lineWidth, HotSpotItem hotSpotItem) {
+	public JMELine(String name, UUID uuid, Vector3f[] vertices, ColorRGBA lineColour, float lineWidth, IHotSpotItem hotSpotItem) {
 		super(name, uuid);
 		this.vertices = vertices;
 		this.lineColour = lineColour;
@@ -109,7 +109,7 @@ public class JMELine extends JMELineItem {
 	}
 	
 	@Override
-	public HotSpotItem getHotSpotItem() {
+	public IHotSpotItem getHotSpotItem() {
 		return hotSpotItem;
 	}
 }

@@ -55,7 +55,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 		this.getZOrderManager().sendToBottom(frameOverlay, null);
 		BehaviourMaker.addBehaviour(frameOverlay, RotateTranslateScaleBehaviour.class);
 		
-		frameOverlay.addItemListener(new IItemListener() {
+		frameOverlay.addItemListener(new ItemListenerAdapter() {
 			
 			@Override
 			public void itemZOrderChanged(IItem item) {
@@ -77,42 +77,54 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 			
 			@Override
 			public void itemMoved(IItem item) {
+			    super.itemMoved(item); 
 			    logger.debug("overlay: moved");
 			    IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
                 
-                parentFrame.bringPaletToTop();
+                
+			    parentFrame.sendHotLinksToTop();
                 parentFrame.bringHotSpotsToTop();
+                parentFrame.bringPaletToTop();
 			}
 			
 			@Override
 			public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
+			    super.itemCursorReleased(item, event);
 			    IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
              
-                parentFrame.bringPaletToTop();
+                
+			    parentFrame.sendHotLinksToTop();
                 parentFrame.bringHotSpotsToTop();
+                parentFrame.bringPaletToTop();
 			}
 			
 			@Override
 			public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
+			    super.itemCursorPressed(item, event);
 			    logger.debug("overlay: pressed");
 	            IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
 			    
-                parentFrame.bringPaletToTop();
+             
+	            parentFrame.sendHotLinksToTop();
                 parentFrame.bringHotSpotsToTop();
+                parentFrame.bringPaletToTop();
 			}
 			
 			@Override
 			public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
+			    super.itemCursorClicked(item, event);
 			    logger.debug("overlay: clicked");
 			    IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
                 
-                parentFrame.bringPaletToTop();
+			    parentFrame.sendHotLinksToTop();
                 parentFrame.bringHotSpotsToTop();
+                parentFrame.bringPaletToTop();
 				
 			}
 			
 			@Override
 			public void itemCursorChanged(IItem item, MultiTouchCursorEvent event) {
+                super.itemCursorChanged(item, event);
 				IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
 				Vector2f frameOriginLocation = parentFrame.getRelativeLocation();
 				Vector2f itemDisplacement = item.getRelativeLocation();
@@ -127,9 +139,10 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 				float relativeRotation = item.getRelativeRotation();
 				parentFrame.setRelativeRotation(relativeRotation);
 				
-				
+				parentFrame.sendHotLinksToTop();
+                parentFrame.bringHotSpotsToTop();
 				parentFrame.bringPaletToTop();
-				parentFrame.bringHotSpotsToTop();
+
 				
 			}
 		});
@@ -150,6 +163,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	public void bringHotSpotsToTop() {
 		for (IHotSpotItem iHotSpotItem : hotSpots) {
 			this.getZOrderManager().bringToTop(iHotSpotItem, null);  
+			iHotSpotItem.redrawHotlink(iHotSpotItem);
 		}
 	}
 
@@ -162,6 +176,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
                     MultiTouchCursorEvent event) {
                 super.itemCursorPressed(item, event);
                 logger.debug("hotlink - pressed");
+//                sendHotLinksToBottom();
                 bringPaletToTop();
             }
             
@@ -171,6 +186,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
                 // TODO Auto-generated method stub
                 super.itemCursorChanged(item, event);
                 logger.debug("hotlink - changed");
+//               sendHotLinksToBottom();
                 bringPaletToTop();
             }
             
@@ -180,6 +196,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
                 // TODO Auto-generated method stub
                 super.itemCursorClicked(item, event);
                 logger.debug("hotlink - clicked");
+//                sendHotLinksToBottom();
                 bringPaletToTop();
             }
             
@@ -214,6 +231,10 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 		    logger.debug("palet to the top; is locked");
 		    sendOverlayToTop();
 		}
+		
+//		  for (ILineItem hl : hotLinks) {
+//	            hl.getZOrderManager().setItemZOrder(palet.getZOrderManager().getItemZOrder()-1);
+//	       }
 		this.getZOrderManager().bringToTop(palet, null);  
 		
 	}
@@ -287,5 +308,19 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
         this.addItem(palet);
     }
     
+    @Override
+    public void sendHotLinksToBottom() {
+        
+        for (ILineItem hl : hotLinks) {
+            this.getZOrderManager().sendToBottom(hl, null);
+        }
+    }
+    
+    @Override
+    public void sendHotLinksToTop() {
+        for (ILineItem hl : hotLinks) {
+            this.getZOrderManager().bringToTop(hl, null);
+        }
+    }
     
 }

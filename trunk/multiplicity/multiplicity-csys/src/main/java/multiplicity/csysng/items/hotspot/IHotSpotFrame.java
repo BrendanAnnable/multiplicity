@@ -44,4 +44,8 @@ public interface IHotSpotFrame extends IFrame {
 
     public void addPalet(IPalet palet);
 
+    public abstract void sendHotLinksToTop();
+
+    public abstract void sendHotLinksToBottom();
+
 }

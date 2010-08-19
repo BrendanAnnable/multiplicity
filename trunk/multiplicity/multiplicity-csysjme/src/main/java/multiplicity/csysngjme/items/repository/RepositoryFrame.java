@@ -44,7 +44,7 @@ public class RepositoryFrame extends JMEFrame implements IRepositoryFrame {
             @Override
             public void itemCursorClicked(IItem item,
                     MultiTouchCursorEvent event) {
-                
+                super.itemCursorClicked(item, event);
                 IRepositoryFrame rf = (IRepositoryFrame) item;
                 if( rf.tap() == 1 ) {
                     if( rf.isOpen() ) {
@@ -60,6 +60,10 @@ public class RepositoryFrame extends JMEFrame implements IRepositoryFrame {
             }
         });
     }
+//    
+//    public void OpenCloseRepo(){
+//        if()
+//    }
 
     @Override
     public void close() {
@@ -104,7 +108,7 @@ public class RepositoryFrame extends JMEFrame implements IRepositoryFrame {
     @Override
     public int tap() {
         logger.info("number of taps on the repos frame: " + taps);
-        return taps++;
+        return ++taps;
     }
     
     public void resetTaps() {
