@@ -23,14 +23,15 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 	private static final long serialVersionUID = 3685342474539036654L;
 	private final static Logger logger = Logger.getLogger(HotSpotItem.class.getName());
 
-	boolean isOpen = true;
-	protected String link;
-	IHotSpotItem relationHotSpot;
+	private boolean isOpen = true;
+	private String link;
+	private IHotSpotItem relationHotSpot;
 	private IHotSpotFrame hotSpotFrameContent;
 	private JMELine hotLink;
-	public int clickCount = 0;
-	private ColorRGBA colorRGBA = new ColorRGBA(1f, 0f, 0f, 1f);
+    private ColorRGBA colorRGBA = new ColorRGBA(1f, 0f, 0f, 1f);
+	private String type;
 
+	public int clickCount = 0;
 	public HotSpotItem(String name, UUID uuid, float radius) {
 		super(name, uuid, radius);
 	}
@@ -41,6 +42,16 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 	}
 
 	@Override
+	public String getType() {
+        return type;
+    }
+
+	@Override
+    public void setType(String type) {
+        this.type = type;
+    }
+    
+	@Override
 	public void initializeGeometry() {
 		super.initializeGeometry();
 
@@ -48,26 +59,26 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 
 	@Override
 	public void setOpen(boolean isOpen) {
-		this.isOpen = isOpen;
-		if (isOpen) {
-
-			// setGradientBackground(new Gradient(
-			// Color.RED,
-			// new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
-			//
-			// this.setSolidBackgroundColour(Color.RED);
-			this.hotLink.setVisible(true);
-			this.hotLink.redrawLine(getLineVertices());
-			hotSpotFrameContent.setVisible(true);
-		} else {
-			this.hotLink.setVisible(false);
-
-			// setGradientBackground(new Gradient(
-			// Color.WHITE,
-			// new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
-			// this.setSolidBackgroundColour(Color.BLACK);
-			hotSpotFrameContent.setVisible(false);
-		}
+//		this.isOpen = isOpen;
+//		if (isOpen) {
+//
+//			// setGradientBackground(new Gradient(
+//			// Color.RED,
+//			// new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
+//			//
+//			// this.setSolidBackgroundColour(Color.RED);
+//			this.hotLink.setVisible(true);
+//			this.hotLink.redrawLine(getLineVertices());
+//			hotSpotFrameContent.setVisible(true);
+//		} else {
+//			this.hotLink.setVisible(false);
+//
+//			// setGradientBackground(new Gradient(
+//			// Color.WHITE,
+//			// new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
+//			// this.setSolidBackgroundColour(Color.BLACK);
+//			hotSpotFrameContent.setVisible(false);
+//		}
 	}
 
 	@Override

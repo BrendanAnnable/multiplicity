@@ -296,7 +296,7 @@ public class GetAttachmentItems extends Thread {
 					}
 					
 					frame.removeItem(releasedItem);
-					stitcher.createNewFrame(releasedItem, new Vector2f(0.0f, 0.0f), "back-" + releasedItem.getUUID(), true);
+					stitcher.createNewFrame(releasedItem, new Vector2f(0.0f, 0.0f), "back-" + releasedItem.getUUID(), true, null);
 					
 				} else {
 					// check if we are dropping on a "background"
