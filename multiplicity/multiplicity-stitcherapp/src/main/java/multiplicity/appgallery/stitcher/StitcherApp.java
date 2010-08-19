@@ -15,6 +15,7 @@ import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
+import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.factory.IPaletFactory;
 import multiplicity.csysng.gfx.Gradient;
@@ -23,7 +24,6 @@ import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
-import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
@@ -31,19 +31,14 @@ import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysng.items.repository.IRepositoryContentItemFactory;
 import multiplicity.csysng.items.repository.IRepositoryFrame;
-import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysngjme.factory.PaletItemFactory;
 import multiplicity.csysngjme.factory.Repository.RepositoryContentItemFactory;
 import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
-import multiplicity.csysngjme.items.JMEColourRectangle;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMELine;
 import multiplicity.csysngjme.items.JMERectangularItem;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
-import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
-import multiplicity.csysngjme.picking.AccuratePickingUtility;
-import multiplicity.csysngjme.picking.PickedSpatial;
 import multiplicity.input.IMultiTouchEventProducer;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.jmeutils.UnitConversion;
@@ -56,13 +51,14 @@ import org.apache.log4j.Logger;
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
-import com.jme.scene.Geometry;
 import com.jme.scene.Node;
 import com.jme.system.DisplaySystem;
 
 public class StitcherApp extends AbstractMultiplicityApp {
 
 	private final static Logger logger = Logger.getLogger(StitcherApp.class.getName());
+    private static final String IMAGE = "IMAGE";
+    private static final String TEXT = "TEXT";
 	public final String MULTIPLICITY_SPACE = "multiplicity";
 	public final String STENCIL_NAME = "stencils";
 	public final String BACKGROUND_NAME = "backgrounds";
@@ -189,7 +185,8 @@ public class StitcherApp extends AbstractMultiplicityApp {
         runnable.run();
 		
 
-		createHotSpotRepo();
+		createHotSpotRepo(IMAGE);
+		createHotSpotRepo(TEXT);
 
 		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
 		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());
@@ -201,7 +198,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 		add(trails);
 	}
 
-	public IHotSpotFrame createNewHotSpotContentFrame() {
+    public IHotSpotFrame createNewHotSpotContentFrame() {
 		return createNewFrame(null, null, "hotspotf-", false);
 	}
 
@@ -481,7 +478,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 		return new Vector2f(posX, posY);
 	}
 
-	public void createHotSpotRepo() {
+	public void createHotSpotRepo(String type) {
 	    
 		UUID uUID = UUID.randomUUID();
 		IFrame frame = this.getContentFactory().createFrame("hotspots", uUID, HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
@@ -490,22 +487,37 @@ public class StitcherApp extends AbstractMultiplicityApp {
 		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 		frame.maintainBorderSizeDuringScale();
 
-		Float xPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getWidth() / 2 - HOTSPOT_DIMENSION / 2).floatValue();
-		Float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - HOTSPOT_DIMENSION / 2).floatValue();
-
+		Float xPos = 0f;
+		Float yPos = 0f;
+		if( type.equals(TEXT) ) {
+		    xPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getWidth() / 2 - HOTSPOT_DIMENSION / 2).floatValue();
+		    yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - HOTSPOT_DIMENSION / 2).floatValue();
+		} else if(type.equals(IMAGE)) {
+		    xPos = Double.valueOf(DisplaySystem.getDisplaySystem().getWidth() / 2 - ((HOTSPOT_DIMENSION * 1.5)  +5)).floatValue();
+	        yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - HOTSPOT_DIMENSION / 2).floatValue();
+		    
+		}
+		
+		
 		frame.setRelativeLocation(new Vector2f(xPos, yPos));
 
 		this.add(frame);
-		fillHotSpotRepo(frame);
+		fillHotSpotRepo(frame,type);
 
 		this.getZOrderManager().bringToTop(frame, null);
 
 		// createXMLRepresentationForGroup(uUID, items);
 	}
 
-	private void fillHotSpotRepo(IFrame frame) {
+	private void fillHotSpotRepo(IFrame frame, String type) {
 
-		IHotSpotItem hotspot = this.getHotSpotContentFactory().createHotSpotItem("cr", UUID.randomUUID(), HOTSPOT_DIMENSION / 4, new ColorRGBA(1f, 0f, 0f, 0.6f));
+	    ColorRGBA colorRGBA = null;
+	    if( type.equals(IMAGE) ) {
+	        colorRGBA = new ColorRGBA(0f, 0f, 1f, 0.6f);
+	    } else if(type.equals(TEXT)) {
+	        colorRGBA = new ColorRGBA(1f, 0f, 0f, 0.6f);
+	    }
+		IHotSpotItem hotspot = this.getHotSpotContentFactory().createHotSpotItem("cr", UUID.randomUUID(), HOTSPOT_DIMENSION / 4, colorRGBA);
 		frame.addItem(hotspot);
 		hotspot.centerItem();
 
@@ -513,6 +525,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 		    
 			@Override
 			public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
+			    super.itemCursorReleased(item, event);
 				String message = "Hotspot released: ";
 				boolean offParent = true;
 				Node s = (Node) stitcher.getOrthoNode();
@@ -530,6 +543,9 @@ public class StitcherApp extends AbstractMultiplicityApp {
 						offParent = false;
 						message = message + "on its parent. Nothing happens";
 
+//						IHotSpotFrame hsf = (IHotSpotFrame) item.getParentItem();
+//						hsf.sendHotLinksToTop();
+						
 					} else if (foundItem instanceof JMEFrame && !firstFrameFound) {
 						try {
 							JMEFrame targetFrame = (JMEFrame)foundItem;
@@ -560,7 +576,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 								message = message + "on " + targetFrame.getName() + ". Great!!";
 
 								// create a new hotspot candidate
-								fillHotSpotRepo(originFrame);
+								fillHotSpotRepo(originFrame,IMAGE);
 							} else if (hotSpotRepo.getName().equals("hotspots") && targetFrame.getName().contains("hotspotf-")) {
 								firstFrameFound = true;
 								IFrame originFrame = (IFrame) item.getParentItem();
@@ -586,7 +602,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 								message = message + "on " + targetFrame.getName() + ". Great!!";
 
 								// create a new hotspot candidate
-								fillHotSpotRepo(originFrame);
+								fillHotSpotRepo(originFrame,IMAGE);
 							}
 
 						} catch (Exception e) {
@@ -597,7 +613,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 
 				if (!firstFrameFound && offParent) {
 					item.centerItem();
-					HotSpotFrame hsFrame = (HotSpotFrame) item.getParentItem();
+					IHotSpotFrame hsFrame = (IHotSpotFrame) item.getParentItem();
 					
 					bumpHotSpotConnections();  
 					message = message + "in the mist .... Let's place it back to the center of its mother frame.";
