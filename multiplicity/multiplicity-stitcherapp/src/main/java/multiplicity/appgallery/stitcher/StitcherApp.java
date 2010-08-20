@@ -621,6 +621,14 @@ public class StitcherApp extends AbstractMultiplicityApp {
 
 		hotspot.addItemListener(new ItemListenerAdapter() {
 		    
+		    @Override
+		    public void itemCursorPressed(IItem item,
+		            MultiTouchCursorEvent event) {
+		        // TODO Auto-generated method stub
+		        super.itemCursorPressed(item, event);
+		        
+		        stitcher.bumpHotSpotConnections();
+		    }
 			@Override
 			public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
 			    super.itemCursorReleased(item, event);
@@ -675,6 +683,8 @@ public class StitcherApp extends AbstractMultiplicityApp {
 
 								// create a new hotspot candidate
 								fillHotSpotRepo(originFrame,hsItem.getType());
+								stitcher.bumpHotSpotConnections();
+								hotSpotFrameContent.bringHotSpotsToTop();
 							}
 
 						} catch (Exception e) {

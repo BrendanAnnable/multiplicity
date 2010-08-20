@@ -321,15 +321,10 @@ public class GetAttachmentItems extends Thread {
 
 										targetFrame.bringPaletToTop();
 										targetFrame.bringHotSpotsToTop();
-									} else if (!targetFrame.isLocked() && targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.SCAN_NAME)) {
+									} else if (!targetFrame.isLocked() && targetFrame.getName().contains("hotspotf-") && (parentContainerName.equals(stitcher.SCAN_NAME) || parentContainerName.equals(stitcher.STENCIL_NAME) || parentContainerName.equals(stitcher.BACKGROUND_NAME) )) {
+	                                    closeRepos(releasedItem.getParentItem());
 										firstFrameFound = true;
 										dropOnHotSpotFrame(releasedItem, targetFrame);
-									} else if (!targetFrame.isLocked() && targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.STENCIL_NAME)) {
-					                       firstFrameFound = true;
-					                       dropOnHotSpotFrame(releasedItem, targetFrame);
-									} else if (!targetFrame.isLocked() && targetFrame.getName().contains("hotspotf-") && parentContainerName.equals(stitcher.BACKGROUND_NAME)) {
-                                        firstFrameFound = true;
-                                        dropOnHotSpotFrame(releasedItem, targetFrame);
 									}// if
 								}// if
 
@@ -351,6 +346,14 @@ public class GetAttachmentItems extends Thread {
 				logger.info("cursor released caught event: " + releasedItem.getParentItem().getClass());
 				//stitcher.bumpHotSpotConnections();
 			}
+
+            private void closeRepos(IItem parentItem) {
+               if( parentItem instanceof IRepositoryFrame ){
+                   IRepositoryFrame repos = (IRepositoryFrame) parentItem;
+                   repos.close();
+               }
+                
+            }
 		});
 
 
