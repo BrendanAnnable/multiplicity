@@ -469,7 +469,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
                 parentFrame.bringHotSpotsToTop();
                 parentFrame.sendOverlayToBottom();
                 parentFrame.bringPaletToTop();
-               // stitcher.bumpHotSpotConnections();
+                stitcher.bumpHotSpotConnections();
                 
             } else {
                 logger.info("locking palet");
@@ -481,7 +481,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
                 parentFrame.sendOverlayToTop();
                 parentFrame.bringHotSpotsToTop();
                 parentFrame.bringPaletToTop();
-               // stitcher.bumpHotSpotConnections();
+               stitcher.bumpHotSpotConnections();
             }
             
          
