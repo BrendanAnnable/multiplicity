@@ -166,7 +166,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
         IImage bg = getContentFactory().createImage("backgroundimage",
                 UUID.randomUUID());
         bg.setImage(StitcherApp.class
-                .getResource("bluebackground.png"));
+                .getResource("bluebackground1680.png"));
         bg.centerItem();
         add(bg);
         zOrderManager.sendToBottom(bg, null);
@@ -610,9 +610,9 @@ public class StitcherApp extends AbstractMultiplicityApp {
 
 	    ColorRGBA colorRGBA = null;
 	    if( type.equals(IMAGE) ) {
-	        colorRGBA = new ColorRGBA(0f, 0f, 1f, 0.6f);
-	    } else if(type.equals(TEXT)) {
 	        colorRGBA = new ColorRGBA(1f, 0f, 0f, 0.6f);
+	    } else if(type.equals(TEXT)) {
+	        colorRGBA = new ColorRGBA(0f, 0f, 1f, 0.6f);
 	    }
 		IHotSpotItem hotspot = this.getHotSpotContentFactory().createHotSpotItem("cr", UUID.randomUUID(), HOTSPOT_DIMENSION / 4, colorRGBA);
 		hotspot.setType(type);
