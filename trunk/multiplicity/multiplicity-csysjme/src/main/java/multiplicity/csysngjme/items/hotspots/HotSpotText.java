@@ -1,12 +1,16 @@
 package multiplicity.csysngjme.items.hotspots;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import multiplicity.csysng.behaviours.BehaviourMaker;
+import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.items.IBorder;
+import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.ILineItem;
@@ -14,18 +18,94 @@ import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
+import multiplicity.csysng.items.keyboard.IKeyboard;
+import multiplicity.csysng.items.keyboard.IKeyboardGraphicsRenderer;
+import multiplicity.csysng.items.keyboard.behaviour.IMultiTouchKeyboardListener;
+import multiplicity.csysng.items.keyboard.behaviour.KeyboardBehaviour;
+import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardDefinition;
+import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRenderer;
+import multiplicity.csysng.items.keyboard.model.KeyModifiers;
+import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
+import multiplicity.csysng.items.keyboard.model.KeyboardKey;
+import multiplicity.csysngjme.factory.JMEContentItemFactory;
 import multiplicity.csysngjme.items.JMEEditableText;
+
+import com.jme.math.Vector2f;
 
 public class HotSpotText extends JMEEditableText implements IHotSpotText {
 
     public List<ILineItem> hotLinks = new CopyOnWriteArrayList<ILineItem>();
-    public List<IHotSpotItem> hotSpots = new CopyOnWriteArrayList<IHotSpotItem>(); 
-
+    public List<IHotSpotItem> hotSpots = new CopyOnWriteArrayList<IHotSpotItem>();
+    private IKeyboard keyboard; 
+    private boolean isKeyboardShown;
+    private JMEContentItemFactory contentItemFactory = new JMEContentItemFactory();
+    private IFrame keyboardFrame;
+    private int taps = 0;
     
     public HotSpotText(String name, UUID uuid) {
         super(name, uuid);
+        createKeyboard();
     }
     
+    @Override
+    public IFrame getKeyboard() {
+        return keyboardFrame;
+    }
+
+    @Override
+    public boolean isKeyboardVisible() {
+        return isKeyboardShown;
+    }
+
+    @Override
+    public void setKeyboardVisible(boolean isKeyboardShown) {
+        this.isKeyboardShown = isKeyboardShown;
+    }
+    
+    private void createKeyboard() {
+        keyboard = contentItemFactory.createKeyboard("kb", UUID.randomUUID());
+        KeyboardDefinition kbd = new SimpleAlphaKeyboardDefinition();
+        keyboard.setKeyboardDefinition(kbd);
+        IKeyboardGraphicsRenderer keyboardRenderer = new SimpleAlphaKeyboardRenderer(kbd);
+        keyboard.setKeyboardRenderer(keyboardRenderer);
+        KeyboardBehaviour kbb = (KeyboardBehaviour) BehaviourMaker.addBehaviour(keyboard, KeyboardBehaviour.class);
+        kbb.addListener(keyboardRenderer);
+        kbb.addListener(new IMultiTouchKeyboardListener() {
+            
+            @Override
+            public void keyReleased(KeyboardKey k, boolean shiftDown, boolean altDown, boolean ctlDown) {
+                if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                    removeChar();
+                    
+                }else if(k.getKeyCode() == KeyEvent.VK_ENTER) {
+                    // ignore
+                }else if(k.getModifiers() == KeyModifiers.NONE) {               
+                    if(shiftDown) {
+                        String txt = KeyEvent.getKeyText(k.getKeyCode()).toUpperCase();
+                        appendChar(txt.charAt(0));
+                    }else{
+                        String txt = KeyEvent.getKeyText(k.getKeyCode()).toLowerCase();
+                        appendChar(txt.charAt(0));
+                    }
+                }
+                keyboard.reDrawKeyboard(shiftDown, altDown, ctlDown);
+            }
+            
+            @Override
+            public void keyPressed(KeyboardKey k, boolean shiftDown, boolean altDown, boolean ctlDown) {
+                keyboard.reDrawKeyboard(shiftDown, altDown, ctlDown);
+            }
+        });
+        
+        keyboardFrame = contentItemFactory.createFrame("keyboardFrame", UUID.randomUUID(), keyboard.getSize().x, keyboard.getSize().y);     
+        keyboardFrame.maintainBorderSizeDuringScale();
+        keyboardFrame.addItem(keyboard);
+        keyboardFrame.setRelativeLocation(new Vector2f(0f, -200f));
+        keyboardFrame.setBorder(contentItemFactory.createRoundedRectangleBorder("innerframeborder", UUID.randomUUID(), 20f, 8));    
+        BehaviourMaker.addBehaviour(keyboardFrame, RotateTranslateScaleBehaviour.class);
+        
+    }
+
     @Override
     public void initializeGeometry() {
         super.initializeGeometry();
@@ -39,6 +119,16 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
             hotLinks.remove(hotLink);
         }
             
+    }
+    
+    @Override
+    public int tap() {
+        return ++taps ;
+    }
+
+    @Override
+    public void resetTaps() {
+        taps = 0;
     }
     
     @Override
@@ -149,7 +239,6 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
 
     @Override
     public IBorder getBorder() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -176,5 +265,7 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
         // TODO Auto-generated method stub
         return null;
     }
+
+    
 
 }

@@ -2,6 +2,7 @@ package multiplicity.appgallery.stitcher;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -30,6 +31,15 @@ import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
+import multiplicity.csysng.items.keyboard.IKeyboard;
+import multiplicity.csysng.items.keyboard.IKeyboardGraphicsRenderer;
+import multiplicity.csysng.items.keyboard.behaviour.IMultiTouchKeyboardListener;
+import multiplicity.csysng.items.keyboard.behaviour.KeyboardBehaviour;
+import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardDefinition;
+import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRenderer;
+import multiplicity.csysng.items.keyboard.model.KeyModifiers;
+import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
+import multiplicity.csysng.items.keyboard.model.KeyboardKey;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysng.items.repository.IRepositoryContentItemFactory;
@@ -283,13 +293,52 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	         hotspotLabel.setCursorAt(3);
 	         BehaviourMaker.addBehaviour(hotspotLabel, RotateTranslateScaleBehaviour.class);       
 	         add(hotspotLabel);
+	         
 	         hotspotLabel.addItemListener(new ItemListenerAdapter() {
 
+	             
 	                @Override
+	                public void itemCursorPressed(IItem item,
+	                    MultiTouchCursorEvent event) {
+	                    super.itemCursorPressed(item, event);
+	                    logger.debug("text label itemCursorPressed");
+	                    IHotSpotText hst = (IHotSpotText) item;
+	                    
+	                    
+                        if (hst.tap() == 2) {
+    
+                            if (hst.isKeyboardVisible() == false) {
+                                showKeyboard(hst);
+                            } else {
+                                hideKeyboard(hst);
+                            }
+                            
+                            hst.resetTaps();
+    
+                        }
+	                }
+
+                    @Override
 	                public void itemMoved(IItem item) {
 	                    super.itemMoved(item);
 	                    hotspotFrameMove(item);
 	                }
+                    
+                    private void showKeyboard(IHotSpotText hotSpotText) {
+                       
+                        IFrame keyboard = hotSpotText.getKeyboard();
+                        add(keyboard);
+                        BehaviourMaker.addBehaviour(keyboard, RotateTranslateScaleBehaviour.class);
+                        zOrderManager.bringToTop(keyboard, null);
+                        hotSpotText.setKeyboardVisible(true);
+                        
+                    }
+                    
+                    private void hideKeyboard(IHotSpotText hotSpotText) {
+                        IFrame keyboard = hotSpotText.getKeyboard();
+                        remove(keyboard);
+                        hotSpotText.setKeyboardVisible(false);
+                    }
 	            });
 	         return hotspotLabel;
 	     }
