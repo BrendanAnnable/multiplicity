@@ -13,7 +13,6 @@ import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.ILineItem;
 import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.hotspot.IHotLink;
@@ -34,7 +33,7 @@ import com.jme.math.Vector2f;
 
 public class HotSpotText extends JMEEditableText implements IHotSpotText {
 
-    public List<ILineItem> hotLinks = new CopyOnWriteArrayList<ILineItem>();
+    public List<IHotLink> hotLinks = new CopyOnWriteArrayList<IHotLink>();
     public List<IHotSpotItem> hotSpots = new CopyOnWriteArrayList<IHotSpotItem>();
     private IKeyboard keyboard; 
     private boolean isKeyboardShown;
@@ -110,7 +109,7 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
     public void initializeGeometry() {
         super.initializeGeometry();
     }
-    public void addHotLink(ILineItem hotLink) {
+    public void addHotLink(IHotLink hotLink) {
         this.hotLinks.add(hotLink);
     }
     
@@ -132,11 +131,11 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
     }
     
     @Override
-    public void setHotLinks(List<ILineItem> hotLinks) {
+    public void setHotLinks(List<IHotLink> hotLinks) {
         this.hotLinks = hotLinks;
     }
 
-    public List<ILineItem> getHotLinks() {
+    public List<IHotLink> getHotLinks() {
         return hotLinks;
     }
 

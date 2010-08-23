@@ -13,7 +13,6 @@ public abstract class JMELineItem extends JMEItem implements ILineItem {
 	
 	public JMELineItem(String name, UUID uuid) {
 		super(name, uuid);
-		// TODO Auto-generated constructor stub
 	}
 
 

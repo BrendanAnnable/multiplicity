@@ -7,9 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.ILineItem;
 import multiplicity.csysng.items.IPalet;
-import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
@@ -31,7 +29,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	private final static Logger logger = Logger.getLogger(HotSpotFrame.class.getName());
 
 	public List<IHotSpotItem> hotSpots = new CopyOnWriteArrayList<IHotSpotItem>(); 
-	public List<ILineItem> hotLinks = new CopyOnWriteArrayList<ILineItem>();
+	public List<IHotLink> hotLinks = new CopyOnWriteArrayList<IHotLink>();
 	protected List<Line> lines = new CopyOnWriteArrayList<Line>();
 	protected boolean isLocked = false;
 	private JMEColourRectangle frameOverlay;
@@ -167,7 +165,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 		}
 	}
 
-	public void addHotLink(ILineItem hotLink) {
+	public void addHotLink(IHotLink hotLink) {
 	    this.hotLinks.add(hotLink);
 	    hotLink.addItemListener(new ItemListenerAdapter(){
             
@@ -212,11 +210,11 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	}
 	
 	@Override
-    public void setHotLinks(List<ILineItem> hotLinks) {
+    public void setHotLinks(List<IHotLink> hotLinks) {
         this.hotLinks = hotLinks;
     }
 
-    public List<ILineItem> getHotLinks() {
+    public List<IHotLink> getHotLinks() {
         return hotLinks;
     }
 
@@ -232,7 +230,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 		    sendOverlayToTop();
 		}
 		
-//		  for (ILineItem hl : hotLinks) {
+//		  for (IHotLink hl : hotLinks) {
 //	            hl.getZOrderManager().setItemZOrder(palet.getZOrderManager().getItemZOrder()-1);
 //	       }
 		this.getZOrderManager().bringToTop(palet, null);  
@@ -311,14 +309,14 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
     @Override
     public void sendHotLinksToBottom() {
         
-        for (ILineItem hl : hotLinks) {
+        for (IHotLink hl : hotLinks) {
             this.getZOrderManager().sendToBottom(hl, null);
         }
     }
     
     @Override
     public void sendHotLinksToTop() {
-        for (ILineItem hl : hotLinks) {
+        for (IHotLink hl : hotLinks) {
             this.getZOrderManager().bringToTop(hl, null);
         }
     }

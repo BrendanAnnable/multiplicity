@@ -4,18 +4,17 @@ import java.util.List;
 
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.ILineItem;
 import multiplicity.csysng.items.IPalet;
 
 public interface IHotSpotFrame extends IFrame {
 
-    public void addHotLink(ILineItem hotLink);
+    public void addHotLink(IHotLink hotLink);
 
     public void removeHotLink(IHotLink hotLink);
 
-    public void setHotLinks(List<ILineItem> hotLinks);
+    public void setHotLinks(List<IHotLink> hotLinks);
 
-    public List<ILineItem> getHotLinks();
+    public List<IHotLink> getHotLinks();
 
     public List<IHotSpotItem> getHotSpots();
 

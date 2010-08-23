@@ -6,6 +6,7 @@ import java.util.UUID;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.ILineItem;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
+import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEColourCircle;
@@ -27,7 +28,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 	private String link;
 	private IHotSpotItem relationHotSpot;
 	private IHotSpotFrame hotSpotFrameContent;
-	private JMELine hotLink;
+	private IHotLink hotLink;
     private ColorRGBA colorRGBA = new ColorRGBA(1f, 0f, 0f, 1f);
 	private String type;
 
@@ -87,12 +88,12 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 	}
 
 	@Override
-	public JMELine createHotLink() {
+	public IHotLink createHotLink() {
 
 		Vector3f[] vertices = getLineVertices();
 
 		UUID uuid = UUID.randomUUID();
-		hotLink = new JMELine("line-" + uuid, uuid, vertices, colorRGBA, 4f, this);
+		hotLink = new HotLink("line-" + uuid, uuid, vertices, colorRGBA, 4f, this);
 		hotLink.initializeGeometry();
 		hotSpotFrameContent.addHotLink(hotLink);
 
@@ -126,10 +127,11 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 			public void itemMoved(IItem item) {
 
 				IHotSpotFrame frame = ((IHotSpotFrame) item);
-				List<ILineItem> iLineItems = frame.getHotLinks();
-
+//				List<IHotSpotItem> hotSpots2 = frame.getHotSpots();
+				List<IHotLink> iLineItems = frame.getHotLinks();
+//
 				IHotSpotItem hsi = null;
-				for (ILineItem iLine : iLineItems) {
+				for (IHotLink iLine : iLineItems) {
 					hsi = iLine.getHotSpotItem();
 					Vector3f[] vertices = ((HotSpotItem) hsi).getLineVertices();
 					iLine.redrawLine(vertices);
@@ -175,11 +177,11 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		return hotSpotFrameContent;
 	}
 
-	public void setHotLink(JMELine hotLink) {
+	public void setHotLink(IHotLink hotLink) {
 		this.hotLink = hotLink;
 	}
 
-	public JMELine getHotLink() {
+	public IHotLink getHotLink() {
 		return hotLink;
 	}
 

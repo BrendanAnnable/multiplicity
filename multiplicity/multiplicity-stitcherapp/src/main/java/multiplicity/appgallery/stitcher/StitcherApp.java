@@ -52,6 +52,7 @@ import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMELine;
 import multiplicity.csysngjme.items.JMERectangularItem;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
+import multiplicity.csysngjme.items.hotspots.HotLink;
 import multiplicity.input.IMultiTouchEventProducer;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.jmeutils.UnitConversion;
@@ -77,7 +78,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	public final String BACKGROUND_NAME = "backgrounds";
 	public final String SCAN_NAME = "scans";
 	private final List<String> pageNames = new ArrayList<String>();
-	private final List<JMELine> hotspotConnections = new ArrayList<JMELine>();
+	private final List<HotLink> hotspotConnections = new ArrayList<HotLink>();
 	private IPage stencilsPage;
 	private IPage backgroundsPage;
 	private IPage scansPage;
@@ -674,9 +675,9 @@ public class StitcherApp extends AbstractMultiplicityApp {
 
 								hsItem.setHotSpotFrameContent(hotSpotFrameContent);
 
-								JMELine l = (JMELine) hsItem.createHotLink();
+								HotLink l = (HotLink) hsItem.createHotLink();
 
-								hotspotConnections.add((JMELine) l);
+								hotspotConnections.add(l);
 								stitcher.add((JMELine) l);
 
 								message = message + "on " + targetFrame.getName() + ". Great!!";

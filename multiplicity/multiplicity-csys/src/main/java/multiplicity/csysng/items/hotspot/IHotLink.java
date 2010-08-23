@@ -1,18 +1,20 @@
 package multiplicity.csysng.items.hotspot;
 
+import multiplicity.csysng.items.ILineItem;
+
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
 
-public interface IHotLink {
+
+public interface IHotLink extends ILineItem {
+
+    public abstract void redrawTargetLocation(Vector2f relativeLocation);
 
     public abstract void redrawLine(Vector3f[] vertices);
 
-    public void redrawSourceLocation(Vector2f vertex);
+    public abstract IHotSpotItem getHotSpotItem();
 
-    public void redrawTargetLocation(Vector2f vertex);
+    public abstract void initializeGeometry();
 
-    public boolean isVisible();
-
-    public void setVisible(boolean isVisable);
 
 }
