@@ -115,7 +115,7 @@ public class MultiTouchInputComponent implements IMultiTouchEventListener, IMult
 		}
 	}
 
-	private IMultiTouchInputFilter getLastFilter() {
+	public IMultiTouchInputFilter getLastFilter() {
 		return filters.get(filters.size()-1);
 	}
 
