@@ -140,14 +140,13 @@ public class GetAttachmentItems extends Thread {
 
 			@Override
 			public void itemCursorChanged(IItem item, MultiTouchCursorEvent event) {
+			    super.itemCursorChanged(item, event);
 				String message = "item moved over: ";
 				boolean firstFrameFound = false;
 				boolean offParent = true;
 				Node s = (Node) stitcher.getOrthoNode();
 				Vector2f locStore = new Vector2f();
 				UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
-
-//				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
 
 				List<IItem> findItemsOnTableAtPosition = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(locStore);
 				
@@ -237,49 +236,40 @@ public class GetAttachmentItems extends Thread {
 
 			@Override
 			public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
+			    super.itemCursorPressed(item, event);
 				logger.info("item pressed" + item.getBehaviours() + "parent: " + item.getParentItem());
 			}
 
 			@Override
 			public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
+			    super.itemCursorClicked(item, event);
 				logger.info("item clicked" + item.getBehaviours());
 			}
 
 			@Override
 			public void itemCursorReleased(IItem releasedItem, MultiTouchCursorEvent event) {
+			    super.itemCursorReleased(releasedItem, event);
 				boolean offParent = true;
 
 				Vector2f locStore = new Vector2f();
 				UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
 
                 List<IItem> findItemsOnTableAtPosition = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(locStore);
-
                 
-//				List<PickedSpatial> spatialsList = AccuratePickingUtility.pickAllOrthogonal(s.getParent().getParent(), locStore);
-
 				if (releasedItem.getParentItem() instanceof IRepositoryFrame) {
 				    IRepositoryFrame repositoryFrame = (IRepositoryFrame) releasedItem.getParentItem();
 					for (IItem foundItem : findItemsOnTableAtPosition) {
 					    
-//					    if( isOnRepository(pickedSpatial.getSpatial())) {
-//					        offParent = false;
-//					        break;
-//					    }
-					    if( foundItem.getParentItem() instanceof IRepositoryFrame) {
-					        offParent = false;
-					    } else if( isOnRepository(foundItem)) {
+					    //did we move it around the repos
+					    if( isOnRepository(foundItem)) {
                             offParent = false;
+                            return;
                         }
-//						if (pickedSpatial.getSpatial().equals(frame.getMaskGeometry())) {
-//							offParent = false;
-//						}
-//						if( pickedSpatial.getSpatial() instanceof IRepositoryFrame ) {
-//						    offParent = false;
-//						}
 					}
 				}
 
-				if (parentContainerName.equals(stitcher.BACKGROUND_NAME) && offParent) {
+				if (parentContainerName.equals(stitcher.BACKGROUND_NAME) && (offParent == true)) {
+				    logger.debug("Creating Background Frame...");
 					IFrame frame = (IFrame) releasedItem.getParentItem();
 					releasedItem.removeItemListener(this);
 
@@ -309,6 +299,7 @@ public class GetAttachmentItems extends Thread {
 									IHotSpotFrame targetFrame = (IHotSpotFrame)foundItem;
 
 									if (!targetFrame.isLocked() && targetFrame.getName().contains("back-") && (parentContainerName.equals(stitcher.SCAN_NAME) || parentContainerName.equals(stitcher.STENCIL_NAME))) {
+									    logger.debug("Dropping on background frame.....");
 										firstFrameFound = true;
 										IFrame frame = (IFrame) releasedItem.getParentItem();
 										frame.removeItem(releasedItem);
@@ -319,9 +310,11 @@ public class GetAttachmentItems extends Thread {
 										releasedItem.setWorldLocation(itemWorldPos);
 										targetFrame.getZOrderManager().bringToTop(releasedItem, null);
 
-										targetFrame.bringPaletToTop();
+										stitcher.bumpHotSpotConnections();
 										targetFrame.bringHotSpotsToTop();
+										targetFrame.bringPaletToTop();
 									} else if (!targetFrame.isLocked() && targetFrame.getName().contains("hotspotf-") && (parentContainerName.equals(stitcher.SCAN_NAME) || parentContainerName.equals(stitcher.STENCIL_NAME) || parentContainerName.equals(stitcher.BACKGROUND_NAME) )) {
+									    logger.debug("Dropping on hotspot frame.....");
 	                                    closeRepos(releasedItem.getParentItem());
 										firstFrameFound = true;
 										dropOnHotSpotFrame(releasedItem, targetFrame);
@@ -335,7 +328,7 @@ public class GetAttachmentItems extends Thread {
 
 					}// for
 					// image was dragged off of the frame DELETE
-					if (!firstFrameFound && offParent) {
+					if (!firstFrameFound && (offParent == true )) {
 						logger.info("delete image moved off the frame");
 
 						IFrame frame = (IFrame) releasedItem.getParentItem();

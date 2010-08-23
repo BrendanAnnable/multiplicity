@@ -1,15 +1,12 @@
 package multiplicity.csysngjme.items;
 
-import java.nio.FloatBuffer;
 import java.util.UUID;
 
-import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.zorder.IZOrderManager;
 import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 
 import com.jme.bounding.OrthogonalBoundingBox;
-import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Line;
@@ -18,98 +15,80 @@ import com.jme.scene.state.BlendState;
 import com.jme.scene.state.BlendState.DestinationFunction;
 import com.jme.scene.state.BlendState.SourceFunction;
 import com.jme.system.DisplaySystem;
-import com.jme.util.geom.BufferUtils;
 
 public class JMELine extends JMELineItem {
 
-	private static final long serialVersionUID = -8078610021819270289L;
-	private Line l;
-	private BlendState diskBlend;	
-	private Vector3f[] vertices;
-	private ColorRGBA lineColour = new ColorRGBA(0f, 0f, 0f, 1f);
-	private float lineWidth = 4f;
-	private IHotSpotItem hotSpotItem = null;
-	private boolean visible = true;
+    private static final long serialVersionUID = -8078610021819270289L;
 
-	public JMELine(String name, UUID uuid, Vector3f[] vertices, ColorRGBA lineColour, float lineWidth, IHotSpotItem hotSpotItem) {
-		super(name, uuid);
-		this.vertices = vertices;
-		this.lineColour = lineColour;
-		this.lineWidth = lineWidth;
-		this.hotSpotItem = hotSpotItem;
-	}
-	
-	@Override
-	public void initializeGeometry() {
-		l = new Line("Link", vertices, null, null, null);
-		l.setSolidColor(lineColour);
-		l.setLineWidth(lineWidth);
-		l.setAntialiased(true);
-		ItemMap.register(l, this);
-		l.setModelBound(new OrthogonalBoundingBox());
-		l.updateModelBound();
-		diskBlend = DisplaySystem.getDisplaySystem().getRenderer().createBlendState();
-		diskBlend.setSourceFunction(SourceFunction.SourceAlpha);
-		diskBlend.setDestinationFunction(DestinationFunction.OneMinusSourceAlpha);
-		diskBlend.setBlendEnabled(true);	
-		l.setRenderState(diskBlend);
-		attachChild(l);
-		updateModelBound();
-	}
-	
+    protected Line l;
 
-	@Override
-	protected IZOrderManager createZOrderManager() {
-		return new SimpleZOrderManager(this);
-	}
+    protected BlendState diskBlend;
 
-	@Override
-	public Spatial getManipulableSpatial() {
-		return l;
-	}
+    protected Vector3f[] vertices;
 
+    protected ColorRGBA lineColour = new ColorRGBA(0f, 0f, 0f, 1f);
 
-	public void changeBackgroundColor(ColorRGBA colorRGBA) {
-		l.setSolidColor(colorRGBA);		
-	}
+    protected float lineWidth = 4f;
 
-	public void setVisible(boolean visible) {
-		this.visible = visible;
-		if(visible) {
-			l.setSolidColor(lineColour);	
-		}
-		else {
-			l.setSolidColor(new ColorRGBA(0f, 0f, 0f, 0f));	
-		}
-	}
-	
-	@Override
-	public void redrawLine(Vector3f[] vertices) {
-		if(visible) {
-			FloatBuffer fBuffer = BufferUtils.createFloatBuffer(vertices);                    
-			l.reconstruct(fBuffer, null, null, null);
-			l.setSolidColor(lineColour);  			
-		}
-	}
+    protected boolean visible = true;
 
+    public JMELine(String name, UUID uuid, Vector3f[] vertices,
+            ColorRGBA lineColour, float lineWidth) {
+        super(name, uuid);
+        this.vertices = vertices;
+        this.lineColour = lineColour;
+        this.lineWidth = lineWidth;
+    }
 
-	@Override
-	public void redrawTargetLocation(Vector2f relativeLocation) {
-		FloatBuffer fBuffer = BufferUtils.createFloatBuffer(relativeLocation);                    
-		l.reconstruct(fBuffer, null, null, null);
-		l.setSolidColor(lineColour);  
-	}
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+        if (visible) {
+            l.setSolidColor(lineColour);
+        } else {
+            l.setSolidColor(new ColorRGBA(0f, 0f, 0f, 0f));
+        }
+    }
 
-	public float getLineWidth() {
-		return lineWidth;
-	}
+    @Override
+    protected IZOrderManager createZOrderManager() {
+        return new SimpleZOrderManager(this);
+    }
 
-	public void setLineWidth(float lineWidth) {
-		this.lineWidth = lineWidth;
-	}
-	
-	@Override
-	public IHotSpotItem getHotSpotItem() {
-		return hotSpotItem;
-	}
+    @Override
+    public Spatial getManipulableSpatial() {
+        return l;
+    }
+
+    public void changeBackgroundColor(ColorRGBA colorRGBA) {
+        l.setSolidColor(colorRGBA);
+    }
+
+    public float getLineWidth() {
+        return lineWidth;
+    }
+
+    public void setLineWidth(float lineWidth) {
+        this.lineWidth = lineWidth;
+    }
+
+    @Override
+    public void initializeGeometry() {
+        l = new Line("Link", vertices, null, null, null);
+        l.setSolidColor(lineColour);
+        l.setLineWidth(lineWidth);
+        l.setAntialiased(true);
+        ItemMap.register(l, this);
+        l.setModelBound(new OrthogonalBoundingBox());
+        l.updateModelBound();
+        diskBlend = DisplaySystem.getDisplaySystem().getRenderer()
+                .createBlendState();
+        diskBlend.setSourceFunction(SourceFunction.SourceAlpha);
+        diskBlend
+                .setDestinationFunction(DestinationFunction.OneMinusSourceAlpha);
+        diskBlend.setBlendEnabled(true);
+        l.setRenderState(diskBlend);
+        attachChild(l);
+        updateModelBound();
+    }
+
 }
