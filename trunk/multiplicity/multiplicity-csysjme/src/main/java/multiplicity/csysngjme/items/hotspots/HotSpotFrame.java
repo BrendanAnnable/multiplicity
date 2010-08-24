@@ -6,6 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
@@ -32,8 +33,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	public List<IHotLink> hotLinks = new CopyOnWriteArrayList<IHotLink>();
 	protected List<Line> lines = new CopyOnWriteArrayList<Line>();
 	protected boolean isLocked = false;
-	private JMEColourRectangle frameOverlay;
-//	private float oldRotation = 0f;
+	private IColourRectangle frameOverlay;
 
     private boolean isVisable;
 
@@ -43,107 +43,42 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 		super(name, uuid, width, height);
 	}
 
-	public void addTouchOverlay() {
+	@Override
+	public void addFrameOverlay() {
 		int width = (int) this.getSize().x;
 		int height = (int) this.getSize().y;
-		frameOverlay = new JMEColourRectangle("frameOverlay",UUID.randomUUID(), width , height);
-		frameOverlay.initializeGeometry();
-		frameOverlay.setSolidBackgroundColour(new ColorRGBA(0f, 0f, 0f, 0.2f));
-		this.addItem(frameOverlay);
-		this.getZOrderManager().sendToBottom(frameOverlay, null);
-		BehaviourMaker.addBehaviour(frameOverlay, RotateTranslateScaleBehaviour.class);
-		
-		frameOverlay.addItemListener(new ItemListenerAdapter() {
-			
-			@Override
-			public void itemZOrderChanged(IItem item) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void itemScaled(IItem item) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void itemRotated(IItem item) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void itemMoved(IItem item) {
-			    super.itemMoved(item); 
-			    logger.debug("overlay: moved");
-			    IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
-                
-                
-			    parentFrame.sendHotLinksToTop();
-                parentFrame.bringHotSpotsToTop();
-                parentFrame.bringPaletToTop();
-			}
-			
-			@Override
-			public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
-			    super.itemCursorReleased(item, event);
-			    IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
-             
-                
-			    parentFrame.sendHotLinksToTop();
-                parentFrame.bringHotSpotsToTop();
-                parentFrame.bringPaletToTop();
-			}
-			
-			@Override
-			public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
-			    super.itemCursorPressed(item, event);
-			    logger.debug("overlay: pressed");
-	            IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
-			    
-             
-	            parentFrame.sendHotLinksToTop();
-                parentFrame.bringHotSpotsToTop();
-                parentFrame.bringPaletToTop();
-			}
-			
-			@Override
-			public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
-			    super.itemCursorClicked(item, event);
-			    logger.debug("overlay: clicked");
-			    IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
-                
-			    parentFrame.sendHotLinksToTop();
-                parentFrame.bringHotSpotsToTop();
-                parentFrame.bringPaletToTop();
-				
-			}
-			
-			@Override
-			public void itemCursorChanged(IItem item, MultiTouchCursorEvent event) {
-                super.itemCursorChanged(item, event);
-				IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
-				Vector2f frameOriginLocation = parentFrame.getRelativeLocation();
-				Vector2f itemDisplacement = item.getRelativeLocation();
-				parentFrame.setRelativeLocation(new Vector2f(frameOriginLocation.x + itemDisplacement.x, frameOriginLocation.y + itemDisplacement.y));
-				item.setRelativeLocation(new Vector2f(0f, 0f));
-				
-				float itemScale = item.getRelativeScale();
-				if(itemScale < 2.5f && itemScale>0.2f)  {
-					parentFrame.setRelativeScale(itemScale);
-				}
-				
-				float relativeRotation = item.getRelativeRotation();
-				parentFrame.setRelativeRotation(relativeRotation);
-				
-				parentFrame.sendHotLinksToTop();
-                parentFrame.bringHotSpotsToTop();
-				parentFrame.bringPaletToTop();
+		setFrameOverlay(new JMEColourRectangle("frameOverlay",UUID.randomUUID(), width , height));
+		getFrameOverlay().initializeGeometry();
+		getFrameOverlay().setSolidBackgroundColour(new ColorRGBA(0f, 0f, 0f, 0.2f));
+		this.addItem(getFrameOverlay());
+		this.getZOrderManager().sendToBottom(getFrameOverlay(), null);
+		BehaviourMaker.addBehaviour(getFrameOverlay(), RotateTranslateScaleBehaviour.class);
+	}
+	
+	@Override
+	public void updateOverLay() {
+        Vector2f frameOriginLocation = this.getRelativeLocation();
+        Vector2f itemDisplacement = this.getFrameOverlay().getRelativeLocation();
+        this.setRelativeLocation(new Vector2f(frameOriginLocation.x + itemDisplacement.x, frameOriginLocation.y + itemDisplacement.y));
+        this.getFrameOverlay().setRelativeLocation(new Vector2f(0f, 0f));
+        
+        float itemScale = this.getFrameOverlay().getRelativeScale();
+        if(itemScale < 2.5f && itemScale>0.2f)  {
+            this.setRelativeScale(itemScale);
+        }
+        
+        float relativeRotation = this.getFrameOverlay().getRelativeRotation();
+        this.setRelativeRotation(relativeRotation);
+        
+//        overlayAction();
+    }
+	
+	public void overlayAction() {
+	    this.sendHotLinksToTop();
+	    this.bringHotSpotsToTop();
+	    this.bringPaletToTop();
+	    this.sendHotLinksToTop();
 
-				
-			}
-		});
 	}
 
 	public List<IHotSpotItem> getHotSpots() {
@@ -161,45 +96,14 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	public void bringHotSpotsToTop() {
 		for (IHotSpotItem iHotSpotItem : hotSpots) {
 			this.getZOrderManager().bringToTop(iHotSpotItem, null);  
-			iHotSpotItem.redrawHotlink(iHotSpotItem);
+//			iHotSpotItem.redrawHotlink(iHotSpotItem);
+			 
 		}
+//		this.sendHotLinksToTop();
 	}
 
 	public void addHotLink(IHotLink hotLink) {
 	    this.hotLinks.add(hotLink);
-	    hotLink.addItemListener(new ItemListenerAdapter(){
-            
-            @Override
-            public void itemCursorPressed(IItem item,
-                    MultiTouchCursorEvent event) {
-                super.itemCursorPressed(item, event);
-                logger.debug("hotlink - pressed");
-//                sendHotLinksToBottom();
-                bringPaletToTop();
-            }
-            
-            @Override
-            public void itemCursorChanged(IItem item,
-                    MultiTouchCursorEvent event) {
-                // TODO Auto-generated method stub
-                super.itemCursorChanged(item, event);
-                logger.debug("hotlink - changed");
-//               sendHotLinksToBottom();
-                bringPaletToTop();
-            }
-            
-            @Override
-            public void itemCursorClicked(IItem item,
-                    MultiTouchCursorEvent event) {
-                // TODO Auto-generated method stub
-                super.itemCursorClicked(item, event);
-                logger.debug("hotlink - clicked");
-//                sendHotLinksToBottom();
-                bringPaletToTop();
-            }
-            
-            
-        });
 	}
 	
 	public void removeHotLink(IHotLink hotLink) {
@@ -222,12 +126,16 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	public void bringPaletToTop() {
 		// TODO Auto-generated method stub
 		if(isLocked() == false ) {
-		    logger.debug("palet to the top; is not locked");
+		    logger.debug("palet to the top; is NOT locked");
 		    sendOverlayToBottom();
-		    
+//		    sendHotLinksToTop();
+//		    bringHotSpotsToTop();
 		} else  {
 		    logger.debug("palet to the top; is locked");
 		    sendOverlayToTop();
+		    
+//		    bringHotSpotsToTop();
+//		    sendHotLinksToTop();
 		}
 		
 //		  for (IHotLink hl : hotLinks) {
@@ -271,27 +179,28 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	public void toggleLock() {
 		if(isLocked) {
 			//our frame is in lock mode, let's unlock it
-			this.getZOrderManager().sendToBottom(frameOverlay, null);
+			this.sendOverlayToBottom();
 			border.setColor(new ColorRGBA(1f, 1f, 1f, 0.6f));
 		}
 		else {
 			//our frame is in unlock mode, let's lock it
-			this.getZOrderManager().bringToTop(frameOverlay, null);
+			this.sendOverlayToTop();
 			border.setColor(new ColorRGBA(0f, 0f, 0f, 0f));
 		}
 	}
 
 	@Override
 	public void sendOverlayToBottom() {
-		this.getZOrderManager().sendToBottom(frameOverlay, null);
+		this.getZOrderManager().sendToBottom(getFrameOverlay(), null);
 	}
 	
 	@Override
 	public void sendOverlayToTop() {
-	    this.getZOrderManager().bringToTop(frameOverlay, null);
+	    this.getZOrderManager().bringToTop(getFrameOverlay(), null);
 	}
 
-	public JMEColourRectangle getFrameOverlay() {
+	@Override
+	public IColourRectangle getFrameOverlay() {
 		return frameOverlay;
 	}
 	
@@ -319,6 +228,10 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
         for (IHotLink hl : hotLinks) {
             this.getZOrderManager().bringToTop(hl, null);
         }
+    }
+
+    public void setFrameOverlay(JMEColourRectangle frameOverlay) {
+        this.frameOverlay = frameOverlay;
     }
     
 }

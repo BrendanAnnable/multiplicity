@@ -4,6 +4,7 @@ import java.nio.FloatBuffer;
 import java.util.UUID;
 
 import multiplicity.csysng.items.hotspot.IHotLink;
+import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.items.JMELine;
@@ -24,6 +25,8 @@ public class HotLink extends JMELine implements IHotLink {
     private static final long serialVersionUID = 1677415896709510948L;
 
     private IHotSpotItem hotSpotItem = null;
+    private IHotSpotFrame sourceFrame = null;
+    private IHotSpotFrame targetFrame = null;
 
     public HotLink(String name, UUID uuid, Vector3f[] vertices,
             ColorRGBA lineColour, float lineWidth, IHotSpotItem hotSpotItem) {
@@ -55,5 +58,25 @@ public class HotLink extends JMELine implements IHotLink {
     @Override
     public void initializeGeometry() {
        super.initializeGeometry();
+    }
+
+    @Override
+    public void setSourceFrame(IHotSpotFrame sourceFrame) {
+        this.sourceFrame = sourceFrame;
+    }
+
+    @Override
+    public IHotSpotFrame getSourceFrame() {
+        return sourceFrame;
+    }
+
+    @Override
+    public void setTargetFrame(IHotSpotFrame targetFrame) {
+        this.targetFrame = targetFrame;
+    }
+
+    @Override
+    public IHotSpotFrame getTargetFrame() {
+        return targetFrame;
     }
 }
