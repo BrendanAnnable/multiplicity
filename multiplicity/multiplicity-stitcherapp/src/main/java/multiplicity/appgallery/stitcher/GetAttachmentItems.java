@@ -286,7 +286,7 @@ public class GetAttachmentItems extends Thread {
 					}
 					
 					frame.removeItem(releasedItem);
-					stitcher.createNewFrame(releasedItem, new Vector2f(0.0f, 0.0f), "back-" + releasedItem.getUUID(), true, null);
+					stitcher.createNewFrame(releasedItem, new Vector2f(0.0f, 0.0f), "back-" + releasedItem.getUUID(), StitcherApp.BACKGROUND);
 					
 				} else {
 					// check if we are dropping on a "background"
@@ -310,7 +310,7 @@ public class GetAttachmentItems extends Thread {
 										releasedItem.setWorldLocation(itemWorldPos);
 										targetFrame.getZOrderManager().bringToTop(releasedItem, null);
 
-										stitcher.bumpHotSpotConnections();
+//										stitcher.bumpHotSpotConnections();
 										targetFrame.bringHotSpotsToTop();
 										targetFrame.bringPaletToTop();
 									} else if (!targetFrame.isLocked() && targetFrame.getName().contains("hotspotf-") && (parentContainerName.equals(stitcher.SCAN_NAME) || parentContainerName.equals(stitcher.STENCIL_NAME) || parentContainerName.equals(stitcher.BACKGROUND_NAME) )) {

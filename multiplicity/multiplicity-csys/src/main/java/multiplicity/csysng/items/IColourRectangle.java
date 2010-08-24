@@ -10,4 +10,5 @@ public interface IColourRectangle extends IRectangularItem {
 	public void setSolidBackgroundColour(Color c);
 	public void setGradientBackground(Gradient g);
 	public void setSolidBackgroundColour(ColorRGBA colorRGBA);
+	public void initializeGeometry();
 }

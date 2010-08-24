@@ -8,13 +8,24 @@ import com.jme.math.Vector3f;
 
 public interface IHotLink extends ILineItem {
 
-    public abstract void redrawTargetLocation(Vector2f relativeLocation);
+    public void redrawTargetLocation(Vector2f relativeLocation);
 
-    public abstract void redrawLine(Vector3f[] vertices);
+    public void redrawLine(Vector3f[] vertices);
 
-    public abstract IHotSpotItem getHotSpotItem();
+    public IHotSpotItem getHotSpotItem();
 
-    public abstract void initializeGeometry();
+    public void initializeGeometry();
+    
+    public void setVisible(boolean visible);
+
+    public IHotSpotFrame getTargetFrame();
+
+    public void setTargetFrame(IHotSpotFrame targetFrame);
+
+    public IHotSpotFrame getSourceFrame();
+
+    public void setSourceFrame(IHotSpotFrame sourceFrame);
+
 
 
 }

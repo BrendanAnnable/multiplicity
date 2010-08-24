@@ -4,14 +4,10 @@ import java.util.List;
 import java.util.UUID;
 
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.ILineItem;
-import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEColourCircle;
-import multiplicity.csysngjme.items.JMELine;
-import multiplicity.input.events.MultiTouchCursorEvent;
 
 import org.apache.log4j.Logger;
 
@@ -25,8 +21,6 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 	private final static Logger logger = Logger.getLogger(HotSpotItem.class.getName());
 
 	private boolean isOpen = true;
-	private String link;
-	private IHotSpotItem relationHotSpot;
 	private IHotSpotFrame hotSpotFrameContent;
 	private IHotLink hotLink;
     private ColorRGBA colorRGBA = new ColorRGBA(1f, 0f, 0f, 1f);
@@ -60,26 +54,26 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 
 	@Override
 	public void setOpen(boolean isOpen) {
-//		this.isOpen = isOpen;
-//		if (isOpen) {
-//
-//			// setGradientBackground(new Gradient(
-//			// Color.RED,
-//			// new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
-//			//
-//			// this.setSolidBackgroundColour(Color.RED);
-//			this.hotLink.setVisible(true);
+		this.isOpen = isOpen;
+		if (isOpen) {
+
+			// setGradientBackground(new Gradient(
+			// Color.RED,
+			// new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
+			//
+			// this.setSolidBackgroundColour(Color.RED);
+			this.hotLink.setVisible(true);
 //			this.hotLink.redrawLine(getLineVertices());
-//			hotSpotFrameContent.setVisible(true);
-//		} else {
-//			this.hotLink.setVisible(false);
-//
-//			// setGradientBackground(new Gradient(
-//			// Color.WHITE,
-//			// new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
-//			// this.setSolidBackgroundColour(Color.BLACK);
-//			hotSpotFrameContent.setVisible(false);
-//		}
+			hotSpotFrameContent.setVisible(true);
+		} else {
+			this.hotLink.setVisible(false);
+
+			// setGradientBackground(new Gradient(
+			// Color.WHITE,
+			// new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
+			// this.setSolidBackgroundColour(Color.BLACK);
+			hotSpotFrameContent.setVisible(false);
+		}
 	}
 
 	@Override
@@ -97,57 +91,33 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		hotLink.initializeGeometry();
 		hotSpotFrameContent.addHotLink(hotLink);
 
-		
-		this.addItemListener(new ItemListenerAdapter() {
 
-		    @Override
-		    public void itemRotated(IItem item) {
-		        super.itemRotated(item);
-		        redrawHotlink(item);
-		    }
-		    @Override
-		    public void itemScaled(IItem item) {
-		        super.itemScaled(item);
-		        redrawHotlink(item);
-		    }
-			public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
-			    super.itemCursorClicked(item, event);
-			    redrawHotlink(item);
-			};
-
-			public void itemMoved(IItem item) {
-			    super.itemMoved(item);
-			    redrawHotlink(item);
-			};
-
-		});
-
-		hotSpotFrameContent.addItemListener(new ItemListenerAdapter() {
-
-			public void itemMoved(IItem item) {
-
-				IHotSpotFrame frame = ((IHotSpotFrame) item);
-//				List<IHotSpotItem> hotSpots2 = frame.getHotSpots();
-				List<IHotLink> iLineItems = frame.getHotLinks();
+//		hotSpotFrameContent.addItemListener(new ItemListenerAdapter() {
 //
-				IHotSpotItem hsi = null;
-				for (IHotLink iLine : iLineItems) {
-					hsi = iLine.getHotSpotItem();
-					Vector3f[] vertices = ((HotSpotItem) hsi).getLineVertices();
-					iLine.redrawLine(vertices);
-				}
-
-				List<IHotSpotItem> hotSpots = frame.getHotSpots();
-				for (IHotSpotItem iHotSpotItem : hotSpots) {
-					Vector3f[] vertices = ((HotSpotItem) iHotSpotItem).getLineVertices();
-					((HotSpotItem) iHotSpotItem).getHotLink().redrawLine(vertices);
-				}
-
-			};
-		});
+//			public void itemMoved(IItem item) {
+//
+//				IHotSpotFrame frame = ((IHotSpotFrame) item);
+////				List<IHotSpotItem> hotSpots2 = frame.getHotSpots();
+//				List<IHotLink> iLineItems = frame.getHotLinks();
+////
+//				IHotSpotItem hsi = null;
+//				for (IHotLink iLine : iLineItems) {
+//					hsi = iLine.getHotSpotItem();
+//					Vector3f[] vertices = ((HotSpotItem) hsi).getLineVertices();
+//					iLine.redrawLine(vertices);
+//				}
+//
+//				List<IHotSpotItem> hotSpots = frame.getHotSpots();
+//				for (IHotSpotItem iHotSpotItem : hotSpots) {
+//					redrawHotlink(iHotSpotItem);
+//				}
+//
+//			};
+//		});
 
 		return hotLink;
 	}
+	
 	
 	@Override
     public void redrawHotlink(IItem item) {
@@ -155,6 +125,11 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
         ((HotSpotItem) item).getHotLink().redrawLine(vertices);
 	}
 
+	   @Override
+	    public void redrawHotlink() {
+	       redrawHotlink(this);
+	    }
+	   
 	private Vector3f[] getLineVertices() {
 		IHotSpotFrame parentF = (IHotSpotFrame) this.getParentItem();
 		Vector2f parentFCoord = parentF.getRelativeLocation();
@@ -185,6 +160,24 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		return hotLink;
 	}
 
+	
+	@Override
+    public void updateHotSpot() {
+        List<IHotLink> iLineItems = hotSpotFrameContent.getHotLinks();
+        //
+        IHotSpotItem hsi = null;
+        for (IHotLink iLine : iLineItems) {
+            hsi = iLine.getHotSpotItem();
+            Vector3f[] vertices = ((HotSpotItem) hsi).getLineVertices();
+            iLine.redrawLine(vertices);
+        }
+
+        List<IHotSpotItem> hotSpots = hotSpotFrameContent.getHotSpots();
+        for (IHotSpotItem iHotSpotItem : hotSpots) {
+            redrawHotlink(iHotSpotItem);
+        }
+    }
+	
 	@Override
 	public void update(Vector2f frameLocation) {
 //		Vector2f HSLocation = this.getRelativeLocation();

@@ -26,4 +26,8 @@ public interface IHotSpotItem extends IItem {
     
     public String getType();
 
+    public void redrawHotlink();
+
+    public void updateHotSpot();
+
 }

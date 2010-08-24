@@ -19,7 +19,7 @@ public class HotSpotContentItemFactory implements IHotSpotContentFactory {
     public IHotSpotFrame createHotSpotFrame(String name, UUID uuid, int width, int height) {
         HotSpotFrame frame = new HotSpotFrame(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height);
         frame.initializeGeometry();
-        frame.addTouchOverlay();
+        frame.addFrameOverlay();
         return frame;
     }
 

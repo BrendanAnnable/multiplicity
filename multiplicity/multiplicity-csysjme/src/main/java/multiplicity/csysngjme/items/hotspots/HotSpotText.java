@@ -10,6 +10,7 @@ import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.items.IBorder;
+import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IItem;
@@ -264,6 +265,26 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public IColourRectangle getFrameOverlay() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void updateOverLay() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void addFrameOverlay() {
+        // TODO Auto-generated method stub
+        
+    }
+
+
 
     
 

@@ -2,6 +2,7 @@ package multiplicity.csysng.items.hotspot;
 
 import java.util.List;
 
+import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
@@ -43,8 +44,14 @@ public interface IHotSpotFrame extends IFrame {
 
     public void addPalet(IPalet palet);
 
-    public abstract void sendHotLinksToTop();
+    public  void sendHotLinksToTop();
 
-    public abstract void sendHotLinksToBottom();
+    public  void sendHotLinksToBottom();
+
+    public IColourRectangle getFrameOverlay();
+
+    public void updateOverLay();
+
+    public void addFrameOverlay();
 
 }
