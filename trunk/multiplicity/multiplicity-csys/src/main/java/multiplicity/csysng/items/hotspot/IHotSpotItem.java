@@ -30,4 +30,10 @@ public interface IHotSpotItem extends IItem {
 
     public void updateHotSpot();
 
+    public int tap();
+
+    public void resetTaps();
+
+    public void toggle();
+
 }

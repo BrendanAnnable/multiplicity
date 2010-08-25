@@ -26,7 +26,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
     private ColorRGBA colorRGBA = new ColorRGBA(1f, 0f, 0f, 1f);
 	private String type;
 
-	public int clickCount = 0;
+	private int taps = 0;
 	public HotSpotItem(String name, UUID uuid, float radius) {
 		super(name, uuid, radius);
 	}
@@ -74,6 +74,15 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 			// this.setSolidBackgroundColour(Color.BLACK);
 			hotSpotFrameContent.setVisible(false);
 		}
+	}
+	
+	@Override
+	public void toggle() {
+	    if( isOpen ) {
+	        setOpen(false);
+	    } else {
+	        setOpen(true);
+	    }
 	}
 
 	@Override
@@ -186,5 +195,15 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		Vector3f[] vertices = this.getLineVertices();
 		this.getHotLink().redrawLine(vertices);
 	}
+
+    @Override
+    public int tap() {
+        return ++taps;
+    }
+
+    @Override
+    public void resetTaps() {
+        taps = 0;
+    }
 
 }
