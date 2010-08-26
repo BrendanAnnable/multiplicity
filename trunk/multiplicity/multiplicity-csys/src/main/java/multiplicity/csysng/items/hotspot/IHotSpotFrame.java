@@ -21,7 +21,7 @@ public interface IHotSpotFrame extends IFrame {
 
     public void setHotSpots(List<IHotSpotItem> hotSpots);
 
-    public void addHotSpot(IItem item);
+    public void addHotSpot(IHotSpotItem item);
 
     public void bringHotSpotsToTop();
  
@@ -29,7 +29,7 @@ public interface IHotSpotFrame extends IFrame {
 
     public void setVisible(boolean b);
     
-    public boolean isVisable();
+    public boolean isVisible();
 
 	public void setLocked(boolean isLocked);
 
@@ -53,5 +53,7 @@ public interface IHotSpotFrame extends IFrame {
     public void updateOverLay();
 
     public void addFrameOverlay();
+
+    public void removeHotSpot(IHotSpotItem hotspotItem);
 
 }

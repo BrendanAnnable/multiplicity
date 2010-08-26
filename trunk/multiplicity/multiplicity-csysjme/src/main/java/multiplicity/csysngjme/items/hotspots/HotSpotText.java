@@ -31,6 +31,7 @@ import multiplicity.csysngjme.factory.JMEContentItemFactory;
 import multiplicity.csysngjme.items.JMEEditableText;
 
 import com.jme.math.Vector2f;
+import com.jme.renderer.Renderer;
 
 public class HotSpotText extends JMEEditableText implements IHotSpotText {
 
@@ -41,6 +42,7 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
     private JMEContentItemFactory contentItemFactory = new JMEContentItemFactory();
     private IFrame keyboardFrame;
     private int taps = 0;
+    private boolean isVisible;
     
     public HotSpotText(String name, UUID uuid) {
         super(name, uuid);
@@ -140,25 +142,7 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
         return hotLinks;
     }
 
-    public List<IHotSpotItem> getHotSpots() {
-        return hotSpots;
-    }
     
-    public void setHotSpots(List<IHotSpotItem> hotSpots) {
-        this.hotSpots = hotSpots;
-    }
-
-    public void addHotSpot(IItem item) {
-        hotSpots.add((IHotSpotItem) item);
-    }
-
-    public void bringHotSpotsToTop() {
-        for (IHotSpotItem iHotSpotItem : hotSpots) {
-            this.getZOrderManager().bringToTop(iHotSpotItem, null);  
-            iHotSpotItem.redrawHotlink(iHotSpotItem);
-        }
-    }
-
     @Override
     public void bringPaletToTop() {
         // TODO Auto-generated method stub
@@ -166,13 +150,27 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
     }
 
     @Override
-    public void setVisible(boolean b) {
-        // TODO Auto-generated method stub
+        public void setVisible(boolean isVisible) {
+            this.isVisible = isVisible;
+            
+            if( isVisible ) {
+                this.getManipulableSpatial().setRenderQueueMode(Renderer.QUEUE_ORTHO);
+            } else {
+                this.getManipulableSpatial().setRenderQueueMode(Renderer.QUEUE_TRANSPARENT);
+            }
+        }
 
+    @Override
+    public void toggle() {
+        if( isVisible ) {
+            setVisible(false);
+        } else {
+            setVisible(true);
+        }
     }
 
     @Override
-    public boolean isVisable() {
+    public boolean isVisible() {
         // TODO Auto-generated method stub
         return false;
     }
@@ -280,6 +278,35 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
 
     @Override
     public void addFrameOverlay() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public List<IHotSpotItem> getHotSpots() {
+        return null;
+    }
+
+    @Override
+    public void setHotSpots(List<IHotSpotItem> hotSpots) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void bringHotSpotsToTop() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void addHotSpot(IHotSpotItem item) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void removeHotSpot(IHotSpotItem hotspotItem) {
         // TODO Auto-generated method stub
         
     }

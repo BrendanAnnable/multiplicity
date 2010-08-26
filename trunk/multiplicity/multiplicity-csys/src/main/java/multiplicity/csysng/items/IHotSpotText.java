@@ -16,4 +16,6 @@ public interface IHotSpotText extends IEditableText, IHotSpotFrame {
 
     public void resetTaps();
 
+    public void toggle();
+
 }

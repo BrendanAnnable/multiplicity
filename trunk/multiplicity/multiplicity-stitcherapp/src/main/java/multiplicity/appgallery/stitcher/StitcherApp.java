@@ -31,6 +31,7 @@ import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
+import multiplicity.csysng.items.hotspot.IHotSpotRepo;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysng.items.repository.IRepositoryContentItemFactory;
@@ -69,7 +70,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	public final String BACKGROUND_NAME = "backgrounds";
 	public final String SCAN_NAME = "scans";
 	private final List<String> pageNames = new ArrayList<String>();
-	private final List<IHotLink> hotspotConnections = new ArrayList<IHotLink>();
+	private final List<IHotLink> hotlinks = new ArrayList<IHotLink>();
 	private IPage stencilsPage;
 	private IPage backgroundsPage;
 	private IPage scansPage;
@@ -277,11 +278,11 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	    } else if((type != null && type.equals(TEXT))) {
 	         
 	         final IHotSpotText hotspotLabel = getHotSpotContentFactory().createEditableHotSpotText("HotSpotLabel", UUID.randomUUID());
-	         hotspotLabel.setText("Replace Me");
+	         hotspotLabel.setText("Label");
 	         hotspotLabel.setFont(new Font("Myriad Pro", Font.BOLD, 48*2));
 	         hotspotLabel.setTextColour(Color.white);
 	         hotspotLabel.setRelativeLocation(new Vector2f(0, 200));
-	         hotspotLabel.setCursorAt(3);
+	         //hotspotLabel.setCursorAt(3);
 	         BehaviourMaker.addBehaviour(hotspotLabel, RotateTranslateScaleBehaviour.class);       
 	         add(hotspotLabel);
 	         
@@ -296,7 +297,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	                    IHotSpotText hst = (IHotSpotText) item;
 	                    
 	                    
-                        if (hst.tap() == 2) {
+                        if (hst.tap() == 4) {
     
                             if (hst.isKeyboardVisible() == false) {
                                 showKeyboard(hst);
@@ -312,7 +313,12 @@ public class StitcherApp extends AbstractMultiplicityApp {
                     @Override
 	                public void itemMoved(IItem item) {
 	                    super.itemMoved(item);
-	                   // redrawContentHotSpotLines(item);
+	                    IHotSpotFrame frame = (IHotSpotFrame) item;
+                        
+                        List<IHotLink> hotLinks = frame.getHotLinks();
+                        for (IHotLink iHotLink : hotLinks) {
+                            iHotLink.getHotSpotItem().updateHotSpot();
+                        }
 	                }
                     
                     private void showKeyboard(IHotSpotText hotSpotText) {
@@ -439,7 +445,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	        
 	        
 	  
-            bumpHotSpotConnections();
+//            bumpHotSpotConnections();
 	        //getZOrderManager().bringToTop(newHotSpotFrame, null);
 	        //newHotSpotFrame.getZOrderManager().updateZOrdering();
 	        
@@ -620,8 +626,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 
 	public void createHotSpotRepo(String type) {
 	    
-		UUID uUID = UUID.randomUUID();
-		IFrame frame = this.getContentFactory().createFrame("hotspots", uUID, HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
+	    IHotSpotRepo frame = this.getHotSpotContentFactory().createHotSpotRepo("hotspots", UUID.randomUUID(), HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
 
 		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 5f, 5));
 		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
@@ -657,27 +662,45 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	    } else if(type.equals(TEXT)) {
 	        colorRGBA = new ColorRGBA(0f, 0f, 1f, 0.6f);
 	    }
-		IHotSpotItem hotspot = this.getHotSpotContentFactory().createHotSpotItem("cr", UUID.randomUUID(), HOTSPOT_DIMENSION / 4, colorRGBA);
-		hotspot.setType(type);
-		frame.addItem(hotspot);
-		hotspot.centerItem();
+		IHotSpotItem hotSpotItem = this.getHotSpotContentFactory().createHotSpotItem("cr", UUID.randomUUID(), HOTSPOT_DIMENSION / 4, colorRGBA);
+		hotSpotItem.setType(type);
+		frame.addItem(hotSpotItem);
+		hotSpotItem.centerItem();
 
-		hotspot.addItemListener(new ItemListenerAdapter() {
+		hotSpotItem.addItemListener(new ItemListenerAdapter() {
 	
+		    @Override
+		    public void itemCursorChanged(IItem item,
+		            MultiTouchCursorEvent event) {
+		        // TODO Auto-generated method stub
+		        super.itemCursorChanged(item, event);
+		        
+	              
+                if(item.getParentItem() != null && ( item.getParentItem() instanceof IHotSpotFrame )) {
+                     logger.debug("hotspot updating on change");
+                      IHotSpotItem hs = (IHotSpotItem) item;
+                      hs.updateHotSpot();
+                }
+		    }
+		    @Override
+		    public void itemMoved(IItem item) {
+		        super.itemMoved(item);
+		        logger.debug("hotspot moved");
+
+		    }
 		    @Override
 		    public void itemCursorPressed(IItem item,
 		            MultiTouchCursorEvent event) {
 		        // TODO Auto-generated method stub
 		        super.itemCursorPressed(item, event);
 		        logger.debug("Hotspot cursor pressed");
-		      
-//              bumpHotSpotConnections();
+		        IHotSpotItem hs = (IHotSpotItem) item;
 
 		        if( item.getParentItem() instanceof IHotSpotFrame) {
 		            
 		            
-		            IHotSpotItem hotSpot = (IHotSpotItem) item;
-		            getZOrderManager().bringToTop(hotSpot.getHotSpotFrameContent(), null);
+		            
+		            getZOrderManager().bringToTop(hs.getHotSpotFrameContent(), null);
 		            IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
 		            
 		            
@@ -687,6 +710,15 @@ public class StitcherApp extends AbstractMultiplicityApp {
 //		            bumpHotSpotConnections();
 		           
 		            parentFrame.bringPaletToTop();
+		            
+		            //hide show
+		            if( hs.tap() == 4 ) {
+		                hs.toggle();
+		                hs.resetTaps();
+		                hs.updateHotSpot();
+		            }
+		            
+		            
 		        }
 		    }
 			@Override
@@ -710,8 +742,9 @@ public class StitcherApp extends AbstractMultiplicityApp {
 						offParent = false;
 						message = message + "on its parent. Nothing happens";
 
-//						IHotSpotFrame hsf = (IHotSpotFrame) item.getParentItem();
-//						hsf.sendHotLinksToTop();
+						if( item.getParentItem() instanceof IHotSpotRepo)
+						    item.centerItem();
+
 						
 					} else if (foundItem instanceof JMEFrame && !firstFrameFound) {
 						try {
@@ -729,7 +762,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 
 								// add HS to the array attached to the frame
 								IHotSpotItem hsItem = (IHotSpotItem)item;
-								((IHotSpotFrame) sourceFrame).addHotSpot(item);
+								((IHotSpotFrame) sourceFrame).addHotSpot(hsItem);
 
 								IHotSpotFrame hotSpotFrameContent = createNewHotSpotContentFrame(hsItem.getType());
 
@@ -738,7 +771,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 								IHotLink l = (HotLink) hsItem.createHotLink();
 								l.setSourceFrame((IHotSpotFrame) sourceFrame);
 								l.setTargetFrame(hotSpotFrameContent);
-								hotspotConnections.add(l);
+								addHotlink(l);
 								add(l);
 
 								message = message + "on " + sourceFrame.getName() + ". Great!!";
@@ -746,8 +779,10 @@ public class StitcherApp extends AbstractMultiplicityApp {
 								// create a new hotspot candidate
 								fillHotSpotRepo(originFrame,hsItem.getType());
 								 
+								updateHotSpotContentFrame(hotSpotFrameContent);
+//								hsItem.updateHotSpot();
 								//hotSpotFrameContent.bringHotSpotsToTop();
-								bumpHotSpotConnections();
+								//bumpHotSpotConnections();
 								//hotSpotFrameContent.bringPaletToTop();
 							}
 
@@ -770,14 +805,20 @@ public class StitcherApp extends AbstractMultiplicityApp {
 
 			}
           
+          
 			
 		});
 
-		BehaviourMaker.addBehaviour((IItem) hotspot, RotateTranslateScaleBehaviour.class);
+		BehaviourMaker.addBehaviour((IItem) hotSpotItem, RotateTranslateScaleBehaviour.class);
 	}
 
+	private void updateHotSpotContentFrame(
+              IHotSpotFrame hotSpotFrameContent) {
+          hotSpotFrameContent.bringPaletToTop();
+    }
+	  
 	public void bumpHotSpotConnections() {
-		for (IHotLink hotlink : hotspotConnections) {
+		for (IHotLink hotlink : hotlinks) {
 			this.getZOrderManager().bringToTop(hotlink, null);
 		}
 	}
@@ -810,4 +851,38 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	public IRepositoryContentItemFactory getRepositoryFactory() {
 		return repositoryFactory;
 	}
+
+    private void addHotlink(IHotLink hotlink) {
+        hotlink.addItemListener(new ItemListenerAdapter(){
+            @Override
+            public void itemCursorPressed(IItem item,
+                    MultiTouchCursorEvent event) {
+                super.itemCursorPressed(item, event);
+                logger.debug("hotlink pressed");
+                
+                IHotLink hotLink = (IHotLink)item;
+                //hide show
+                if( hotLink.tap() == 4 ) {
+                  logger.debug("deleting hotlink");
+                  
+                  IHotSpotFrame sourceFrame = (IHotSpotFrame) hotLink.getHotSpotItem().getParentItem();
+                  IHotSpotFrame hotSpotFrameContent = hotLink.getHotSpotItem().getHotSpotFrameContent();
+                  
+                  //remove hotspot
+                  sourceFrame.removeHotSpot(hotLink.getHotSpotItem());
+                  sourceFrame.removeItem(hotLink.getHotSpotItem());
+                  
+                  //remove hotlink
+                  sourceFrame.removeHotLink(hotLink);
+                  
+                  remove(hotLink);
+                  remove(hotSpotFrameContent);
+                  
+                }
+            }
+            
+            
+        });
+        hotlinks.add(hotlink);
+    }
 }

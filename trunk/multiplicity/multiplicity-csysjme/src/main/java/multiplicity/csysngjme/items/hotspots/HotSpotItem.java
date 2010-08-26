@@ -173,17 +173,21 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 	@Override
     public void updateHotSpot() {
         List<IHotLink> iLineItems = hotSpotFrameContent.getHotLinks();
-        //
-        IHotSpotItem hsi = null;
-        for (IHotLink iLine : iLineItems) {
-            hsi = iLine.getHotSpotItem();
-            Vector3f[] vertices = ((HotSpotItem) hsi).getLineVertices();
-            iLine.redrawLine(vertices);
+        
+        if( iLineItems != null ) {
+            IHotSpotItem hsi = null;
+            for (IHotLink iLine : iLineItems) {
+                hsi = iLine.getHotSpotItem();
+                Vector3f[] vertices = ((HotSpotItem) hsi).getLineVertices();
+                iLine.redrawLine(vertices);
+            }
         }
 
         List<IHotSpotItem> hotSpots = hotSpotFrameContent.getHotSpots();
-        for (IHotSpotItem iHotSpotItem : hotSpots) {
-            redrawHotlink(iHotSpotItem);
+        if( hotSpots != null ) {
+            for (IHotSpotItem iHotSpotItem : hotSpots) {
+                redrawHotlink(iHotSpotItem);
+            }
         }
     }
 	

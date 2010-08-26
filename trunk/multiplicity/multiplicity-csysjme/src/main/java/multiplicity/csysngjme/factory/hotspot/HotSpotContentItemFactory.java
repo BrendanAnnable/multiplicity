@@ -6,9 +6,12 @@ import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
+import multiplicity.csysng.items.hotspot.IHotSpotRepo;
 import multiplicity.csysngjme.factory.ContentItemFactoryUtil;
+import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
 import multiplicity.csysngjme.items.hotspots.HotSpotItem;
+import multiplicity.csysngjme.items.hotspots.HotSpotRepo;
 import multiplicity.csysngjme.items.hotspots.HotSpotText;
 
 import com.jme.renderer.ColorRGBA;
@@ -43,5 +46,13 @@ public class HotSpotContentItemFactory implements IHotSpotContentFactory {
         IHotSpotText text = new HotSpotText(name, uuid);
         text.initializeGeometry();
         return text;
+    }
+
+    @Override
+    public IHotSpotRepo createHotSpotRepo(String name, UUID uuid, int width,
+            int height) {
+        IHotSpotRepo frame =  new HotSpotRepo(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height);
+        frame.initializeGeometry();
+        return frame;
     }
 }
