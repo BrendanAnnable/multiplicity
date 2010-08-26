@@ -28,6 +28,8 @@ public class HotLink extends JMELine implements IHotLink {
     private IHotSpotFrame sourceFrame = null;
     private IHotSpotFrame targetFrame = null;
 
+    private int taps;
+
     public HotLink(String name, UUID uuid, Vector3f[] vertices,
             ColorRGBA lineColour, float lineWidth, IHotSpotItem hotSpotItem) {
         super(name, uuid, vertices, lineColour, lineWidth);
@@ -78,5 +80,15 @@ public class HotLink extends JMELine implements IHotLink {
     @Override
     public IHotSpotFrame getTargetFrame() {
         return targetFrame;
+    }
+    
+    @Override
+    public int tap() {
+        return ++taps;
+    }
+
+    @Override
+    public void resetTaps() {
+        taps = 0;
     }
 }

@@ -35,7 +35,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	protected boolean isLocked = false;
 	private IColourRectangle frameOverlay;
 
-    private boolean isVisable;
+    private boolean isVisible;
 
     private IPalet palet; ;
 
@@ -89,10 +89,17 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 		this.hotSpots = hotSpots;
 	}
 
-	public void addHotSpot(IItem item) {
-		hotSpots.add((IHotSpotItem) item);
+	@Override
+	public void addHotSpot(IHotSpotItem hotspotItem) {
+		hotSpots.add(hotspotItem);
+		addItem(hotspotItem);
 	}
 
+	@Override
+	public void removeHotSpot(IHotSpotItem hotspotItem) {
+	    hotSpots.remove(hotspotItem);
+	    removeItem(hotspotItem);
+	}
 	public void bringHotSpotsToTop() {
 		for (IHotSpotItem iHotSpotItem : hotSpots) {
 			this.getZOrderManager().bringToTop(iHotSpotItem, null);  
@@ -108,6 +115,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	
 	public void removeHotLink(IHotLink hotLink) {
 	    if( !hotLinks.isEmpty() && hotLinks.contains(hotLink)) {
+	        removeItem(hotLink);
 	        hotLinks.remove(hotLink);
 	    }
 	        
@@ -146,10 +154,10 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	}
 
     @Override
-    public void setVisible(boolean isVisable) {
-        this.isVisable = isVisable;
+    public void setVisible(boolean isVisible) {
+        this.isVisible = isVisible;
         
-        if( isVisable ) {
+        if( isVisible ) {
             this.getManipulableSpatial().setRenderQueueMode(Renderer.QUEUE_ORTHO);
             this.getMaskGeometry().setRenderQueueMode(Renderer.QUEUE_ORTHO);
         } else {
@@ -160,8 +168,8 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
     }
 
     @Override
-    public boolean isVisable() {
-        return this.isVisable;
+    public boolean isVisible() {
+        return this.isVisible;
     }
 
 	@Override

@@ -26,6 +26,10 @@ public interface IHotLink extends ILineItem {
 
     public void setSourceFrame(IHotSpotFrame sourceFrame);
 
+    public int tap();
+
+    public void resetTaps();
+
 
 
 }
