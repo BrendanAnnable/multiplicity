@@ -171,8 +171,7 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
 
     @Override
     public boolean isVisible() {
-        // TODO Auto-generated method stub
-        return false;
+        return isVisible;
     }
 
     @Override
@@ -219,13 +218,17 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
 
     @Override
     public void sendHotLinksToTop() {
-        // TODO Auto-generated method stub
+        for (IHotLink hl : hotLinks) {
+            this.getZOrderManager().sendToBottom(hl, null);
+        }
 
     }
 
     @Override
     public void sendHotLinksToBottom() {
-        // TODO Auto-generated method stub
+        for (IHotLink hl : hotLinks) {
+            this.getZOrderManager().bringToTop(hl, null);
+        }
 
     }
 
