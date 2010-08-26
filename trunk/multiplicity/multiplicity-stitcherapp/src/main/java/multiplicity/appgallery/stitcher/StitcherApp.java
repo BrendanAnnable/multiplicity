@@ -69,6 +69,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	public final String BACKGROUND_NAME = "backgrounds";
 	public final String SCAN_NAME = "scans";
 	private final List<String> pageNames = new ArrayList<String>();
+	private final List<IHotSpotFrame> hotspotContentFrames = new ArrayList<IHotSpotFrame>();
 	private IPage stencilsPage;
 	private IPage backgroundsPage;
 	private IPage scansPage;
@@ -285,19 +286,18 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	         add(hotspotLabel);
 	         
 	         hotspotLabel.addItemListener(new ItemListenerAdapter() {
-
-	                @Override
-	                public void itemCursorChanged(IItem item,
-	                    MultiTouchCursorEvent event) {
-	                    super.itemCursorChanged(item, event);
-	                    IHotSpotFrame frame = (IHotSpotFrame) item;
-                        
-                        List<IHotLink> hotLinks = frame.getHotLinks();
-                        for (IHotLink iHotLink : hotLinks) {
-                            iHotLink.getHotSpotItem().updateHotSpot();
-                        }
-	                }
 	             
+	             @Override
+                 public void itemCursorChanged(IItem item,
+                         MultiTouchCursorEvent event) {
+                     // TODO Auto-generated method stub
+                     super.itemCursorChanged(item, event);
+                     IHotSpotFrame frame = (IHotSpotFrame) item;
+                     
+                     updateHotSpots(frame);
+                     
+                     
+                 }
 	                @Override
 	                public void itemCursorPressed(IItem item,
 	                    MultiTouchCursorEvent event) {
@@ -371,10 +371,9 @@ public class StitcherApp extends AbstractMultiplicityApp {
                             iHotSpotItem.updateHotSpot();
                         }
 	                } else {
-	                    List<IHotLink> hotLinks = hotspotFrame.getHotLinks();
-                        for (IHotLink iHotLink : hotLinks) {
-                            iHotLink.getHotSpotItem().updateHotSpot();
-                        }
+	                    
+	                    updateHotSpots(hotspotFrame);
+
 	                }
                     hotspotFrame.updateOverLay();
                     hotspotFrame.bringPaletToTop();
@@ -421,12 +420,12 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	                    super.itemCursorChanged(item, event);
 	                    IHotSpotFrame frame = (IHotSpotFrame) item;
                         
-                        List<IHotLink> hotLinks = frame.getHotLinks();
-                        for (IHotLink iHotLink : hotLinks) {
-                            iHotLink.getHotSpotItem().updateHotSpot();
-                        }
+	                    updateHotSpots(frame);
+
                         
 	                }
+
+               
                 });
 	        } else if( type.equals(BACKGROUND)) {
 	            newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
@@ -467,13 +466,13 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	    
 	}
 	
-	protected void redrawContentHotSpotLines(IHotSpotFrame hotspotFrame){
-            List<IHotSpotItem> hotSpots = hotspotFrame.getHotSpots();
-            for (IHotSpotItem iHotSpotItem : hotSpots) {
-                iHotSpotItem.update(hotspotFrame.getRelativeLocation());
+    private void updateHotSpots(IHotSpotFrame frame) {
+        List<IHotLink> hotLinks = frame.getHotLinks();
+            for (IHotLink iHotLink : hotLinks) {
+                iHotLink.getHotSpotItem().updateHotSpot();
             }
-	}
-
+    }
+	
 	
     protected void paletReleased(IItem item, MultiTouchCursorEvent event) {
         String message = "Palet released: ";
@@ -779,7 +778,13 @@ public class StitcherApp extends AbstractMultiplicityApp {
 								// create a new hotspot candidate
 								fillHotSpotRepo(originFrame,hsItem.getType());
 								 
-								updateHotSpotContentFrame(hotSpotFrameContent);
+								hotspotContentFrames.add(hotSpotFrameContent);
+								updateHotSpotContentFrames();
+								
+								if( hotSpotFrameContent instanceof IHotSpotText ) {
+								    updateHotSpots(hotSpotFrameContent);
+								    getZOrderManager().updateZOrdering();
+								}
 //								hsItem.updateHotSpot();
 								//hotSpotFrameContent.bringHotSpotsToTop();
 								//bumpHotSpotConnections();
@@ -812,9 +817,12 @@ public class StitcherApp extends AbstractMultiplicityApp {
 		BehaviourMaker.addBehaviour((IItem) hotSpotItem, RotateTranslateScaleBehaviour.class);
 	}
 
-	private void updateHotSpotContentFrame(
-              IHotSpotFrame hotSpotFrameContent) {
-          hotSpotFrameContent.bringPaletToTop();
+	private void updateHotSpotContentFrames() {
+	    
+	      for (IHotSpotFrame hsFrame : hotspotContentFrames) {
+	          hsFrame.bringPaletToTop();
+	      }
+          
     }
 
 	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
@@ -859,18 +867,21 @@ public class StitcherApp extends AbstractMultiplicityApp {
                 if( hotLink.tap() == 4 ) {
                   logger.debug("deleting hotlink");
                   
+                  
                   IHotSpotItem hotSpotItem = hotLink.getHotSpotItem();
                   
                   hotSpotItem.removeHotLink(hotLink);
                   
                   IHotSpotFrame sourceFrame = (IHotSpotFrame) hotLink.getHotSpotItem().getParentItem();
                   IHotSpotFrame hotSpotFrameContent = hotLink.getHotSpotItem().getHotSpotFrameContent();
-                  
+                  if(!(hotSpotFrameContent instanceof IHotSpotText) ) {
+                      hotSpotFrameContent.removeHotSpot(hotSpotItem);
+                  }
                   //remove hotspot
                   sourceFrame.removeHotSpot(hotSpotItem);
-                  hotSpotFrameContent.removeHotSpot(hotSpotItem);
                   
                   remove(hotLink);
+                  hotspotContentFrames.remove(hotSpotFrameContent);
                   remove(hotSpotFrameContent);
                 
                   sourceFrame.bringHotSpotsToTop();
