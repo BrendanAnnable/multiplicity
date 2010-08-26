@@ -27,6 +27,7 @@ import com.jme.scene.state.BlendState;
 import com.jme.scene.state.StencilState;
 import com.jme.scene.state.BlendState.DestinationFunction;
 import com.jme.scene.state.BlendState.SourceFunction;
+import com.jme.scene.state.RenderState.StateType;
 import com.jme.scene.state.StencilState.StencilFunction;
 import com.jme.scene.state.StencilState.StencilOperation;
 import com.jme.system.DisplaySystem;
@@ -142,6 +143,11 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 	@Override
 	public void removeItem(IItem item) {
 		super.removeItem(item);
+		JMEItemUserData itemData = (JMEItemUserData) item.getManipulableSpatial().getUserData(JMEItem.KEY_JMEITEMDATA);
+		itemData.setMaskGeometry(null);
+		StencilState ss = (StencilState) item.getTreeRootSpatial().getRenderState(StateType.Stencil);
+		ss.setEnabled(false);
+		item.getTreeRootSpatial().clearRenderState(StateType.Stencil);		
 	    updateRenderState();
 	}
 	

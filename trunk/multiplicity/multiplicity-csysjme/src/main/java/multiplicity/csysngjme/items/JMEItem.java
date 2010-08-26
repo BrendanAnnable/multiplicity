@@ -199,7 +199,7 @@ public abstract class JMEItem extends Node implements IItem {
 	public void removeItem(IItem item) {
 		getItemChildren().remove(item);
 		detachChild(item.getTreeRootSpatial());
-		//item.setParentItem(null);
+		item.setParentItem(null);
 		getZOrderManager().unregisterForZOrdering(item);
 	}
 	
