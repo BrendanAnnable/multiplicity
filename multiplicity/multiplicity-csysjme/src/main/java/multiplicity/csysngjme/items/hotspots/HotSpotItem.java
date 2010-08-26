@@ -22,6 +22,8 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 
 	private boolean isOpen = true;
 	private IHotSpotFrame hotSpotFrameContent;
+	private IHotSpotFrame sourceFrameContent;
+
 	private IHotLink hotLink;
     private ColorRGBA colorRGBA = new ColorRGBA(1f, 0f, 0f, 1f);
 	private String type;
@@ -49,7 +51,6 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 	@Override
 	public void initializeGeometry() {
 		super.initializeGeometry();
-
 	}
 
 	@Override
@@ -91,7 +92,13 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 	}
 
 	@Override
+	public void removeHotLink(IHotLink hotLink) {
+	    hotSpotFrameContent.removeHotLink(hotLink);
+        sourceFrameContent.removeHotLink(hotLink);
+	}
+	@Override
 	public IHotLink createHotLink() {
+	    sourceFrameContent = (IHotSpotFrame) this.getParentItem();
 
 		Vector3f[] vertices = getLineVertices();
 
@@ -99,6 +106,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		hotLink = new HotLink("line-" + uuid, uuid, vertices, colorRGBA, 4f, this);
 		hotLink.initializeGeometry();
 		hotSpotFrameContent.addHotLink(hotLink);
+		sourceFrameContent.addHotLink(hotLink);
 
 
 //		hotSpotFrameContent.addItemListener(new ItemListenerAdapter() {

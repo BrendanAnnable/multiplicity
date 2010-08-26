@@ -23,6 +23,7 @@ import com.jme.math.Vector2f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.renderer.Renderer;
 import com.jme.scene.Line;
+import com.jme.scene.Spatial;
 
 public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	
@@ -97,26 +98,31 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 
 	@Override
 	public void removeHotSpot(IHotSpotItem hotspotItem) {
+	    logger.debug("removing hotspot from hotspotframe");
 	    hotSpots.remove(hotspotItem);
-	    removeItem(hotspotItem);
+	    ((Spatial)hotspotItem).removeFromParent();
+//	    removeItem(hotspotItem);
+	    
 	}
 	public void bringHotSpotsToTop() {
-		for (IHotSpotItem iHotSpotItem : hotSpots) {
-			this.getZOrderManager().bringToTop(iHotSpotItem, null);  
-//			iHotSpotItem.redrawHotlink(iHotSpotItem);
-			 
-		}
-//		this.sendHotLinksToTop();
+        if (!hotSpots.isEmpty()) {
+            for (IHotSpotItem iHotSpotItem : hotSpots) {
+                this.getZOrderManager().bringToTop(iHotSpotItem, null);
+            }
+        }
 	}
 
+	@Override
 	public void addHotLink(IHotLink hotLink) {
 	    this.hotLinks.add(hotLink);
+	    logger.debug("hotlink added to hotspot frame");
 	}
 	
+	@Override
 	public void removeHotLink(IHotLink hotLink) {
 	    if( !hotLinks.isEmpty() && hotLinks.contains(hotLink)) {
-	        removeItem(hotLink);
 	        hotLinks.remove(hotLink);
+	        logger.debug("hotlink removed from hotspot frame");
 	    }
 	        
 	}

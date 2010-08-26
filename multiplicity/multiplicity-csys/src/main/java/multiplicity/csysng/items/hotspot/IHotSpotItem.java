@@ -36,4 +36,6 @@ public interface IHotSpotItem extends IItem {
 
     public void toggle();
 
+    public void removeHotLink(IHotLink hotLink);
+
 }
