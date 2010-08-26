@@ -231,7 +231,6 @@ public class GetAttachmentItems extends Thread {
 				}
 
 				logger.info(message);
-				stitcher.bumpHotSpotConnections();
 			}
 
 			@Override
