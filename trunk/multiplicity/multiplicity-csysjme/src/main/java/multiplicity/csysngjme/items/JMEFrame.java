@@ -169,7 +169,7 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 		item.addItemListener(new ItemListenerAdapter() {
 			@Override
 			public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
-				for(IItemListener l : itemListeners) {
+				for(IItemListener l : getItemListeners()) {
 					l.itemCursorPressed(instance, event);
 				}
 			}
@@ -196,7 +196,7 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 		this.border.addItemListener(new ItemListenerAdapter() {
 			@Override
 			public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
-				for(IItemListener l : itemListeners) {
+				for(IItemListener l : getItemListeners()) {
 					l.itemCursorPressed(instance, event);
 				}
 			}
