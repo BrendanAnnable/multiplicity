@@ -14,13 +14,13 @@ import com.jme.math.Vector2f;
 
 public class RepositoryFrame extends JMEFrame implements IRepositoryFrame {
 
-    private final static Logger logger = Logger.getLogger(RepositoryFrame.class.getName());
+    protected final static Logger logger = Logger.getLogger(RepositoryFrame.class.getName());
 
-	private static final long serialVersionUID = 6646308702330551200L;
-	private boolean isOpen = false;
-    private Vector2f openLocation;
-    private Vector2f closeLocation;
-    private int taps = 0;
+    protected static final long serialVersionUID = 6646308702330551200L;
+    protected boolean isOpen = false;
+    protected Vector2f openLocation;
+    protected Vector2f closeLocation;
+    protected int taps = 0;
     public RepositoryFrame(String name, UUID uuid, int width, int height) {
         super(name, uuid, width, height);
         

@@ -49,6 +49,11 @@ public class HotLink extends JMELine implements IHotLink {
             l.setSolidColor(lineColour);
         }
     }
+    
+    @Override
+    public void changeBackgroundColor(ColorRGBA colorRGBA) {
+        super.changeBackgroundColor(colorRGBA);
+    }
 
     @Override
     public void redrawTargetLocation(Vector2f relativeLocation) {

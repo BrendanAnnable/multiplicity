@@ -4,6 +4,7 @@ import multiplicity.csysng.items.ILineItem;
 
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
+import com.jme.renderer.ColorRGBA;
 
 
 public interface IHotLink extends ILineItem {
@@ -29,6 +30,8 @@ public interface IHotLink extends ILineItem {
     public int tap();
 
     public void resetTaps();
+
+    public void changeBackgroundColor(ColorRGBA colorRGBA);
 
 
 
