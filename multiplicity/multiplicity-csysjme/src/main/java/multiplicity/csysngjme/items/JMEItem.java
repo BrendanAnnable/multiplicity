@@ -30,7 +30,7 @@ public abstract class JMEItem extends Node implements IItem {
 	protected MultiTouchEventDispatcher dispatcher = new MultiTouchEventDispatcher();
 	
 //	protected final List<IItemListener> itemListeners = new ArrayList<IItemListener>();
-	protected final List<IItemListener> itemListeners = new CopyOnWriteArrayList<IItemListener>();
+	private List<IItemListener> itemListeners = new CopyOnWriteArrayList<IItemListener>();
 	protected IItem parentItem;
 	protected UUID uuid;
 	protected Quaternion rot = new Quaternion();
@@ -49,24 +49,24 @@ public abstract class JMEItem extends Node implements IItem {
 		dispatcher.addListener(new IMultiTouchEventListener() {			
 			@Override
 			public void cursorReleased(MultiTouchCursorEvent event) {
-					for(IItemListener l : itemListeners) l.itemCursorReleased(instance, event);
+					for(IItemListener l : getItemListeners()) l.itemCursorReleased(instance, event);
 			}
 			
 			@Override
 			public void cursorPressed(MultiTouchCursorEvent event) {
-				for(IItemListener l : itemListeners) {
+				for(IItemListener l : getItemListeners()) {
 					l.itemCursorPressed(instance, event);
 				}
 			}
 			
 			@Override
 			public void cursorClicked(MultiTouchCursorEvent event) {
-				for(IItemListener l : itemListeners) l.itemCursorClicked(instance, event);	
+				for(IItemListener l : getItemListeners()) l.itemCursorClicked(instance, event);	
 			}
 			
 			@Override
 			public void cursorChanged(MultiTouchCursorEvent event) {
-				for(IItemListener l : itemListeners) l.itemCursorChanged(instance, event);
+				for(IItemListener l : getItemListeners()) l.itemCursorChanged(instance, event);
 			}
 			
 			@Override public void objectRemoved(MultiTouchObjectEvent event) {}
@@ -99,7 +99,7 @@ public abstract class JMEItem extends Node implements IItem {
 			this.getParent().worldToLocal(in, getLocalTranslation());
 		}
 		
-		for(IItemListener l : itemListeners) {
+		for(IItemListener l : getItemListeners()) {
 			l.itemMoved(this);
 		}
 	}
@@ -121,7 +121,7 @@ public abstract class JMEItem extends Node implements IItem {
 	@Override
 	public void setRelativeLocation(Vector2f newLoc) {
 		getLocalTranslation().set(newLoc.x, newLoc.y, 0);
-		for(IItemListener l : itemListeners) {
+		for(IItemListener l : getItemListeners()) {
 			l.itemMoved(this);
 		}
 	}
@@ -136,7 +136,7 @@ public abstract class JMEItem extends Node implements IItem {
 		this.angle = angle;
 		rot.fromAngleAxis(angle, Vector3f.UNIT_Z);
 		setLocalRotation(rot);
-		for(IItemListener l : itemListeners) {
+		for(IItemListener l : getItemListeners()) {
 			l.itemRotated(this);
 		}
 	}
@@ -144,7 +144,7 @@ public abstract class JMEItem extends Node implements IItem {
 	@Override
 	public void setRelativeScale(float scale) {
 		setLocalScale(scale);
-		for(IItemListener l : itemListeners) {
+		for(IItemListener l : getItemListeners()) {
 			l.itemScaled(this);
 		}
 	}
@@ -214,13 +214,13 @@ public abstract class JMEItem extends Node implements IItem {
 	}
 	
 	public void addItemListener(IItemListener itemListener) {
-		if(!itemListeners.contains(itemListener)) {
-			itemListeners.add(itemListener);
+		if(!getItemListeners().contains(itemListener)) {
+			getItemListeners().add(itemListener);
 		}	
 	}
 	
 	public void removeItemListener(IItemListener itemListener) {
-		itemListeners.remove(itemListener);
+		getItemListeners().remove(itemListener);
 	}
 	
 	/**
@@ -280,5 +280,14 @@ public abstract class JMEItem extends Node implements IItem {
 		this.itemName = itemName;
 	}
 
+	@Override
+    public List<IItemListener> getItemListeners() {
+        return itemListeners;
+    }
+
+	@Override
+	public void setItemListeners(List<IItemListener> itemListeners){
+	    this.itemListeners = itemListeners;
+	}
 }
 
