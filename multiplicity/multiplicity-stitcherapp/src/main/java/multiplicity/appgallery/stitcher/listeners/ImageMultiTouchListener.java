@@ -100,7 +100,7 @@ public class ImageMultiTouchListener extends MultiTouchEventAdapter {
                   IImage copyImage = copyImage(mainImage);
                     stitcherApp
                             .createNewFrame(copyImage, new Vector2f(0.0f,
-                                    300.0f), IStitcherContants.BACKGROUND + "-"
+                                    0.0f), IStitcherContants.BACKGROUND + "-"
                                     + copyImage.getUUID(),
                                     IStitcherContants.BACKGROUND);
 //                    copyImage(mainImage, repositoryFrame);
