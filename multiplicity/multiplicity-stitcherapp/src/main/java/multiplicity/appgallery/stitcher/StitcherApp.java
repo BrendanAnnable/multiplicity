@@ -14,6 +14,10 @@ import java.util.Vector;
 import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
+import multiplicity.appgallery.stitcher.listeners.HotSpotItemMultiTouchListener;
+import multiplicity.appgallery.stitcher.listeners.ImageMultiTouchListener;
+import multiplicity.appgallery.stitcher.listeners.OverlayMultiTouchListener;
+import multiplicity.appgallery.stitcher.listeners.PaletMultiTouchListener;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
@@ -33,16 +37,14 @@ import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.hotspot.IHotSpotRepo;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
+import multiplicity.csysng.items.repository.IBackgroundRepositoryFrame;
+import multiplicity.csysng.items.repository.IImageRepositoryFrame;
 import multiplicity.csysng.items.repository.IRepositoryContentItemFactory;
-import multiplicity.csysng.items.repository.IRepositoryFrame;
 import multiplicity.csysngjme.factory.PaletItemFactory;
 import multiplicity.csysngjme.factory.Repository.RepositoryContentItemFactory;
 import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
-import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMEImage;
-import multiplicity.csysngjme.items.JMERectangularItem;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
-import multiplicity.csysngjme.items.hotspots.HotLink;
 import multiplicity.input.IMultiTouchEventProducer;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.jmeutils.UnitConversion;
@@ -55,19 +57,12 @@ import org.apache.log4j.Logger;
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
-import com.jme.scene.Node;
 import com.jme.system.DisplaySystem;
 
-public class StitcherApp extends AbstractMultiplicityApp {
+public class StitcherApp extends AbstractMultiplicityApp implements IStitcherContants {
 
-	private final static Logger logger = Logger.getLogger(StitcherApp.class.getName());
-	public static final String IMAGE = "IMAGE";
-    public static final String TEXT = "TEXT";
-    public static final String BACKGROUND = "BACKGROUND";
-	public final String MULTIPLICITY_SPACE = "multiplicity";
-	public final String STENCIL_NAME = "stencils";
-	public final String BACKGROUND_NAME = "backgrounds";
-	public final String SCAN_NAME = "scans";
+	
+    private final static Logger logger = Logger.getLogger(StitcherApp.class.getName());
 	private final List<String> pageNames = new ArrayList<String>();
 	private final List<IHotSpotFrame> hotspotContentFrames = new ArrayList<IHotSpotFrame>();
 	private IPage stencilsPage;
@@ -80,23 +75,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	public String output_document_path = null;
 	public String wikiUser = null;
 	public String wikiPass = null;
-	// public Grouper smaker = null;
-	public int maxFileSize = 0;
-	private int frameWidth = 600;
-	private int frameHeight = 600;
-
-	public final Float BORDER_THICKNESS = 40f;
-	public final Float TOP_BOTTOM_REPO_HEIGHT = 300f;
-	public final Float RIGHT_LEFT_REPO_HEIGHT = 400f;
-	public final int HOTSPOT_DIMENSION = 80;
-	public final int HOTSPOT_FRAME_DIMENSION = 200;
-	public final int PALET_DIMENSION = 35;
-	public final int SMALLER_PALET_DIMENSION = 30;
-	public final int MAX_THUMBNAIL_SIDE_SIZE = 150;
-	public final float INITIAL_DROP_SCALE = 0.5f;
-
-	// when this is filled the first one is at the top of the z index
-	List<IItem> zOrderedItems;
+    public int maxFileSize = 0;
 
 	private IHotSpotContentFactory hotSpotContentFactory;
 
@@ -113,9 +92,9 @@ public class StitcherApp extends AbstractMultiplicityApp {
 		setHotSpotContentFactory(new HotSpotContentItemFactory());
 		setPaletFactory(new PaletItemFactory());
 		setRepositoryFactory(new RepositoryContentItemFactory());
-		pageNames.add(STENCIL_NAME);
-		pageNames.add(BACKGROUND_NAME);
-		pageNames.add(SCAN_NAME);
+		pageNames.add(STENCIL_REPO_NAME);
+		pageNames.add(BACKGROUND_REPO_NAME);
+		pageNames.add(SCAN_REPO_NAME);
 		HashMap<String, IPage> populateFromWiki = populateFromWiki();
 		loadContent(populateFromWiki);
 
@@ -161,8 +140,6 @@ public class StitcherApp extends AbstractMultiplicityApp {
 //        add(bg);
 //        zOrderManager.sendToBottom(bg, null);
 //        zOrderManager.neverBringToTop(bg);
-	        
-        zOrderedItems = new ArrayList<IItem>();
         
         Runnable runnable = new Runnable() {
             
@@ -171,13 +148,13 @@ public class StitcherApp extends AbstractMultiplicityApp {
                 
                 List<IItem> items = null;
                 IPage iPage = null;
-                GetAttachmentItems getAttachmentItems;
+                AttachmentFetchThread getAttachmentItems;
                 for (int i = 0; i < wikiPages.size(); i++) {
                     iPage = wikiPages.get(pageNames.get(i));
                     attachments = iPage.getAttachments();
                     items = new ArrayList<IItem>();
 
-                    getAttachmentItems = new GetAttachmentItems(StitcherApp.this, iPage, attachments, items, pageNames.get(i));
+                    getAttachmentItems = new AttachmentFetchThread(StitcherApp.this, iPage, attachments, items, pageNames.get(i));
                     try {
                         getAttachmentItems.start();
                         getAttachmentItems.join();
@@ -187,7 +164,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
                     }
 
                     if (items != null) {
-                        addItemsToFrame(getAttachmentItems.getItemsToReturn(), new Vector2f(i * 5f, i * 5f), pageNames.get(i));
+                        repostoryFactory(getAttachmentItems.getItemsToReturn(), new Vector2f(i * 5f, i * 5f), pageNames.get(i));
                     }
                 }
                 
@@ -211,7 +188,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	}
 
     public IHotSpotFrame createNewHotSpotContentFrame(String type) {
-		return createNewFrame(null, null, "hotspotf-", type);
+		return createNewFrame(null, null, HOTSPOT_FRAME_NAME, type);
 	}
 
 	public IHotSpotFrame createNewFrame(IItem backgroundImage,Vector2f atPosition, String frameName, String type) {
@@ -233,31 +210,36 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	        newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 	        newHotSpotFrame.maintainBorderSizeDuringScale();
 	        newHotSpotFrame.setRelativeLocation(atPosition);
-
 	        BehaviourMaker.addBehaviour(newHotSpotFrame, RotateTranslateScaleBehaviour.class);
 	        this.add(newHotSpotFrame);
 	        
             Vector2f itemWorldPos = backgroundImage.getWorldLocation();
             newHotSpotFrame.addItem(backgroundImage);
             backgroundImage.setWorldLocation(itemWorldPos);
-            newHotSpotFrame.getZOrderManager().bringToTop(backgroundImage, null);
             BehaviourMaker.removeBehavior(backgroundImage, RotateTranslateScaleBehaviour.class);
             backgroundImage.centerItem();
+//            newHotSpotFrame.getZOrderManager().bringToTop(backgroundImage, null);
             // little trick to make sure palet and hotspots are always on top
             backgroundImage.addItemListener(new ItemListenerAdapter() {
                 @Override
                 public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
                     super.itemCursorPressed(item, event);
-                    IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
-                    parentFrame.getZOrderManager().sendToBottom(item, null);
-                    if (!parentFrame.isLocked()) {
-                        parentFrame.sendOverlayToBottom();
+                    logger.debug("background image pressed");
+                    if( item.getParentItem() instanceof IHotSpotFrame) {
+                        IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
+                        parentFrame.getZOrderManager().sendToBottom(item, null);
+                        if (!parentFrame.isLocked()) {
+                            parentFrame.sendOverlayToBottom();
+                        }
+                        parentFrame.bringHotSpotsToTop();
+                        parentFrame.bringPaletToTop();
                     }
-                    parentFrame.bringHotSpotsToTop();
-                    parentFrame.bringPaletToTop();
                  
                 }
             });
+           
+            
+
 	    } else if( type.equals(IMAGE) ){
 	        
 	        UUID randomUUID = UUID.randomUUID();
@@ -294,7 +276,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
                      super.itemCursorChanged(item, event);
                      IHotSpotFrame frame = (IHotSpotFrame) item;
                      
-                     updateHotSpots(frame);
+//                     updateHotSpots(frame);
                      
                      
                  }
@@ -343,72 +325,15 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	    
 	    if(type.equals(BACKGROUND) || type.equals(IMAGE)){
 	        
-	        newHotSpotFrame.getFrameOverlay().addItemListener(new ItemListenerAdapter(){
-	            
-	            
-	            @Override
-	            public void itemCursorPressed(IItem item,
-	                    MultiTouchCursorEvent event) {
-	                // TODO Auto-generated method stub
-	                super.itemCursorPressed(item, event);
-	                logger.debug("overlay pressed");
-	                IHotSpotFrame hotspotFrame = (IHotSpotFrame)item.getParentItem();
-	                hotspotFrame.bringHotSpotsToTop();
-                    hotspotFrame.bringPaletToTop();
-	            }
-	            
-	            @Override
-	            public void itemCursorChanged(IItem item,
-	                    MultiTouchCursorEvent event) {
-	                // TODO Auto-generated method stub
-	                super.itemCursorChanged(item, event);
-	                logger.debug("overlay changed");
-	                IHotSpotFrame hotspotFrame = (IHotSpotFrame)item.getParentItem();
-	                
-	                if( hotspotFrame.getName().contains("back")) {
-	                    List<IHotSpotItem> hotSpots = hotspotFrame.getHotSpots();
-                        for (IHotSpotItem iHotSpotItem : hotSpots) {
-                            iHotSpotItem.updateHotSpot();
-                        }
-	                } else {
-	                    
-	                    updateHotSpots(hotspotFrame);
-
-	                }
-                    hotspotFrame.updateOverLay();
-                    hotspotFrame.bringPaletToTop();
-	            }
-	            
-	            
-	        });
+	        new OverlayMultiTouchListener(newHotSpotFrame.getFrameOverlay());
 	        
 	        //set up the palet
 	        IPalet palet = this.getPaletFactory().createPaletItem("palet",  UUID.randomUUID(), PALET_DIMENSION, new ColorRGBA(0f, 1f, 0f, 1f));
 	        newHotSpotFrame.addPalet(palet);
 	        palet.centerItem();
 	        BehaviourMaker.addBehaviour(palet, RotateTranslateScaleBehaviour.class);
-	        palet.addItemListener(new ItemListenerAdapter() {
-	            
-	            @Override
-	            public void itemCursorPressed(IItem item,
-	                    MultiTouchCursorEvent event) {
-	                super.itemCursorPressed(item, event);
-	                IPalet palet = (IPalet) item;
-	                paletPressed(palet);
-	                IHotSpotFrame hotspotFrame = (IHotSpotFrame) item.getParentItem();
-	                List<IHotSpotItem> hotSpots = hotspotFrame.getHotSpots();
-	                for (IHotSpotItem iHotSpotItem : hotSpots) {
-                        getZOrderManager().bringToTop(iHotSpotItem.getHotSpotFrameContent(), null);
-                    }
-	            }
-
-	            @Override
-	            public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
-	                 super.itemCursorReleased(item, event);
-	                 paletReleased(item, event);
-	                 
-	            }
-	        });
+	        //add the listener
+	        new PaletMultiTouchListener(palet, this);
 	        
 	        if(  type.equals(IMAGE) ) {
 	            newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
@@ -420,7 +345,7 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	                    super.itemCursorChanged(item, event);
 	                    IHotSpotFrame frame = (IHotSpotFrame) item;
                         
-	                    updateHotSpots(frame);
+	                    HotSpotItemMultiTouchListener.updateHotSpots(frame);
 
                         
 	                }
@@ -447,192 +372,115 @@ public class StitcherApp extends AbstractMultiplicityApp {
 	              
 	            });
 	        }
-
-	        
-	        
-	  
-//            bumpHotSpotConnections();
-	        //getZOrderManager().bringToTop(newHotSpotFrame, null);
-	        //newHotSpotFrame.getZOrderManager().updateZOrdering();
-	        
 	        return newHotSpotFrame;
 	    }
 	    
-   
-
 	    return null;
-
-       
-	    
 	}
 	
-    private void updateHotSpots(IHotSpotFrame frame) {
-        List<IHotLink> hotLinks = frame.getHotLinks();
-            for (IHotLink iHotLink : hotLinks) {
-                iHotLink.getHotSpotItem().updateHotSpot();
-            }
-    }
+   
 	
-	
-    protected void paletReleased(IItem item, MultiTouchCursorEvent event) {
-        String message = "Palet released: ";
-        logger.debug(message);
-        boolean offParent = true;
-        
-        Vector2f locStore = new Vector2f();
-        UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
+	public void repostoryFactory(Vector<Object> imagesToAdd, Vector2f atPosition, String frameName) {
 
-        List<IItem> items = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(locStore);
+		Color startColor = new Color(0.6f, 0.6f, 0.6f, 1f);
+		Color endColor = new Color(0f, 0f, 0f, 1f);
 
-        IHotSpotFrame paletParent = (IHotSpotFrame) item.getParentItem();
+        if (frameName.equals(BACKGROUND_REPO_NAME)) {
+		    IBackgroundRepositoryFrame frame = this.getRepositoryFactory().createBackgroundRepositoryFrame(frameName, UUID.randomUUID(), frameWidth, frameHeight);
 
-        for (IItem foundItem : items) {
-            if (foundItem.getParentItem() != null && foundItem.getParentItem().equals(item.getParentItem())) {
-                offParent = false;
-                logger.debug("Palet released on its parent");
-            }
-        }
-
-        if (offParent) {
-            item.centerItem();
-            logger.debug("Palet in the mist, come back to center");
-        }
-
-//        getZOrderManager().sendToBottom(paletParent, event);
-        paletParent.bringPaletToTop();
-//        paletParent.bringHotSpotsToTop();
-//        paletParent.bringPaletToTop();
-        
-//        bumpHotSpotConnections();
-    
-       
-	}
-	protected void paletPressed(IPalet palet) {
-	    logger.info("palet pressed");
-        int taps = palet.tap();
-        logger.info("palet clicked " + taps);
-        if (taps == 2) {
-            
-            palet.resetTaps();
-            
-            IHotSpotFrame parentFrame = (IHotSpotFrame) palet.getParentItem();
-            
-            if( parentFrame.isLocked() ) {
-                
-                logger.info("unlocking palet");
-
-                parentFrame.setLocked(false);
-
-                palet.lockPalet(false);
-
-//                hotspotFrameMove(parentFrame);
-                 
-            } else {
-                logger.info("locking palet");
-
-                parentFrame.setLocked(true);
-
-                palet.lockPalet(true);
-
-//                hotspotFrameMove(parentFrame);
-                
-                
-            }
-//            bumpHotSpotConnections();
-            parentFrame.bringPaletToTop();
-        }
-	}
-	
-	public void addItemsToFrame(Vector<Object> itemsToAdd, Vector2f atPosition, String frameName) {
-		Vector2f framePosition = null;
-		Vector2f frameClosePosition = null;
-		UUID uUID = UUID.randomUUID();
-
-		IRepositoryFrame frame = (IRepositoryFrame) this.getRepositoryFactory().createRepositoryFrame(frameName, uUID, frameWidth, frameHeight);
-
-		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, .9f), new Color(0f, 0f, 0f, .9f), GradientDirection.VERTICAL));
-		frame.maintainBorderSizeDuringScale();
-
-		if (frameName.equals(BACKGROUND_NAME)) {
 			frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
 			Float xPos = 0f;
-			Float yPos = Integer.valueOf((int) (-DisplaySystem.getDisplaySystem().getHeight() / 2 - (TOP_BOTTOM_REPO_HEIGHT / 2 + BORDER_THICKNESS) + BORDER_THICKNESS)).floatValue();
-			framePosition = new Vector2f(xPos, yPos);
-			frame.setOpenLocation(framePosition);
-			frameClosePosition = new Vector2f(framePosition.x, framePosition.y + TOP_BOTTOM_REPO_HEIGHT);
-			frame.setCloseLocation(frameClosePosition);
-			frame.close();
-			JMERoundedRectangleBorder border = new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 0);
+			Float yPos = Integer.valueOf((int) (-DisplaySystem.getDisplaySystem().getHeight() /2 - (TOP_BOTTOM_REPO_HEIGHT / 2 + BORDER_THICKNESS) + BORDER_THICKNESS)).floatValue();
+			Vector2f closePosition = new Vector2f(xPos, yPos);
+			
+	         Vector2f openPosition = new Vector2f(closePosition.x, closePosition.y + TOP_BOTTOM_REPO_HEIGHT);
+	         frame.setOpenLocation(openPosition);
+	            frame.setCloseLocation(closePosition);
+			JMERoundedRectangleBorder border = new JMERoundedRectangleBorder( frameName +"-border", UUID.randomUUID(), BORDER_THICKNESS, 0);
 			border.setColor(new ColorRGBA(.211f, .211f, .211f, 1f));
-			frame.setBorder(border);
-		} else if (frameName.equals(SCAN_NAME)) {
+            frame.setBorder(border);
+            frame.maintainBorderSizeDuringScale();
+            frame.setGradientBackground(new Gradient(startColor, endColor,
+                    GradientDirection.VERTICAL));
+           
+            add(frame);
+            addImagesToFrame(frame, imagesToAdd);
+            getZOrderManager().bringToTop(frame, null);
+            frame.open();
+		} else if (frameName.equals(SCAN_REPO_NAME)) {
+	        IImageRepositoryFrame frame = this.getRepositoryFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), frameWidth, frameHeight);
+
 			frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
 			Float xPos = 0f;
 			Float yPos = Integer.valueOf((int) (DisplaySystem.getDisplaySystem().getHeight() / 2 + (TOP_BOTTOM_REPO_HEIGHT / 2 + BORDER_THICKNESS) - BORDER_THICKNESS)).floatValue();
-			framePosition = new Vector2f(xPos, yPos);
-			frame.setOpenLocation(framePosition);
-			frameClosePosition = new Vector2f(framePosition.x, framePosition.y - TOP_BOTTOM_REPO_HEIGHT);
-			frame.setCloseLocation(frameClosePosition);
-			frame.close();
-			JMERoundedRectangleBorder border = new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 0);
+			Vector2f  closePosition = new Vector2f(xPos, yPos);
+			
+			Vector2f openPosition = new Vector2f(closePosition.x, closePosition.y - TOP_BOTTOM_REPO_HEIGHT);
+			frame.setOpenLocation(openPosition);
+			frame.setCloseLocation(closePosition);
+			
+			JMERoundedRectangleBorder border = new JMERoundedRectangleBorder( frameName +"-border", UUID.randomUUID(), BORDER_THICKNESS, 0);
 			border.setColor(new ColorRGBA(.211f, .211f, .211f, 1f));
 			frame.setBorder(border);
-		} else if (frameName.equals(STENCIL_NAME)) {
+            frame.maintainBorderSizeDuringScale();
+            frame.setGradientBackground(new Gradient(startColor, endColor,
+                    GradientDirection.VERTICAL));
+            add(frame);
+            frame.close();
+            addImagesToFrame(frame, imagesToAdd);
+            getZOrderManager().bringToTop(frame, null);
+            frame.close();
+		} else if (frameName.equals(STENCIL_REPO_NAME)) {
+	        IImageRepositoryFrame frame = this.getRepositoryFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), frameWidth, frameHeight);
+
 			frame.setSize(RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 10);
 
 			Float xPos = Integer.valueOf((int) (DisplaySystem.getDisplaySystem().getWidth() / 2 + (RIGHT_LEFT_REPO_HEIGHT / 2 + BORDER_THICKNESS) - BORDER_THICKNESS)).floatValue();
 			Float yPos = 0f;
-			framePosition = new Vector2f(xPos, yPos);
-			frame.setOpenLocation(framePosition);
-			frameClosePosition = new Vector2f(framePosition.x - RIGHT_LEFT_REPO_HEIGHT, framePosition.y);
-			frame.setCloseLocation(frameClosePosition);
-			frame.close();
+			Vector2f closePosition = new Vector2f(xPos, yPos);
+			Vector2f  openPosition = new Vector2f(closePosition.x - RIGHT_LEFT_REPO_HEIGHT, closePosition.y);
+			frame.setCloseLocation(closePosition);
+			frame.setOpenLocation(openPosition);
 
-			JMERoundedRectangleBorder border = new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), BORDER_THICKNESS, 0);
+			JMERoundedRectangleBorder border = new JMERoundedRectangleBorder( frameName +"-border", UUID.randomUUID(), BORDER_THICKNESS, 0);
 			border.setColor(new ColorRGBA(1f, 1f, 1f, 1f));
-			frame.setBorder(border);
+            frame.setBorder(border);
+            frame.maintainBorderSizeDuringScale();
+            frame.setGradientBackground(new Gradient(startColor, endColor,
+                    GradientDirection.VERTICAL));
+            add(frame);
+            frame.close();
+            addImagesToFrame(frame, imagesToAdd);
+            getZOrderManager().bringToTop(frame, null);
+            frame.close();
 		}
 
-		for (int i = 0; i < itemsToAdd.size(); i++) {
-			@SuppressWarnings("unchecked")
-			Vector<Object> itemEntry = (Vector<Object>) itemsToAdd.elementAt(i);
-
-			IImage vecItem = (IImage) itemEntry.elementAt(1);
-			float scale = (Float) itemEntry.elementAt(0);
-			vecItem.setRelativeScale(scale);
-			Vector2f position = generateRandomPosition(frame, vecItem);
-			frame.addItem(vecItem);
-			vecItem.setRelativeLocation(position);
-		}
-
-		this.add(frame);
-
-		this.getZOrderManager().bringToTop(frame, null);
-
-		// createXMLRepresentationForGroup(uUID, items);
 	}
 
-	public Vector2f generateRandomPosition(IFrame frame, IImage vecItem) {
-		Vector2f frameSize = frame.getSize();
-		Vector2f imageSize = ((JMERectangularItem) vecItem).getSize();
+	public void addImagesToFrame(IFrame frame, Vector<Object> imagesToAdd) {
+	    for (int i = 0; i < imagesToAdd.size(); i++) {
+            @SuppressWarnings("unchecked")
+            Vector<Object> itemEntry = (Vector<Object>) imagesToAdd.elementAt(i);
 
-		float lowerBoundX = -frameSize.x / 2 + imageSize.x / 2;
-		float upperBoundX = frameSize.x / 2 - imageSize.x / 2;
-
-		float lowerBoundY = -frameSize.y / 2 + imageSize.y / 2;
-		float upperBoundY = frameSize.y / 2 - imageSize.y / 2;
-
-		float posX = (float) (lowerBoundX + (Math.random() * (upperBoundX - lowerBoundX)));
-		float posY = (float) (lowerBoundY + (Math.random() * (upperBoundY - lowerBoundY)));
-
-		return new Vector2f(posX, posY);
+            IImage image = (IImage) itemEntry.elementAt(1);
+            
+            float scale = (Float) itemEntry.elementAt(0);
+            image.setRelativeScale(scale);
+//            new ImageMultiTouchListener(image, this);
+            frame.addItem(image);
+           
+            Vector2f position = StitcherUtils.generateRandomPosition(frame, image);
+            image.setRelativeLocation(position);
+            frame.getZOrderManager().bringToTop(image, null);
+        }
 	}
+
 
 	public void createHotSpotRepo(String type) {
 	    
-	    IHotSpotRepo frame = this.getHotSpotContentFactory().createHotSpotRepo("hotspots", UUID.randomUUID(), HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
+	    IHotSpotRepo frame = this.getHotSpotContentFactory().createHotSpotRepo(HOTSPOTS, UUID.randomUUID(), HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
 
 		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 5f, 5));
 		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
@@ -660,170 +508,26 @@ public class StitcherApp extends AbstractMultiplicityApp {
 		// createXMLRepresentationForGroup(uUID, items);
 	}
 
-	private void fillHotSpotRepo(IFrame frame, String type) {
+	public void fillHotSpotRepo(IFrame frame, String type) {
 
 	    ColorRGBA colorRGBA = null;
 	    if( type.equals(IMAGE) ) {
-	        colorRGBA = new ColorRGBA(1f, 0f, 0f, 0.6f);
+	        colorRGBA = new ColorRGBA(1f, 0f, 0f, .9f);
 	    } else if(type.equals(TEXT)) {
-	        colorRGBA = new ColorRGBA(0f, 0f, 1f, 0.6f);
+	        colorRGBA = new ColorRGBA(0f, 0f, 1f, .9f);
 	    }
 		IHotSpotItem hotSpotItem = this.getHotSpotContentFactory().createHotSpotItem("hotspot", UUID.randomUUID(), HOTSPOT_DIMENSION / 4, colorRGBA);
 		hotSpotItem.setType(type);
 		frame.addItem(hotSpotItem);
 		hotSpotItem.centerItem();
 
-		hotSpotItem.addItemListener(new ItemListenerAdapter() {
-	
-		    @Override
-		    public void itemCursorChanged(IItem item,
-		            MultiTouchCursorEvent event) {
-		        // TODO Auto-generated method stub
-		        super.itemCursorChanged(item, event);
-		        
-	              
-                if(item.getParentItem() != null && ( item.getParentItem() instanceof IHotSpotFrame )) {
-                     logger.debug("hotspot updating on change");
-                      IHotSpotItem hs = (IHotSpotItem) item;
-                      hs.updateHotSpot();
-                }
-		    }
-		    @Override
-		    public void itemCursorPressed(IItem item,
-		            MultiTouchCursorEvent event) {
-		        // TODO Auto-generated method stub
-		        super.itemCursorPressed(item, event);
-		        logger.debug("Hotspot cursor pressed");
-		        IHotSpotItem hs = (IHotSpotItem) item;
+		new HotSpotItemMultiTouchListener(hotSpotItem, this);
 
-		        if( item.getParentItem() instanceof IHotSpotFrame) {
-		            
-		            
-		            
-		            getZOrderManager().bringToTop(hs.getHotSpotFrameContent(), null);
-		            IHotSpotFrame parentFrame = (IHotSpotFrame) item.getParentItem();
-		            
-		            
-		             if (!parentFrame.isLocked()) {
-	                        parentFrame.sendOverlayToBottom();
-	                    }
-//		            bumpHotSpotConnections();
-		           
-		            parentFrame.bringPaletToTop();
-		            
-		            //hide show
-		            if( hs.tap() == 4 ) {
-		                hs.toggle();
-		                hs.resetTaps();
-		                hs.updateHotSpot();
-		            }
-		            
-		            
-		        }
-		    }
-			@Override
-			public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
-			    super.itemCursorReleased(item, event);
-			    logger.debug("Hotspot cursor released");
-				String message = "Hotspot released: ";
-				boolean offParent = true;
-				Node s = (Node)getOrthoNode();
-
-				JMEFrame hotSpotRepo = (JMEFrame) item.getParentItem();
-				Vector2f locStore = new Vector2f();
-				UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
-
-                List<IItem> findItemsOnTableAtPosition = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(locStore);
-
-                
-				boolean firstFrameFound = false;
-				for (IItem foundItem : findItemsOnTableAtPosition) {
-					if (foundItem.getParentItem() != null && foundItem.getParentItem().equals(item.getParentItem())) {
-						offParent = false;
-						message = message + "on its parent. Nothing happens";
-
-						if( item.getParentItem() instanceof IHotSpotRepo)
-						    item.centerItem();
-
-						
-					} else if (foundItem instanceof JMEFrame && !firstFrameFound) {
-						try {
-							JMEFrame sourceFrame = (JMEFrame)foundItem;
-
-							if ( hotSpotRepo.getName().equals("hotspots") && (sourceFrame.getName().contains("back-") ||  sourceFrame.getName().contains("hotspotf-")) ) {
-								firstFrameFound = true;
-								IFrame originFrame = (IFrame) item.getParentItem();
-								originFrame.removeItem(item);
-
-								Vector2f itemWorldPos = item.getWorldLocation();
-								sourceFrame.addItem(item);
-								item.setWorldLocation(itemWorldPos);
-								sourceFrame.getZOrderManager().bringToTop(item, null);
-
-								// add HS to the array attached to the frame
-								IHotSpotItem hsItem = (IHotSpotItem)item;
-								((IHotSpotFrame) sourceFrame).addHotSpot(hsItem);
-
-								IHotSpotFrame hotSpotFrameContent = createNewHotSpotContentFrame(hsItem.getType());
-
-								hsItem.setHotSpotFrameContent(hotSpotFrameContent);
-
-								IHotLink l = (HotLink) hsItem.createHotLink();
-						
-								addHotlink(l);
-								
-
-								message = message + "on " + sourceFrame.getName() + ". Great!!";
-
-								// create a new hotspot candidate
-								fillHotSpotRepo(originFrame,hsItem.getType());
-								 
-								hotspotContentFrames.add(hotSpotFrameContent);
-								updateHotSpotContentFrames();
-								
-								if( hotSpotFrameContent instanceof IHotSpotText ) {
-								    updateHotSpots(hotSpotFrameContent);
-								    getZOrderManager().updateZOrdering();
-								}
-//								hsItem.updateHotSpot();
-								//hotSpotFrameContent.bringHotSpotsToTop();
-								//bumpHotSpotConnections();
-								//hotSpotFrameContent.bringPaletToTop();
-							}
-
-						} catch (Exception e) {
-							logger.debug("Stitcher app: itemCursorReleased: Exception: " + e);
-						}
-					}
-				}
-
-				if (!firstFrameFound && offParent) {
-					item.centerItem();
-					IHotSpotFrame hsFrame = (IHotSpotFrame) item.getParentItem();
-					
-					 
-					message = message + "in the mist .... Let's place it back to the center of its mother frame.";
-				}
-
-				logger.info(message);
-//				 bumpHotSpotConnections();
-
-			}
-          
-          
-			
-		});
 
 		BehaviourMaker.addBehaviour((IItem) hotSpotItem, RotateTranslateScaleBehaviour.class);
 	}
 
-	private void updateHotSpotContentFrames() {
-	    
-	      for (IHotSpotFrame hsFrame : hotspotContentFrames) {
-	          hsFrame.bringPaletToTop();
-	      }
-          
-    }
+
 
 	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		SingleAppMultiplicitySurfaceSystem.startSystem(StitcherApp.class);
@@ -853,43 +557,8 @@ public class StitcherApp extends AbstractMultiplicityApp {
 		return repositoryFactory;
 	}
 
-    private void addHotlink(IHotLink hl) {
-        add(hl);
-        hl.addItemListener(new ItemListenerAdapter(){
-            @Override
-            public void itemCursorPressed(IItem item,
-                    MultiTouchCursorEvent event) {
-                super.itemCursorPressed(item, event);
-                logger.debug("hotlink pressed");
-                
-                IHotLink hotLink = (IHotLink)item;
-                //hide show
-                if( hotLink.tap() == 4 ) {
-                  logger.debug("deleting hotlink");
-                  
-                  
-                  IHotSpotItem hotSpotItem = hotLink.getHotSpotItem();
-                  
-                  hotSpotItem.removeHotLink(hotLink);
-                  
-                  IHotSpotFrame sourceFrame = (IHotSpotFrame) hotLink.getHotSpotItem().getParentItem();
-                  IHotSpotFrame hotSpotFrameContent = hotLink.getHotSpotItem().getHotSpotFrameContent();
-                  if(!(hotSpotFrameContent instanceof IHotSpotText) ) {
-                      hotSpotFrameContent.removeHotSpot(hotSpotItem);
-                  }
-                  //remove hotspot
-                  sourceFrame.removeHotSpot(hotSpotItem);
-                  
-                  remove(hotLink);
-                  hotspotContentFrames.remove(hotSpotFrameContent);
-                  remove(hotSpotFrameContent);
-                
-                  sourceFrame.bringHotSpotsToTop();
-                  
-                }
-            }
-            
-            
-        });
+    public List<IHotSpotFrame> getHotspotContentFrames() {
+        return hotspotContentFrames;
     }
+
 }
