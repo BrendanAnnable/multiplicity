@@ -21,6 +21,8 @@ public interface IItem {
 	
 	public void addItemListener(IItemListener itemListener);
 	public void removeItemListener(IItemListener itemListener);
+	public List<IItemListener> getItemListeners();
+	public void setItemListeners(List<IItemListener> itemListeners);
 	
 	public void setWorldLocation(Vector2f loc);
 	public Vector2f getWorldLocation();
@@ -49,6 +51,10 @@ public interface IItem {
 	
 	public void behaviourAdded(IBehaviour behaviour);
 	public List<IBehaviour> getBehaviours();
+
+    
+
+    
 
 	
 }
