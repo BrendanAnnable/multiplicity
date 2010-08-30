@@ -20,22 +20,26 @@ public interface IHotSpotItem extends IItem {
 
     public  void initializeGeometry();
 
-    public void redrawHotlink(IItem item);
-    
     public void setType(String type);
     
     public String getType();
+
+    public void redrawHotlink(IItem item);
 
     public void redrawHotlink();
 
     public void updateHotSpot();
 
-    public int tap();
+    public void tap();
 
     public void resetTaps();
 
     public void toggle();
 
     public void removeHotLink(IHotLink hotLink);
+
+    public IHotLink getHotLink();
+    
+    public int getTapCount();
 
 }

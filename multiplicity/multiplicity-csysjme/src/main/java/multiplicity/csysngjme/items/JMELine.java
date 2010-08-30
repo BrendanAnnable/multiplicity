@@ -26,9 +26,9 @@ public class JMELine extends JMELineItem {
 
     protected Vector3f[] vertices;
 
-    protected ColorRGBA lineColour = new ColorRGBA(0f, 0f, 0f, 1f);
+    protected ColorRGBA lineColour = new ColorRGBA(0f, 0f, 0f, .9f);
 
-    protected float lineWidth = 4f;
+    protected float lineWidth = 8f;
 
     protected boolean visible = true;
 
