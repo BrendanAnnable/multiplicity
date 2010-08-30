@@ -22,7 +22,7 @@ public class PaletMultiTouchListener extends MultiTouchEventAdapter {
     private IPalet palet;
     private StitcherApp stitcherApp;
 
-    public PaletMultiTouchListener(IPalet palet, StitcherApp stitcerApp) {
+    public PaletMultiTouchListener(IPalet palet, StitcherApp stitcherApp) {
         this.palet = palet;
         this.palet.getMultiTouchDispatcher().addListener(this);
         this.stitcherApp = stitcherApp;
