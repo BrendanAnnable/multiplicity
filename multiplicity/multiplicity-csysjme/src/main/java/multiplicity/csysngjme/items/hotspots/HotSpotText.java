@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.apache.log4j.Logger;
+
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.gfx.Gradient;
@@ -32,8 +34,12 @@ import multiplicity.csysngjme.items.JMEEditableText;
 
 import com.jme.math.Vector2f;
 import com.jme.renderer.Renderer;
+import com.jme.scene.Spatial;
 
 public class HotSpotText extends JMEEditableText implements IHotSpotText {
+    
+    private final static Logger logger = Logger.getLogger(HotSpotText.class.getName());
+
 
     public List<IHotLink> hotLinks = new CopyOnWriteArrayList<IHotLink>();
     public List<IHotSpotItem> hotSpots = new CopyOnWriteArrayList<IHotSpotItem>();
@@ -285,37 +291,35 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
         
     }
 
-    @Override
+
     public List<IHotSpotItem> getHotSpots() {
-        return null;
+        return hotSpots;
     }
-
-    @Override
+    
     public void setHotSpots(List<IHotSpotItem> hotSpots) {
-        // TODO Auto-generated method stub
-        
+        this.hotSpots = hotSpots;
     }
 
     @Override
-    public void bringHotSpotsToTop() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void addHotSpot(IHotSpotItem item) {
-        // TODO Auto-generated method stub
-        
+    public void addHotSpot(IHotSpotItem hotspotItem) {
+        hotSpots.add(hotspotItem);
+        addItem(hotspotItem);
     }
 
     @Override
     public void removeHotSpot(IHotSpotItem hotspotItem) {
-        // TODO Auto-generated method stub
+        logger.debug("removing hotspot from hotspotframe");
+        hotSpots.remove(hotspotItem);
+        ((Spatial)hotspotItem).removeFromParent();
+//      removeItem(hotspotItem);
         
     }
-
-
-
-    
+    public void bringHotSpotsToTop() {
+        if (!hotSpots.isEmpty()) {
+            for (IHotSpotItem iHotSpotItem : hotSpots) {
+                this.getZOrderManager().bringToTop(iHotSpotItem, null);
+            }
+        }
+    }
 
 }
