@@ -93,6 +93,7 @@ public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
                     IHotSpotFrame parentFrame = (IHotSpotFrame) hotSpotItem
                             .getParentItem();
 
+      
                     if (!parentFrame.isLocked()) {
                         parentFrame.sendOverlayToBottom();
                     }
@@ -100,19 +101,25 @@ public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
                     parentFrame.bringPaletToTop();
 
                     stitcherApp.getZOrderManager().bringToTop(hotSpotItem.getHotLink(),null);
+                    if( hotSpotItem.getHotSpotFrameContent() instanceof IHotSpotText) {
+                        //redraw it
+                        HotSpotItemMultiTouchListener.updateHotSpots((IHotSpotFrame) hotSpotItem.getParentItem());
+                        parentFrame.sendHotLinksToTop();
+                        ((IHotSpotFrame) hotSpotItem.getHotSpotFrameContent()).sendHotLinksToTop();
+                    }
+                    
                     // hide show
                     logger.debug("num of hspot taps " + hotSpotItem.getTapCount());
                     if (hotSpotItem.getTapCount() > 2 ) {
                         hotSpotItem.toggle();
                         hotSpotItem.resetTaps();
                         hotSpotItem.updateHotSpot();
-                        
-                        
                     }
                 }
 
                 return;
 
+                
             } else if (foundItem instanceof IHotSpotFrame) {
                 try {
                     if( (foundItem instanceof IHotSpotFrame) ) {
@@ -147,8 +154,8 @@ public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
                             updateHotSpotContentFrames();
                             
                             if( hotSpotFrameContent instanceof IHotSpotText ) {
-                                updateHotSpots(hotSpotFrameContent);
-                                stitcherApp.getZOrderManager().updateZOrdering();
+//                                updateHotSpots(hotSpotFrameContent);
+                                stitcherApp.getZOrderManager().bringToTop(l, null);
                             }
                     }
 
@@ -177,6 +184,7 @@ public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
         List<IHotLink> hotLinks = frame.getHotLinks();
             for (IHotLink iHotLink : hotLinks) {
                 iHotLink.getHotSpotItem().updateHotSpot();
+                
             }
     }
     

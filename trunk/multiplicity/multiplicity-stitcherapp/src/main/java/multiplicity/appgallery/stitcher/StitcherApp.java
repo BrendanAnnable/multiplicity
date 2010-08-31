@@ -15,6 +15,7 @@ import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
 import multiplicity.appgallery.stitcher.listeners.HotSpotItemMultiTouchListener;
+import multiplicity.appgallery.stitcher.listeners.HotSpotTextListener;
 import multiplicity.appgallery.stitcher.listeners.ImageMultiTouchListener;
 import multiplicity.appgallery.stitcher.listeners.OverlayMultiTouchListener;
 import multiplicity.appgallery.stitcher.listeners.PaletMultiTouchListener;
@@ -45,6 +46,7 @@ import multiplicity.csysngjme.factory.Repository.RepositoryContentItemFactory;
 import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
 import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
+import multiplicity.csysngjme.items.hotspots.HotSpotText;
 import multiplicity.input.IMultiTouchEventProducer;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.jmeutils.UnitConversion;
@@ -267,56 +269,8 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	         BehaviourMaker.addBehaviour(hotspotLabel, RotateTranslateScaleBehaviour.class);       
 	         add(hotspotLabel);
 	         
-	         hotspotLabel.addItemListener(new ItemListenerAdapter() {
-	             
-	             @Override
-                 public void itemCursorChanged(IItem item,
-                         MultiTouchCursorEvent event) {
-                     // TODO Auto-generated method stub
-                     super.itemCursorChanged(item, event);
-                     IHotSpotFrame frame = (IHotSpotFrame) item;
-                     
-//                     updateHotSpots(frame);
-                     
-                     
-                 }
-	                @Override
-	                public void itemCursorPressed(IItem item,
-	                    MultiTouchCursorEvent event) {
-	                    super.itemCursorPressed(item, event);
-	                    logger.debug("text label itemCursorPressed");
-	                    IHotSpotText hst = (IHotSpotText) item;
-	                    
-	                    
-                        if (hst.tap() == 4) {
-    
-                            if (hst.isKeyboardVisible() == false) {
-                                showKeyboard(hst);
-                            } else {
-                                hideKeyboard(hst);
-                            }
-                            
-                            hst.resetTaps();
-    
-                        }
-	                }
+	         new HotSpotTextListener(hotspotLabel, this);
 
-                    private void showKeyboard(IHotSpotText hotSpotText) {
-                       
-                        IFrame keyboard = hotSpotText.getKeyboard();
-                        add(keyboard);
-                        BehaviourMaker.addBehaviour(keyboard, RotateTranslateScaleBehaviour.class);
-                        zOrderManager.bringToTop(keyboard, null);
-                        hotSpotText.setKeyboardVisible(true);
-                        
-                    }
-                    
-                    private void hideKeyboard(IHotSpotText hotSpotText) {
-                        IFrame keyboard = hotSpotText.getKeyboard();
-                        remove(keyboard);
-                        hotSpotText.setKeyboardVisible(false);
-                    }
-	            });
 	         return hotspotLabel;
 	     }
 	       
