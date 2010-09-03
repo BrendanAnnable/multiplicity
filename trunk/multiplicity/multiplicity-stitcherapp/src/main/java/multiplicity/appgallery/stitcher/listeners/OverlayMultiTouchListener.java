@@ -20,6 +20,8 @@ public class OverlayMultiTouchListener extends MultiTouchEventAdapter {
         this.overlay = overlay;
         this.overlay.getMultiTouchDispatcher().addListener(this);
     }
+    
+    
     @Override
     public void cursorPressed(MultiTouchCursorEvent event) {
         super.cursorPressed(event);

@@ -190,18 +190,24 @@ public class ImageMultiTouchListener extends MultiTouchEventAdapter {
                 if( hotspotFrame.getName().contains(IStitcherContants.HOTSPOT_FRAME_NAME)) {
                     //we are dropping on a  hotspot content frame
 //                    repository.removeItem(releasedItem);
+                 
+
                     IImage copyImage = copyImage((IImage) releasedItem);
                     hotspotFrame.addItem(copyImage);
-                    ((JMERectangularItem) copyImage).setSize(hotspotFrame.getSize().x, hotspotFrame.getSize().y);
+                    copyImage.setRelativeScale(1.0f);
+                    ((JMERectangularItem) copyImage).setSize(IStitcherContants.HOTSPOT_FRAME_DIMENSION, IStitcherContants.HOTSPOT_FRAME_DIMENSION);
                     copyImage.centerItem();
                     releasedItem.centerItem();
 
                     hotspotFrame.setLocked(true);
                     hotspotFrame.toggleLock();
+                    hotspotFrame.getPalet().lockPalet(hotspotFrame.isLocked());
+
                     hotspotFrame.bringPaletToTop();
                 } else {
                     IImage copyImage = copyImage((IImage) releasedItem);
 
+                    
 //                    repository.removeItem(copyImage);
                     Vector2f itemWorldPos = releasedItem.getWorldLocation();
                     hotspotFrame.addItem(copyImage);

@@ -65,12 +65,17 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
         
         float itemScale = this.getFrameOverlay().getRelativeScale();
         if(itemScale < 2.5f && itemScale>0.2f)  {
+            logger.debug("overylay size: h" + this.getFrameOverlay().getSize().x + " w " +  this.getFrameOverlay().getSize().y );
+            logger.debug("frame size: x" + this.getSize().x + " y " + this.getSize().y );
+//            ((JMEColourRectangle)this.getFrameOverlay()).quad.resize(this.getSize().x*1.2f, this.getSize().y*1.2f);
+            this.setSize(this.getFrameOverlay().getSize().x*itemScale, this.getFrameOverlay().getSize().y*itemScale);
+
+            logger.debug("frame relative scale: " + this.getRelativeScale() + " overlayscale " + this.getFrameOverlay().getRelativeScale() + " world scale frame " + this.getWorldScale() );
             this.setRelativeScale(itemScale);
         }
         
         float relativeRotation = this.getFrameOverlay().getRelativeRotation();
         this.setRelativeRotation(relativeRotation);
-        
 //        overlayAction();
     }
 	

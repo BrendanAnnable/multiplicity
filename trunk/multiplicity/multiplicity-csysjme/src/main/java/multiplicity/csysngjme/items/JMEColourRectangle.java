@@ -23,7 +23,7 @@ import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 public class JMEColourRectangle extends JMERectangularItem implements IColourRectangle {
 	private static final long serialVersionUID = 3930879484748356787L;
 
-	private Quad quad;
+	public Quad quad;
 	private BlendState alphaBlending;	
 	
 	public JMEColourRectangle(String name, UUID uuid, int width, int height) {
