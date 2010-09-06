@@ -16,10 +16,7 @@ import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
 import multiplicity.appgallery.stitcher.listeners.HotSpotItemMultiTouchListener;
 import multiplicity.appgallery.stitcher.listeners.HotSpotTextListener;
-import multiplicity.appgallery.stitcher.listeners.ImageMultiTouchListener;
-import multiplicity.appgallery.stitcher.listeners.OverlayMultiTouchListener;
 import multiplicity.appgallery.stitcher.listeners.PaletMultiTouchListener;
-import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
@@ -32,12 +29,9 @@ import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
-import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.hotspot.IHotSpotRepo;
-import multiplicity.csysng.items.overlays.ICursorOverlay;
-import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysng.items.repository.IBackgroundRepositoryFrame;
 import multiplicity.csysng.items.repository.IImageRepositoryFrame;
 import multiplicity.csysng.items.repository.IRepositoryContentItemFactory;
@@ -46,10 +40,10 @@ import multiplicity.csysngjme.factory.Repository.RepositoryContentItemFactory;
 import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
 import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
-import multiplicity.csysngjme.items.hotspots.HotSpotText;
+import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
+import multiplicity.csysngjme.items.hotspots.listeners.OverlayMultiTouchListener;
 import multiplicity.input.IMultiTouchEventProducer;
 import multiplicity.input.events.MultiTouchCursorEvent;
-import multiplicity.jmeutils.UnitConversion;
 import no.uio.intermedia.snomobile.XWikiRestFulService;
 import no.uio.intermedia.snomobile.interfaces.IAttachment;
 import no.uio.intermedia.snomobile.interfaces.IPage;
@@ -94,6 +88,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		setHotSpotContentFactory(new HotSpotContentItemFactory());
 		setPaletFactory(new PaletItemFactory());
 		setRepositoryFactory(new RepositoryContentItemFactory());
+		HotSpotUtils.apps.add(this);
 		pageNames.add(STENCIL_REPO_NAME);
 		pageNames.add(BACKGROUND_REPO_NAME);
 		pageNames.add(SCAN_REPO_NAME);
@@ -179,14 +174,14 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		createHotSpotRepo(IMAGE);
 		createHotSpotRepo(TEXT);
 
-		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
-		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());
-		add(cursors);
-
-		ICursorTrailsOverlay trails = getContentFactory().createCursorTrailsOverlay("trails", UUID.randomUUID());
-		// trails.respondToItem(bg);
-		trails.setFadingColour(Color.white);
-		add(trails);
+//		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
+//		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());
+//		add(cursors);
+//
+//		ICursorTrailsOverlay trails = getContentFactory().createCursorTrailsOverlay("trails", UUID.randomUUID());
+//		// trails.respondToItem(bg);
+//		trails.setFadingColour(Color.white);
+//		add(trails);
 	}
 
     public IHotSpotFrame createNewHotSpotContentFrame(String type) {
@@ -299,7 +294,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	                    super.itemCursorChanged(item, event);
 	                    IHotSpotFrame frame = (IHotSpotFrame) item;
                         
-	                    HotSpotItemMultiTouchListener.updateHotSpots(frame);
+	                    HotSpotUtils.updateHotSpots(frame);
 
                         
 	                }
@@ -309,6 +304,11 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        } else if( type.equals(BACKGROUND)) {
 	            newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
 
+	                @Override
+	                public void itemScaled(IItem item) {
+	                    // TODO Auto-generated method stub
+	                    super.itemScaled(item);
+	                }
 	                @Override
 	                public void itemCursorChanged(IItem item,
 	                        MultiTouchCursorEvent event) {
