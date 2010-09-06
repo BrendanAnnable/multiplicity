@@ -223,22 +223,6 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
     }
 
     @Override
-    public void sendHotLinksToTop() {
-        for (IHotLink hl : hotLinks) {
-            this.getZOrderManager().sendToBottom(hl, null);
-        }
-
-    }
-
-    @Override
-    public void sendHotLinksToBottom() {
-        for (IHotLink hl : hotLinks) {
-            this.getZOrderManager().bringToTop(hl, null);
-        }
-
-    }
-
-    @Override
     public void setBorder(IBorder b) {
         // TODO Auto-generated method stub
 

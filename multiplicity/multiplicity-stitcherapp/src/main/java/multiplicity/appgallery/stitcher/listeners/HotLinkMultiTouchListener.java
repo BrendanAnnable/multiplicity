@@ -1,6 +1,6 @@
 package multiplicity.appgallery.stitcher.listeners;
 
-import multiplicity.appgallery.stitcher.StitcherApp;
+import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
@@ -14,11 +14,9 @@ public class HotLinkMultiTouchListener extends MultiTouchEventAdapter {
     
     private final static Logger logger = Logger.getLogger(HotLinkMultiTouchListener.class.getName());
     private IHotLink hotLink;
-    private StitcherApp stitcherApp;
     
-    public HotLinkMultiTouchListener(IHotLink hotLink, StitcherApp stitcherApp) {
+    public HotLinkMultiTouchListener(IHotLink hotLink) {
         this.hotLink = hotLink;
-        this.stitcherApp = stitcherApp;
         this.hotLink.getMultiTouchDispatcher().addListener(this);
     }
     
@@ -41,12 +39,14 @@ public class HotLinkMultiTouchListener extends MultiTouchEventAdapter {
           if(!(hotSpotFrameContent instanceof IHotSpotText) ) {
               hotSpotFrameContent.removeHotSpot(hotSpotItem);
           }
+          
           //remove hotspot
           sourceFrame.removeHotSpot(hotSpotItem);
           
-          stitcherApp.remove(hotLink);
-          stitcherApp.getHotspotContentFrames().remove(hotSpotFrameContent);
-          stitcherApp.remove(hotSpotFrameContent);
+          
+          StitcherUtils.removeHotThing(hotLink);
+          StitcherUtils.removeHotThing(hotSpotFrameContent);
+;
         
           sourceFrame.bringHotSpotsToTop();
           

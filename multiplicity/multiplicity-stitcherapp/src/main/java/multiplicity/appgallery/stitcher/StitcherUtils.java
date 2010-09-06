@@ -3,17 +3,28 @@ package multiplicity.appgallery.stitcher;
 import java.net.URL;
 import java.util.UUID;
 
-import com.jme.math.Vector2f;
-
+import multiplicity.appgallery.stitcher.listeners.HotLinkMultiTouchListener;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.items.IFrame;
+import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IImage.AlphaStyle;
+import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.hotspot.IHotLink;
+import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysngjme.items.JMERectangularItem;
 
+import com.jme.math.Vector2f;
+
 public class StitcherUtils {
+    
+    public static StitcherApp stitcherApp;
+    public static String wikiUser = null;
+    public static String wikiPass = null;
+    public static int maxFileSize = 0;
+
     
     public static IImage createPhotoImage(URL url) {
             IImage img = ContentSystem.getContentSystem().getContentFactory().createImage(IStitcherContants.IMAGE, UUID.randomUUID());
@@ -52,5 +63,64 @@ public class StitcherUtils {
         }
 
         return scale;
+    }
+    
+    public static void showKeyboard(IHotSpotText hotSpotText) {
+        
+        IFrame keyboard = hotSpotText.getKeyboard();
+        stitcherApp.add(keyboard);
+        BehaviourMaker.addBehaviour(keyboard, RotateTranslateScaleBehaviour.class);
+        stitcherApp.getZOrderManager().bringToTop(keyboard, null);
+        hotSpotText.setKeyboardVisible(true);
+        
+    }
+    
+    public static void hideKeyboard(IHotSpotText hotSpotText) {
+        IFrame keyboard = hotSpotText.getKeyboard();
+        stitcherApp.remove(keyboard);
+        hotSpotText.setKeyboardVisible(false);
+    }
+
+    public static void bringToTop(IItem item) {
+        stitcherApp.getZOrderManager().bringToTop(item, null);
+    }
+
+    public static void createBackgroundFrame(IImage copyImage) {
+        stitcherApp.createNewFrame(copyImage, new Vector2f(0.0f,
+                0.0f), IStitcherContants.BACKGROUND + "-"
+                + copyImage.getUUID(),
+                IStitcherContants.BACKGROUND);
+    }
+
+    public static void removeHotThing(IItem hotThing) {
+        if( hotThing instanceof IHotLink ) {
+            stitcherApp.remove(hotThing);
+        } else if(hotThing instanceof IHotSpotFrame) {
+            stitcherApp.getHotspotContentFrames().remove(hotThing);
+            stitcherApp.remove(hotThing);
+        }
+    }
+
+    public static IHotSpotFrame createNewHotSpotFrame(String type) {
+        return stitcherApp.createNewHotSpotContentFrame(type);
+    }
+
+    public static void fillHotSpotRepo(IFrame originFrame, String type) {
+        stitcherApp.fillHotSpotRepo(originFrame,type);
+    }
+
+    public static void addHotSpotContentFrame(IHotSpotFrame hotSpotFrameContent) {
+        stitcherApp.getHotspotContentFrames().add(hotSpotFrameContent);        
+    }
+
+    public static void addHotLink(IHotLink hotLink) {
+        stitcherApp.add(hotLink);
+        new HotLinkMultiTouchListener(hotLink);
+    }
+
+    public static void updateHotShotContentFrames() {
+        for (IHotSpotFrame hsFrame : stitcherApp.getHotspotContentFrames()) {
+            hsFrame.bringPaletToTop();
+        }
     }
 }

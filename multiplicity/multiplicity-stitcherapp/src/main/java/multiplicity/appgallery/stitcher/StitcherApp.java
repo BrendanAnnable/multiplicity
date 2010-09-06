@@ -68,10 +68,8 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	private XWikiRestFulService wikiService;
 	private Vector<IAttachment> attachments;
 	// private Vector<ITag> tags;
-	public String output_document_path = null;
-	public String wikiUser = null;
-	public String wikiPass = null;
-    public int maxFileSize = 0;
+	
+	
 
 	private IHotSpotContentFactory hotSpotContentFactory;
 
@@ -88,7 +86,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		setHotSpotContentFactory(new HotSpotContentItemFactory());
 		setPaletFactory(new PaletItemFactory());
 		setRepositoryFactory(new RepositoryContentItemFactory());
-		HotSpotUtils.apps.add(this);
+		StitcherUtils.stitcherApp = this;
 		pageNames.add(STENCIL_REPO_NAME);
 		pageNames.add(BACKGROUND_REPO_NAME);
 		pageNames.add(SCAN_REPO_NAME);
@@ -103,9 +101,9 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
 		try {
 			prop.load(StitcherApp.class.getResourceAsStream("xwiki.properties"));
-			this.wikiUser = prop.getProperty("DEFAULT_USER");
-			this.wikiPass = prop.getProperty("DEFAULT_PASS");
-			this.maxFileSize = Integer.valueOf(prop.getProperty("MAX_ATTCHMENT_SIZE"));
+			StitcherUtils.wikiUser = prop.getProperty("DEFAULT_USER");
+			StitcherUtils.wikiPass = prop.getProperty("DEFAULT_PASS");
+			StitcherUtils.maxFileSize = Integer.valueOf(prop.getProperty("MAX_ATTCHMENT_SIZE"));
 			stencilsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("REPOSITORY_WIKI_SPACE"), prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
 			wikiPages.put(pageNames.get(0), stencilsPage);
 			backgroundsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
@@ -151,7 +149,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
                     attachments = iPage.getAttachments();
                     items = new ArrayList<IItem>();
 
-                    getAttachmentItems = new AttachmentFetchThread(StitcherApp.this, iPage, attachments, items, pageNames.get(i));
+                    getAttachmentItems = new AttachmentFetchThread( iPage, attachments, items, pageNames.get(i));
                     try {
                         getAttachmentItems.start();
                         getAttachmentItems.join();
@@ -264,7 +262,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	         BehaviourMaker.addBehaviour(hotspotLabel, RotateTranslateScaleBehaviour.class);       
 	         add(hotspotLabel);
 	         
-	         new HotSpotTextListener(hotspotLabel, this);
+	         new HotSpotTextListener(hotspotLabel);
 
 	         return hotspotLabel;
 	     }
@@ -282,7 +280,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        palet.centerItem();
 	        BehaviourMaker.addBehaviour(palet, RotateTranslateScaleBehaviour.class);
 	        //add the listener
-	        new PaletMultiTouchListener(palet, this);
+	        new PaletMultiTouchListener(palet);
 	        
 	        if(  type.equals(IMAGE) ) {
 	            newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
@@ -475,7 +473,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		frame.addItem(hotSpotItem);
 		hotSpotItem.centerItem();
 
-		new HotSpotItemMultiTouchListener(hotSpotItem, this);
+		new HotSpotItemMultiTouchListener(hotSpotItem);
 
 
 		BehaviourMaker.addBehaviour((IItem) hotSpotItem, RotateTranslateScaleBehaviour.class);
