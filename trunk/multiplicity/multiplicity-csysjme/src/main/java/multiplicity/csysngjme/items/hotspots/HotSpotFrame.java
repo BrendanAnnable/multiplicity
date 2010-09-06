@@ -80,10 +80,10 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
     }
 	
 	public void overlayAction() {
-	    this.sendHotLinksToTop();
+//	    this.sendHotLinksToTop();
 	    this.bringHotSpotsToTop();
 	    this.bringPaletToTop();
-	    this.sendHotLinksToTop();
+//	    this.sendHotLinksToTop();
 
 	}
 
@@ -234,20 +234,6 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
         this.addItem(palet);
     }
     
-    @Override
-    public void sendHotLinksToBottom() {
-        
-        for (IHotLink hl : hotLinks) {
-            this.getZOrderManager().sendToBottom(hl, null);
-        }
-    }
-    
-    @Override
-    public void sendHotLinksToTop() {
-        for (IHotLink hl : hotLinks) {
-            this.getZOrderManager().bringToTop(hl, null);
-        }
-    }
 
     public void setFrameOverlay(JMEColourRectangle frameOverlay) {
         this.frameOverlay = frameOverlay;

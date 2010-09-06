@@ -34,13 +34,10 @@ public class ImageMultiTouchListener extends MultiTouchEventAdapter {
 
     private ArrayList<HotSpotFrame> highlightedFrames = new ArrayList<HotSpotFrame>();
 
-    private StitcherApp stitcherApp;
-
     private IImage mainImage;
     
-    public ImageMultiTouchListener(IImage mainImage, StitcherApp stitcherApp) {
+    public ImageMultiTouchListener(IImage mainImage) {
         this.mainImage = mainImage;
-        this.stitcherApp = stitcherApp;
         this.mainImage.getMultiTouchDispatcher().addListener(this);
     }
     @Override
@@ -98,11 +95,8 @@ public class ImageMultiTouchListener extends MultiTouchEventAdapter {
                   logger.debug("creating background frame....");
                     //mainImage.getParentItem().removeItem(mainImage);
                   IImage copyImage = copyImage(mainImage);
-                    stitcherApp
-                            .createNewFrame(copyImage, new Vector2f(0.0f,
-                                    0.0f), IStitcherContants.BACKGROUND + "-"
-                                    + copyImage.getUUID(),
-                                    IStitcherContants.BACKGROUND);
+                    StitcherUtils.createBackgroundFrame(copyImage);
+                           
 //                    copyImage(mainImage, repositoryFrame);
                     mainImage.centerItem();
                     repositoryFrame.close();
@@ -175,7 +169,7 @@ public class ImageMultiTouchListener extends MultiTouchEventAdapter {
 //        float scale = (Float) getScale(((JMERectangularItem) copy)
 //                .getSize());
         copy.setRelativeScale(imageItem.getRelativeScale());
-        new ImageMultiTouchListener(copy, stitcherApp);
+        new ImageMultiTouchListener(copy);
         return copy;
 
     }

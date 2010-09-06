@@ -1,14 +1,13 @@
 package multiplicity.appgallery.stitcher.listeners;
 
-import java.awt.Color;
 import java.util.List;
 
 import multiplicity.appgallery.stitcher.StitcherApp;
+import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
@@ -23,7 +22,6 @@ import multiplicity.jmeutils.UnitConversion;
 import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
-import com.jme.renderer.ColorRGBA;
 
 public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
     
@@ -31,11 +29,9 @@ public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
 
     
     private IHotSpotItem hotSpotItem;
-    private StitcherApp stitcherApp;
 
-    public HotSpotItemMultiTouchListener(IHotSpotItem hotSpotItem, StitcherApp stitcherApp) {
+    public HotSpotItemMultiTouchListener(IHotSpotItem hotSpotItem) {
         this.hotSpotItem = hotSpotItem;
-        this.stitcherApp = stitcherApp;
         this.hotSpotItem.getMultiTouchDispatcher().addListener(this);
     }
     
@@ -88,8 +84,7 @@ public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
                     //do regular hotspot stuff
                     hotSpotItem.tap();
 //                    hotSpotItem.getHotLink().changeBackgroundColor(new ColorRGBA(1f, 0f, 0f, .9f));
-                    stitcherApp.getZOrderManager().bringToTop(
-                            hotSpotItem.getHotSpotFrameContent(), null);
+                    StitcherUtils.bringToTop(hotSpotItem.getHotSpotFrameContent());
                     IHotSpotFrame parentFrame = (IHotSpotFrame) hotSpotItem
                             .getParentItem();
 
@@ -136,26 +131,27 @@ public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
                             IHotSpotItem hsItem = (IHotSpotItem)hotSpotItem;
                             ((IHotSpotFrame) sourceFrame).addHotSpot(hsItem);
 
-                            IHotSpotFrame hotSpotFrameContent = stitcherApp.createNewHotSpotContentFrame(hsItem.getType());
+                            IHotSpotFrame hotSpotFrameContent = StitcherUtils.createNewHotSpotFrame(hsItem.getType());
+//                            IHotSpotFrame hotSpotFrameContent = stitcherApp.createNewHotSpotContentFrame(hsItem.getType());
 
                             hsItem.setHotSpotFrameContent(hotSpotFrameContent);
 
                             IHotLink l = (HotLink) hsItem.createHotLink();
                     
-                            addHotlink(l);
+                            StitcherUtils.addHotLink(l);
                             
 
                             logger.debug("dropped hotspotitem on " + sourceFrame.getName());
 
                             // create a new hotspot candidate
-                            stitcherApp.fillHotSpotRepo(originFrame,hsItem.getType());
+                            StitcherUtils.fillHotSpotRepo(originFrame,hsItem.getType());
                              
-                            stitcherApp.getHotspotContentFrames().add(hotSpotFrameContent);
-                            updateHotSpotContentFrames();
+                            StitcherUtils.addHotSpotContentFrame(hotSpotFrameContent);
+                            
+                            StitcherUtils.updateHotShotContentFrames();
                             
                             if( hotSpotFrameContent instanceof IHotSpotText ) {
-//                                updateHotSpots(hotSpotFrameContent);
-                                stitcherApp.getZOrderManager().bringToTop(l, null);
+                                StitcherUtils.bringToTop(l);
                             }
                     }
 
@@ -175,18 +171,4 @@ public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
 
     }
 
-    private void addHotlink(final IHotLink hl) {
-        stitcherApp.add(hl);
-        new HotLinkMultiTouchListener(hl, stitcherApp);
-    }
-    
-
-    
-    private void updateHotSpotContentFrames() {
-        
-        for (IHotSpotFrame hsFrame : stitcherApp.getHotspotContentFrames()) {
-            hsFrame.bringPaletToTop();
-        }
-        
-  }
 }

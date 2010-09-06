@@ -3,6 +3,7 @@ package multiplicity.appgallery.stitcher.listeners;
 import java.util.List;
 
 import multiplicity.appgallery.stitcher.StitcherApp;
+import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
@@ -20,12 +21,10 @@ public class PaletMultiTouchListener extends MultiTouchEventAdapter {
 
     private final static Logger logger = Logger.getLogger(PaletMultiTouchListener.class.getName());
     private IPalet palet;
-    private StitcherApp stitcherApp;
 
-    public PaletMultiTouchListener(IPalet palet, StitcherApp stitcherApp) {
+    public PaletMultiTouchListener(IPalet palet) {
         this.palet = palet;
         this.palet.getMultiTouchDispatcher().addListener(this);
-        this.stitcherApp = stitcherApp;
     }
     
     @Override
@@ -37,7 +36,8 @@ public class PaletMultiTouchListener extends MultiTouchEventAdapter {
         for (IHotSpotItem iHotSpotItem : hotSpots) {
             
             if( iHotSpotItem.getHotSpotFrameContent() != null )
-                stitcherApp.getZOrderManager().bringToTop(iHotSpotItem.getHotSpotFrameContent(), null);
+                StitcherUtils.bringToTop(iHotSpotItem.getHotSpotFrameContent());
+                
         }
     }
     

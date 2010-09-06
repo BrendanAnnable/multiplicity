@@ -60,13 +60,13 @@ public class AttachmentFetchThread extends Thread {
 
 	private IPage iPage = null;
 
-	private StitcherApp stitcherApp;
 	private String parentContainerName;
 
 	private ArrayList<HotSpotFrame> highlightedFrames = new ArrayList<HotSpotFrame>();
+	
+	public String output_document_path = null;
 
-	public AttachmentFetchThread(StitcherApp stitcherApp, IPage iPage, Vector<IAttachment> attachments, List<IItem> items, String parentContainerName) {
-		this.stitcherApp = stitcherApp;
+	public AttachmentFetchThread(IPage iPage, Vector<IAttachment> attachments, List<IItem> items, String parentContainerName) {
 		this.attachments = attachments;
 		this.iPage = iPage;
 		this.items = items;
@@ -85,7 +85,7 @@ public class AttachmentFetchThread extends Thread {
 	 * @param Version
 	 */
 	public File writeFileToLocalStorageDir(String filename, String dirName) {
-		String targetDirectory = LocalStorageUtility.getLocalWorkingDirectory(stitcherApp.MULTIPLICITY_SPACE, "").getAbsolutePath() + File.separatorChar + dirName;
+		String targetDirectory = LocalStorageUtility.getLocalWorkingDirectory(IStitcherContants.MULTIPLICITY_SPACE, "").getAbsolutePath() + File.separatorChar + dirName;
 		boolean canUpload = false;
 		File savedFile = null;
 		if (new File(targetDirectory).exists() == false) {
@@ -95,8 +95,8 @@ public class AttachmentFetchThread extends Thread {
 		}
 
 		if (canUpload) {
-			stitcherApp.output_document_path = targetDirectory + File.separatorChar + filename;
-			savedFile = new File(stitcherApp.output_document_path);
+			output_document_path = targetDirectory + File.separatorChar + filename;
+			savedFile = new File(output_document_path);
 		}
 		return savedFile;
 	}
@@ -377,7 +377,7 @@ public class AttachmentFetchThread extends Thread {
 
 				logger.info("File exists: " + file.exists() + " - " + iAttachment.getName() + " - " + iAttachment.getSize() + " - " + file.length());
 				if (file.exists() == false) {
-					WikiUtility wikiUtility = new WikiUtility(stitcherApp.wikiUser, stitcherApp.wikiPass, stitcherApp.maxFileSize, iAttachment.getMimeType(), iAttachment.getAbsoluteUrl());
+					WikiUtility wikiUtility = new WikiUtility(StitcherUtils.wikiUser, StitcherUtils.wikiPass, StitcherUtils.maxFileSize, iAttachment.getMimeType(), iAttachment.getAbsoluteUrl());
 					try {
 						wikiUtility.start();
 						wikiUtility.join();
@@ -415,7 +415,7 @@ public class AttachmentFetchThread extends Thread {
 						try {
 							i = StitcherUtils.createPhotoImage(file.toURI().toURL());
 //							i.addItemListener(new ImageItemListener(stitcherApp));
-							new ImageMultiTouchListener(i, stitcherApp);
+							new ImageMultiTouchListener(i);
 							Vector2f size = ((JMERectangularItem) i).getSize();
 							calculatedScale = StitcherUtils.getScale(size);
 						} catch (MalformedURLException e) {
