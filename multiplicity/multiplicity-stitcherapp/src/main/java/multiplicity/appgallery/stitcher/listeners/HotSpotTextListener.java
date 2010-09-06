@@ -5,9 +5,7 @@ import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
-import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.events.ItemListenerAdapter;
-import multiplicity.csysng.items.hotspot.IHotSpotFrame;
+import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
 
@@ -26,7 +24,7 @@ public class HotSpotTextListener extends MultiTouchEventAdapter {
     @Override
     public void cursorChanged(MultiTouchCursorEvent event) {
         super.cursorChanged(event);
-        HotSpotItemMultiTouchListener.updateHotSpots(hotSpotText);
+        HotSpotUtils.updateHotSpots(hotSpotText);
     }
     
     @Override

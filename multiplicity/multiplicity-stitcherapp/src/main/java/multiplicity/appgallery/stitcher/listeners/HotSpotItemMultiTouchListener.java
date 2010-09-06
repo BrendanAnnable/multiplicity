@@ -100,13 +100,13 @@ public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
 
                     parentFrame.bringPaletToTop();
 
-                    stitcherApp.getZOrderManager().bringToTop(hotSpotItem.getHotLink(),null);
-                    if( hotSpotItem.getHotSpotFrameContent() instanceof IHotSpotText) {
-                        //redraw it
-                        HotSpotItemMultiTouchListener.updateHotSpots((IHotSpotFrame) hotSpotItem.getParentItem());
-                        parentFrame.sendHotLinksToTop();
-                        ((IHotSpotFrame) hotSpotItem.getHotSpotFrameContent()).sendHotLinksToTop();
-                    }
+//                    stitcherApp.getZOrderManager().bringToTop(hotSpotItem.getHotLink(),null);
+//                    if( hotSpotItem.getHotSpotFrameContent() instanceof IHotSpotText) {
+//                        //redraw it
+//                        HotSpotItemMultiTouchListener.updateHotSpots((IHotSpotFrame) hotSpotItem.getParentItem());
+//                        parentFrame.sendHotLinksToTop();
+//                        ((IHotSpotFrame) hotSpotItem.getHotSpotFrameContent()).sendHotLinksToTop();
+//                    }
                     
                     // hide show
                     logger.debug("num of hspot taps " + hotSpotItem.getTapCount());
@@ -180,13 +180,7 @@ public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
         new HotLinkMultiTouchListener(hl, stitcherApp);
     }
     
-    public static void updateHotSpots(IHotSpotFrame frame) {
-        List<IHotLink> hotLinks = frame.getHotLinks();
-            for (IHotLink iHotLink : hotLinks) {
-                iHotLink.getHotSpotItem().updateHotSpot();
-                
-            }
-    }
+
     
     private void updateHotSpotContentFrames() {
         

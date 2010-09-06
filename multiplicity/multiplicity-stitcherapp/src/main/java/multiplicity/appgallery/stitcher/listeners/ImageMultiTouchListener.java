@@ -239,23 +239,7 @@ public class ImageMultiTouchListener extends MultiTouchEventAdapter {
         highlightedFrames = new ArrayList<HotSpotFrame>();
     }
 
-    protected void dropOnHotSpotFrame(IItem item, IHotSpotFrame hotSpotFrame) {
-        IFrame frame = (IFrame) item.getParentItem();
-        frame.removeItem(item);
 
-        hotSpotFrame.addItem(item);
-//        item.setRelativeScale(1.0f);
-        ((JMERectangularItem) item).setSize(IStitcherContants.HOTSPOT_FRAME_DIMENSION, IStitcherContants.HOTSPOT_FRAME_DIMENSION);
-        item.centerItem();
-        clearAllHighlightedHotSpotFrames();
-        hotSpotFrame.setLocked(true);
-        hotSpotFrame.getPalet().lockPalet(hotSpotFrame.isLocked());
-        hotSpotFrame.bringPaletToTop();
-        hotSpotFrame.bringHotSpotsToTop();
-        hotSpotFrame.getZOrderManager().sendToBottom(item, null);
-
-//        stitcherApp.bumpHotSpotConnections();
-    }
     
     public boolean isHotspotFrame(IItem item) {
         if( item != null && ( item instanceof IHotSpotFrame ) ) {
