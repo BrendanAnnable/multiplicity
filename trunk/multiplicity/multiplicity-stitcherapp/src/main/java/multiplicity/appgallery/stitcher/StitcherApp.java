@@ -282,6 +282,8 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        newHotSpotFrame.addPalet(palet);
 	        palet.centerItem();
 	        BehaviourMaker.addBehaviour(palet, RotateTranslateScaleBehaviour.class);
+	        StitcherUtils.removeScaleBehavior(palet.getBehaviours());
+
 	        //add the listener
 	        new PaletMultiTouchListener(palet);
 	        
