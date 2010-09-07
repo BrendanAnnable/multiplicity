@@ -26,31 +26,31 @@ public class HotLinkMultiTouchListener extends MultiTouchEventAdapter {
         logger.debug("hotlink PRESSED");
         
         //hide show
-        if( hotLink.tap() > 4 ) {
-          logger.debug("deleting hotlink");
-          
-          
-          IHotSpotItem hotSpotItem = hotLink.getHotSpotItem();
-          
-          hotSpotItem.removeHotLink(hotLink);
-          
-          IHotSpotFrame sourceFrame = (IHotSpotFrame) hotLink.getHotSpotItem().getParentItem();
-          IHotSpotFrame hotSpotFrameContent = hotLink.getHotSpotItem().getHotSpotFrameContent();
-          if(!(hotSpotFrameContent instanceof IHotSpotText) ) {
-              hotSpotFrameContent.removeHotSpot(hotSpotItem);
-          }
-          
-          //remove hotspot
-          sourceFrame.removeHotSpot(hotSpotItem);
-          
-          
-          StitcherUtils.removeHotThing(hotLink);
-          StitcherUtils.removeHotThing(hotSpotFrameContent);
-;
-        
-          sourceFrame.bringHotSpotsToTop();
-          
-        }
+//        if( hotLink.tap() > 4 ) {
+//          logger.debug("deleting hotlink");
+//          
+//          
+//          IHotSpotItem hotSpotItem = hotLink.getHotSpotItem();
+//          
+//          hotSpotItem.removeHotLink(hotLink);
+//          
+//          IHotSpotFrame sourceFrame = (IHotSpotFrame) hotLink.getHotSpotItem().getParentItem();
+//          IHotSpotFrame hotSpotFrameContent = hotLink.getHotSpotItem().getHotSpotFrameContent();
+//          if(!(hotSpotFrameContent instanceof IHotSpotText) ) {
+//              hotSpotFrameContent.removeHotSpot(hotSpotItem);
+//          }
+//          
+//          //remove hotspot
+//          sourceFrame.removeHotSpot(hotSpotItem);
+//          
+//          
+//          StitcherUtils.removeHotThing(hotLink);
+//          StitcherUtils.removeHotThing(hotSpotFrameContent);
+//;
+//        
+//          sourceFrame.bringHotSpotsToTop();
+//          
+//        }
     }
 
 
