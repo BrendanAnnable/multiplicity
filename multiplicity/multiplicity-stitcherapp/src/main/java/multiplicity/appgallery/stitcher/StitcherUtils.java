@@ -1,11 +1,14 @@
 package multiplicity.appgallery.stitcher;
 
 import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 import multiplicity.appgallery.stitcher.listeners.HotLinkMultiTouchListener;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
+import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
@@ -73,6 +76,15 @@ public class StitcherUtils {
         stitcherApp.getZOrderManager().bringToTop(keyboard, null);
         hotSpotText.setKeyboardVisible(true);
         
+    }
+    
+    public static void removeScaleBehavior(List<IBehaviour> behaviours) {
+        for (Iterator iterator = behaviours.iterator(); iterator.hasNext();) {
+            IBehaviour iBehaviour = (IBehaviour) iterator.next();
+            if( iBehaviour instanceof RotateTranslateScaleBehaviour ) {
+                ((RotateTranslateScaleBehaviour)iBehaviour).setScaleEnabled(false);
+            }
+        }
     }
     
     public static void hideKeyboard(IHotSpotText hotSpotText) {
