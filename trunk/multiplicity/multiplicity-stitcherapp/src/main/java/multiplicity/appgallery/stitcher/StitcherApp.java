@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import multiplicity.appgallery.stitcher.listeners.HotSpotItemMultiTouchListener;
 import multiplicity.appgallery.stitcher.listeners.HotSpotTextListener;
 import multiplicity.appgallery.stitcher.listeners.PaletMultiTouchListener;
 import multiplicity.csysng.behaviours.BehaviourMaker;
+import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.factory.IPaletFactory;
@@ -32,6 +34,7 @@ import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.hotspot.IHotSpotRepo;
+import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.repository.IBackgroundRepositoryFrame;
 import multiplicity.csysng.items.repository.IImageRepositoryFrame;
 import multiplicity.csysng.items.repository.IRepositoryContentItemFactory;
@@ -172,9 +175,9 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		createHotSpotRepo(IMAGE);
 		createHotSpotRepo(TEXT);
 
-//		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
-//		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());
-//		add(cursors);
+		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
+		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());
+		add(cursors);
 //
 //		ICursorTrailsOverlay trails = getContentFactory().createCursorTrailsOverlay("trails", UUID.randomUUID());
 //		// trails.respondToItem(bg);
@@ -472,12 +475,16 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		hotSpotItem.setType(type);
 		frame.addItem(hotSpotItem);
 		hotSpotItem.centerItem();
-
+		hotSpotItem.setRelativeScale(1f);
 		new HotSpotItemMultiTouchListener(hotSpotItem);
 
 
 		BehaviourMaker.addBehaviour((IItem) hotSpotItem, RotateTranslateScaleBehaviour.class);
+		 List<IBehaviour> behaviours = hotSpotItem.getBehaviours();
+		 StitcherUtils.removeScaleBehavior(behaviours);
+
 	}
+
 
 
 

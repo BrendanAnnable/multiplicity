@@ -8,6 +8,7 @@ import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
@@ -34,6 +35,7 @@ public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
         this.hotSpotItem = hotSpotItem;
         this.hotSpotItem.getMultiTouchDispatcher().addListener(this);
     }
+    
     
     @Override
     public void objectChanged(MultiTouchObjectEvent event) {

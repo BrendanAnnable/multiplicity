@@ -30,7 +30,7 @@ public interface IStitcherContants {
 
     public final static Float RIGHT_LEFT_REPO_HEIGHT = 400f;
 
-    public final static int HOTSPOT_DIMENSION = 80;
+    public final static int HOTSPOT_DIMENSION = 100;
 
     public final static int HOTSPOT_FRAME_DIMENSION = 200;
 
