@@ -72,7 +72,6 @@ public class StitcherUtils {
         
         IFrame keyboard = hotSpotText.getKeyboard();
         stitcherApp.add(keyboard);
-        BehaviourMaker.addBehaviour(keyboard, RotateTranslateScaleBehaviour.class);
         stitcherApp.getZOrderManager().bringToTop(keyboard, null);
         hotSpotText.setKeyboardVisible(true);
         
