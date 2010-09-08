@@ -47,7 +47,7 @@ public class OverlayMultiTouchListener extends MultiTouchEventAdapter {
             HotSpotUtils.updateHotSpots(hotspotFrame);
 
         }
-        hotspotFrame.updateOverLay();
+//        hotspotFrame.updateOverLay();
         hotspotFrame.bringPaletToTop();
     }
 }
