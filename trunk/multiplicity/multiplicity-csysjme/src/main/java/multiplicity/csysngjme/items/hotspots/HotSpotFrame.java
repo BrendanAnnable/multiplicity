@@ -9,10 +9,12 @@ import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
+import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
+import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.items.JMEColourRectangle;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.input.events.MultiTouchCursorEvent;
@@ -51,9 +53,35 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 		setFrameOverlay(new JMEColourRectangle("frameOverlay",UUID.randomUUID(), width , height));
 		getFrameOverlay().initializeGeometry();
 		getFrameOverlay().setSolidBackgroundColour(new ColorRGBA(0f, 0f, 0f, 0.2f));
-		this.addItem(getFrameOverlay());
+		
+	      final IItem instance = this;
+	        this.getFrameOverlay().addItemListener(new ItemListenerAdapter() {
+	            
+	            @Override
+	            public void itemCursorPressed(IItem item,
+	                    MultiTouchCursorEvent event) {
+	               logger.debug("overlay pressed transfered to frame");
+	                for(IItemListener l : getItemListeners()) {
+	                    l.itemCursorPressed(instance, event);
+	                }
+	            }
+	            @Override
+	            public void itemScaled(IItem item) {
+	                logger.debug("overlay scaled transfered to frame");
+	                for(IItemListener l : getItemListeners()) {
+	                    l.itemScaled(instance);
+	                }
+	            }
+	          
+	        });
+	        
+	        this.getMultiTouchDispatcher().addListeners(getFrameOverlay().getMultiTouchDispatcher().getListeners());
+//	    getFrameOverlay().getMultiTouchDispatcher().addListeners(getMultiTouchDispatcher().getListeners());
+	       ItemMap.register(getFrameOverlay().getManipulableSpatial(), this);
+//	       attachChild(getFrameOverlay().getTreeRootSpatial());
+	        this.addItem(getFrameOverlay());
+	       
 		this.getZOrderManager().sendToBottom(getFrameOverlay(), null);
-		BehaviourMaker.addBehaviour(getFrameOverlay(), RotateTranslateScaleBehaviour.class);
 	}
 	
 	@Override
