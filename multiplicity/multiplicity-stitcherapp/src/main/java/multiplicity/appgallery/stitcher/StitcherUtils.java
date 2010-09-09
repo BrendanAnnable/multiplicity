@@ -107,7 +107,7 @@ public class StitcherUtils {
         if( hotThing instanceof IHotLink ) {
             stitcherApp.remove(hotThing);
         } else if(hotThing instanceof IHotSpotFrame) {
-            stitcherApp.getHotspotContentFrames().remove(hotThing);
+            stitcherApp.getHotSpotFrames().remove(hotThing);
             stitcherApp.remove(hotThing);
         }
     }
@@ -121,7 +121,7 @@ public class StitcherUtils {
     }
 
     public static void addHotSpotContentFrame(IHotSpotFrame hotSpotFrameContent) {
-        stitcherApp.getHotspotContentFrames().add(hotSpotFrameContent);        
+        stitcherApp.getHotSpotFrames().add(hotSpotFrameContent);        
     }
 
     public static void addHotLink(IHotLink hotLink) {
@@ -130,7 +130,7 @@ public class StitcherUtils {
     }
 
     public static void updateHotShotContentFrames() {
-        for (IHotSpotFrame hsFrame : stitcherApp.getHotspotContentFrames()) {
+        for (IHotSpotFrame hsFrame : stitcherApp.getHotSpotFrames()) {
             hsFrame.bringPaletToTop();
         }
     }

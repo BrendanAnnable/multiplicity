@@ -37,17 +37,8 @@ public class OverlayMultiTouchListener extends MultiTouchEventAdapter {
         logger.debug("overlay changed");
         IHotSpotFrame hotspotFrame = (IHotSpotFrame)overlay.getParentItem();
         
-        if( hotspotFrame.getName().contains("back")) {
-            List<IHotSpotItem> hotSpots = hotspotFrame.getHotSpots();
-            for (IHotSpotItem iHotSpotItem : hotSpots) {
-                iHotSpotItem.updateHotSpot();
-            }
-        } else {
-            
-            HotSpotUtils.updateHotSpots(hotspotFrame);
+        HotSpotUtils.updateHotLinkSegments(hotspotFrame);
 
-        }
-//        hotspotFrame.updateOverLay();
-        hotspotFrame.bringPaletToTop();
+        hotspotFrame.updateOverLay();
     }
 }

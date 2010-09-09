@@ -63,7 +63,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	
     private final static Logger logger = Logger.getLogger(StitcherApp.class.getName());
 	private final List<String> pageNames = new ArrayList<String>();
-	private final List<IHotSpotFrame> hotspotContentFrames = new ArrayList<IHotSpotFrame>();
+	private final List<IHotSpotFrame> hotSpotFrames = new ArrayList<IHotSpotFrame>();
 	private IPage stencilsPage;
 	private IPage backgroundsPage;
 	private IPage scansPage;
@@ -178,11 +178,6 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
 		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());
 		add(cursors);
-//
-//		ICursorTrailsOverlay trails = getContentFactory().createCursorTrailsOverlay("trails", UUID.randomUUID());
-//		// trails.respondToItem(bg);
-//		trails.setFadingColour(Color.white);
-//		add(trails);
 	}
 
     public IHotSpotFrame createNewHotSpotContentFrame(String type) {
@@ -308,29 +303,30 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	            newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
 
 	                @Override
-	                public void itemScaled(IItem item) {
-	                    // TODO Auto-generated method stub
-	                    super.itemScaled(item);
-	                }
-	                @Override
 	                public void itemCursorChanged(IItem item,
 	                        MultiTouchCursorEvent event) {
 	                    super.itemCursorChanged(item, event);
-	                    logger.debug("cursor changed background");
+	                    logger.debug("cursor changed background frame");
 	                    IHotSpotFrame frame = (IHotSpotFrame) item;
                         
-                        List<IHotSpotItem> hotSpots = frame.getHotSpots();
-                        for (IHotSpotItem iHotSpotItem : hotSpots) {
-                            iHotSpotItem.updateHotSpot();
-                        }
+//                        HotSpotUtils.updateHotSpots(frame);
+
+                        HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
+                        
                         frame.bringPaletToTop();
                         
 	                }
 	              
 	            });
 	        }
+	        
+	        //add for later
+	        hotSpotFrames.add(newHotSpotFrame);
+	        
 	        return newHotSpotFrame;
 	    }
+	    
+	    
 	    
 	    return null;
 	}
@@ -518,8 +514,8 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		return repositoryFactory;
 	}
 
-    public List<IHotSpotFrame> getHotspotContentFrames() {
-        return hotspotContentFrames;
+    public List<IHotSpotFrame> getHotSpotFrames() {
+        return hotSpotFrames;
     }
 
 }
