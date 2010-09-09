@@ -1,26 +1,20 @@
 package multiplicity.csysngjme.items.hotspots.listeners;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
+import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IColourRectangle;
+import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
-import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
 
-public class OverlayMultiTouchListener extends MultiTouchEventAdapter {
+import org.apache.log4j.Logger;
 
-    private final static Logger logger = Logger.getLogger(OverlayMultiTouchListener.class.getName());
+public class OverlayBehavior extends MultiTouchEventAdapter implements IBehaviour {
+
+    private final static Logger logger = Logger.getLogger(OverlayBehavior.class.getName());
 
     private IColourRectangle overlay;
 
-    public OverlayMultiTouchListener(IColourRectangle overlay) {
-        this.overlay = overlay;
-        this.overlay.getMultiTouchDispatcher().addListener(this);
-    }
-    
     
     @Override
     public void cursorPressed(MultiTouchCursorEvent event) {
@@ -40,5 +34,23 @@ public class OverlayMultiTouchListener extends MultiTouchEventAdapter {
         HotSpotUtils.updateHotLinkSegments(hotspotFrame);
 
         hotspotFrame.updateOverLay();
+    }
+    
+    @Override
+    public void removeItemActingOn() {
+        if(overlay != null) {
+            overlay.getMultiTouchDispatcher().remove(this);
+        }
+        this.overlay = null;
+    }
+
+    @Override
+    public void setItemActingOn(IItem item) {
+        if(item instanceof IColourRectangle) {
+            this.overlay = (IColourRectangle) item;
+            this.overlay.getMultiTouchDispatcher().addListener(this);
+        }else{
+            //TODO: log severe
+        }
     }
 }

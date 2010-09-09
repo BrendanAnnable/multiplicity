@@ -33,7 +33,7 @@ import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysngjme.factory.PaletItemFactory;
 import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
-import multiplicity.csysngjme.items.hotspots.listeners.OverlayMultiTouchListener;
+import multiplicity.csysngjme.items.hotspots.listeners.OverlayBehavior;
 import multiplicity.input.IMultiTouchEventProducer;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
@@ -198,7 +198,7 @@ public class GalleryScaleApp extends AbstractMultiplicityApp {
         img.setRelativeScale(0.8f);
         BehaviourMaker.addBehaviour(img, RotateTranslateScaleBehaviour.class);
 
-        new OverlayMultiTouchListener(newHotSpotFrame.getFrameOverlay());
+        BehaviourMaker.addBehaviour(newHotSpotFrame.getFrameOverlay(),OverlayBehavior.class);
 
         newHotSpotFrame.addItem(img);
         newHotSpotFrame.setLocked(true);

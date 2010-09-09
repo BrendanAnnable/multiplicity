@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import multiplicity.appgallery.stitcher.listeners.HotLinkMultiTouchListener;
+import multiplicity.appgallery.stitcher.listeners.HotLinkBehavior;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
@@ -126,7 +126,7 @@ public class StitcherUtils {
 
     public static void addHotLink(IHotLink hotLink) {
         stitcherApp.add(hotLink);
-        new HotLinkMultiTouchListener(hotLink);
+        BehaviourMaker.addBehaviour(hotLink, HotLinkBehavior.class);
     }
 
     public static void updateHotShotContentFrames() {

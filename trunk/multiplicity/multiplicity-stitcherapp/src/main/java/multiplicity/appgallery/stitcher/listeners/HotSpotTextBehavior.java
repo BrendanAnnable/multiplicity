@@ -1,19 +1,18 @@
 package multiplicity.appgallery.stitcher.listeners;
 
 import multiplicity.appgallery.stitcher.StitcherUtils;
+import multiplicity.csysng.behaviours.IBehaviour;
+import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IHotSpotText;
+import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.IPalet;
 import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
 
-public class HotSpotTextListener extends MultiTouchEventAdapter {
+public class HotSpotTextBehavior extends MultiTouchEventAdapter implements IBehaviour {
 
     private IHotSpotText hotSpotText;
-
-    public HotSpotTextListener(IHotSpotText hotSpotText) {
-        this.hotSpotText = hotSpotText;
-        this.hotSpotText.getMultiTouchDispatcher().addListener(this);
-    }
 
     @Override
     public void cursorChanged(MultiTouchCursorEvent event) {
@@ -39,4 +38,21 @@ public class HotSpotTextListener extends MultiTouchEventAdapter {
         }
     }
 
+    @Override
+    public void removeItemActingOn() {
+        if(hotSpotText != null) {
+            hotSpotText.getMultiTouchDispatcher().remove(this);
+        }
+        this.hotSpotText = null;
+    }
+
+    @Override
+    public void setItemActingOn(IItem item) {
+        if(item instanceof IHotSpotText) {
+            this.hotSpotText = (IHotSpotText) item;
+            hotSpotText.getMultiTouchDispatcher().addListener(this);
+        }else{
+            //TODO: log severe
+        }
+    }
 }
