@@ -52,4 +52,11 @@ public class JMEEditableText extends JMELabel implements IEditableText {
 		cursorIndex = this.text.length()-1;
 		update();		
 	}
+
+    @Override
+    public void appendString(String charSet) {
+        this.text = this.text + charSet;
+        cursorIndex = this.text.length()-1;
+        update();
+    }
 }
