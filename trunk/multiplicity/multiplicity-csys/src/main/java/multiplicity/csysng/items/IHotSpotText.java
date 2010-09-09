@@ -1,6 +1,7 @@
 package multiplicity.csysng.items;
 
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
+import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
 
 public interface IHotSpotText extends IEditableText, IHotSpotFrame {
 
@@ -17,5 +18,8 @@ public interface IHotSpotText extends IEditableText, IHotSpotFrame {
     public void resetTaps();
 
     public void toggle();
+    
+    public void createKeyboard(Class<? extends KeyboardDefinition> keyboardDef);
+
 
 }

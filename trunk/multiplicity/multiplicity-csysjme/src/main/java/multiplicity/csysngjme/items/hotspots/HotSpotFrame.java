@@ -34,7 +34,8 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 
     private boolean isVisible;
 
-    private IPalet palet; ;
+    private IPalet palet;
+    private boolean canScale = true;
 
 	public HotSpotFrame(String name, UUID uuid, int width, int height) {
 		super(name, uuid, width, height);
@@ -213,6 +214,16 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 
     public void setFrameOverlay(JMEColourRectangle frameOverlay) {
         this.frameOverlay = frameOverlay;
+    }
+
+    @Override
+    public void setScalable(boolean canScale) {
+        this.canScale  = canScale;
+    }
+    
+    @Override
+    public boolean canScale() {
+        return this.canScale;
     }
     
 }

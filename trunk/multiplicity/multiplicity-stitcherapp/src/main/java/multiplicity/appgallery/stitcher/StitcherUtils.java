@@ -77,11 +77,11 @@ public class StitcherUtils {
         
     }
     
-    public static void removeScaleBehavior(List<IBehaviour> behaviours) {
+    public static void modScaleBehavior(List<IBehaviour> behaviours, boolean shouldScale) {
         for (Iterator iterator = behaviours.iterator(); iterator.hasNext();) {
             IBehaviour iBehaviour = (IBehaviour) iterator.next();
             if( iBehaviour instanceof RotateTranslateScaleBehaviour ) {
-                ((RotateTranslateScaleBehaviour)iBehaviour).setScaleEnabled(false);
+                ((RotateTranslateScaleBehaviour)iBehaviour).setScaleEnabled(shouldScale);
             }
         }
     }

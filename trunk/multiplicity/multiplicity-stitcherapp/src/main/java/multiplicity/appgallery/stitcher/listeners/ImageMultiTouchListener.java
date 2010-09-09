@@ -198,6 +198,7 @@ public class ImageMultiTouchListener extends MultiTouchEventAdapter {
                     hotspotFrame.getPalet().lockPalet(hotspotFrame.isLocked());
 
                     hotspotFrame.bringPaletToTop();
+                    
                 } else {
                     IImage copyImage = copyImage((IImage) releasedItem);
 
