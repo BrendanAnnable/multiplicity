@@ -5,10 +5,12 @@ import java.util.List;
 import multiplicity.appgallery.stitcher.StitcherApp;
 import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.ContentSystem;
+import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
+import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.jmeutils.UnitConversion;
@@ -17,16 +19,11 @@ import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 
-public class PaletMultiTouchListener extends MultiTouchEventAdapter {
+public class PaletBehavior extends MultiTouchEventAdapter implements IBehaviour {
 
-    private final static Logger logger = Logger.getLogger(PaletMultiTouchListener.class.getName());
+    private final static Logger logger = Logger.getLogger(PaletBehavior.class.getName());
     private IPalet palet;
 
-    public PaletMultiTouchListener(IPalet palet) {
-        this.palet = palet;
-        this.palet.getMultiTouchDispatcher().addListener(this);
-    }
-    
     @Override
     public void cursorPressed(MultiTouchCursorEvent event) {
         super.cursorPressed(event);
@@ -92,6 +89,24 @@ public class PaletMultiTouchListener extends MultiTouchEventAdapter {
                 palet.lockPalet(true);
             }
             parentFrame.bringPaletToTop();
+        }
+    }
+
+    @Override
+    public void removeItemActingOn() {
+        if(palet != null) {
+            palet.getMultiTouchDispatcher().remove(this);
+        }
+        this.palet = null;
+    }
+
+    @Override
+    public void setItemActingOn(IItem item) {
+        if(item instanceof IPalet) {
+            this.palet = (IPalet) item;
+            this.palet.getMultiTouchDispatcher().addListener(this);
+        }else{
+            //TODO: log severe
         }
     }
 }

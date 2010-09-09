@@ -13,7 +13,7 @@ import java.util.Vector;
 import javax.imageio.ImageIO;
 
 import multiplicity.app.utils.LocalStorageUtility;
-import multiplicity.appgallery.stitcher.listeners.ImageMultiTouchListener;
+import multiplicity.appgallery.stitcher.listeners.HotSpotImageBehavior;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
@@ -415,7 +415,8 @@ public class AttachmentFetchThread extends Thread {
 						try {
 							i = StitcherUtils.createPhotoImage(file.toURI().toURL());
 //							i.addItemListener(new ImageItemListener(stitcherApp));
-							new ImageMultiTouchListener(i);
+							
+							BehaviourMaker.addBehaviour(i, HotSpotImageBehavior.class);
 							Vector2f size = ((JMERectangularItem) i).getSize();
 							calculatedScale = StitcherUtils.getScale(size);
 						} catch (MalformedURLException e) {

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -15,9 +14,9 @@ import java.util.Vector;
 import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
-import multiplicity.appgallery.stitcher.listeners.HotSpotItemMultiTouchListener;
-import multiplicity.appgallery.stitcher.listeners.HotSpotTextListener;
-import multiplicity.appgallery.stitcher.listeners.PaletMultiTouchListener;
+import multiplicity.appgallery.stitcher.listeners.HotSpotItemBehavior;
+import multiplicity.appgallery.stitcher.listeners.HotSpotTextBehavior;
+import multiplicity.appgallery.stitcher.listeners.PaletBehavior;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
@@ -45,7 +44,7 @@ import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
 import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
-import multiplicity.csysngjme.items.hotspots.listeners.OverlayMultiTouchListener;
+import multiplicity.csysngjme.items.hotspots.listeners.OverlayBehavior;
 import multiplicity.input.IMultiTouchEventProducer;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import no.uio.intermedia.snomobile.XWikiRestFulService;
@@ -265,7 +264,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	         BehaviourMaker.addBehaviour(hotspotLabel, RotateTranslateScaleBehaviour.class);       
 	         add(hotspotLabel);
 	         
-	         new HotSpotTextListener(hotspotLabel);
+	         BehaviourMaker.addBehaviour(hotspotLabel, HotSpotTextBehavior.class);       
 
 	         return hotspotLabel;
 	     }
@@ -275,7 +274,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	    
 	    if(type.equals(BACKGROUND) || type.equals(IMAGE)){
 	        
-	        new OverlayMultiTouchListener(newHotSpotFrame.getFrameOverlay());
+	        BehaviourMaker.addBehaviour(newHotSpotFrame, OverlayBehavior.class);
 	        
 	        //set up the palet
 	        IPalet palet = this.getPaletFactory().createPaletItem("palet",  UUID.randomUUID(), PALET_DIMENSION, new ColorRGBA(0f, 1f, 0f, 1f));
@@ -285,9 +284,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        BehaviourMaker.addBehaviour(palet, RotateTranslateScaleBehaviour.class);
 	        
 
-	        
-	        //add the listener
-	        new PaletMultiTouchListener(palet);
+	        BehaviourMaker.addBehaviour(palet, PaletBehavior.class);
 	        
 	        if(  type.equals(IMAGE) ) {
 
@@ -487,7 +484,8 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		frame.addItem(hotSpotItem);
 		hotSpotItem.centerItem();
 		hotSpotItem.setRelativeScale(1f);
-		new HotSpotItemMultiTouchListener(hotSpotItem);
+		
+		BehaviourMaker.addBehaviour(hotSpotItem, HotSpotItemBehavior.class);
 
 
 		BehaviourMaker.addBehaviour((IItem) hotSpotItem, RotateTranslateScaleBehaviour.class);

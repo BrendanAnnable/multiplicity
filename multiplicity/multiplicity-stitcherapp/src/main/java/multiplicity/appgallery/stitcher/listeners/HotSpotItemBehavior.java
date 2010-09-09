@@ -5,9 +5,11 @@ import java.util.List;
 import multiplicity.appgallery.stitcher.StitcherApp;
 import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.ContentSystem;
+import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
@@ -24,19 +26,12 @@ import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 
-public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
+public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBehaviour {
     
-    private final static Logger logger = Logger.getLogger(HotSpotItemMultiTouchListener.class.getName());
-
+    private final static Logger logger = Logger.getLogger(HotSpotItemBehavior.class.getName());
     
     private IHotSpotItem hotSpotItem;
 
-    public HotSpotItemMultiTouchListener(IHotSpotItem hotSpotItem) {
-        this.hotSpotItem = hotSpotItem;
-        this.hotSpotItem.getMultiTouchDispatcher().addListener(this);
-    }
-    
-    
     @Override
     public void objectChanged(MultiTouchObjectEvent event) {
         super.objectChanged(event);
@@ -173,4 +168,21 @@ public class HotSpotItemMultiTouchListener extends MultiTouchEventAdapter {
 
     }
 
+    @Override
+    public void removeItemActingOn() {
+        if(hotSpotItem != null) {
+            hotSpotItem.getMultiTouchDispatcher().remove(this);
+        }
+        this.hotSpotItem = null;
+    }
+
+    @Override
+    public void setItemActingOn(IItem item) {
+        if(item instanceof IHotSpotItem) {
+            this.hotSpotItem = (IHotSpotItem) item;
+            this.hotSpotItem.getMultiTouchDispatcher().addListener(this);
+        }else{
+            //TODO: log severe
+        }
+    }
 }

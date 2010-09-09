@@ -12,11 +12,14 @@ import multiplicity.appgallery.stitcher.IStitcherContants;
 import multiplicity.appgallery.stitcher.StitcherApp;
 import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.ContentSystem;
+import multiplicity.csysng.behaviours.BehaviourMaker;
+import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
+import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.hotspot.IHotSpotRepo;
 import multiplicity.csysng.items.repository.IBackgroundRepositoryFrame;
 import multiplicity.csysng.items.repository.IImageRepositoryFrame;
@@ -28,7 +31,7 @@ import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.jmeutils.UnitConversion;
 
-public class ImageMultiTouchListener extends MultiTouchEventAdapter {
+public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBehaviour {
     
     private final static Logger logger = Logger.getLogger(ImageItemListener.class.getName());
 
@@ -36,10 +39,6 @@ public class ImageMultiTouchListener extends MultiTouchEventAdapter {
 
     private IImage mainImage;
     
-    public ImageMultiTouchListener(IImage mainImage) {
-        this.mainImage = mainImage;
-        this.mainImage.getMultiTouchDispatcher().addListener(this);
-    }
     @Override
     public void cursorReleased(MultiTouchCursorEvent event) {
         super.cursorReleased(event);
@@ -169,7 +168,7 @@ public class ImageMultiTouchListener extends MultiTouchEventAdapter {
 //        float scale = (Float) getScale(((JMERectangularItem) copy)
 //                .getSize());
         copy.setRelativeScale(imageItem.getRelativeScale());
-        new ImageMultiTouchListener(copy);
+        BehaviourMaker.addBehaviour(copy, HotSpotImageBehavior.class);
         return copy;
 
     }
@@ -267,6 +266,24 @@ public class ImageMultiTouchListener extends MultiTouchEventAdapter {
         }
 
         return scale;
+    }
+    
+    @Override
+    public void removeItemActingOn() {
+        if(mainImage != null) {
+            mainImage.getMultiTouchDispatcher().remove(this);
+        }
+        this.mainImage = null;
+    }
+
+    @Override
+    public void setItemActingOn(IItem item) {
+        if(item instanceof IImage) {
+            this.mainImage = (IImage) item;
+            this.mainImage.getMultiTouchDispatcher().addListener(this);
+        }else{
+            //TODO: log severe
+        }
     }
 
 }

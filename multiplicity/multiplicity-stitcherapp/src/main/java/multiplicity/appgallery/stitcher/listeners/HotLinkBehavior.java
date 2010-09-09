@@ -1,7 +1,9 @@
 package multiplicity.appgallery.stitcher.listeners;
 
 import multiplicity.appgallery.stitcher.StitcherUtils;
+import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IHotSpotText;
+import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
@@ -10,15 +12,10 @@ import multiplicity.input.events.MultiTouchCursorEvent;
 
 import org.apache.log4j.Logger;
 
-public class HotLinkMultiTouchListener extends MultiTouchEventAdapter {
+public class HotLinkBehavior extends MultiTouchEventAdapter implements IBehaviour {
     
-    private final static Logger logger = Logger.getLogger(HotLinkMultiTouchListener.class.getName());
+    private final static Logger logger = Logger.getLogger(HotLinkBehavior.class.getName());
     private IHotLink hotLink;
-    
-    public HotLinkMultiTouchListener(IHotLink hotLink) {
-        this.hotLink = hotLink;
-        this.hotLink.getMultiTouchDispatcher().addListener(this);
-    }
     
     @Override
     public void cursorPressed(MultiTouchCursorEvent event) {
@@ -53,5 +50,22 @@ public class HotLinkMultiTouchListener extends MultiTouchEventAdapter {
 //        }
     }
 
+    @Override
+    public void removeItemActingOn() {
+        if(hotLink != null) {
+            hotLink.getMultiTouchDispatcher().remove(this);
+        }
+        this.hotLink = null;
+    }
+
+    @Override
+    public void setItemActingOn(IItem item) {
+        if(item instanceof IHotLink) {
+            this.hotLink = (IHotLink) item;
+            hotLink.getMultiTouchDispatcher().addListener(this);
+        }else{
+            //TODO: log severe
+        }
+    }
 
 }
