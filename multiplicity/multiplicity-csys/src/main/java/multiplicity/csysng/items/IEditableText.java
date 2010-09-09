@@ -6,4 +6,5 @@ public interface IEditableText extends ILabel {
 	public void insertChar(char c);
 	public void removeChar();
 	public void appendChar(char c);
+	public void appendString(String charSet);
 }
