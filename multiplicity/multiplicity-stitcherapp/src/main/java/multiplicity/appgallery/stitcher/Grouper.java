@@ -143,8 +143,8 @@ public class Grouper implements IMultiTouchEventListener {
 	}
 
 	public void addItemsToFrame(List<IItem> items, Vector2f atPosition) {
-		int frameWidth = 600;
-		int frameHeight = 600;
+		int frameWidth = 150;
+		int frameHeight = 100;
 		UUID uUID = UUID.randomUUID();
 		IFrame frame = app.getContentFactory().createFrame("group", uUID, frameWidth, frameHeight);
 		logger.info("Group UUID: "+uUID.toString());

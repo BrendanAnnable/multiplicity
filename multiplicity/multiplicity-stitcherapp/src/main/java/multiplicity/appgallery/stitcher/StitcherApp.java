@@ -34,6 +34,7 @@ import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.hotspot.IHotSpotRepo;
+import multiplicity.csysng.items.keyboard.defs.norwegian.NorwegianKeyboardDefinition;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.repository.IBackgroundRepositoryFrame;
 import multiplicity.csysng.items.repository.IImageRepositoryFrame;
@@ -247,12 +248,16 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        newHotSpotFrame.setRelativeLocation(new Vector2f(xPos, yPos));
 
 	        BehaviourMaker.addBehaviour(newHotSpotFrame, RotateTranslateScaleBehaviour.class);
+
+	        //we dont want to scale hotspots until a pic is dropped
 	        this.add(newHotSpotFrame);
 	    
 	    } else if((type != null && type.equals(TEXT))) {
 	         
 	         final IHotSpotText hotspotLabel = getHotSpotContentFactory().createEditableHotSpotText("HotSpotLabel", UUID.randomUUID());
+	         hotspotLabel.createKeyboard(NorwegianKeyboardDefinition.class);
 	         hotspotLabel.setText("Label");
+	         hotspotLabel.setCursorAt(0);
 	         hotspotLabel.setFont(new Font("Myriad Pro", Font.BOLD, 48*2));
 	         hotspotLabel.setTextColour(Color.white);
 	         hotspotLabel.setRelativeLocation(new Vector2f(0, 200));
@@ -274,23 +279,31 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        
 	        //set up the palet
 	        IPalet palet = this.getPaletFactory().createPaletItem("palet",  UUID.randomUUID(), PALET_DIMENSION, new ColorRGBA(0f, 1f, 0f, 1f));
+	        StitcherUtils.modScaleBehavior(palet.getBehaviours(), false);
 	        newHotSpotFrame.addPalet(palet);
 	        palet.centerItem();
 	        BehaviourMaker.addBehaviour(palet, RotateTranslateScaleBehaviour.class);
-	        StitcherUtils.removeScaleBehavior(palet.getBehaviours());
+	        
 
+	        
 	        //add the listener
 	        new PaletMultiTouchListener(palet);
 	        
 	        if(  type.equals(IMAGE) ) {
+
+	            newHotSpotFrame.setScalable(false);
 	            newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
 
+	               
 	                @Override
 	                public void itemCursorChanged(IItem item,
 	                        MultiTouchCursorEvent event) {
 	                    // TODO Auto-generated method stub
 	                    super.itemCursorChanged(item, event);
 	                    IHotSpotFrame frame = (IHotSpotFrame) item;
+                        
+	                    logger.debug("hotspot frame scaled " + frame.canScale() );
+                      
                         
 	                    HotSpotUtils.updateHotSpots(frame);
 
@@ -479,7 +492,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
 		BehaviourMaker.addBehaviour((IItem) hotSpotItem, RotateTranslateScaleBehaviour.class);
 		 List<IBehaviour> behaviours = hotSpotItem.getBehaviours();
-		 StitcherUtils.removeScaleBehavior(behaviours);
+		 StitcherUtils.modScaleBehavior(behaviours,false);
 
 	}
 

@@ -9,6 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.apache.log4j.Logger;
 
 import multiplicity.csysng.behaviours.BehaviourMaker;
+import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.items.IBorder;
@@ -24,6 +25,8 @@ import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.csysng.items.keyboard.IKeyboardGraphicsRenderer;
 import multiplicity.csysng.items.keyboard.behaviour.IMultiTouchKeyboardListener;
 import multiplicity.csysng.items.keyboard.behaviour.KeyboardBehaviour;
+import multiplicity.csysng.items.keyboard.defs.norwegian.NorwegianKeyboardDefinition;
+import multiplicity.csysng.items.keyboard.defs.norwegian.NorwegianKeyboardListener;
 import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardDefinition;
 import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRenderer;
 import multiplicity.csysng.items.keyboard.model.KeyModifiers;
@@ -49,10 +52,11 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
     private IFrame keyboardFrame;
     private int taps = 0;
     private boolean isVisible;
+
+    private boolean canScale = true;
     
     public HotSpotText(String name, UUID uuid) {
         super(name, uuid);
-        createKeyboard();
     }
     
     @Override
@@ -70,40 +74,24 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
         this.isKeyboardShown = isKeyboardShown;
     }
     
-    private void createKeyboard() {
+    @Override
+    public void createKeyboard(Class<? extends KeyboardDefinition> keyboardDef) {
         keyboard = contentItemFactory.createKeyboard("kb", UUID.randomUUID());
-        KeyboardDefinition kbd = new SimpleAlphaKeyboardDefinition();
+        
+        KeyboardDefinition kbd = null;
+        try {
+            kbd = keyboardDef.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         keyboard.setKeyboardDefinition(kbd);
         IKeyboardGraphicsRenderer keyboardRenderer = new SimpleAlphaKeyboardRenderer(kbd);
         keyboard.setKeyboardRenderer(keyboardRenderer);
         KeyboardBehaviour kbb = (KeyboardBehaviour) BehaviourMaker.addBehaviour(keyboard, KeyboardBehaviour.class);
         kbb.addListener(keyboardRenderer);
-        kbb.addListener(new IMultiTouchKeyboardListener() {
-            
-            @Override
-            public void keyReleased(KeyboardKey k, boolean shiftDown, boolean altDown, boolean ctlDown) {
-                if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-                    removeChar();
-                    
-                }else if(k.getKeyCode() == KeyEvent.VK_ENTER) {
-                    // ignore
-                }else if(k.getModifiers() == KeyModifiers.NONE) {               
-                    if(shiftDown) {
-                        String txt = KeyEvent.getKeyText(k.getKeyCode()).toUpperCase();
-                        appendChar(txt.charAt(0));
-                    }else{
-                        String txt = KeyEvent.getKeyText(k.getKeyCode()).toLowerCase();
-                        appendChar(txt.charAt(0));
-                    }
-                }
-                keyboard.reDrawKeyboard(shiftDown, altDown, ctlDown);
-            }
-            
-            @Override
-            public void keyPressed(KeyboardKey k, boolean shiftDown, boolean altDown, boolean ctlDown) {
-                keyboard.reDrawKeyboard(shiftDown, altDown, ctlDown);
-            }
-        });
+        kbb.addListener(new NorwegianKeyboardListener(this, keyboard));
         
         keyboardFrame = contentItemFactory.createFrame("keyboardFrame", UUID.randomUUID(), keyboard.getSize().x, keyboard.getSize().y);     
         keyboardFrame.maintainBorderSizeDuringScale();
@@ -304,6 +292,16 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
                 this.getZOrderManager().bringToTop(iHotSpotItem, null);
             }
         }
+    }
+
+    @Override
+    public void setScalable(boolean canScale) {
+        this.canScale  = canScale;
+    }
+    
+    @Override
+    public boolean canScale() {
+        return this.canScale;
     }
 
 }
