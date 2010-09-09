@@ -58,35 +58,9 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
         getFrameOverlay().getMultiTouchDispatcher().addListeners(getMultiTouchDispatcher().getListeners());
     }
 	
-	@Override
 	public void updateOverLay() {
-        Vector2f frameOriginLocation = this.getRelativeLocation();
-        Vector2f itemDisplacement = this.getFrameOverlay().getRelativeLocation();
-        this.setRelativeLocation(new Vector2f(frameOriginLocation.x + itemDisplacement.x, frameOriginLocation.y + itemDisplacement.y));
-        this.getFrameOverlay().setRelativeLocation(new Vector2f(0f, 0f));
-        
-        float itemScale = this.getFrameOverlay().getRelativeScale();
-        if(itemScale < 2.5f && itemScale>0.2f)  {
-            logger.debug("overylay size: h" + this.getFrameOverlay().getSize().x + " w " +  this.getFrameOverlay().getSize().y );
-            logger.debug("frame size: x" + this.getSize().x + " y " + this.getSize().y );
-//            ((JMEColourRectangle)this.getFrameOverlay()).quad.resize(this.getSize().x*1.2f, this.getSize().y*1.2f);
-            this.setSize(this.getFrameOverlay().getSize().x*itemScale, this.getFrameOverlay().getSize().y*itemScale);
-
-            logger.debug("frame relative scale: " + this.getRelativeScale() + " overlayscale " + this.getFrameOverlay().getRelativeScale() + " world scale frame " + this.getWorldScale() );
-            this.setRelativeScale(itemScale);
-        }
-        
-        float relativeRotation = this.getFrameOverlay().getRelativeRotation();
-        this.setRelativeRotation(relativeRotation);
-//        overlayAction();
-    }
-	
-	public void overlayAction() {
-//	    this.sendHotLinksToTop();
 	    this.bringHotSpotsToTop();
 	    this.bringPaletToTop();
-//	    this.sendHotLinksToTop();
-
 	}
 
 	public List<IHotSpotItem> getHotSpots() {
