@@ -17,6 +17,7 @@ import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.hotspot.IHotSpotRepo;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.hotspots.HotLink;
+import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.input.events.MultiTouchObjectEvent;
@@ -128,6 +129,7 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
                             IHotSpotItem hsItem = (IHotSpotItem)hotSpotItem;
                             ((IHotSpotFrame) sourceFrame).addHotSpot(hsItem);
 
+                            logger.debug("hotspot location " + hsItem.getRelativeLocation() + "world " + hsItem.getWorldLocation() + "scale " + hsItem.getRelativeScale());
                             IHotSpotFrame hotSpotFrameContent = StitcherUtils.createNewHotSpotFrame(hsItem.getType());
 //                            IHotSpotFrame hotSpotFrameContent = stitcherApp.createNewHotSpotContentFrame(hsItem.getType());
 
@@ -135,8 +137,11 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
 
                             IHotLink l = (HotLink) hsItem.createHotLink();
                     
+
                             StitcherUtils.addHotLink(l);
                             
+                            logger.debug("HOTLINK location " + l.getRelativeLocation() + "world " + l.getWorldLocation() + "scale " + l.getRelativeScale());
+
 
                             logger.debug("dropped hotspotitem on " + sourceFrame.getName());
 
@@ -185,4 +190,5 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
             //TODO: log severe
         }
     }
+   
 }

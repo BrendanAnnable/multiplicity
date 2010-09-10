@@ -291,7 +291,8 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	            newHotSpotFrame.setScalable(false);
 	            newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
 
-	               
+	           
+	                
 	                @Override
 	                public void itemCursorChanged(IItem item,
 	                        MultiTouchCursorEvent event) {

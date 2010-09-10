@@ -151,7 +151,8 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		IHotSpotFrame parentF = (IHotSpotFrame) this.getParentItem();
 		Vector2f parentFCoord = parentF.getRelativeLocation();
 		// get the worldlocation of hotspot
-		Vector2f xyHS1 = new Vector2f(this.getRelativeLocation().x + parentFCoord.x, this.getRelativeLocation().y + parentFCoord.y);
+		logger.debug("getVertices --> relative " + this.getRelativeLocation() + "parent " + parentFCoord + " parent scale " + parentF.getRelativeScale());
+		Vector2f xyHS1 =  new Vector2f((this.getRelativeLocation().x*parentF.getRelativeScale()) + parentFCoord.x, (this.getRelativeLocation().y *parentF.getRelativeScale()) + parentFCoord.y);
 		// get the worldlocation of hotspot
 		Vector2f xyHS2 = hotSpotFrameContent.getRelativeLocation();
 
