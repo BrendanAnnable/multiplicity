@@ -446,18 +446,18 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	    
 	    IHotSpotRepo frame = this.getHotSpotContentFactory().createHotSpotRepo(HOTSPOTS, UUID.randomUUID(), HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
 
-		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 5f, 5));
-		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
+//		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 5f, 5));
+		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 1f), new Color(0.2f, 0.2f, 0.2f, 1f), GradientDirection.VERTICAL));
 		frame.maintainBorderSizeDuringScale();
 
 		Float xPos = 0f;
 		Float yPos = 0f;
 		if( type.equals(TEXT) ) {
-		    xPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getWidth() / 2 - HOTSPOT_DIMENSION / 2).floatValue();
-		    yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - HOTSPOT_DIMENSION / 2).floatValue();
+		    xPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getWidth() / 2 - (HOTSPOT_DIMENSION / 2)-60).floatValue();
+		    yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_DIMENSION / 2)-60).floatValue();
 		} else if(type.equals(IMAGE)) {
-		    xPos = Double.valueOf(DisplaySystem.getDisplaySystem().getWidth() / 2 - ((HOTSPOT_DIMENSION * 1.5)  +5)).floatValue();
-	        yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - HOTSPOT_DIMENSION / 2).floatValue();
+		    xPos = Double.valueOf(DisplaySystem.getDisplaySystem().getWidth() / 2 - ((HOTSPOT_DIMENSION * 1.5)  +60)).floatValue();
+	        yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_DIMENSION / 2) - 60).floatValue();
 		    
 		}
 		
