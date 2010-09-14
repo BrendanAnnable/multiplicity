@@ -350,9 +350,9 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		Color endColor = new Color(0f, 0f, 0f, 1f);
 
         if (frameName.equals(BACKGROUND_REPO_NAME)) {
-		    IBackgroundRepositoryFrame frame = this.getRepositoryFactory().createBackgroundRepositoryFrame(frameName, UUID.randomUUID(), frameWidth, frameHeight);
+		    IBackgroundRepositoryFrame frame = this.getRepositoryFactory().createBackgroundRepositoryFrame(frameName, UUID.randomUUID(), DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
-			frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
+//			frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
 			Float xPos = 0f;
 			Float yPos = Integer.valueOf((int) (-DisplaySystem.getDisplaySystem().getHeight() /2 - (TOP_BOTTOM_REPO_HEIGHT / 2 + BORDER_THICKNESS) + BORDER_THICKNESS)).floatValue();
@@ -373,9 +373,9 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             getZOrderManager().bringToTop(frame, null);
             frame.open();
 		} else if (frameName.equals(SCAN_REPO_NAME)) {
-	        IImageRepositoryFrame frame = this.getRepositoryFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), frameWidth, frameHeight);
+	        IImageRepositoryFrame frame = this.getRepositoryFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
-			frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
+//			frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
 			Float xPos = 0f;
 			Float yPos = Integer.valueOf((int) (DisplaySystem.getDisplaySystem().getHeight() / 2 + (TOP_BOTTOM_REPO_HEIGHT / 2 + BORDER_THICKNESS) - BORDER_THICKNESS)).floatValue();
@@ -397,9 +397,9 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             getZOrderManager().bringToTop(frame, null);
             frame.close();
 		} else if (frameName.equals(STENCIL_REPO_NAME)) {
-	        IImageRepositoryFrame frame = this.getRepositoryFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), frameWidth, frameHeight);
+	        IImageRepositoryFrame frame = this.getRepositoryFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 10);
 
-			frame.setSize(RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 10);
+//			frame.setSize(RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 10);
 
 			Float xPos = Integer.valueOf((int) (DisplaySystem.getDisplaySystem().getWidth() / 2 + (RIGHT_LEFT_REPO_HEIGHT / 2 + BORDER_THICKNESS) - BORDER_THICKNESS)).floatValue();
 			Float yPos = 0f;

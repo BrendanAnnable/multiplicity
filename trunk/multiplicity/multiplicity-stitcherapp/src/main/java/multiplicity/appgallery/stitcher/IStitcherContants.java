@@ -26,9 +26,9 @@ public interface IStitcherContants {
 
     public final static Float BORDER_THICKNESS = 40f;
 
-    public final static Float TOP_BOTTOM_REPO_HEIGHT = 300f;
+    public final static int TOP_BOTTOM_REPO_HEIGHT = 300;
 
-    public final static Float RIGHT_LEFT_REPO_HEIGHT = 400f;
+    public final static int RIGHT_LEFT_REPO_HEIGHT = 400;
 
     public final static int HOTSPOT_DIMENSION = 100;
 
