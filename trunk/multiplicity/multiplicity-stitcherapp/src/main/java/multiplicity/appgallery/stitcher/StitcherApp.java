@@ -303,7 +303,9 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	                    logger.debug("hotspot frame scaled " + frame.canScale() );
                       
                         
-	                    HotSpotUtils.updateHotSpots(frame);
+//	                    HotSpotUtils.updateHotSpots(frame);
+                        HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
+
 
                         
 	                }
