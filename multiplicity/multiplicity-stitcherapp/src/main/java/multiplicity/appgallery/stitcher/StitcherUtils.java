@@ -18,6 +18,7 @@ import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysngjme.items.JMERectangularItem;
+import multiplicity.csysngjme.items.hotspots.HotSpotTextFrame;
 
 import com.jme.math.Vector2f;
 
@@ -131,7 +132,8 @@ public class StitcherUtils {
 
     public static void updateHotShotContentFrames() {
         for (IHotSpotFrame hsFrame : stitcherApp.getHotSpotFrames()) {
-            hsFrame.bringPaletToTop();
+            if( ! (hsFrame instanceof HotSpotTextFrame ) )
+                hsFrame.bringPaletToTop();
         }
     }
 }

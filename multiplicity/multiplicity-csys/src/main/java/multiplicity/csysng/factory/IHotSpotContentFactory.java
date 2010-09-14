@@ -20,5 +20,9 @@ public interface IHotSpotContentFactory {
 	public IHotSpotItem createHotSpotItem(String name, UUID uuid, float radius, ColorRGBA colorRGBA);
 
     public IHotSpotText createEditableHotSpotText(String name, UUID uuid);
+    
+    public IHotSpotFrame createEditableHotSpotTextFrame(String name, UUID uuid,
+            int width, int height);
+
 
 }

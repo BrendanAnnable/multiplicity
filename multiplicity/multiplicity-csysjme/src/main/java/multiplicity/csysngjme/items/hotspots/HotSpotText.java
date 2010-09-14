@@ -304,4 +304,10 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
         return this.canScale;
     }
 
+    @Override
+    public void createText(String text) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

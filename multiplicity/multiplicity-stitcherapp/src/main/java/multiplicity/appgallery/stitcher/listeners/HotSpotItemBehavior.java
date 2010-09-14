@@ -70,7 +70,7 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
 
         List<IItem> findItemsOnTableAtPosition = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(locStore);
 
-        
+        logger.debug("finditems on from hotspot drop " + findItemsOnTableAtPosition);
         
         for (IItem foundItem : findItemsOnTableAtPosition) {
             if ( foundItem.equals(hotSpotItem.getParentItem())) {
