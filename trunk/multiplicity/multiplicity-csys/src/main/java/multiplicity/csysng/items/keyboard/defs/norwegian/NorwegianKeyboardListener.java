@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IEditableText;
+import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.csysng.items.keyboard.behaviour.IMultiTouchKeyboardListener;
@@ -42,6 +43,7 @@ public class NorwegianKeyboardListener implements IMultiTouchKeyboardListener {
          } else if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
             editItem.removeChar();
             
+            
         }else if(k.getKeyCode() == KeyEvent.VK_ENTER) {
             // ignore
         }else if(k.getModifiers() == KeyModifiers.NONE) {               
@@ -53,6 +55,12 @@ public class NorwegianKeyboardListener implements IMultiTouchKeyboardListener {
                 editItem.appendChar(txt.charAt(0));
             }
         }
+        
+        if( editItem.getParentItem() instanceof IFrame ) {
+            IFrame frame = (IFrame) editItem.getParentItem();
+            frame.setSize(editItem.getWidth(), editItem.getHeight());
+        }
+        
         keyboard.reDrawKeyboard(shiftDown, altDown, ctlDown);
     }
 

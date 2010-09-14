@@ -251,22 +251,57 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        //we dont want to scale hotspots until a pic is dropped
 	        this.add(newHotSpotFrame);
 	    
-	    } else if((type != null && type.equals(TEXT))) {
+	    } else if(type != null && type.equals(TEXT)) {
 	         
-	         final IHotSpotText hotspotLabel = getHotSpotContentFactory().createEditableHotSpotText("HotSpotLabel", UUID.randomUUID());
-	         hotspotLabel.createKeyboard(NorwegianKeyboardDefinition.class);
-	         hotspotLabel.setText("Label");
-	         hotspotLabel.setCursorAt(0);
-	         hotspotLabel.setFont(new Font("Myriad Pro", Font.BOLD, 48*2));
-	         hotspotLabel.setTextColour(Color.white);
-	         hotspotLabel.setRelativeLocation(new Vector2f(0, 200));
-	         //hotspotLabel.setCursorAt(3);
-	         BehaviourMaker.addBehaviour(hotspotLabel, RotateTranslateScaleBehaviour.class);       
-	         add(hotspotLabel);
-	         
-	         BehaviourMaker.addBehaviour(hotspotLabel, HotSpotTextBehavior.class);       
+	        UUID randomUUID = UUID.randomUUID();
+            float xPos = Integer.valueOf(-DisplaySystem.getDisplaySystem().getWidth() / 2 + (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
+            float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
 
-	         return hotspotLabel;
+            newHotSpotFrame  =  this.getHotSpotContentFactory().createEditableHotSpotTextFrame(frameName + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
+            
+            newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, new ColorRGBA(0f, 0f, 0f, 0f)));
+            newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
+            newHotSpotFrame.maintainBorderSizeDuringScale();
+            newHotSpotFrame.setRelativeLocation(new Vector2f(xPos, yPos));
+            ((IHotSpotText)newHotSpotFrame).createText("Label");
+            BehaviourMaker.addBehaviour(newHotSpotFrame, RotateTranslateScaleBehaviour.class);
+
+            ((IHotSpotText)newHotSpotFrame).createKeyboard(NorwegianKeyboardDefinition.class);
+//	         hotspotLabel.setText("Label");
+//	         hotspotLabel.setCursorAt(0);
+//	         hotspotLabel.setFont(new Font("Myriad Pro", Font.BOLD, 48*2));
+//	         hotspotLabel.setTextColour(Color.white);
+//	         hotspotLabel.setRelativeLocation(new Vector2f(0, 200));
+	         //hotspotLabel.setCursorAt(3);
+	                
+	         add(newHotSpotFrame);
+	         
+	         BehaviourMaker.addBehaviour(newHotSpotFrame, HotSpotTextBehavior.class);
+             newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
+
+            
+                 
+                 @Override
+                 public void itemCursorChanged(IItem item,
+                         MultiTouchCursorEvent event) {
+                     // TODO Auto-generated method stub
+                     super.itemCursorChanged(item, event);
+                     IHotSpotFrame frame = (IHotSpotFrame) item;
+                     
+                     logger.debug("hotspot frame scaled " + frame.canScale() );
+                   
+                     
+//                   HotSpotUtils.updateHotSpots(frame);
+                     HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
+
+
+                     
+                 }
+
+            
+             });
+
+//	         return hotspotLabel;
 	     }
 	       
 	     
@@ -333,15 +368,15 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	            });
 	        }
 	        
-	        //add for later
-	        hotSpotFrames.add(newHotSpotFrame);
+	      
 	        
-	        return newHotSpotFrame;
 	    }
 	    
 	    
+	    //add for later
+        hotSpotFrames.add(newHotSpotFrame);
 	    
-	    return null;
+	    return newHotSpotFrame;
 	}
 	
    

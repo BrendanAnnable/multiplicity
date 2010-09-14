@@ -14,6 +14,7 @@ public class HotSpotTextBehavior extends MultiTouchEventAdapter implements IBeha
 
     private IHotSpotText hotSpotText;
 
+    
     @Override
     public void cursorChanged(MultiTouchCursorEvent event) {
         super.cursorChanged(event);

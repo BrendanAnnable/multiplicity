@@ -13,6 +13,7 @@ import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
 import multiplicity.csysngjme.items.hotspots.HotSpotItem;
 import multiplicity.csysngjme.items.hotspots.HotSpotRepo;
 import multiplicity.csysngjme.items.hotspots.HotSpotText;
+import multiplicity.csysngjme.items.hotspots.HotSpotTextFrame;
 
 import com.jme.renderer.ColorRGBA;
 
@@ -54,5 +55,13 @@ public class HotSpotContentItemFactory implements IHotSpotContentFactory {
         IHotSpotRepo frame =  new HotSpotRepo(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height);
         frame.initializeGeometry();
         return frame;
+    }
+
+    @Override
+    public IHotSpotFrame createEditableHotSpotTextFrame(String name, UUID uuid, int width, int height) {
+        HotSpotTextFrame text = new HotSpotTextFrame(name, uuid, width, height);
+        text.initializeGeometry();
+//        text.addFrameOverlay();
+        return text;
     }
 }

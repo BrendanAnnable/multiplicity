@@ -30,12 +30,12 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 	public List<IHotLink> hotLinks = new CopyOnWriteArrayList<IHotLink>();
 	protected List<Line> lines = new CopyOnWriteArrayList<Line>();
 	protected boolean isLocked = false;
-	private IColourRectangle frameOverlay;
+	protected IColourRectangle frameOverlay;
 
-    private boolean isVisible;
+	protected boolean isVisible;
 
-    private IPalet palet;
-    private boolean canScale = true;
+    protected IPalet palet;
+    protected boolean canScale = true;
 
 	public HotSpotFrame(String name, UUID uuid, int width, int height) {
 		super(name, uuid, width, height);
@@ -56,7 +56,8 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
     @Override
    public void behaviourAdded(IBehaviour behaviour) {
         super.behaviourAdded(behaviour);
-        getFrameOverlay().getMultiTouchDispatcher().addListeners(getMultiTouchDispatcher().getListeners());
+        if( getFrameOverlay() != null)
+            getFrameOverlay().getMultiTouchDispatcher().addListeners(getMultiTouchDispatcher().getListeners());
     }
 	
 	public void updateOverLay() {

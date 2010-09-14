@@ -20,6 +20,8 @@ public interface IHotSpotText extends IEditableText, IHotSpotFrame {
     public void toggle();
     
     public void createKeyboard(Class<? extends KeyboardDefinition> keyboardDef);
+    
+    public void createText(String text);
 
 
 }
