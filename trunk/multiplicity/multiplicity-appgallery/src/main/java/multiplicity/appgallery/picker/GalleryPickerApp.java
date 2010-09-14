@@ -110,13 +110,16 @@ public class GalleryPickerApp extends AbstractMultiplicityApp {
 
 	       int frameHeight = 600;
 	       
+	       int frameWidth2 =  DisplaySystem.getDisplaySystem().getWidth() - 10;
+	       int frameHeight2 =  400;
+	       
 	       Float BORDER_THICKNESS = 40f;
 	       
 	       Float TOP_BOTTOM_REPO_HEIGHT = 300f;
 
 	       Float RIGHT_LEFT_REPO_HEIGHT = 400f;
 	       
-	        IBackgroundRepositoryFrame frame = repositoryFactory.createBackgroundRepositoryFrame(frameName, UUID.randomUUID(), DisplaySystem.getDisplaySystem().getWidth() - 10, 400);
+	        IBackgroundRepositoryFrame frame = repositoryFactory.createBackgroundRepositoryFrame(frameName, UUID.randomUUID(),frameWidth, frameHeight);
 
 	        frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
