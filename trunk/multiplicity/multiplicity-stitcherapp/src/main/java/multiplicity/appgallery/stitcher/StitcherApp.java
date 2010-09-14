@@ -341,7 +341,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 //	                    HotSpotUtils.updateHotSpots(frame);
                         HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
 
-
+                        frame.bringPaletToTop();
                         
 	                }
 
