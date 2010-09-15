@@ -291,7 +291,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
                      logger.debug("hotspot frame scaled " + frame.canScale() );
                    
                      
-//                   HotSpotUtils.updateHotSpots(frame);
+                     HotSpotUtils.updateHotSpots(frame);
                      HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
 
 
@@ -323,25 +323,40 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        
 	        if(  type.equals(IMAGE) ) {
 
-	            newHotSpotFrame.setScalable(false);
 	            newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
 
 	           
 	                
 	                @Override
+	                public void itemCursorPressed(IItem item,
+	                        MultiTouchCursorEvent event) {
+	                    super.itemCursorPressed(item, event);
+	                    
+	                    IHotSpotFrame frame = (IHotSpotFrame) item;
+                        logger.debug("item cursor pressed hotspot frame " + frame);
+
+                      
+                        
+//                      HotSpotUtils.updateHotSpots(frame);
+                        HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
+
+                        frame.updateOverLay();
+	                }
+	                @Override
 	                public void itemCursorChanged(IItem item,
 	                        MultiTouchCursorEvent event) {
 	                    // TODO Auto-generated method stub
 	                    super.itemCursorChanged(item, event);
+	                    
 	                    IHotSpotFrame frame = (IHotSpotFrame) item;
-                        
-	                    logger.debug("hotspot frame scaled " + frame.canScale() );
+                        logger.debug("item cursor changed hotspot frame " + frame);
+
                       
                         
 //	                    HotSpotUtils.updateHotSpots(frame);
                         HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
 
-                        frame.bringPaletToTop();
+                        frame.updateOverLay();
                         
 	                }
 
@@ -351,17 +366,32 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	            newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
 
 	                @Override
+	                public void itemCursorPressed(IItem item,
+	                        MultiTouchCursorEvent event) {
+	                    super.itemCursorPressed(item, event);
+	                    logger.debug("cursor pressed background frame");
+	                    IHotSpotFrame frame = (IHotSpotFrame) item;
+
+                        HotSpotUtils.updateHotSpots(frame);
+
+	                       
+	                    HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
+                        
+	                    frame.updateOverLay();
+	                }
+	                
+	                @Override
 	                public void itemCursorChanged(IItem item,
 	                        MultiTouchCursorEvent event) {
 	                    super.itemCursorChanged(item, event);
 	                    logger.debug("cursor changed background frame");
 	                    IHotSpotFrame frame = (IHotSpotFrame) item;
                         
-//                        HotSpotUtils.updateHotSpots(frame);
+                        HotSpotUtils.updateHotSpots(frame);
 
                         HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
                         
-                        frame.bringPaletToTop();
+                        frame.updateOverLay();;
                         
 	                }
 	              

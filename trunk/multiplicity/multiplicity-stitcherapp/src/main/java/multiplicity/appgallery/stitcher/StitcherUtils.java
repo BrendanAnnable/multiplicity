@@ -127,12 +127,12 @@ public class StitcherUtils {
 
     public static void addHotLink(IHotLink hotLink) {
         stitcherApp.add(hotLink);
-        BehaviourMaker.addBehaviour(hotLink, HotLinkBehavior.class);
+//        BehaviourMaker.addBehaviour(hotLink, HotLinkBehavior.class);
     }
 
     public static void updateHotShotContentFrames() {
         for (IHotSpotFrame hsFrame : stitcherApp.getHotSpotFrames()) {
-            if( ! (hsFrame instanceof HotSpotTextFrame ) )
+            if( hsFrame.hasPalet() )
                 hsFrame.bringPaletToTop();
         }
     }

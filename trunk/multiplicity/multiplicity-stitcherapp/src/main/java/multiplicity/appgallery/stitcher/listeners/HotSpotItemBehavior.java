@@ -51,11 +51,6 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
     public void cursorPressed(MultiTouchCursorEvent event) {
         super.cursorPressed(event);
         logger.debug("Hotspot cursor pressed");
-
-        if (hotSpotItem.getParentItem() instanceof IHotSpotFrame) {
-
-           
-        }
     }
     
     @Override
@@ -66,10 +61,15 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
 
         JMEFrame hotSpotRepo = (JMEFrame) hotSpotItem.getParentItem();
         Vector2f locStore = new Vector2f();
-        UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, locStore);
+        ContentSystem.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), locStore);
 
         List<IItem> findItemsOnTableAtPosition = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(locStore);
 
+        if( findItemsOnTableAtPosition == null || findItemsOnTableAtPosition.isEmpty() ) {
+            hotSpotItem.centerItem();
+            return;
+        }
+        
         logger.debug("finditems on from hotspot drop " + findItemsOnTableAtPosition);
         
         for (IItem foundItem : findItemsOnTableAtPosition) {

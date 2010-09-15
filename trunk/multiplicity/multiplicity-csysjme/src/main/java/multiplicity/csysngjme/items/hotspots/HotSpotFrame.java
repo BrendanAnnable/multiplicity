@@ -226,5 +226,10 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
     public boolean canScale() {
         return this.canScale;
     }
+
+    @Override
+    public boolean hasPalet() {
+        return true;
+    }
     
 }

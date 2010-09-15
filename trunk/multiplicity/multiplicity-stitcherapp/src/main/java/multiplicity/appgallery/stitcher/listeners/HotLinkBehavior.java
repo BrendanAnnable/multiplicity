@@ -20,8 +20,10 @@ public class HotLinkBehavior extends MultiTouchEventAdapter implements IBehaviou
     @Override
     public void cursorPressed(MultiTouchCursorEvent event) {
         super.cursorPressed(event);
-        logger.debug("hotlink PRESSED");
+        logger.debug("hotlink PRESSED bring to the top");
         
+        StitcherUtils.bringToTop(hotLink.getSourceFrame());
+        StitcherUtils.bringToTop(hotLink.getTargetFrame());
         //hide show
 //        if( hotLink.tap() > 4 ) {
 //          logger.debug("deleting hotlink");
