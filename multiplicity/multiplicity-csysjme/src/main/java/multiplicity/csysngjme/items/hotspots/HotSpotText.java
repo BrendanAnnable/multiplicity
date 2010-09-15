@@ -310,4 +310,9 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
         
     }
 
+    @Override
+    public boolean hasPalet() {
+        return false;
+    }
+
 }

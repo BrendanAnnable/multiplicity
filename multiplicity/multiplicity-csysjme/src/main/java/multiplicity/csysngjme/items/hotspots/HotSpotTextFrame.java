@@ -177,10 +177,20 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
     public void setLabelText(IEditableText labelText) {
         this.labelText = labelText;
     }
+    
+    @Override
+    public boolean hasPalet() {
+        return false;
+    }
 
 
     public IEditableText getLabelText() {
         return labelText;
+    }
+    
+    @Override
+    public void updateOverLay() {
+        this.bringHotSpotsToTop();
     }
 
 }

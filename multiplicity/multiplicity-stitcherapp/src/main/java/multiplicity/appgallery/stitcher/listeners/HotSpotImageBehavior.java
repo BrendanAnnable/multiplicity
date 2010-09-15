@@ -47,7 +47,6 @@ public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBeh
         
         Vector2f screenPos = new Vector2f();
         ContentSystem.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), screenPos);
-//        UnitConversion.tableToScreen(event.getPosition().x, event.getPosition().y, screenPos);
         List<IItem> findItemsOnTableAtPosition = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(screenPos);
         logger.debug("items found on drop: " + findItemsOnTableAtPosition.toString());
         if( mainImage.getParentItem() != null ) {

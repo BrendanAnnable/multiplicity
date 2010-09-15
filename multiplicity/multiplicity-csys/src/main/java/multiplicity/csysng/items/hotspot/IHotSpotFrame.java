@@ -58,4 +58,6 @@ public interface IHotSpotFrame extends IFrame {
     public void setScalable(boolean canScale);
 
     public boolean canScale();
+    
+    public boolean hasPalet();
 }
