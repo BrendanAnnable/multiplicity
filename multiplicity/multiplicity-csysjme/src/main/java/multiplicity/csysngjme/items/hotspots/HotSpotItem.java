@@ -82,7 +82,10 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 	    if( isOpen ) {
 	        setOpen(false);
 	    } else {
+	        //redraw its position. 
+	        
 	        setOpen(true);
+	        this.updateHotSpot();
 	    }
 	}
 
@@ -103,7 +106,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		Vector3f[] vertices = getLineVertices();
 
 		UUID uuid = UUID.randomUUID();
-		hotLink = new HotLink("line-" + uuid, uuid, vertices, colorRGBA, 4f, this);
+		hotLink = new HotLink("line-" + uuid, uuid, vertices, colorRGBA, 2f, this);
 		hotLink.initializeGeometry();
 		hotSpotFrameContent.addHotLink(hotLink);
 		sourceFrameContent.addHotLink(hotLink);

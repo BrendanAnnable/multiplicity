@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import multiplicity.appgallery.stitcher.listeners.HotLinkBehavior;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
@@ -18,12 +17,16 @@ import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysngjme.items.JMERectangularItem;
-import multiplicity.csysngjme.items.hotspots.HotSpotTextFrame;
 import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
+
+import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 
 public class StitcherUtils {
+    
+    public final static Logger logger = Logger.getLogger(StitcherUtils.class.getName());
+
     
     public static StitcherApp stitcherApp;
     public static String wikiUser = null;
@@ -41,19 +44,29 @@ public class StitcherUtils {
     }
     
     public static Vector2f generateRandomPosition(IFrame frame, IImage vecItem) {
-        Vector2f frameSize = frame.getSize();
+        
+        Vector2f frameSize = new Vector2f();
+        
+        frame.getSize().subtract(frame.getBorder().getSize(), frameSize);
         Vector2f imageSize = ((JMERectangularItem) vecItem).getSize();
+        
+        logger.debug("generate random position.......");
+        logger.debug("frame size: " + frameSize + " framePosition " + frame.getRelativeLocation() + " imageSize " + imageSize);
 
-        float lowerBoundX = -frameSize.x / 2 + imageSize.x / 2;
-        float upperBoundX = frameSize.x / 2 - imageSize.x / 2;
+        int i = 4;
+        float lowerBoundX = -frameSize.x / i + imageSize.x / i;
+        float upperBoundX = frameSize.x / i - imageSize.x / i;
 
-        float lowerBoundY = -frameSize.y / 2 + imageSize.y / 2;
-        float upperBoundY = frameSize.y / 2 - imageSize.y / 2;
+        float lowerBoundY = -frameSize.y / i + imageSize.y / i;
+        float upperBoundY = frameSize.y / i - imageSize.y / i;
 
         float posX = (float) (lowerBoundX + (Math.random() * (upperBoundX - lowerBoundX)));
         float posY = (float) (lowerBoundY + (Math.random() * (upperBoundY - lowerBoundY)));
 
-        return new Vector2f(posX, posY);
+        Vector2f vector2f = new Vector2f(posX, posY);
+        logger.debug("generate random position....... " + vector2f );
+
+        return vector2f;
     }
 
     public static float getScale(Vector2f size) {

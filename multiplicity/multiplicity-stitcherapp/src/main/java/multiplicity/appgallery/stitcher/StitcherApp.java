@@ -505,7 +505,6 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
            
             Vector2f position = StitcherUtils.generateRandomPosition(frame, image);
             image.setRelativeLocation(position);
-            frame.getZOrderManager().bringToTop(image, null);
         }
 	}
 

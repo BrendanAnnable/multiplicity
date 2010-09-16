@@ -50,6 +50,10 @@ public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBeh
         ContentSystem.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), screenPos);
         List<IItem> findItemsOnTableAtPosition = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(screenPos);
         logger.debug("items found on drop: " + findItemsOnTableAtPosition.toString());
+        
+        if( findItemsOnTableAtPosition.isEmpty())
+            mainImage.centerItem();
+        
         if( mainImage.getParentItem() != null ) {
             
             
