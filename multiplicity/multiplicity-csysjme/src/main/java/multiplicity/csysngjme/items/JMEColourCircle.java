@@ -17,11 +17,11 @@ import com.jme.system.DisplaySystem;
 
 public class JMEColourCircle extends JMECircularItem {
 
-	private static final long serialVersionUID = -2734936339048374247L;
-	private Disk d;
-	private BlendState diskBlend;	
+	protected static final long serialVersionUID = -2734936339048374247L;
+	protected Disk d;
+	protected BlendState diskBlend;	
 	protected float diskRadius = 10f;
-	private ColorRGBA diskColour = new ColorRGBA(0f, 0f, 0f, 1f);
+	protected ColorRGBA diskColour = new ColorRGBA(0f, 0f, 0f, 1f);
 
 	public JMEColourCircle(String name, UUID uuid, float diskRadius) {
 		super(name, uuid);
