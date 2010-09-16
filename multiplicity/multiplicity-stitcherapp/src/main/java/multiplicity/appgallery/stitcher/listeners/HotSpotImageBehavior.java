@@ -16,6 +16,7 @@ import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IFrame;
+import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
@@ -51,6 +52,7 @@ public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBeh
         logger.debug("items found on drop: " + findItemsOnTableAtPosition.toString());
         if( mainImage.getParentItem() != null ) {
             
+            
             if( mainImage.getParentItem() instanceof IHotSpotFrame ) {
                 logger.debug("image hotspot frame released on itself");
                 IHotSpotFrame hotspotFrame = (IHotSpotFrame) mainImage.getParentItem();
@@ -62,6 +64,9 @@ public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBeh
                 IRepositoryFrame repositoryFrame = (IRepositoryFrame) mainImage.getParentItem();
                 for (IItem foundItem : findItemsOnTableAtPosition) {
                      
+                    if( isHotspotFrameText(foundItem))
+                        return;
+                    
                     if( isHotspotFrame(foundItem)) {
                         if( mainImage.getParentItem() instanceof IImageRepositoryFrame ) {
                             logger.debug("image released on hotspot");
@@ -241,6 +246,15 @@ public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBeh
         }
         return false;
     }
+    
+    public boolean isHotspotFrameText(IItem item) {
+        if( item != null && ( item instanceof IHotSpotText ) ) {
+            return true;
+        }
+        return false;
+    }
+    
+    
     public boolean isRepository(IItem item) {
         
         if( item instanceof IRepositoryFrame ) {
