@@ -17,6 +17,7 @@ import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
 import multiplicity.appgallery.stitcher.listeners.HotSpotItemBehavior;
 import multiplicity.appgallery.stitcher.listeners.HotSpotTextBehavior;
 import multiplicity.appgallery.stitcher.listeners.PaletBehavior;
+import multiplicity.appgallery.stitcher.listeners.RepositoryBehavior;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
@@ -292,8 +293,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
                    
                      
                      HotSpotUtils.updateHotSpots(frame);
-                     HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
-
+                     StitcherUtils.updateAllHotLinkConnections();
 
                      
                  }
@@ -354,8 +354,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
                       
                         
 //	                    HotSpotUtils.updateHotSpots(frame);
-                        HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
-
+                        StitcherUtils.updateAllHotLinkConnections();
                         frame.updateOverLay();
                         
 	                }
@@ -374,8 +373,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
                         HotSpotUtils.updateHotSpots(frame);
 
-	                       
-	                    HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
+                        StitcherUtils.updateAllHotLinkConnections();
                         
 	                    frame.updateOverLay();
 	                }
@@ -389,7 +387,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
                         
                         HotSpotUtils.updateHotSpots(frame);
 
-                        HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
+                        StitcherUtils.updateAllHotLinkConnections();
                         
                         frame.updateOverLay();;
                         
@@ -436,8 +434,9 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
                     GradientDirection.VERTICAL));
            
             add(frame);
+            BehaviourMaker.addBehaviour(frame, RepositoryBehavior.class);
             addImagesToFrame(frame, imagesToAdd);
-            getZOrderManager().bringToTop(frame, null);
+//            getZOrderManager().bringToTop(frame, null);
             frame.open();
 		} else if (frameName.equals(SCAN_REPO_NAME)) {
 	        IImageRepositoryFrame frame = this.getRepositoryFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
@@ -459,9 +458,10 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             frame.setGradientBackground(new Gradient(startColor, endColor,
                     GradientDirection.VERTICAL));
             add(frame);
+            BehaviourMaker.addBehaviour(frame, RepositoryBehavior.class);
             frame.close();
             addImagesToFrame(frame, imagesToAdd);
-            getZOrderManager().bringToTop(frame, null);
+//            getZOrderManager().bringToTop(frame, null);
             frame.close();
 		} else if (frameName.equals(STENCIL_REPO_NAME)) {
 	        IImageRepositoryFrame frame = this.getRepositoryFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 10);
@@ -481,10 +481,11 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             frame.maintainBorderSizeDuringScale();
             frame.setGradientBackground(new Gradient(startColor, endColor,
                     GradientDirection.VERTICAL));
+            BehaviourMaker.addBehaviour(frame, RepositoryBehavior.class);
             add(frame);
             frame.close();
             addImagesToFrame(frame, imagesToAdd);
-            getZOrderManager().bringToTop(frame, null);
+//            getZOrderManager().bringToTop(frame, null);
             frame.close();
 		}
 

@@ -35,36 +35,8 @@ public class RepositoryFrame extends JMEFrame implements IRepositoryFrame {
     @Override
     public void initializeGeometry() {
         super.initializeGeometry();
-        init();
     }
     
-    private void init() {
-        this.addItemListener(new ItemListenerAdapter(){
-            
-            @Override
-            public void itemCursorClicked(IItem item,
-                    MultiTouchCursorEvent event) {
-                super.itemCursorClicked(item, event);
-                IRepositoryFrame rf = (IRepositoryFrame) item;
-                if( rf.tap() == 1 ) {
-                    if( rf.isOpen() ) {
-                        rf.close();
-                        rf.resetTaps();
-                    } else {
-                        rf.open();
-                        rf.resetTaps();
-                    }
-                }
-                
-                
-            }
-        });
-    }
-//    
-//    public void OpenCloseRepo(){
-//        if()
-//    }
-
     @Override
     public void close() {
         isOpen = false;
