@@ -17,6 +17,7 @@ import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.hotspot.IHotSpotRepo;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.hotspots.HotLink;
+import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
 import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
@@ -106,8 +107,11 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
                     if (hotSpotItem.getTapCount() > 2 ) {
                         hotSpotItem.toggle();
                         hotSpotItem.resetTaps();
-                        hotSpotItem.updateHotSpot();
+                    } else {
+                        HotSpotUtils.updateHotLinkSegments(parentFrame);
                     }
+                    
+                    
                 }
 
                 return;
