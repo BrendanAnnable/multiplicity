@@ -1,13 +1,17 @@
 package multiplicity.csysngjme.items.hotspots;
 
+import java.awt.Color;
 import java.util.List;
 import java.util.UUID;
 
+import multiplicity.csysng.gfx.Gradient;
+import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEColourCircle;
+import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
 
 import org.apache.log4j.Logger;
 
@@ -56,25 +60,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 	@Override
 	public void setOpen(boolean isOpen) {
 		this.isOpen = isOpen;
-		if (isOpen) {
-
-			// setGradientBackground(new Gradient(
-			// Color.RED,
-			// new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
-			//
-			// this.setSolidBackgroundColour(Color.RED);
-			this.hotLink.setVisible(true);
-//			this.hotLink.redrawLine(getLineVertices());
-			hotSpotFrameContent.setVisible(true);
-		} else {
-			this.hotLink.setVisible(false);
-
-			// setGradientBackground(new Gradient(
-			// Color.WHITE,
-			// new Color(0f, 0f, 0f,1f), GradientDirection.VERTICAL));
-			// this.setSolidBackgroundColour(Color.BLACK);
-			hotSpotFrameContent.setVisible(false);
-		}
+		HotSpotUtils.setVisibleHotSpotChain(this, isOpen);
 	}
 	
 	@Override
@@ -110,30 +96,6 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		hotLink.initializeGeometry();
 		hotSpotFrameContent.addHotLink(hotLink);
 		sourceFrameContent.addHotLink(hotLink);
-
-
-//		hotSpotFrameContent.addItemListener(new ItemListenerAdapter() {
-//
-//			public void itemMoved(IItem item) {
-//
-//				IHotSpotFrame frame = ((IHotSpotFrame) item);
-////				List<IHotSpotItem> hotSpots2 = frame.getHotSpots();
-//				List<IHotLink> iLineItems = frame.getHotLinks();
-////
-//				IHotSpotItem hsi = null;
-//				for (IHotLink iLine : iLineItems) {
-//					hsi = iLine.getHotSpotItem();
-//					Vector3f[] vertices = ((HotSpotItem) hsi).getLineVertices();
-//					iLine.redrawLine(vertices);
-//				}
-//
-//				List<IHotSpotItem> hotSpots = frame.getHotSpots();
-//				for (IHotSpotItem iHotSpotItem : hotSpots) {
-//					redrawHotlink(iHotSpotItem);
-//				}
-//
-//			};
-//		});
 
 		return hotLink;
 	}
@@ -199,7 +161,8 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
         List<IHotSpotItem> hotSpots = hotSpotFrameContent.getHotSpots();
         if( hotSpots != null ) {
             for (IHotSpotItem iHotSpotItem : hotSpots) {
-                redrawHotlink(iHotSpotItem);
+//                redrawHotlink(iHotSpotItem);
+                iHotSpotItem.updateHotSpot();
             }
         }
     }
