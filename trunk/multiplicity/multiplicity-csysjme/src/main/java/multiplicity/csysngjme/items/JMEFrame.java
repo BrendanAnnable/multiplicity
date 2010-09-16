@@ -249,7 +249,7 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 
 	@Override
 	protected IZOrderManager createZOrderManager() {
-		return new FrameZOrderManager(this, 50);
+		return new FrameZOrderManager(this, 200);
 	}
 
 	public Spatial getMaskGeometry() {
