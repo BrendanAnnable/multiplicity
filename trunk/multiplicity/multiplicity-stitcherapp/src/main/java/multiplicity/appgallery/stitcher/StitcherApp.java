@@ -513,7 +513,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	    
 	    IHotSpotRepo frame = this.getHotSpotContentFactory().createHotSpotRepo(HOTSPOTS, UUID.randomUUID(), HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
 
-//		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 5f, 5));
+		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), .1f, 5, new ColorRGBA(0f, 0f, 0f, .1f) ));
 		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 1f), new Color(0.2f, 0.2f, 0.2f, 1f), GradientDirection.VERTICAL));
 		frame.maintainBorderSizeDuringScale();
 
