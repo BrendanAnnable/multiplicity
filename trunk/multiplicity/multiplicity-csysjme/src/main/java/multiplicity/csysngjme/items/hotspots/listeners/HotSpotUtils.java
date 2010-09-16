@@ -9,6 +9,23 @@ import multiplicity.csysng.items.hotspot.IHotSpotItem;
 
 public class HotSpotUtils {
     
+    public static void setVisibleHotSpotChain(IHotSpotItem startHotSpotItem, boolean isVisible) {
+        startHotSpotItem.getHotLink().setVisible(isVisible);
+        startHotSpotItem.getHotSpotFrameContent().setVisible(isVisible);
+        
+        //go through the chain
+        
+        List<IHotSpotItem> hotSpots = startHotSpotItem.getHotSpotFrameContent().getHotSpots();
+        
+        if( hotSpots == null || hotSpots.isEmpty() )
+            return;
+        
+        for (IHotSpotItem hs : hotSpots) {
+            HotSpotUtils.setVisibleHotSpotChain(hs, isVisible);
+        }
+        
+    }
+    
     public static void updateHotSpots(IHotSpotFrame frame) {
         List<IHotSpotItem> hotSpots = frame.getHotSpots();
         for (IHotSpotItem iHotSpotItem : hotSpots) {
