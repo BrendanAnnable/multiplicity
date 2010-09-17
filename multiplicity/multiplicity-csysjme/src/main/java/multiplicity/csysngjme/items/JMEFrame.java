@@ -11,7 +11,6 @@ import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.zorder.IZOrderManager;
-import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.picking.JMEItemUserData;
 import multiplicity.csysngjme.utils.JMEUtils;
 import multiplicity.csysngjme.zordering.FrameZOrderManager;
@@ -137,6 +136,7 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 		maskGeometry.updateGeometry(size.x, size.y);
 		maskGeometry.updateGeometricState(0f, true);
 		maskGeometry.updateRenderState();
+		maskGeometry.updateModelBound();
 	}
 
 	
@@ -185,25 +185,14 @@ public class JMEFrame extends JMERectangularItem implements IFrame {
 	@Override
 	public void setBorder(IBorder b) {		
 		if(this.border != null) {
+			this.border.getMultiTouchDispatcher().removeListeners(getMultiTouchDispatcher().getListeners());
 			this.detachChild(this.border.getTreeRootSpatial());
 		}
 		this.border = b;
 		this.originalBorderWidth = border.getBorderWidth();
 		this.border.setSize(this.getSize());
-
-		// need to send events for the border to our listeners
-		final IItem instance = this;
-		this.border.addItemListener(new ItemListenerAdapter() {
-			@Override
-			public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
-				for(IItemListener l : getItemListeners()) {
-					l.itemCursorPressed(instance, event);
-				}
-			}
-		});
+		
 		setMaskGeometry(this.border.getSize());
-		border.getMultiTouchDispatcher().addListeners(getMultiTouchDispatcher().getListeners());
-		ItemMap.register(border.getManipulableSpatial(), this);
 		rebuild();		
 		attachChild(this.border.getTreeRootSpatial());
 		getZOrderManager().updateZOrdering();
