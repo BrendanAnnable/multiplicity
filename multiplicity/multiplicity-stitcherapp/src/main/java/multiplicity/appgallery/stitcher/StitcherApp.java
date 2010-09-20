@@ -292,7 +292,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
                      logger.debug("hotspot frame scaled " + frame.canScale() );
                    
                      
-                     HotSpotUtils.updateHotSpots(frame);
+//                     HotSpotUtils.updateHotSpots(frame);
                      StitcherUtils.updateAllHotLinkConnections();
 
                      
@@ -337,8 +337,8 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
                       
                         
-//                      HotSpotUtils.updateHotSpots(frame);
-                        HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
+                      HotSpotUtils.updateHotSpots(frame);
+//                        HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
 
                         frame.updateOverLay();
 	                }
@@ -353,8 +353,8 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
                       
                         
-//	                    HotSpotUtils.updateHotSpots(frame);
-                        StitcherUtils.updateAllHotLinkConnections();
+	                    HotSpotUtils.updateHotSpots(frame);
+//                        StitcherUtils.updateAllHotLinkConnections();
                         frame.updateOverLay();
                         
 	                }
@@ -373,7 +373,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
                         HotSpotUtils.updateHotSpots(frame);
 
-                        StitcherUtils.updateAllHotLinkConnections();
+//                        StitcherUtils.updateAllHotLinkConnections();
                         
 	                    frame.updateOverLay();
 	                }
