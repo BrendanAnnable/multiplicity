@@ -40,13 +40,6 @@ public class MultiTouchEventDispatcher implements IMultiTouchEventListener {
         for(IMultiTouchEventListener item : items) {
             item.cursorReleased(event);
         }
-//		ListIterator<IMultiTouchEventListener> li = items.listIterator();
-//		  while(li.hasNext()) {
-//		      IMultiTouchEventListener me = li.next();
-//              me.cursorReleased(event);
-//             
-//          }
-
 	}	
 
 	@Override
@@ -105,5 +98,11 @@ public class MultiTouchEventDispatcher implements IMultiTouchEventListener {
 
 	public void remove(IMultiTouchEventListener listener) {
 		items.remove(listener);		
+	}
+	
+	public void removeListeners(List<IMultiTouchEventListener> listeners) {
+		for(IMultiTouchEventListener l : listeners) {
+			remove(l);
+		}		
 	}
 }
