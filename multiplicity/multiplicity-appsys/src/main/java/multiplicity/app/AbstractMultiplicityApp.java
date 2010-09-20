@@ -34,7 +34,7 @@ public abstract class AbstractMultiplicityApp {
 		orthoNode = new Node(this.getClass().getName() + "_orthonode");
 		threeDNode = new Node(this.getClass().getName() + "_3dnode");
 		
-		zOrderManager = new NestedZOrderManager(null, 500);
+		zOrderManager = new NestedZOrderManager(null, 1000);
 		getZOrderManager().setItemZOrder(0);	
 	}
 
