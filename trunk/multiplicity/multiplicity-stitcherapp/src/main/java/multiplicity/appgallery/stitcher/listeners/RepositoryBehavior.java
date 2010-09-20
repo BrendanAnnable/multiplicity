@@ -44,7 +44,7 @@ public class RepositoryBehavior extends MultiTouchEventAdapter implements
             }
         }
         
-        StitcherUtils.updateAllHotLinkConnections();
+//        StitcherUtils.updateAllHotLinkConnections();
         
     }
     
