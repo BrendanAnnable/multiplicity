@@ -60,4 +60,8 @@ public interface IHotSpotFrame extends IFrame {
     public boolean canScale();
     
     public boolean hasPalet();
+    
+    public void setType(String type);
+    
+    public String getType();
 }
