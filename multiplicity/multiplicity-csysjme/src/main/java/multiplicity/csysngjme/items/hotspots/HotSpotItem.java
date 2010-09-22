@@ -112,7 +112,7 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 	       redrawHotlink(this);
 	    }
 	   
-	private Vector3f[] getLineVertices() {
+	public Vector3f[] getLineVertices() {
 		IHotSpotFrame parentF = (IHotSpotFrame) this.getParentItem();
 		Vector2f parentFCoord = parentF.getRelativeLocation();
 		// get the worldlocation of hotspot

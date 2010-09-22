@@ -1,5 +1,6 @@
 package multiplicity.csysng.factory;
 
+import java.net.URL;
 import java.util.UUID;
 
 import multiplicity.csysng.items.IHotSpotText;
@@ -18,6 +19,8 @@ public interface IHotSpotContentFactory {
     public IHotSpotItem createHotSpotItem(String name, UUID uuid, float radius);
 
 	public IHotSpotItem createHotSpotItem(String name, UUID uuid, float radius, ColorRGBA colorRGBA);
+	
+	public IHotSpotItem createHotSpotItemImage(String name, UUID uuid, URL imageResource);
 
     public IHotSpotText createEditableHotSpotText(String name, UUID uuid);
     

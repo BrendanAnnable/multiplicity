@@ -1,38 +1,38 @@
 package multiplicity.appgallery.stitcher.listeners;
 
 import java.util.List;
+import java.util.UUID;
 
-import multiplicity.appgallery.stitcher.StitcherApp;
+import multiplicity.appgallery.stitcher.IStitcherContants;
 import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.ContentSystem;
+import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IFrame;
-import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.IPalet;
-import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.hotspot.IHotSpotRepo;
+import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.hotspots.HotLink;
 import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
-import multiplicity.input.IMultiTouchEventListener;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.input.events.MultiTouchObjectEvent;
-import multiplicity.jmeutils.UnitConversion;
 
 import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
+import com.jme.renderer.ColorRGBA;
 
 public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBehaviour {
     
     private final static Logger logger = Logger.getLogger(HotSpotItemBehavior.class.getName());
     
     private IHotSpotItem hotSpotItem;
+    private HotSpotContentItemFactory hotSpotContentItemFactory = new HotSpotContentItemFactory();
 
     @Override
     public void objectChanged(MultiTouchObjectEvent event) {
@@ -122,43 +122,50 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
                     if( (foundItem instanceof IHotSpotFrame) ) {
                          JMEFrame sourceFrame = (JMEFrame)foundItem;
                             IFrame originFrame = (IFrame) hotSpotItem.getParentItem();
-                            originFrame.removeItem(hotSpotItem);
-
+                            
+                            
+                            IHotSpotItem hotSpotItemCircle = hotSpotContentItemFactory.createHotSpotItem("hotspot", UUID.randomUUID(), IStitcherContants.HOTSPOT_DIMENSION / 4, new ColorRGBA(1f, 0f, 0f, .9f));
+                            hotSpotItemCircle.setType(hotSpotItem.getType());
+                            BehaviourMaker.addBehaviour(hotSpotItemCircle, HotSpotItemBehavior.class);
+                            
+                            
+                            
                             Vector2f itemWorldPos = hotSpotItem.getWorldLocation();
-                            sourceFrame.addItem(hotSpotItem);
-                            hotSpotItem.setWorldLocation(itemWorldPos);
-                            sourceFrame.getZOrderManager().bringToTop(hotSpotItem, null);
+                            
+                            
+                            sourceFrame.addItem(hotSpotItemCircle);
+                            hotSpotItemCircle.setWorldLocation(itemWorldPos);
+                            sourceFrame.getZOrderManager().bringToTop(hotSpotItemCircle, null);
 
-                            // add HS to the array attached to the frame
-                            IHotSpotItem hsItem = (IHotSpotItem)hotSpotItem;
-                            ((IHotSpotFrame) sourceFrame).addHotSpot(hsItem);
+                            hotSpotItem.centerItem();
+                            
+                            ((IHotSpotFrame) sourceFrame).addHotSpot(hotSpotItemCircle);
 
-                            logger.debug("hotspot location " + hsItem.getRelativeLocation() + "world " + hsItem.getWorldLocation() + "scale " + hsItem.getRelativeScale());
-                            IHotSpotFrame hotSpotFrameContent = StitcherUtils.createNewHotSpotFrame(hsItem.getType());
-//                            IHotSpotFrame hotSpotFrameContent = stitcherApp.createNewHotSpotContentFrame(hsItem.getType());
+//                            logger.debug("hotspot location " + hotSpotItemCircle.getRelativeLocation() + "world " + hotSpotItemCircle.getWorldLocation() + "scale " + hotSpotItemCircle.getRelativeScale());
+                            IHotSpotFrame hotSpotFrameContent = StitcherUtils.createNewHotSpotFrame(hotSpotItemCircle.getType());
 
-                            hsItem.setHotSpotFrameContent(hotSpotFrameContent);
+                            hotSpotItemCircle.setHotSpotFrameContent(hotSpotFrameContent);
 
-                            IHotLink l = (HotLink) hsItem.createHotLink();
+                            IHotLink l = (HotLink) hotSpotItemCircle.createHotLink();
                     
 
                             StitcherUtils.addHotLink(l);
                             
-                            logger.debug("HOTLINK location " + l.getRelativeLocation() + "world " + l.getWorldLocation() + "scale " + l.getRelativeScale());
+//                            logger.debug("HOTLINK location " + l.getRelativeLocation() + "world " + l.getWorldLocation() + "scale " + l.getRelativeScale());
 
 
                             logger.debug("dropped hotspotitem on " + sourceFrame.getName());
 
                             // create a new hotspot candidate
-                            StitcherUtils.fillHotSpotRepo(originFrame,hsItem.getType());
+//                            StitcherUtils.fillHotSpotRepo(originFrame,hsItem.getType());
                              
                             
                             
                             StitcherUtils.updateHotShotContentFrames();
                             
-                            if( hotSpotFrameContent instanceof IHotSpotText ) {
-                                StitcherUtils.bringToTop(l);
-                            }
+//                            if( hotSpotFrameContent instanceof IHotSpotText ) {
+//                                StitcherUtils.bringToTop(l);
+//                            }
                     }
 
 //              

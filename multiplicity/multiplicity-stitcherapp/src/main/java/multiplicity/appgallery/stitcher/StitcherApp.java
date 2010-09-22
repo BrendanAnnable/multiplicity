@@ -1,7 +1,6 @@
 package multiplicity.appgallery.stitcher;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -45,7 +44,6 @@ import multiplicity.csysngjme.factory.Repository.RepositoryContentItemFactory;
 import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
 import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
-import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
 import multiplicity.csysngjme.items.hotspots.listeners.OverlayBehavior;
 import multiplicity.input.IMultiTouchEventProducer;
 import multiplicity.input.events.MultiTouchCursorEvent;
@@ -436,23 +434,26 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
 	public void fillHotSpotRepo(IFrame frame, String type) {
 
-	    ColorRGBA colorRGBA = null;
-	    if( type.equals(IMAGE) ) {
-	        colorRGBA = new ColorRGBA(1f, 0f, 0f, .9f);
-	    } else if(type.equals(TEXT)) {
-	        colorRGBA = new ColorRGBA(0f, 0f, 1f, .9f);
-	    }
-		IHotSpotItem hotSpotItem = this.getHotSpotContentFactory().createHotSpotItem("hotspot", UUID.randomUUID(), HOTSPOT_DIMENSION / 4, colorRGBA);
-		hotSpotItem.setType(type);
-		frame.addItem(hotSpotItem);
-		hotSpotItem.centerItem();
-		hotSpotItem.setRelativeScale(1f);
+	    
+	    IHotSpotItem hotSpotItemImage = null;
+	    
+//	    ColorRGBA colorRGBA = null;
+//	    if( type.equals(IMAGE) ) {
+//	        colorRGBA = new ColorRGBA(1f, 0f, 0f, .9f);
+//	    } else if(type.equals(TEXT)) {
+//	        colorRGBA = new ColorRGBA(0f, 0f, 1f, .9f);
+//	    }
+		hotSpotItemImage = this.getHotSpotContentFactory().createHotSpotItemImage("hotspot", UUID.randomUUID(), StitcherApp.class.getResource("textsymbol.png"));
+		hotSpotItemImage.setType(type);
+		frame.addItem(hotSpotItemImage);
+		hotSpotItemImage.centerItem();
+		//hotSpotItemImage.setRelativeScale(1f);
 		
-		BehaviourMaker.addBehaviour(hotSpotItem, HotSpotItemBehavior.class);
+		BehaviourMaker.addBehaviour(hotSpotItemImage, HotSpotItemBehavior.class);
 
 
-		BehaviourMaker.addBehaviour((IItem) hotSpotItem, RotateTranslateScaleBehaviour.class);
-		 List<IBehaviour> behaviours = hotSpotItem.getBehaviours();
+		BehaviourMaker.addBehaviour((IItem) hotSpotItemImage, RotateTranslateScaleBehaviour.class);
+		 List<IBehaviour> behaviours = hotSpotItemImage.getBehaviours();
 		 StitcherUtils.modScaleBehavior(behaviours,false);
 
 	}
