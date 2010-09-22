@@ -1,5 +1,6 @@
 package multiplicity.csysngjme.factory.hotspot;
 
+import java.net.URL;
 import java.util.UUID;
 
 import multiplicity.csysng.factory.IHotSpotContentFactory;
@@ -12,6 +13,7 @@ import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
 import multiplicity.csysngjme.items.hotspots.HotSpotItem;
 import multiplicity.csysngjme.items.hotspots.HotSpotRepo;
+import multiplicity.csysngjme.items.hotspots.HotSpotItemImage;
 import multiplicity.csysngjme.items.hotspots.HotSpotText;
 import multiplicity.csysngjme.items.hotspots.HotSpotTextFrame;
 
@@ -41,6 +43,14 @@ public class HotSpotContentItemFactory implements IHotSpotContentFactory {
         return pi;
 	}
 
+    @Override
+    public IHotSpotItem createHotSpotItemImage(String name, UUID uuid,
+             URL imageResource) {
+        IHotSpotItem pi = new HotSpotItemImage(name, uuid, imageResource);
+        pi.initializeGeometry();
+        return pi;
+    }
+    
 
     @Override
     public IHotSpotText createEditableHotSpotText(String name, UUID uuid) {
@@ -64,4 +74,6 @@ public class HotSpotContentItemFactory implements IHotSpotContentFactory {
 //        text.addFrameOverlay();
         return text;
     }
+
+
 }
