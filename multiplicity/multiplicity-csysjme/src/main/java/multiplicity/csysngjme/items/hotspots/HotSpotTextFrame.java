@@ -23,17 +23,16 @@ import multiplicity.csysngjme.factory.JMEContentItemFactory;
 
 public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
 
-    private IKeyboard keyboard; 
+	private static final long serialVersionUID = 1L;
+	private IKeyboard keyboard; 
     private boolean isKeyboardShown;
     private JMEContentItemFactory contentItemFactory = new JMEContentItemFactory();
     private IFrame keyboardFrame;
     private int taps = 0;
-    private boolean isVisible;
     private IEditableText labelText;
     
     public HotSpotTextFrame(String name, UUID uuid, int width, int height) {
         super(name, uuid, width, height);
-        
     }
 
     
@@ -44,7 +43,7 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
 
     @Override
     public void setCursorDisplay(boolean onOrOff) {
-        
+        labelText.setCursorDisplay(onOrOff);
     }
 
     @Override
@@ -59,17 +58,17 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
 
     @Override
     public void appendChar(char c) {
-        
+    	labelText.appendChar(c);
     }
 
     @Override
     public void appendString(String charSet) {
-        
+    	labelText.appendString(charSet);
     }
 
     @Override
     public void setFont(Font f) {
-        
+    	labelText.setFont(f);
     }
 
     @Override
@@ -163,7 +162,7 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
 //        this.getSize().setY(this.getSize().getY()*.8f);
 //        getFrameOverlay().setSize(this.getSize());
 //        updateModelBound();
-        getLabelText().getMultiTouchDispatcher().addListeners(getMultiTouchDispatcher().getListeners());
+//        getLabelText().getMultiTouchDispatcher().addListeners(getMultiTouchDispatcher().getListeners());
         
     }
     
@@ -190,7 +189,7 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
     
     @Override
     public void updateOverLay() {
-        this.bringHotSpotsToTop();
+        super.updateOverLay();
     }
 
 }

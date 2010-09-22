@@ -36,6 +36,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 
     protected IPalet palet;
     protected boolean canScale = true;
+	private String type;
 
 	public HotSpotFrame(String name, UUID uuid, int width, int height) {
 		super(name, uuid, width, height);
@@ -231,5 +232,15 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
     public boolean hasPalet() {
         return true;
     }
+
+	@Override
+	public String getType() {
+		return this.type;
+	}
+
+	@Override
+	public void setType(String type) {
+		this.type = type;
+	}
     
 }

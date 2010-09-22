@@ -152,7 +152,7 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
                             // create a new hotspot candidate
                             StitcherUtils.fillHotSpotRepo(originFrame,hsItem.getType());
                              
-                            StitcherUtils.addHotSpotContentFrame(hotSpotFrameContent);
+                            
                             
                             StitcherUtils.updateHotShotContentFrames();
                             

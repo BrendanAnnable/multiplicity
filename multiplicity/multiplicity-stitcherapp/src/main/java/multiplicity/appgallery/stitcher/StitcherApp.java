@@ -14,6 +14,7 @@ import java.util.Vector;
 import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
+import multiplicity.appgallery.stitcher.listeners.HotSpotFrameBehavior;
 import multiplicity.appgallery.stitcher.listeners.HotSpotItemBehavior;
 import multiplicity.appgallery.stitcher.listeners.HotSpotTextBehavior;
 import multiplicity.appgallery.stitcher.listeners.PaletBehavior;
@@ -205,7 +206,6 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        newHotSpotFrame.maintainBorderSizeDuringScale();
 	        newHotSpotFrame.setRelativeLocation(atPosition);
 	        BehaviourMaker.addBehaviour(newHotSpotFrame, RotateTranslateScaleBehaviour.class);
-	        this.add(newHotSpotFrame);
 	        
             Vector2f itemWorldPos = backgroundImage.getWorldLocation();
             newHotSpotFrame.addItem(backgroundImage);
@@ -250,7 +250,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        BehaviourMaker.addBehaviour(newHotSpotFrame, RotateTranslateScaleBehaviour.class);
 
 	        //we dont want to scale hotspots until a pic is dropped
-	        this.add(newHotSpotFrame);
+	       
 	    
 	    } else if(type != null && type.equals(TEXT)) {
 	         
@@ -268,140 +268,35 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             BehaviourMaker.addBehaviour(newHotSpotFrame, RotateTranslateScaleBehaviour.class);
 
             ((IHotSpotText)newHotSpotFrame).createKeyboard(NorwegianKeyboardDefinition.class);
-//	         hotspotLabel.setText("Label");
-//	         hotspotLabel.setCursorAt(0);
-//	         hotspotLabel.setFont(new Font("Myriad Pro", Font.BOLD, 48*2));
-//	         hotspotLabel.setTextColour(Color.white);
-//	         hotspotLabel.setRelativeLocation(new Vector2f(0, 200));
-	         //hotspotLabel.setCursorAt(3);
-	                
-	         add(newHotSpotFrame);
-	         
-	         BehaviourMaker.addBehaviour(newHotSpotFrame, HotSpotTextBehavior.class);
-             newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
-
-            
-                 
-                 @Override
-                 public void itemCursorChanged(IItem item,
-                         MultiTouchCursorEvent event) {
-                     // TODO Auto-generated method stub
-                     super.itemCursorChanged(item, event);
-                     IHotSpotFrame frame = (IHotSpotFrame) item;
-                     
-                     logger.debug("hotspot frame scaled " + frame.canScale() );
-                   
-                     
-//                     HotSpotUtils.updateHotSpots(frame);
-                     StitcherUtils.updateAllHotLinkConnections();
-
-                     
-                 }
-
-            
-             });
-
-//	         return hotspotLabel;
-	     }
-	       
-	     
-	    
-	    
-	    if(type.equals(BACKGROUND) || type.equals(IMAGE)){
-	        
-	        BehaviourMaker.addBehaviour(newHotSpotFrame, OverlayBehavior.class);
-	        
-	        //set up the palet
-	        IPalet palet = this.getPaletFactory().createPaletItem("palet",  UUID.randomUUID(), PALET_DIMENSION, new ColorRGBA(0f, 1f, 0f, 1f));
-	        StitcherUtils.modScaleBehavior(palet.getBehaviours(), false);
-	        newHotSpotFrame.addPalet(palet);
-	        palet.centerItem();
-	        BehaviourMaker.addBehaviour(palet, RotateTranslateScaleBehaviour.class);
-	        
-
-	        BehaviourMaker.addBehaviour(palet, PaletBehavior.class);
-	        
-	        if(  type.equals(IMAGE) ) {
-
-	            newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
-
-	           
-	                
-	                @Override
-	                public void itemCursorPressed(IItem item,
-	                        MultiTouchCursorEvent event) {
-	                    super.itemCursorPressed(item, event);
-	                    
-	                    IHotSpotFrame frame = (IHotSpotFrame) item;
-                        logger.debug("item cursor pressed hotspot frame " + frame);
-
-                      
-                        
-                      HotSpotUtils.updateHotSpots(frame);
-//                        HotSpotUtils.updateAllHotLinkConnections(getHotSpotFrames());
-
-                        frame.updateOverLay();
-	                }
-	                @Override
-	                public void itemCursorChanged(IItem item,
-	                        MultiTouchCursorEvent event) {
-	                    // TODO Auto-generated method stub
-	                    super.itemCursorChanged(item, event);
-	                    
-	                    IHotSpotFrame frame = (IHotSpotFrame) item;
-                        logger.debug("item cursor changed hotspot frame " + frame);
-
-                      
-                        
-	                    HotSpotUtils.updateHotSpots(frame);
-//                        StitcherUtils.updateAllHotLinkConnections();
-                        frame.updateOverLay();
-                        
-	                }
-
-               
-                });
-	        } else if( type.equals(BACKGROUND)) {
-	            newHotSpotFrame.addItemListener(new ItemListenerAdapter() {
-
-	                @Override
-	                public void itemCursorPressed(IItem item,
-	                        MultiTouchCursorEvent event) {
-	                    super.itemCursorPressed(item, event);
-	                    logger.debug("cursor pressed background frame");
-	                    IHotSpotFrame frame = (IHotSpotFrame) item;
-
-                        HotSpotUtils.updateHotSpots(frame);
-
-//                        StitcherUtils.updateAllHotLinkConnections();
-                        
-	                    frame.updateOverLay();
-	                }
-	                
-	                @Override
-	                public void itemCursorChanged(IItem item,
-	                        MultiTouchCursorEvent event) {
-	                    super.itemCursorChanged(item, event);
-	                    logger.debug("cursor changed background frame");
-	                    IHotSpotFrame frame = (IHotSpotFrame) item;
-                        
-                        HotSpotUtils.updateHotSpots(frame);
-
-                        StitcherUtils.updateAllHotLinkConnections();
-                        
-                        frame.updateOverLay();;
-                        
-	                }
-	              
-	            });
-	        }
-	        
-	      
-	        
 	    }
+	         
+		BehaviourMaker.addBehaviour(newHotSpotFrame, HotSpotTextBehavior.class);
+
+		newHotSpotFrame.setType(type);
+		BehaviourMaker
+				.addBehaviour(newHotSpotFrame, HotSpotFrameBehavior.class);
+
+		if (type.equals(BACKGROUND) || type.equals(IMAGE)) {
+
+			BehaviourMaker.addBehaviour(newHotSpotFrame, OverlayBehavior.class);
+
+			// set up the palet
+			IPalet palet = this.getPaletFactory().createPaletItem("palet",
+					UUID.randomUUID(), PALET_DIMENSION,
+					new ColorRGBA(0f, 1f, 0f, 1f));
+			StitcherUtils.modScaleBehavior(palet.getBehaviours(), false);
+			newHotSpotFrame.addPalet(palet);
+			palet.centerItem();
+			BehaviourMaker.addBehaviour(palet,
+					RotateTranslateScaleBehaviour.class);
+
+			BehaviourMaker.addBehaviour(palet, PaletBehavior.class);
+
+		}
 	    
 	    
 	    //add for later
+		this.add(newHotSpotFrame);
         hotSpotFrames.add(newHotSpotFrame);
 	    
 	    return newHotSpotFrame;

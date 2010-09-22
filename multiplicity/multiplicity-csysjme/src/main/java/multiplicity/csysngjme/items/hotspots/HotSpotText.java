@@ -315,4 +315,16 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
         return false;
     }
 
+	@Override
+	public String getType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setType(String type) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
