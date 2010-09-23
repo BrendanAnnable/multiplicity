@@ -1,5 +1,6 @@
 package multiplicity.appgallery.stitcher;
 
+import java.awt.Color;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
@@ -22,12 +23,14 @@ import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
 import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
+import com.jme.renderer.ColorRGBA;
 
 public class StitcherUtils {
     
     public final static Logger logger = Logger.getLogger(StitcherUtils.class.getName());
 
-    
+    public static ColorRGBA burColorRGBA = new ColorRGBA(.9f, .6f, .6f, 1f);
+    public static Color pink = new Color(StitcherUtils.burColorRGBA.r, StitcherUtils.burColorRGBA.g, StitcherUtils.burColorRGBA.b, 1f);
     public static StitcherApp stitcherApp;
     public static String wikiUser = null;
     public static String wikiPass = null;
@@ -53,7 +56,7 @@ public class StitcherUtils {
         logger.debug("generate random position.......");
         logger.debug("frame size: " + frameSize + " framePosition " + frame.getRelativeLocation() + " imageSize " + imageSize);
 
-        int i = 2;
+        int i = 4;
         float lowerBoundX = -frameSize.x / i + imageSize.x / i;
         float upperBoundX = frameSize.x / i - imageSize.x / i;
 

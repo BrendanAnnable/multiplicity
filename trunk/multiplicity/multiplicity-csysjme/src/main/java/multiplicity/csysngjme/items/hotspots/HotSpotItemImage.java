@@ -11,6 +11,7 @@ import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
 
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.IImage.AlphaStyle;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
@@ -45,7 +46,8 @@ public class HotSpotItemImage extends JMEImage implements IHotSpotItem {
     @Override
     public void initializeGeometry() {
         super.initializeGeometry();
-        setImage(imageResource, .5f);
+       setImage(imageResource, 1f);
+       setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
         
     }
 
