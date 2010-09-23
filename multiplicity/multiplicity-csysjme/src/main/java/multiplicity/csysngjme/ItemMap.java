@@ -31,6 +31,13 @@ public class ItemMap {
 		return item3DMap.get(uuid);
 	}
 
+	/**
+	 * Associates a spatial item to a content item. This is used
+	 * by the <code>PickedItemDispatcher</code> to find out where
+	 * to dispatch events to when a spatial is pressed on.
+	 * @param spatial
+	 * @param item
+	 */
 	public static void register(Spatial spatial, IItem item) {
 		JMEItemUserData id = new JMEItemUserData(item.getUUID());
 		spatial.setUserData(JMEItem.KEY_JMEITEMDATA, id);
