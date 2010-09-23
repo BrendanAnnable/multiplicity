@@ -228,7 +228,7 @@ private void txtProxyPortKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
 }//GEN-LAST:event_txtProxyPortKeyReleased
 
 private void checkProxyEnabledItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkProxyEnabledItemStateChanged
-System.out.println("item state changed");
+
     prefs.setProxyEnabled(checkProxyEnabled.isSelected());
 }//GEN-LAST:event_checkProxyEnabledItemStateChanged
 
@@ -255,7 +255,7 @@ private void txtXMPPUserKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:ev
 
 private void txtXMPPPasswordKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtXMPPPasswordKeyReleased
     String pass = new String(txtXMPPPassword.getPassword());
-    System.out.println(pass);
+    
     prefs.setXMPPPassword(pass);
 }//GEN-LAST:event_txtXMPPPasswordKeyReleased
 
