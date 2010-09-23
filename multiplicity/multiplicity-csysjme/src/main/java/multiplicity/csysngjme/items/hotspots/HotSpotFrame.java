@@ -48,7 +48,8 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
         int height = (int) this.getSize().y;
         setFrameOverlay(new JMEColourRectangle("frameOverlay",UUID.randomUUID(), width , height));
         getFrameOverlay().initializeGeometry();
-        getFrameOverlay().setSolidBackgroundColour(new ColorRGBA(1f, 0f, 0f, 0.2f));
+        getFrameOverlay().setSolidBackgroundColour(new ColorRGBA(.1f, 0f, 0f, 0.1f));
+//        getFrameOverlay().setSolidBackgroundColour(new ColorRGBA(1f, 0f, 0f, 0.2f));
         getFrameOverlay().getMultiTouchDispatcher().addListeners(getMultiTouchDispatcher().getListeners());
         this.addItem(getFrameOverlay());
         this.getZOrderManager().bringToTop(getFrameOverlay(), null);

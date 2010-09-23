@@ -151,9 +151,9 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
     public void createText(String t) {
         setLabelText(ContentSystem.getContentSystem().getContentFactory().createEditableText("hotspot-text", UUID.randomUUID()));
         getLabelText().setText(t);
-        getLabelText().setFont(new Font("Myriad Pro", Font.BOLD, 48*2));
+        getLabelText().setFont(new Font("Arial", Font.BOLD, 48*2));
         getLabelText().setTextColour(Color.white);
-        getLabelText().setRelativeLocation(new Vector2f(0, -15));
+        getLabelText().setRelativeLocation(new Vector2f(0, 0));
         getLabelText().setCursorAt(t.length()-1);
         addItem(getLabelText());
 //        getLabelText().centerItem();

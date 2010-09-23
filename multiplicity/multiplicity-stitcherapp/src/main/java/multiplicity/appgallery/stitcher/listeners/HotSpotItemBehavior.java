@@ -8,6 +8,7 @@ import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
+import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotLink;
@@ -124,9 +125,12 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
                             IFrame originFrame = (IFrame) hotSpotItem.getParentItem();
                             
                             
-                            IHotSpotItem hotSpotItemCircle = hotSpotContentItemFactory.createHotSpotItem("hotspot", UUID.randomUUID(), IStitcherContants.HOTSPOT_DIMENSION / 4, new ColorRGBA(1f, 0f, 0f, .9f));
+                            
+							IHotSpotItem hotSpotItemCircle = hotSpotContentItemFactory.createHotSpotItem("hotspot", UUID.randomUUID(), IStitcherContants.HOTSPOT_DIMENSION / 4, StitcherUtils.burColorRGBA);
                             hotSpotItemCircle.setType(hotSpotItem.getType());
                             BehaviourMaker.addBehaviour(hotSpotItemCircle, HotSpotItemBehavior.class);
+                            BehaviourMaker.addBehaviour(hotSpotItemCircle, RotateTranslateScaleBehaviour.class);
+                            StitcherUtils.modScaleBehavior(hotSpotItemCircle.getBehaviours(),false);
                             
                             
                             

@@ -3,6 +3,7 @@ package multiplicity.appgallery.stitcher;
 import java.awt.Color;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -241,7 +242,8 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        newHotSpotFrame = (IHotSpotFrame) this.getHotSpotContentFactory().createHotSpotFrame(frameName + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
 
 	        newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, new ColorRGBA(0f, 0f, 0f, 0f)));
-	        newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
+	        newHotSpotFrame.setSolidBackgroundColour(StitcherUtils.pink);
+//	        newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 	        newHotSpotFrame.maintainBorderSizeDuringScale();
 	        newHotSpotFrame.setRelativeLocation(new Vector2f(xPos, yPos));
 
@@ -258,11 +260,21 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
             newHotSpotFrame  =  this.getHotSpotContentFactory().createEditableHotSpotTextFrame(frameName + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
             
-            newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, new ColorRGBA(0f, 0f, 0f, 0f)));
-            newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
+            newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, StitcherUtils.burColorRGBA));
+            
+            
+            newHotSpotFrame.setSolidBackgroundColour(StitcherUtils.pink);
+//            newHotSpotFrame.setGradientBackground(StitcherUtils.burColorRGBA, StitcherUtils.burColorRGBA, GradientDirection.VERTICAL));
+//            newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
             newHotSpotFrame.maintainBorderSizeDuringScale();
             newHotSpotFrame.setRelativeLocation(new Vector2f(xPos, yPos));
-            ((IHotSpotText)newHotSpotFrame).createText("Label");
+            ((IHotSpotText)newHotSpotFrame).createText("tag");
+            
+//            Color awtColor = Color.decode(StitcherUtils.burColorRGBA.toString());
+//            ((IHotSpotText)newHotSpotFrame).setTextColour(new Color(StitcherUtils.burColorRGBA.r, StitcherUtils.burColorRGBA.g, StitcherUtils.burColorRGBA.b, 1f));
+            
+            ((IHotSpotText)newHotSpotFrame).setTextColour(new Color(90,18,18));
+
             BehaviourMaker.addBehaviour(newHotSpotFrame, RotateTranslateScaleBehaviour.class);
 
             ((IHotSpotText)newHotSpotFrame).createKeyboard(NorwegianKeyboardDefinition.class);
@@ -307,8 +319,8 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		Color startColor = new Color(0.6f, 0.6f, 0.6f, 1f);
 		Color endColor = new Color(0f, 0f, 0f, 1f);
 
-        if (frameName.equals(BACKGROUND_REPO_NAME)) {
-		    IBackgroundRepositoryFrame frame = this.getRepositoryFactory().createBackgroundRepositoryFrame(frameName, UUID.randomUUID(), DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
+        if (frameName.equals(STENCIL_REPO_NAME)) {
+        	IImageRepositoryFrame frame = this.getRepositoryFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
 //			frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
@@ -330,7 +342,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             BehaviourMaker.addBehaviour(frame, RepositoryBehavior.class);
             addImagesToFrame(frame, imagesToAdd);
 //            getZOrderManager().bringToTop(frame, null);
-            frame.open();
+            frame.close();
 		} else if (frameName.equals(SCAN_REPO_NAME)) {
 	        IImageRepositoryFrame frame = this.getRepositoryFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
@@ -356,8 +368,9 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             addImagesToFrame(frame, imagesToAdd);
 //            getZOrderManager().bringToTop(frame, null);
             frame.close();
-		} else if (frameName.equals(STENCIL_REPO_NAME)) {
-	        IImageRepositoryFrame frame = this.getRepositoryFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 10);
+		} else if (frameName.equals(BACKGROUND_REPO_NAME)) {
+
+		    IBackgroundRepositoryFrame frame = this.getRepositoryFactory().createBackgroundRepositoryFrame(frameName, UUID.randomUUID(), RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 10);
 
 //			frame.setSize(RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 10);
 
@@ -378,8 +391,8 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             add(frame);
             frame.close();
             addImagesToFrame(frame, imagesToAdd);
-//            getZOrderManager().bringToTop(frame, null);
-            frame.close();
+           getZOrderManager().bringToTop(frame, null);
+            frame.open();
 		}
 
 	}
@@ -436,18 +449,19 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
 	    
 	    IHotSpotItem hotSpotItemImage = null;
+	    URL resource = null;
 	    
-//	    ColorRGBA colorRGBA = null;
-//	    if( type.equals(IMAGE) ) {
-//	        colorRGBA = new ColorRGBA(1f, 0f, 0f, .9f);
-//	    } else if(type.equals(TEXT)) {
-//	        colorRGBA = new ColorRGBA(0f, 0f, 1f, .9f);
-//	    }
-		hotSpotItemImage = this.getHotSpotContentFactory().createHotSpotItemImage("hotspot", UUID.randomUUID(), StitcherApp.class.getResource("textsymbol.png"));
+	    ColorRGBA colorRGBA = null;
+	    if( type.equals(IMAGE) ) {
+	    	resource = StitcherApp.class.getResource("imagesymbol.png");
+	    } else if(type.equals(TEXT)) {
+	    	resource = StitcherApp.class.getResource("textsymbol.png");
+	    }
+		hotSpotItemImage = this.getHotSpotContentFactory().createHotSpotItemImage("hotspot", UUID.randomUUID(), resource);
 		hotSpotItemImage.setType(type);
 		frame.addItem(hotSpotItemImage);
 		hotSpotItemImage.centerItem();
-		//hotSpotItemImage.setRelativeScale(1f);
+//		hotSpotItemImage.setRelativeScale(.2f);
 		
 		BehaviourMaker.addBehaviour(hotSpotItemImage, HotSpotItemBehavior.class);
 

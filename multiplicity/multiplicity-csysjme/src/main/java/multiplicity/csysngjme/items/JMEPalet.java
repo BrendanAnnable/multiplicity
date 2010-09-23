@@ -1,5 +1,6 @@
 package multiplicity.csysngjme.items;
 
+import java.awt.Color;
 import java.util.UUID;
 
 import multiplicity.csysng.items.IPalet;
@@ -28,7 +29,7 @@ public class JMEPalet extends JMEColourCircle implements IPalet {
 	@Override
 	public void lockPalet(boolean locked) {
 		if(locked) {
-			super.changeBackgroundColor(new ColorRGBA(255f, 140f, 0f, 1f));
+			super.changeBackgroundColor(new ColorRGBA(0.5f, 0.5f, 0.5f, 1f));
 		}
 		else {
 			super.changeBackgroundColor(new ColorRGBA(0f, 1f, 0f, 1f));
