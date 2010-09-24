@@ -3,7 +3,8 @@ package multiplicity.appgallery.stitcher;
 public interface IStitcherContants {
 
     
-    public static final String HOTSPOT_FRAME_NAME = "hotspotf-";
+    public static final String HOTSPOT_FRAME_NAME_IMAGE = "hotspotf-";
+    public static final String HOTSPOT_FRAME_NAME_TEXT = "hotspotf-";
     public static final String HOTSPOTS = "hotspots";
     
     public static final String IMAGE = "IMAGE";

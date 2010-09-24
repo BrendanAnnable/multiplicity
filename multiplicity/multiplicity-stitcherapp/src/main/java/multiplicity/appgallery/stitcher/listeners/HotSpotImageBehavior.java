@@ -189,7 +189,7 @@ public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBeh
 
             if( hotspotFrame.isLocked() == false ) {
                 
-                if( hotspotFrame.getName().contains(IStitcherContants.HOTSPOT_FRAME_NAME)) {
+                if( hotspotFrame.getName().contains(IStitcherContants.HOTSPOT_FRAME_NAME_IMAGE)) {
                     //we are dropping on a  hotspot content frame
 //                    repository.removeItem(releasedItem);
                  
@@ -198,8 +198,7 @@ public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBeh
                     hotspotFrame.addItem(copyImage);
                     copyImage.setRelativeScale(1.0f);
                     ((JMERectangularItem) copyImage).setSize(IStitcherContants.HOTSPOT_FRAME_DIMENSION, IStitcherContants.HOTSPOT_FRAME_DIMENSION);
-                    copyImage.centerItem();
-                    releasedItem.centerItem();
+                    
 
                     hotspotFrame.setLocked(true);
                     hotspotFrame.toggleLock();
@@ -208,22 +207,23 @@ public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBeh
                     hotspotFrame.bringPaletToTop();
                     
                 } else {
+                    // on a background
                     IImage copyImage = copyImage((IImage) releasedItem);
 
                     
 //                    repository.removeItem(copyImage);
                     Vector2f itemWorldPos = releasedItem.getWorldLocation();
                     hotspotFrame.addItem(copyImage);
-                    copyImage.centerItem();
-                    releasedItem.centerItem();
+//                    copyImage.centerItem();
                     copyImage.setWorldLocation(itemWorldPos);
-                    hotspotFrame.getZOrderManager().bringToTop(releasedItem, null);
+                    hotspotFrame.getZOrderManager().bringToTop(copyImage, null);
                     hotspotFrame.bringHotSpotsToTop();
                     hotspotFrame.bringPaletToTop();
     
                     
                 
                 }
+                releasedItem.centerItem();
                 
 //                repository.addItem(copyImage);
                 repository.close();

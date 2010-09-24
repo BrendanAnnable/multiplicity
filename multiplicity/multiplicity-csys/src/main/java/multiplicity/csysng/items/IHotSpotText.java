@@ -23,5 +23,9 @@ public interface IHotSpotText extends IEditableText, IHotSpotFrame {
     
     public void createText(String text);
 
+    public IImage getKeyboardImage();
+
+    public void makeSureKeyboardImageIsOnTop();
+
 
 }

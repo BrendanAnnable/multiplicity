@@ -24,8 +24,9 @@ public interface IHotSpotContentFactory {
 
     public IHotSpotText createEditableHotSpotText(String name, UUID uuid);
     
+   
     public IHotSpotFrame createEditableHotSpotTextFrame(String name, UUID uuid,
-            int width, int height);
+            int width, int height, URL keyboardImage);
 
 
 }

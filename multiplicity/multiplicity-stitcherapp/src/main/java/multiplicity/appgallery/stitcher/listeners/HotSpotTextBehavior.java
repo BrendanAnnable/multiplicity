@@ -11,20 +11,13 @@ import multiplicity.input.events.MultiTouchCursorEvent;
 public class HotSpotTextBehavior extends MultiTouchEventAdapter implements IBehaviour {
 
     private IHotSpotText hotSpotText;
-
-    
-    @Override
-    public void cursorChanged(MultiTouchCursorEvent event) {
-        super.cursorChanged(event);
-        HotSpotUtils.updateHotSpots(hotSpotText);
-    }
     
     @Override
     public void cursorPressed(MultiTouchCursorEvent event) {
         super.cursorPressed(event);
         
         
-        if (hotSpotText.tap() > 4) {
+        if (hotSpotText.tap() > 3) {
 
             if (hotSpotText.isKeyboardVisible() == false) {
                 StitcherUtils.showKeyboard(hotSpotText);
@@ -40,7 +33,7 @@ public class HotSpotTextBehavior extends MultiTouchEventAdapter implements IBeha
     @Override
     public void removeItemActingOn() {
         if(hotSpotText != null) {
-            hotSpotText.getMultiTouchDispatcher().remove(this);
+            hotSpotText.getKeyboardImage().getMultiTouchDispatcher().remove(this);
         }
         this.hotSpotText = null;
     }
@@ -49,7 +42,7 @@ public class HotSpotTextBehavior extends MultiTouchEventAdapter implements IBeha
     public void setItemActingOn(IItem item) {
         if(item instanceof IHotSpotText) {
             this.hotSpotText = (IHotSpotText) item;
-            hotSpotText.getMultiTouchDispatcher().addListener(this);
+            hotSpotText.getKeyboardImage().getMultiTouchDispatcher().addListener(this);
         }else{
             //TODO: log severe
         }

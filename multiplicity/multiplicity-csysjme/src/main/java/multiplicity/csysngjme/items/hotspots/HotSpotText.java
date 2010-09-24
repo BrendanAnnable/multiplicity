@@ -16,6 +16,7 @@ import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
+import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.events.IItemListener;
@@ -326,5 +327,17 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
 		// TODO Auto-generated method stub
 		
 	}
+
+    @Override
+    public IImage getKeyboardImage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void makeSureKeyboardImageIsOnTop() {
+        // TODO Auto-generated method stub
+        
+    }
 
 }

@@ -10,6 +10,7 @@ import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.items.IFrame;
+import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
@@ -26,7 +27,6 @@ import multiplicity.input.events.MultiTouchObjectEvent;
 import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
-import com.jme.renderer.ColorRGBA;
 
 public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBehaviour {
     
@@ -84,16 +84,21 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
                     //do regular hotspot stuff
                     hotSpotItem.tap();
 //                    hotSpotItem.getHotLink().changeBackgroundColor(new ColorRGBA(1f, 0f, 0f, .9f));
-                    StitcherUtils.bringToTop(hotSpotItem.getHotSpotFrameContent());
+//                    StitcherUtils.bringToTop(hotSpotItem.getHotSpotFrameContent());
                     IHotSpotFrame parentFrame = (IHotSpotFrame) hotSpotItem
                             .getParentItem();
 
       
-                    if (!parentFrame.isLocked()) {
-                        parentFrame.sendOverlayToBottom();
-                    }
+                  
 
-                    parentFrame.bringPaletToTop();
+                  if( !(parentFrame instanceof IHotSpotText) ) {
+                      if (!parentFrame.isLocked()) {
+                          parentFrame.sendOverlayToBottom();
+                      }
+                      parentFrame.bringPaletToTop();
+                  }
+                    
+                    
 
 //                    stitcherApp.getZOrderManager().bringToTop(hotSpotItem.getHotLink(),null);
 //                    if( hotSpotItem.getHotSpotFrameContent() instanceof IHotSpotText) {
@@ -120,7 +125,7 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
                 
             } else if (foundItem instanceof IHotSpotFrame) {
                 try {
-                    if( (foundItem instanceof IHotSpotFrame) ) {
+                    if( (foundItem instanceof IHotSpotFrame && !( foundItem instanceof IHotSpotText)) ) {
                          JMEFrame sourceFrame = (JMEFrame)foundItem;
                             IFrame originFrame = (IFrame) hotSpotItem.getParentItem();
                             
@@ -170,6 +175,8 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
 //                            if( hotSpotFrameContent instanceof IHotSpotText ) {
 //                                StitcherUtils.bringToTop(l);
 //                            }
+                    } else {
+                        hotSpotItem.centerItem();
                     }
 
 //              
