@@ -58,7 +58,7 @@ public class NorwegianKeyboardListener implements IMultiTouchKeyboardListener {
         
         if( editItem.getParentItem() instanceof IFrame ) {
             IFrame frame = (IFrame) editItem.getParentItem();
-            frame.setSize(editItem.getWidth(), editItem.getHeight());
+            frame.setSize(editItem.getWidth(), frame.getSize().y);
         }
         
         keyboard.reDrawKeyboard(shiftDown, altDown, ctlDown);

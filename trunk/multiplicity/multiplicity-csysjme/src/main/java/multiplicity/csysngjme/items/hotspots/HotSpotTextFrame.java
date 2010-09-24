@@ -2,9 +2,8 @@ package multiplicity.csysngjme.items.hotspots;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.net.URL;
 import java.util.UUID;
-
-import com.jme.math.Vector2f;
 
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
@@ -13,6 +12,8 @@ import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
+import multiplicity.csysng.items.IImage;
+import multiplicity.csysng.items.IImage.AlphaStyle;
 import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.csysng.items.keyboard.IKeyboardGraphicsRenderer;
 import multiplicity.csysng.items.keyboard.behaviour.KeyboardBehaviour;
@@ -20,6 +21,8 @@ import multiplicity.csysng.items.keyboard.defs.norwegian.NorwegianKeyboardListen
 import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRenderer;
 import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
 import multiplicity.csysngjme.factory.JMEContentItemFactory;
+
+import com.jme.math.Vector2f;
 
 public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
 
@@ -30,9 +33,12 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
     private IFrame keyboardFrame;
     private int taps = 0;
     private IEditableText labelText;
+    private IImage keyboardImage;
+    private URL keyboardImageUrl;
     
-    public HotSpotTextFrame(String name, UUID uuid, int width, int height) {
+    public HotSpotTextFrame(String name, UUID uuid, int width, int height, URL keyboardImageUrl) {
         super(name, uuid, width, height);
+        this.keyboardImageUrl = keyboardImageUrl;
     }
 
     
@@ -141,9 +147,10 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
         keyboardFrame.maintainBorderSizeDuringScale();
         keyboardFrame.addItem(keyboard);
         keyboardFrame.setRelativeLocation(new Vector2f(0f, -200f));
-        keyboardFrame.setBorder(contentItemFactory.createRoundedRectangleBorder("innerframeborder", UUID.randomUUID(), 20f, 8));    
+        keyboardFrame.setBorder(contentItemFactory.createRoundedRectangleBorder("innerframeborder", UUID.randomUUID(),1, 15));    
         BehaviourMaker.addBehaviour(keyboardFrame, RotateTranslateScaleBehaviour.class);
         
+        keyboard.getMultiTouchDispatcher().addListeners(keyboardFrame.getMultiTouchDispatcher().getListeners());
     }
 
 
@@ -153,16 +160,25 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
         getLabelText().setText(t);
         getLabelText().setFont(new Font("Arial", Font.BOLD, 48*2));
         getLabelText().setTextColour(Color.white);
-        getLabelText().setRelativeLocation(new Vector2f(0, 0));
+        getLabelText().setRelativeLocation(new Vector2f(0, -10));
         getLabelText().setCursorAt(t.length()-1);
         addItem(getLabelText());
 //        getLabelText().centerItem();
         
-        this.setSize(getLabelText().getSize());
+        
 //        this.getSize().setY(this.getSize().getY()*.8f);
 //        getFrameOverlay().setSize(this.getSize());
 //        updateModelBound();
 //        getLabelText().getMultiTouchDispatcher().addListeners(getMultiTouchDispatcher().getListeners());
+        
+        setKeyboardImage(ContentSystem.getContentSystem().getContentFactory().createImage("keyboard-icon", UUID.randomUUID()));
+        getKeyboardImage().setImage(keyboardImageUrl);
+        //img.setRelativeScale(0.6f);
+        getKeyboardImage().setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
+        getKeyboardImage().setRelativeLocation(new Vector2f(0, 53));
+        addItem(getKeyboardImage());
+
+        this.setSize(getLabelText().getSize().x, getLabelText().getSize().y+getKeyboardImage().getSize().y);
         
     }
     
@@ -190,6 +206,22 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
     @Override
     public void updateOverLay() {
         super.updateOverLay();
+    }
+
+
+    public void setKeyboardImage(IImage keyboardImage) {
+        this.keyboardImage = keyboardImage;
+    }
+
+
+    @Override
+    public IImage getKeyboardImage() {
+        return keyboardImage;
+    }
+    
+    @Override
+    public void makeSureKeyboardImageIsOnTop() {
+        this.getZOrderManager().bringToTop(getKeyboardImage(), null);
     }
 
 }

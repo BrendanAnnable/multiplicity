@@ -45,13 +45,13 @@ public class HotSpotFrameBehavior extends MultiTouchEventAdapter implements
     	
     	logger.debug("hotspot frame cursorpressed");
     	
-    	String type = hotSpotFrame.getType();
-    	
-    	if( type.equals(IStitcherContants.IMAGE) || type.equals(IStitcherContants.BACKGROUND) ) {
-    	      hotSpotFrame.updateOverLay();
-    	} 
-    	
-	      HotSpotUtils.updateHotSpots(hotSpotFrame);
+//    	String type = hotSpotFrame.getType();
+//    	
+//    	if( type.equals(IStitcherContants.IMAGE) || type.equals(IStitcherContants.BACKGROUND) ) {
+//    	      hotSpotFrame.updateOverLay();
+//    	} 
+//    	
+//	      HotSpotUtils.updateHotSpots(hotSpotFrame);
 
     	
     }

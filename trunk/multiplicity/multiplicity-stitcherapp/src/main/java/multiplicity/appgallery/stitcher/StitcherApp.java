@@ -47,6 +47,7 @@ import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.csysngjme.items.hotspots.listeners.OverlayBehavior;
 import multiplicity.input.IMultiTouchEventProducer;
+import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import no.uio.intermedia.snomobile.XWikiRestFulService;
 import no.uio.intermedia.snomobile.interfaces.IAttachment;
@@ -139,6 +140,8 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 //        add(bg);
 //        zOrderManager.sendToBottom(bg, null);
 //        zOrderManager.neverBringToTop(bg);
+	    createHotSpotRepo(IMAGE);
+        createHotSpotRepo(TEXT);
         
         Runnable runnable = new Runnable() {
             
@@ -173,8 +176,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
         runnable.run();
 		
 
-		createHotSpotRepo(IMAGE);
-		createHotSpotRepo(TEXT);
+		
 
 		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
 		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());
@@ -182,11 +184,11 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	}
 
     public IHotSpotFrame createNewHotSpotContentFrame(String type) {
-		return createNewFrame(null, null, HOTSPOT_FRAME_NAME, type);
+		return createNewFrame(null, null, null, type);
 	}
 
 	public IHotSpotFrame createNewFrame(IItem backgroundImage,Vector2f atPosition, String frameName, String type) {
-	    IHotSpotFrame newHotSpotFrame = null;
+	    final IHotSpotFrame newHotSpotFrame;
 
 	       
 	    if( type.equals(BACKGROUND) ) {
@@ -239,7 +241,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        float xPos = Integer.valueOf(-DisplaySystem.getDisplaySystem().getWidth() / 2 + (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
 	        float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
 
-	        newHotSpotFrame = (IHotSpotFrame) this.getHotSpotContentFactory().createHotSpotFrame(frameName + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
+	        newHotSpotFrame = (IHotSpotFrame) this.getHotSpotContentFactory().createHotSpotFrame(HOTSPOT_FRAME_NAME_IMAGE + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
 
 	        newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, new ColorRGBA(0f, 0f, 0f, 0f)));
 	        newHotSpotFrame.setSolidBackgroundColour(StitcherUtils.pink);
@@ -258,7 +260,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             float xPos = Integer.valueOf(-DisplaySystem.getDisplaySystem().getWidth() / 2 + (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
             float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
 
-            newHotSpotFrame  =  this.getHotSpotContentFactory().createEditableHotSpotTextFrame(frameName + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
+            newHotSpotFrame  =  this.getHotSpotContentFactory().createEditableHotSpotTextFrame(HOTSPOT_FRAME_NAME_TEXT + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION,StitcherApp.class.getResource("keyboard.png"));
             
             newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, StitcherUtils.burColorRGBA));
             
@@ -269,15 +271,29 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             newHotSpotFrame.maintainBorderSizeDuringScale();
             newHotSpotFrame.setRelativeLocation(new Vector2f(xPos, yPos));
             ((IHotSpotText)newHotSpotFrame).createText("tag");
-            
-//            Color awtColor = Color.decode(StitcherUtils.burColorRGBA.toString());
-//            ((IHotSpotText)newHotSpotFrame).setTextColour(new Color(StitcherUtils.burColorRGBA.r, StitcherUtils.burColorRGBA.g, StitcherUtils.burColorRGBA.b, 1f));
-            
             ((IHotSpotText)newHotSpotFrame).setTextColour(new Color(90,18,18));
 
             BehaviourMaker.addBehaviour(newHotSpotFrame, RotateTranslateScaleBehaviour.class);
 
             ((IHotSpotText)newHotSpotFrame).createKeyboard(NorwegianKeyboardDefinition.class);
+            
+            newHotSpotFrame.getMultiTouchDispatcher().addListener(new MultiTouchEventAdapter(){
+                
+                    @Override
+                    public void cursorChanged(MultiTouchCursorEvent event) {
+                        super.cursorChanged(event);
+                        ((IHotSpotText)newHotSpotFrame).makeSureKeyboardImageIsOnTop();
+                    }
+                
+                    @Override
+                    public void cursorReleased(MultiTouchCursorEvent event) {
+                        super.cursorReleased(event);
+                        ((IHotSpotText)newHotSpotFrame).makeSureKeyboardImageIsOnTop();
+                        
+                    }
+            });
+	    } else {
+	        newHotSpotFrame = null; 
 	    }
 	         
 		BehaviourMaker.addBehaviour(newHotSpotFrame, HotSpotTextBehavior.class);
@@ -293,7 +309,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 			// set up the palet
 			IPalet palet = this.getPaletFactory().createPaletItem("palet",
 					UUID.randomUUID(), PALET_DIMENSION,
-					new ColorRGBA(0f, 1f, 0f, 1f));
+					new ColorRGBA(0f, 1f, 0f, .5f));
 			StitcherUtils.modScaleBehavior(palet.getBehaviours(), false);
 			newHotSpotFrame.addPalet(palet);
 			palet.centerItem();

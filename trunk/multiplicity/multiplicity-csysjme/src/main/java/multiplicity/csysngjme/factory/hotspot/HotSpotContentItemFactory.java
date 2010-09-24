@@ -68,8 +68,8 @@ public class HotSpotContentItemFactory implements IHotSpotContentFactory {
     }
 
     @Override
-    public IHotSpotFrame createEditableHotSpotTextFrame(String name, UUID uuid, int width, int height) {
-        HotSpotTextFrame text = new HotSpotTextFrame(name, uuid, width, height);
+    public IHotSpotFrame createEditableHotSpotTextFrame(String name, UUID uuid, int width, int height,URL keyboardImage) {
+        HotSpotTextFrame text = new HotSpotTextFrame(name, uuid, width, height,keyboardImage);
         text.initializeGeometry();
 //        text.addFrameOverlay();
         return text;

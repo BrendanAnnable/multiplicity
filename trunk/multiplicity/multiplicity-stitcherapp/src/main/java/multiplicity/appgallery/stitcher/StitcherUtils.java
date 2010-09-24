@@ -29,8 +29,9 @@ public class StitcherUtils {
     
     public final static Logger logger = Logger.getLogger(StitcherUtils.class.getName());
 
-    public static ColorRGBA burColorRGBA = new ColorRGBA(.9f, .6f, .6f, 1f);
-    public static Color pink = new Color(StitcherUtils.burColorRGBA.r, StitcherUtils.burColorRGBA.g, StitcherUtils.burColorRGBA.b, 1f);
+    public static ColorRGBA burColorRGBA = new ColorRGBA(90f/255f, 16f/255f, 16f/255f, 1f);
+    public static Color burg = new Color(90,18,18);
+    public static Color pink = new Color(248, 181, 182);
     public static StitcherApp stitcherApp;
     public static String wikiUser = null;
     public static String wikiPass = null;
