@@ -28,11 +28,14 @@ import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 
-public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBehaviour {
-    
-    private final static Logger logger = Logger.getLogger(HotSpotItemBehavior.class.getName());
-    
+public class HotSpotItemBehavior extends MultiTouchEventAdapter implements
+        IBehaviour {
+
+    private final static Logger logger = Logger
+            .getLogger(HotSpotItemBehavior.class.getName());
+
     private IHotSpotItem hotSpotItem;
+
     private HotSpotContentItemFactory hotSpotContentItemFactory = new HotSpotContentItemFactory();
 
     @Override
@@ -40,21 +43,23 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
         super.objectChanged(event);
         logger.debug("Hotspot CHANGED clicked");
     }
+
     @Override
     public void cursorChanged(MultiTouchCursorEvent event) {
         super.cursorChanged(event);
-        if(hotSpotItem.getParentItem() != null && ( hotSpotItem.getParentItem() instanceof IHotSpotFrame )) {
-             logger.debug("hotspot updating on change");
-              hotSpotItem.updateHotSpot();
+        if (hotSpotItem.getParentItem() != null
+                && (hotSpotItem.getParentItem() instanceof IHotSpotFrame)) {
+            logger.debug("hotspot updating on change");
+            hotSpotItem.updateHotSpot();
         }
     }
-    
+
     @Override
     public void cursorPressed(MultiTouchCursorEvent event) {
         super.cursorPressed(event);
         logger.debug("Hotspot cursor pressed");
     }
-    
+
     @Override
     public void cursorReleased(MultiTouchCursorEvent event) {
         super.cursorReleased(event);
@@ -63,141 +68,158 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
 
         JMEFrame hotSpotRepo = (JMEFrame) hotSpotItem.getParentItem();
         Vector2f locStore = new Vector2f();
-        ContentSystem.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), locStore);
+        ContentSystem.getContentSystem().getDisplayManager()
+                .tableToScreen(event.getPosition(), locStore);
 
-        List<IItem> findItemsOnTableAtPosition = ContentSystem.getContentSystem().getPickSystem().findItemsOnTableAtPosition(locStore);
+        List<IItem> findItemsOnTableAtPosition = ContentSystem
+                .getContentSystem().getPickSystem()
+                .findItemsOnTableAtPosition(locStore);
 
-        if( findItemsOnTableAtPosition == null || findItemsOnTableAtPosition.isEmpty() ) {
+        if (findItemsOnTableAtPosition == null
+                || findItemsOnTableAtPosition.isEmpty()) {
             hotSpotItem.centerItem();
             return;
         }
-        
-        logger.debug("finditems on from hotspot drop " + findItemsOnTableAtPosition);
-        
+
+        logger.debug("finditems on from hotspot drop "
+                + findItemsOnTableAtPosition);
+
         for (IItem foundItem : findItemsOnTableAtPosition) {
-            if ( foundItem.equals(hotSpotItem.getParentItem())) {
+            if (foundItem.equals(hotSpotItem.getParentItem())) {
 
                 logger.debug("HotspotItem  released on parent");
                 if (foundItem instanceof IHotSpotRepo) {
                     hotSpotItem.centerItem();
                 } else {
-                    //do regular hotspot stuff
+                    // do regular hotspot stuff
                     hotSpotItem.tap();
-//                    hotSpotItem.getHotLink().changeBackgroundColor(new ColorRGBA(1f, 0f, 0f, .9f));
-//                    StitcherUtils.bringToTop(hotSpotItem.getHotSpotFrameContent());
+                    // hotSpotItem.getHotLink().changeBackgroundColor(new
+                    // ColorRGBA(1f, 0f, 0f, .9f));
+                    // StitcherUtils.bringToTop(hotSpotItem.getHotSpotFrameContent());
                     IHotSpotFrame parentFrame = (IHotSpotFrame) hotSpotItem
                             .getParentItem();
 
-      
-                  
+                    if (!(parentFrame instanceof IHotSpotText)) {
+                        if (!parentFrame.isLocked()) {
+                            parentFrame.sendOverlayToBottom();
+                        }
+                        parentFrame.bringPaletToTop();
+                    }
 
-                  if( !(parentFrame instanceof IHotSpotText) ) {
-                      if (!parentFrame.isLocked()) {
-                          parentFrame.sendOverlayToBottom();
-                      }
-                      parentFrame.bringPaletToTop();
-                  }
-                    
-                    
+                    // stitcherApp.getZOrderManager().bringToTop(hotSpotItem.getHotLink(),null);
+                    // if( hotSpotItem.getHotSpotFrameContent() instanceof
+                    // IHotSpotText) {
+                    // //redraw it
+                    // HotSpotItemMultiTouchListener.updateHotSpots((IHotSpotFrame)
+                    // hotSpotItem.getParentItem());
+                    // parentFrame.sendHotLinksToTop();
+                    // ((IHotSpotFrame)
+                    // hotSpotItem.getHotSpotFrameContent()).sendHotLinksToTop();
+                    // }
 
-//                    stitcherApp.getZOrderManager().bringToTop(hotSpotItem.getHotLink(),null);
-//                    if( hotSpotItem.getHotSpotFrameContent() instanceof IHotSpotText) {
-//                        //redraw it
-//                        HotSpotItemMultiTouchListener.updateHotSpots((IHotSpotFrame) hotSpotItem.getParentItem());
-//                        parentFrame.sendHotLinksToTop();
-//                        ((IHotSpotFrame) hotSpotItem.getHotSpotFrameContent()).sendHotLinksToTop();
-//                    }
-                    
                     // hide show
-                    logger.debug("num of hspot taps " + hotSpotItem.getTapCount());
-                    if (hotSpotItem.getTapCount() > 2 ) {
+                    logger.debug("num of hspot taps "
+                            + hotSpotItem.getTapCount());
+                    if (hotSpotItem.getTapCount() > 2) {
                         hotSpotItem.toggle();
                         hotSpotItem.resetTaps();
                     } else {
                         HotSpotUtils.updateHotLinkSegments(parentFrame);
                     }
-                    
-                    
+
                 }
 
                 return;
 
-                
             } else if (foundItem instanceof IHotSpotFrame) {
                 try {
-                    if( (foundItem instanceof IHotSpotFrame && !( foundItem instanceof IHotSpotText)) ) {
-                         JMEFrame sourceFrame = (JMEFrame)foundItem;
-                            IFrame originFrame = (IFrame) hotSpotItem.getParentItem();
-                            
-                            
-                            
-							IHotSpotItem hotSpotItemCircle = hotSpotContentItemFactory.createHotSpotItem("hotspot", UUID.randomUUID(), IStitcherContants.HOTSPOT_DIMENSION / 4, StitcherUtils.burColorRGBA);
-                            hotSpotItemCircle.setType(hotSpotItem.getType());
-                            BehaviourMaker.addBehaviour(hotSpotItemCircle, HotSpotItemBehavior.class);
-                            BehaviourMaker.addBehaviour(hotSpotItemCircle, RotateTranslateScaleBehaviour.class);
-                            StitcherUtils.modScaleBehavior(hotSpotItemCircle.getBehaviours(),false);
-                            
-                            
-                            
-                            Vector2f itemWorldPos = hotSpotItem.getWorldLocation();
-                            
-                            
-                            sourceFrame.addItem(hotSpotItemCircle);
-                            hotSpotItemCircle.setWorldLocation(itemWorldPos);
-                            sourceFrame.getZOrderManager().bringToTop(hotSpotItemCircle, null);
+                    if ((foundItem instanceof IHotSpotFrame && !(foundItem instanceof IHotSpotText))) {
+                        JMEFrame sourceFrame = (JMEFrame) foundItem;
+                        IFrame originFrame = (IFrame) hotSpotItem
+                                .getParentItem();
 
-                            hotSpotItem.centerItem();
-                            
-                            ((IHotSpotFrame) sourceFrame).addHotSpot(hotSpotItemCircle);
+                        IHotSpotItem hotSpotItemCircle = hotSpotContentItemFactory
+                                .createHotSpotItem(
+                                        "hotspot",
+                                        UUID.randomUUID(),
+                                        IStitcherContants.HOTSPOT_DIMENSION / 4,
+                                        StitcherUtils.burColorRGBA);
+                        hotSpotItemCircle.setType(hotSpotItem.getType());
+                        BehaviourMaker.addBehaviour(hotSpotItemCircle,
+                                HotSpotItemBehavior.class);
+                        BehaviourMaker.addBehaviour(hotSpotItemCircle,
+                                RotateTranslateScaleBehaviour.class);
+                        StitcherUtils.modScaleBehavior(
+                                hotSpotItemCircle.getBehaviours(), false);
 
-//                            logger.debug("hotspot location " + hotSpotItemCircle.getRelativeLocation() + "world " + hotSpotItemCircle.getWorldLocation() + "scale " + hotSpotItemCircle.getRelativeScale());
-                            IHotSpotFrame hotSpotFrameContent = StitcherUtils.createNewHotSpotFrame(hotSpotItemCircle.getType());
+                        Vector2f itemWorldPos = hotSpotItem.getWorldLocation();
 
-                            hotSpotItemCircle.setHotSpotFrameContent(hotSpotFrameContent);
+                        sourceFrame.addItem(hotSpotItemCircle);
+                        hotSpotItemCircle.setWorldLocation(itemWorldPos);
+                        sourceFrame.getZOrderManager().bringToTop(
+                                hotSpotItemCircle, null);
 
-                            IHotLink l = (HotLink) hotSpotItemCircle.createHotLink();
-                    
+                        hotSpotItem.centerItem();
 
-                            StitcherUtils.addHotLink(l);
-                            
-//                            logger.debug("HOTLINK location " + l.getRelativeLocation() + "world " + l.getWorldLocation() + "scale " + l.getRelativeScale());
+                        ((IHotSpotFrame) sourceFrame)
+                                .addHotSpot(hotSpotItemCircle);
 
+                        // logger.debug("hotspot location " +
+                        // hotSpotItemCircle.getRelativeLocation() + "world " +
+                        // hotSpotItemCircle.getWorldLocation() + "scale " +
+                        // hotSpotItemCircle.getRelativeScale());
+                        IHotSpotFrame hotSpotFrameContent = StitcherUtils
+                                .createNewHotSpotFrame(hotSpotItemCircle
+                                        .getType());
 
-                            logger.debug("dropped hotspotitem on " + sourceFrame.getName());
+                        hotSpotItemCircle
+                                .setHotSpotFrameContent(hotSpotFrameContent);
 
-                            // create a new hotspot candidate
-//                            StitcherUtils.fillHotSpotRepo(originFrame,hsItem.getType());
-                             
-                            
-                            
-                            StitcherUtils.updateHotShotContentFrames();
-                            
-//                            if( hotSpotFrameContent instanceof IHotSpotText ) {
-//                                StitcherUtils.bringToTop(l);
-//                            }
+                        IHotLink l = (HotLink) hotSpotItemCircle
+                                .createHotLink();
+
+                        StitcherUtils.addHotLink(l);
+
+                        // logger.debug("HOTLINK location " +
+                        // l.getRelativeLocation() + "world " +
+                        // l.getWorldLocation() + "scale " +
+                        // l.getRelativeScale());
+
+                        logger.debug("dropped hotspotitem on "
+                                + sourceFrame.getName());
+
+                        // create a new hotspot candidate
+                        // StitcherUtils.fillHotSpotRepo(originFrame,hsItem.getType());
+
+                        StitcherUtils.updateHotShotContentFrames();
+
+                        // bring up the keyboard
+                        if (hotSpotFrameContent instanceof IHotSpotText) {
+                            StitcherUtils.showKeyboard((IHotSpotText) hotSpotFrameContent);
+                        }
                     } else {
                         hotSpotItem.centerItem();
                     }
 
-//              
+                    //
 
                 } catch (Exception e) {
                     logger.debug("HotSpotItem Exception: " + e);
                 }// try
-                
+
                 return;
             }// if
         }// for
 
-        //move no place
-            hotSpotItem.centerItem();
-            logger.debug("hotspotitem in the mist");
+        // move no place
+        hotSpotItem.centerItem();
+        logger.debug("hotspotitem in the mist");
 
     }
 
     @Override
     public void removeItemActingOn() {
-        if(hotSpotItem != null) {
+        if (hotSpotItem != null) {
             hotSpotItem.getMultiTouchDispatcher().remove(this);
         }
         this.hotSpotItem = null;
@@ -205,12 +227,12 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements IBeha
 
     @Override
     public void setItemActingOn(IItem item) {
-        if(item instanceof IHotSpotItem) {
+        if (item instanceof IHotSpotItem) {
             this.hotSpotItem = (IHotSpotItem) item;
             this.hotSpotItem.getMultiTouchDispatcher().addListener(this);
-        }else{
-            //TODO: log severe
+        } else {
+            // TODO: log severe
         }
     }
-   
+
 }
