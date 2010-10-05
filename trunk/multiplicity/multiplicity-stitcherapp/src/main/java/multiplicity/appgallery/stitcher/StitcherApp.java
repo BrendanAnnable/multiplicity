@@ -442,16 +442,17 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		Float xPos = 0f;
 		Float yPos = 0f;
 		if( type.equals(TEXT) ) {
-		    xPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getWidth() / 2 - (HOTSPOT_DIMENSION / 2)-60).floatValue();
-		    yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_DIMENSION / 2)-60).floatValue();
+		    xPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getWidth() / 2 - (HOTSPOT_DIMENSION / 2)-20).floatValue();
+		    yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_DIMENSION / 2)-360).floatValue();
+		    logger.debug("HSPOT TEXT REPO " + xPos + "," +yPos);
 		} else if(type.equals(IMAGE)) {
-		    xPos = Double.valueOf(DisplaySystem.getDisplaySystem().getWidth() / 2 - ((HOTSPOT_DIMENSION * 1.5)  +60)).floatValue();
-	        yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_DIMENSION / 2) - 60).floatValue();
-		    
+		    xPos = Double.valueOf(DisplaySystem.getDisplaySystem().getWidth() / 2 - (HOTSPOT_DIMENSION / 2)-20).floatValue();
+	        yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_DIMENSION / 2) - 460).floatValue();
+	        logger.debug("HSPOT IMAGE REPO " + xPos + "," +yPos);
 		}
 		
 		
-		frame.setRelativeLocation(new Vector2f(xPos, yPos));
+		frame.setRelativeLocation(new Vector2f(-xPos, yPos));
 
 		this.add(frame);
 		fillHotSpotRepo(frame,type);
