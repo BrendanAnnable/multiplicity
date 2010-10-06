@@ -37,6 +37,13 @@ public class HotSpotFrameBehavior extends MultiTouchEventAdapter implements
     	
 		   HotSpotUtils.updateHotSpots(hotSpotFrame);
 
+		   
+    }
+    
+    @Override
+    public void cursorReleased(MultiTouchCursorEvent event) {
+        super.cursorReleased(event);
+        logger.debug("HOTSPOT FRAME POS RL" + hotSpotFrame.getRelativeLocation() + " WL" + hotSpotFrame.getWorldLocation());
     }
     
     @Override
