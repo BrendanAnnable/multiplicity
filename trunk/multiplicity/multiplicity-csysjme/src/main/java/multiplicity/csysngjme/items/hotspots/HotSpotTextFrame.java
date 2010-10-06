@@ -180,6 +180,10 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
 
         this.setSize(getLabelText().getSize().x, getLabelText().getSize().y+getKeyboardImage().getSize().y);
         
+        if( t != null && t.equals("tag")) {
+            getLabelText().setText(" ");
+        }
+        
     }
     
     @Override
