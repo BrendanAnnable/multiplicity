@@ -171,6 +171,13 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements
                         IHotSpotFrame hotSpotFrameContent = StitcherUtils
                                 .createNewHotSpotFrame(hotSpotItemCircle
                                         .getType());
+                        
+                        //reposition
+                        float x1 = ((sourceFrame.getSize().x / 2 ) + sourceFrame.getBorder().getBorderWidth())+ 60;
+                        
+                        float xp = x1+sourceFrame.getWorldLocation().x;
+                        float yp = sourceFrame.getWorldLocation().y;
+                        hotSpotFrameContent.setWorldLocation(new Vector2f(xp, yp));
 
                         hotSpotItemCircle
                                 .setHotSpotFrameContent(hotSpotFrameContent);

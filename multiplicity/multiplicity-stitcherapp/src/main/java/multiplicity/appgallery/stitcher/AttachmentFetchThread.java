@@ -416,7 +416,7 @@ public class AttachmentFetchThread extends Thread {
 							i = StitcherUtils.createPhotoImage(file.toURI().toURL());
 //							i.addItemListener(new ImageItemListener(stitcherApp));
 							
-							BehaviourMaker.addBehaviour(i, HotSpotImageBehavior.class);
+							
 							Vector2f size = ((JMERectangularItem) i).getSize();
 							calculatedScale = StitcherUtils.getScale(size);
 						} catch (MalformedURLException e) {

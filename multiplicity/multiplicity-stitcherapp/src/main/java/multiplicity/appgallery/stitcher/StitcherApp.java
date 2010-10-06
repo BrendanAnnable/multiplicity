@@ -15,6 +15,7 @@ import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
 import multiplicity.appgallery.stitcher.listeners.HotSpotFrameBehavior;
+import multiplicity.appgallery.stitcher.listeners.HotSpotImageBehavior;
 import multiplicity.appgallery.stitcher.listeners.HotSpotItemBehavior;
 import multiplicity.appgallery.stitcher.listeners.HotSpotTextBehavior;
 import multiplicity.appgallery.stitcher.listeners.PaletBehavior;
@@ -419,7 +420,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             Vector<Object> itemEntry = (Vector<Object>) imagesToAdd.elementAt(i);
 
             IImage image = (IImage) itemEntry.elementAt(1);
-            
+            BehaviourMaker.addBehaviour(image, HotSpotImageBehavior.class);
             float scale = (Float) itemEntry.elementAt(0);
             image.setRelativeScale(scale);
 //            new ImageMultiTouchListener(image, this);
