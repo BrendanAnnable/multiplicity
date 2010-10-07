@@ -23,6 +23,7 @@ import multiplicity.appgallery.stitcher.listeners.RepositoryBehavior;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysng.behaviours.inertia.InertiaBehaviour;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.factory.IPaletFactory;
 import multiplicity.csysng.gfx.Gradient;
@@ -323,6 +324,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	    
 	    
 	    //add for later
+		BehaviourMaker.addBehaviour(newHotSpotFrame, InertiaBehaviour.class);
 		this.add(newHotSpotFrame);
         hotSpotFrames.add(newHotSpotFrame);
 	    
@@ -426,6 +428,8 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 //            new ImageMultiTouchListener(image, this);
             frame.addItem(image);
            
+            //add behavior
+            BehaviourMaker.addBehaviour(image, InertiaBehaviour.class);
             Vector2f position = StitcherUtils.generateRandomPosition(frame, image);
             image.setRelativeLocation(position);
         }
