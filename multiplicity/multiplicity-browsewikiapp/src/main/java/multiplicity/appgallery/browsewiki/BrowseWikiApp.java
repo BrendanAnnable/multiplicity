@@ -26,6 +26,7 @@ import multiplicity.appgallery.stitcher.listeners.RepositoryBehavior;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysng.behaviours.inertia.InertiaBehaviour;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.factory.IPaletFactory;
 import multiplicity.csysng.gfx.Gradient;
@@ -113,12 +114,12 @@ public class BrowseWikiApp extends AbstractMultiplicityApp implements IStitcherC
 			StitcherUtils.wikiUser = prop.getProperty("DEFAULT_USER");
 			StitcherUtils.wikiPass = prop.getProperty("DEFAULT_PASS");
 			StitcherUtils.maxFileSize = Integer.valueOf(prop.getProperty("MAX_ATTCHMENT_SIZE"));
-			stencilsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("REPOSITORY_WIKI_SPACE"), prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
-			wikiPages.put(pageNames.get(0), stencilsPage);
-			backgroundsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
-			wikiPages.put(pageNames.get(1), backgroundsPage);
+//			stencilsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("REPOSITORY_WIKI_SPACE"), prop.getProperty("REPOSITORY_WIKI_SPACE_STENCILS"), false);
+//			wikiPages.put(pageNames.get(0), stencilsPage);
+//			backgroundsPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_BACKGROUNDS"), false);
+//			wikiPages.put(pageNames.get(1), backgroundsPage);
 			scansPage = getWikiPage(prop, prop.getProperty("DEFAULT_WIKI_NAME"), prop.getProperty("CLASS_WIKI_SPACE"), prop.getProperty("CLASS_WIKI_SPACE_SCANS"), false);
-			wikiPages.put(pageNames.get(2), scansPage);
+			wikiPages.put(pageNames.get(0), scansPage);
 		} catch (IOException e) {
 			logger.debug("setup:  IOException: " + e);
 		}
@@ -191,6 +192,7 @@ public class BrowseWikiApp extends AbstractMultiplicityApp implements IStitcherC
             image.setRelativeScale(scale);
             Vector2f position = this.generateRandomPosition(image);
             image.setRelativeLocation(position);
+            BehaviourMaker.addBehaviour(image, InertiaBehaviour.class);
             this.add(image);
         }
 
