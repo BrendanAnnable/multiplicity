@@ -65,5 +65,12 @@ public class NorwegianKeyboardDefinition extends KeyboardDefinition {
         CharacterKey spaceKey = new CharacterKey("Space", KeyEvent.VK_SPACE);
         KeyboardKey spaceBar = new KeyboardKey(spaceKey, rect);
         addKey(spaceBar);
+        
+        KeyboardKey ooo = getKey("¾");
+        KeyboardKey sp = getKey("Space");
+        rect = new Rectangle2D.Float(ooo.getMaxX() + gapBetweenKeys, sp.getMinY(), standardKeyWidth * 1.5f, standardKeyHeight);
+        CharacterKey closeKey = new CharacterKey("CLOSE", KeyEvent.VK_CANCEL);
+        KeyboardKey closeBar = new KeyboardKey(closeKey, rect);
+        addKey(closeBar);
     }
 }

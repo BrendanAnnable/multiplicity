@@ -2,7 +2,6 @@ package multiplicity.csysng.items.keyboard.defs.norwegian;
 
 import java.awt.event.KeyEvent;
 
-import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
@@ -42,11 +41,10 @@ public class NorwegianKeyboardListener implements IMultiTouchKeyboardListener {
                  editItem.appendString("Å");
          } else if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
             editItem.removeChar();
-            
-            
+       
         }else if(k.getKeyCode() == KeyEvent.VK_ENTER) {
             // ignore
-        }else if(k.getModifiers() == KeyModifiers.NONE) {               
+        }else if(k.getKeyCode() !=  KeyEvent.VK_CANCEL && k.getModifiers() == KeyModifiers.NONE  ) {               
             if(shiftDown) {
                 String txt = KeyEvent.getKeyText(k.getKeyCode()).toUpperCase();
                 editItem.appendChar(txt.charAt(0));

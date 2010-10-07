@@ -324,7 +324,6 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	    
 	    
 	    //add for later
-		BehaviourMaker.addBehaviour(newHotSpotFrame, InertiaBehaviour.class);
 		this.add(newHotSpotFrame);
         hotSpotFrames.add(newHotSpotFrame);
 	    

@@ -1,6 +1,7 @@
 package multiplicity.csysng.items;
 
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
+import multiplicity.csysng.items.keyboard.behaviour.KeyboardBehaviour;
 import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
 
 public interface IHotSpotText extends IEditableText, IHotSpotFrame {
@@ -26,6 +27,8 @@ public interface IHotSpotText extends IEditableText, IHotSpotFrame {
     public IImage getKeyboardImage();
 
     public void makeSureKeyboardImageIsOnTop();
+
+    public KeyboardBehaviour getKeyBoardBehavior();
 
 
 }
