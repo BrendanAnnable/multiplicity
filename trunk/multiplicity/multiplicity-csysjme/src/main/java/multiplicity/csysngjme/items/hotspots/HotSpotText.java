@@ -340,4 +340,10 @@ public class HotSpotText extends JMEEditableText implements IHotSpotText {
         
     }
 
+    @Override
+    public KeyboardBehaviour getKeyBoardBehavior() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
