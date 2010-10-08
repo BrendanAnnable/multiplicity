@@ -20,6 +20,7 @@ import multiplicity.csysng.items.keyboard.behaviour.KeyboardBehaviour;
 import multiplicity.csysng.items.keyboard.defs.norwegian.NorwegianKeyboardListener;
 import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRenderer;
 import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
+import multiplicity.csysng.items.keyboard.model.KeyboardKey;
 import multiplicity.csysngjme.factory.JMEContentItemFactory;
 
 import com.jme.math.Vector2f;
@@ -35,6 +36,7 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
     private IEditableText labelText;
     private IImage keyboardImage;
     private URL keyboardImageUrl;
+    private KeyboardBehaviour keyBoardBehavior;
     
     public HotSpotTextFrame(String name, UUID uuid, int width, int height, URL keyboardImageUrl) {
         super(name, uuid, width, height);
@@ -139,10 +141,9 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
         keyboard.setKeyboardDefinition(kbd);
         IKeyboardGraphicsRenderer keyboardRenderer = new SimpleAlphaKeyboardRenderer(kbd);
         keyboard.setKeyboardRenderer(keyboardRenderer);
-        KeyboardBehaviour kbb = (KeyboardBehaviour) BehaviourMaker.addBehaviour(keyboard, KeyboardBehaviour.class);
-        kbb.addListener(keyboardRenderer);
-        kbb.addListener(new NorwegianKeyboardListener(labelText, keyboard));
-        
+        setKeyBoardBehavior((KeyboardBehaviour) BehaviourMaker.addBehaviour(keyboard, KeyboardBehaviour.class));
+        getKeyBoardBehavior().addListener(keyboardRenderer);
+        getKeyBoardBehavior().addListener(new NorwegianKeyboardListener(labelText, keyboard));
         keyboardFrame = contentItemFactory.createFrame("keyboardFrame", UUID.randomUUID(), keyboard.getSize().x, keyboard.getSize().y);     
         keyboardFrame.maintainBorderSizeDuringScale();
         keyboardFrame.addItem(keyboard);
@@ -226,6 +227,17 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
     @Override
     public void makeSureKeyboardImageIsOnTop() {
         this.getZOrderManager().bringToTop(getKeyboardImage(), null);
+    }
+
+
+    public void setKeyBoardBehavior(KeyboardBehaviour keyBoardBehavior) {
+        this.keyBoardBehavior = keyBoardBehavior;
+    }
+
+
+    @Override
+    public KeyboardBehaviour getKeyBoardBehavior() {
+        return keyBoardBehavior;
     }
 
 }
