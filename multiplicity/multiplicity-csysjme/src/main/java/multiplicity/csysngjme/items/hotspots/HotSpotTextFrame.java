@@ -22,8 +22,10 @@ import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRendere
 import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
 import multiplicity.csysng.items.keyboard.model.KeyboardKey;
 import multiplicity.csysngjme.factory.JMEContentItemFactory;
+import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 
 import com.jme.math.Vector2f;
+import com.jme.renderer.ColorRGBA;
 
 public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
 
@@ -127,6 +129,16 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
     }
 
     @Override
+    public void setSize(float width, float height) {
+        super.setSize(width, height);
+        
+        if( getKeyboardImage() != null && getLabelText() != null ) {
+            getKeyboardImage().setRelativeLocation(new Vector2f(getLabelText().getWidth()/2-32f,70));
+        }
+        
+        
+    }
+    @Override
     public void createKeyboard(Class<? extends KeyboardDefinition> keyboardDef) {
         keyboard = contentItemFactory.createKeyboard("kb", UUID.randomUUID());
         
@@ -148,7 +160,11 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
         keyboardFrame.maintainBorderSizeDuringScale();
         keyboardFrame.addItem(keyboard);
         keyboardFrame.setRelativeLocation(new Vector2f(0f, -200f));
-        keyboardFrame.setBorder(contentItemFactory.createRoundedRectangleBorder("innerframeborder", UUID.randomUUID(),1, 15));    
+        
+        JMERoundedRectangleBorder jmeRoundedRectangleBorder = new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 15, 5, new ColorRGBA(1f,0f, 1f, 1f));
+        jmeRoundedRectangleBorder.setColor(new ColorRGBA(.211f, .211f, .211f, 1f));
+
+        keyboardFrame.setBorder(jmeRoundedRectangleBorder);    
         BehaviourMaker.addBehaviour(keyboardFrame, RotateTranslateScaleBehaviour.class);
         
         keyboard.getMultiTouchDispatcher().addListeners(keyboardFrame.getMultiTouchDispatcher().getListeners());
@@ -159,7 +175,7 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
     public void createText(String t) {
         setLabelText(ContentSystem.getContentSystem().getContentFactory().createEditableText("hotspot-text", UUID.randomUUID()));
         getLabelText().setText(t);
-        getLabelText().setFont(new Font("Arial", Font.BOLD, 48*2));
+        getLabelText().setFont(new Font("Arial Narrow", Font.BOLD, 48*3));
         getLabelText().setTextColour(Color.white);
         getLabelText().setRelativeLocation(new Vector2f(0, -10));
         getLabelText().setCursorAt(t.length()-1);
@@ -176,7 +192,7 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
         getKeyboardImage().setImage(keyboardImageUrl);
         //img.setRelativeScale(0.6f);
         getKeyboardImage().setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
-        getKeyboardImage().setRelativeLocation(new Vector2f(0, 53));
+        getKeyboardImage().setRelativeLocation(new Vector2f(getLabelText().getWidth()/2-32f, 70));
         addItem(getKeyboardImage());
 
         this.setSize(getLabelText().getSize().x, getLabelText().getSize().y+getKeyboardImage().getSize().y);

@@ -28,6 +28,7 @@ import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.factory.IPaletFactory;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
+import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IImage;
@@ -39,6 +40,7 @@ import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.hotspot.IHotSpotRepo;
 import multiplicity.csysng.items.keyboard.defs.norwegian.NorwegianKeyboardDefinition;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
+import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysng.items.repository.IBackgroundRepositoryFrame;
 import multiplicity.csysng.items.repository.IImageRepositoryFrame;
 import multiplicity.csysng.items.repository.IRepositoryContentItemFactory;
@@ -133,15 +135,18 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	}
 
 	private void loadContent(final HashMap<String, IPage> wikiPages) {
+//        
+        IImage bg = getContentFactory().createImage("backgroundimage",
+                UUID.randomUUID());
+        bg.setImage(StitcherApp.class
+                .getResource("white1920x1200.png"));
+        bg.centerItem();
+        add(bg);
         
-//        IImage bg = getContentFactory().createImage("backgroundimage",
-//                UUID.randomUUID());
-//        bg.setImage(StitcherApp.class
-//                .getResource("bluebackground1680.png"));
-//        bg.centerItem();
-//        add(bg);
-//        zOrderManager.sendToBottom(bg, null);
-//        zOrderManager.neverBringToTop(bg);
+        zOrderManager.sendToBottom(bg, null);
+        zOrderManager.neverBringToTop(bg);
+	    
+	    
 	    createHotSpotRepo(IMAGE);
         createHotSpotRepo(TEXT);
         
@@ -178,11 +183,15 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
         runnable.run();
 		
 
-		
 
 		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
 		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());
 		add(cursors);
+		
+		  ICursorTrailsOverlay trails = getContentFactory().createCursorTrailsOverlay("trails", UUID.randomUUID());
+	        trails.respondToItem(bg);
+	        trails.setFadingColour(Color.black);
+	        add(trails);
 	}
 
     public IHotSpotFrame createNewHotSpotContentFrame(String type) {
@@ -246,7 +255,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        newHotSpotFrame = (IHotSpotFrame) this.getHotSpotContentFactory().createHotSpotFrame(HOTSPOT_FRAME_NAME_IMAGE + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
 
 	        newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, new ColorRGBA(0f, 0f, 0f, 0f)));
-	        newHotSpotFrame.setSolidBackgroundColour(StitcherUtils.pink);
+	        newHotSpotFrame.setSolidBackgroundColour(Color.black);
 //	        newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 	        newHotSpotFrame.maintainBorderSizeDuringScale();
 	        newHotSpotFrame.setRelativeLocation(new Vector2f(xPos, yPos));
@@ -267,13 +276,13 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, StitcherUtils.burColorRGBA));
             
             
-            newHotSpotFrame.setSolidBackgroundColour(StitcherUtils.pink);
+            newHotSpotFrame.setSolidBackgroundColour(Color.black);
 //            newHotSpotFrame.setGradientBackground(StitcherUtils.burColorRGBA, StitcherUtils.burColorRGBA, GradientDirection.VERTICAL));
 //            newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
             newHotSpotFrame.maintainBorderSizeDuringScale();
             newHotSpotFrame.setRelativeLocation(new Vector2f(xPos, yPos));
             ((IHotSpotText)newHotSpotFrame).createText("tag");
-            ((IHotSpotText)newHotSpotFrame).setTextColour(new Color(90,18,18));
+//            ((IHotSpotText)newHotSpotFrame).setTextColour(new Color(90,18,18));
 
             BehaviourMaker.addBehaviour(newHotSpotFrame, RotateTranslateScaleBehaviour.class);
 
@@ -400,7 +409,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 			frame.setOpenLocation(openPosition);
 
 			JMERoundedRectangleBorder border = new JMERoundedRectangleBorder( frameName +"-border", UUID.randomUUID(), BORDER_THICKNESS, 0);
-			border.setColor(new ColorRGBA(1f, 1f, 1f, 1f));
+			border.setColor(new ColorRGBA(.9f, .9f, .9f, 1f));
             frame.setBorder(border);
             frame.maintainBorderSizeDuringScale();
             frame.setGradientBackground(new Gradient(startColor, endColor,
@@ -440,7 +449,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	    IHotSpotRepo frame = this.getHotSpotContentFactory().createHotSpotRepo(HOTSPOTS, UUID.randomUUID(), HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
 
 		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), .1f, 5, new ColorRGBA(0f, 0f, 0f, .1f) ));
-		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 1f), new Color(0.2f, 0.2f, 0.2f, 1f), GradientDirection.VERTICAL));
+		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0f), new Color(0.2f, 0.2f, 0.2f, 0f), GradientDirection.VERTICAL));
 		frame.maintainBorderSizeDuringScale();
 
 		Float xPos = 0f;

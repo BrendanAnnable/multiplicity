@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 import com.jme.math.Vector2f;
+import com.jme.renderer.ColorRGBA;
 
 import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
@@ -26,6 +27,7 @@ import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRendere
 import multiplicity.csysng.items.keyboard.model.KeyModifiers;
 import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
 import multiplicity.csysng.items.keyboard.model.KeyboardKey;
+import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
 
 public class SymbolicInputApp extends AbstractMultiplicityApp {
@@ -87,7 +89,11 @@ public class SymbolicInputApp extends AbstractMultiplicityApp {
 		framewrap.maintainBorderSizeDuringScale();
 		framewrap.addItem(kb);
 		framewrap.setRelativeLocation(new Vector2f(0f, -200f));
-		framewrap.setBorder(getContentFactory().createRoundedRectangleBorder("innerframeborder", UUID.randomUUID(), 20f, 8));
+		
+		JMERoundedRectangleBorder jmeRoundedRectangleBorder = new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 15, 30, new ColorRGBA(1f,0f, 1f, 1f));
+		jmeRoundedRectangleBorder.setColor(new ColorRGBA(.211f, .211f, .211f, 1f));
+		framewrap.setBorder(jmeRoundedRectangleBorder);
+		
 		add(framewrap);		
 		BehaviourMaker.addBehaviour(framewrap, RotateTranslateScaleBehaviour.class);
 		
