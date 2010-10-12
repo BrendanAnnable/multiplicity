@@ -27,6 +27,7 @@ import multiplicity.input.events.MultiTouchObjectEvent;
 import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
+import com.jme.renderer.ColorRGBA;
 
 public class HotSpotItemBehavior extends MultiTouchEventAdapter implements
         IBehaviour {
@@ -143,7 +144,7 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements
                                         "hotspot",
                                         UUID.randomUUID(),
                                         IStitcherContants.HOTSPOT_DIMENSION / 4,
-                                        StitcherUtils.burColorRGBA);
+                                        ColorRGBA.black);
                         hotSpotItemCircle.setType(hotSpotItem.getType());
                         BehaviourMaker.addBehaviour(hotSpotItemCircle,
                                 HotSpotItemBehavior.class);
