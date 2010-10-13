@@ -2,6 +2,8 @@ package multiplicity.csysng.items.keyboard.defs.norwegian;
 
 import java.awt.event.KeyEvent;
 
+import org.apache.commons.lang.StringUtils;
+
 import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IItem;
@@ -25,20 +27,21 @@ public class NorwegianKeyboardListener implements IMultiTouchKeyboardListener {
     public void keyPressed(KeyboardKey k, boolean shiftDown, boolean altDown,
             boolean ctlDown) {
         if(k.getKeyCode() == 222) {
-            if(!shiftDown)
-                editItem.appendString("æ");
-            else
+//            if(!shiftDown)
+//                editItem.appendString("æ");
+//            else
                 editItem.appendString("Æ");
         } else if(k.getKeyCode() == 59) {
-            if(!shiftDown)
-                editItem.appendString("ø");
-            else
+//            if(!shiftDown)
+//                editItem.appendString("ø");
+//            else
                 editItem.appendString("Ø");
         } else if(k.getKeyCode() == 91) {
-             if(!shiftDown)
-                 editItem.appendString("å");
-             else
+//             if(!shiftDown)
+//                 editItem.appendString("å");
+//             else
                  editItem.appendString("Å");
+             
          } else if(k.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
             editItem.removeChar();
        
@@ -47,10 +50,10 @@ public class NorwegianKeyboardListener implements IMultiTouchKeyboardListener {
         }else if(k.getKeyCode() !=  KeyEvent.VK_CANCEL && k.getModifiers() == KeyModifiers.NONE  ) {               
             if(shiftDown) {
                 String txt = KeyEvent.getKeyText(k.getKeyCode()).toUpperCase();
-                editItem.appendChar(txt.charAt(0));
+                editItem.appendChar(Character.toUpperCase(txt.charAt(0)));
             }else{
                 String txt = KeyEvent.getKeyText(k.getKeyCode()).toLowerCase();
-                editItem.appendChar(txt.charAt(0));
+                editItem.appendChar(Character.toUpperCase(txt.charAt(0)));
             }
         }
         
