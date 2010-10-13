@@ -74,7 +74,7 @@ public class PaletBehavior extends MultiTouchEventAdapter implements IBehaviour 
         logger.info("palet pressed");
         int taps = palet.tap();
         logger.info("palet clicked " + taps);
-        if (taps > 2) {
+        if (taps > 1) {
             
             palet.resetTaps();
             
