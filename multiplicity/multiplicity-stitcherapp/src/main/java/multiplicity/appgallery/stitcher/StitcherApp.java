@@ -437,7 +437,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             frame.addItem(image);
            
             //add behavior
-            BehaviourMaker.addBehaviour(image, InertiaBehaviour.class);
+//            BehaviourMaker.addBehaviour(image, InertiaBehaviour.class);
             Vector2f position = StitcherUtils.generateRandomPosition(frame, image);
             image.setRelativeLocation(position);
         }
