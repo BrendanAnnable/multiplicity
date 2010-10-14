@@ -21,7 +21,7 @@ public class HotSpotTextBehavior extends MultiTouchEventAdapter implements IBeha
         super.cursorPressed(event);
         
         
-        if (hotSpotText.tap() > 3) {
+        if (hotSpotText.tap() > 1) {
 
             if (hotSpotText.isKeyboardVisible() == false) {
                 StitcherUtils.showKeyboard(hotSpotText);

@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.net.URL;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
+
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
@@ -130,10 +132,18 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
 
     @Override
     public void setSize(float width, float height) {
-        super.setSize(width, height);
+        
         
         if( getKeyboardImage() != null && getLabelText() != null ) {
-            getKeyboardImage().setRelativeLocation(new Vector2f(getLabelText().getWidth()/2-32f,70));
+//            getLabelText().setText(StringUtils.upperCase(getLabelText().getText()));
+            getKeyboardImage().setRelativeLocation(new Vector2f(getLabelText().getWidth()/2+10,0));
+            super.setSize(width+getKeyboardImage().getWidth()+20, height);
+            
+         
+            
+            
+        } else {
+            super.setSize(width, height);
         }
         
         
@@ -175,9 +185,9 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
     public void createText(String t) {
         setLabelText(ContentSystem.getContentSystem().getContentFactory().createEditableText("hotspot-text", UUID.randomUUID()));
         getLabelText().setText(t);
-        getLabelText().setFont(new Font("Arial Narrow", Font.BOLD, 48*3));
+        getLabelText().setFont(new Font("Arial Narrow", Font.BOLD, 48));
         getLabelText().setTextColour(Color.white);
-        getLabelText().setRelativeLocation(new Vector2f(0, -10));
+        getLabelText().setRelativeLocation(new Vector2f(-20, 0));
         getLabelText().setCursorAt(t.length()-1);
         addItem(getLabelText());
 //        getLabelText().centerItem();
@@ -186,16 +196,15 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
 //        this.getSize().setY(this.getSize().getY()*.8f);
 //        getFrameOverlay().setSize(this.getSize());
 //        updateModelBound();
-//        getLabelText().getMultiTouchDispatcher().addListeners(getMultiTouchDispatcher().getListeners());
         
         setKeyboardImage(ContentSystem.getContentSystem().getContentFactory().createImage("keyboard-icon", UUID.randomUUID()));
         getKeyboardImage().setImage(keyboardImageUrl);
         //img.setRelativeScale(0.6f);
         getKeyboardImage().setAlphaBlending(AlphaStyle.USE_TRANSPARENCY);
-        getKeyboardImage().setRelativeLocation(new Vector2f(getLabelText().getWidth()/2-32f, 70));
+        getKeyboardImage().setRelativeLocation(new Vector2f(getLabelText().getWidth()/2+10, 0));
         addItem(getKeyboardImage());
 
-        this.setSize(getLabelText().getSize().x, getLabelText().getSize().y+getKeyboardImage().getSize().y);
+        this.setSize(getLabelText().getSize().x+getKeyboardImage().getWidth()+10, getLabelText().getSize().y);
         
         if( t != null && t.equals("tag")) {
             getLabelText().setText(" ");

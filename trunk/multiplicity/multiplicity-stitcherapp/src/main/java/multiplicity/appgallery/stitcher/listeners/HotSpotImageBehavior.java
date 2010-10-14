@@ -60,6 +60,8 @@ public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBeh
             if( mainImage.getParentItem() instanceof IHotSpotFrame ) {
                 logger.debug("image hotspot frame released on itself");
                 IHotSpotFrame hotspotFrame = (IHotSpotFrame) mainImage.getParentItem();
+               
+                hotspotFrame.bringHotSpotsToTop();
                 hotspotFrame.bringPaletToTop();
                 return;
             }
@@ -109,6 +111,8 @@ public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBeh
                     mainImage.centerItem();
                     repositoryFrame.close();
               }
+              
+              mainImage.centerItem();
                 return;
                 
 //                if( mainImage.getParentItem() instanceof IBackgroundRepositoryFrame) {
