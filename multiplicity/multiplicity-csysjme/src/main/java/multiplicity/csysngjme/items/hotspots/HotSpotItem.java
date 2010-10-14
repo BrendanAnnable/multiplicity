@@ -121,6 +121,13 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		// get the worldlocation of hotspot
 		Vector2f xyHS2 = hotSpotFrameContent.getRelativeLocation();
 
+		//what quadradent
+		Vector2f hotSpotWorldLocation = this.getWorldLocation();
+		Vector2f frameworldLocation = hotSpotFrameContent.getWorldLocation();
+		
+		logger.debug("hotspotworld location " + hotSpotWorldLocation + " frameworldlocation " + frameworldLocation);
+		
+		
 		Vector3f[] vertices = new Vector3f[2];
 		vertices[0] = new Vector3f(xyHS1.x, xyHS1.y, 0f);
 		vertices[1] = new Vector3f(xyHS2.x, xyHS2.y, 0f);
