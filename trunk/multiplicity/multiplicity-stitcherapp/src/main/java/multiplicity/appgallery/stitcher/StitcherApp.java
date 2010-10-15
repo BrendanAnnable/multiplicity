@@ -237,7 +237,12 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
                         if (!parentFrame.isLocked()) {
                             parentFrame.sendOverlayToBottom();
                         }
+                        
+                        StitcherUtils.updateAllHotLinkConnections();
                         parentFrame.bringHotSpotsToTop();
+                        StitcherUtils.bringAllHotLinksToTheTop(parentFrame);
+                        StitcherUtils.bringAllHotSpotFramesToTheTop();
+                        
                         parentFrame.bringPaletToTop();
                     }
                  

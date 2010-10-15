@@ -39,6 +39,8 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements
 
     private HotSpotContentItemFactory hotSpotContentItemFactory = new HotSpotContentItemFactory();
 
+    
+    
     @Override
     public void objectChanged(MultiTouchObjectEvent event) {
         super.objectChanged(event);

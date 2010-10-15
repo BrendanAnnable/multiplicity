@@ -61,7 +61,16 @@ public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBeh
                 logger.debug("image hotspot frame released on itself");
                 IHotSpotFrame hotspotFrame = (IHotSpotFrame) mainImage.getParentItem();
                
+              
                 hotspotFrame.bringHotSpotsToTop();
+               
+                
+              
+        
+               
+                
+                StitcherUtils.bringAllHotLinksToTheTop(hotspotFrame);
+                StitcherUtils.bringAllHotSpotFramesToTheTop();
                 hotspotFrame.bringPaletToTop();
                 return;
             }
