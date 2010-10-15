@@ -34,6 +34,7 @@ public class DeveloperPrefsPanel extends javax.swing.JPanel {
 		sceneMonitor.setText("Enable scene monitor:");
 		sceneMonitor.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
 		sceneMonitor.setName("sceneMonitor"); // NOI18N
+		sceneMonitor.setSelected(prefs.getShowSceneMonitor());
 		sceneMonitor.addItemListener(new java.awt.event.ItemListener() {
 			public void itemStateChanged(java.awt.event.ItemEvent evt) {
 				sceneMonitorItemStateChanged(evt);
