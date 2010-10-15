@@ -20,6 +20,7 @@ public class NetworkConfigPrefsItem implements PreferencesItem {
 	private static final String XMPP_ENABLED = "XMPP_ENABLED";
 	private static final String XMPP_USER = "XMPP_USER";
 	private static final String XMPP_PASSWORD = "XMPP_PASSWORD";
+        private static final String XMPP_CHOOSE_USER_AT_LAUNCH = "XMPP_CHOOSE_USER_AT_LAUNCH";
 	
 
 	@Override
@@ -95,4 +96,12 @@ public class NetworkConfigPrefsItem implements PreferencesItem {
 	public String getXMPPPassword() {
 		return prefs.get(XMPP_PASSWORD, "");
 	}
+        
+        public boolean getChooseUserAtLaunch() {
+            return prefs.getBoolean(XMPP_CHOOSE_USER_AT_LAUNCH, false);
+        }
+        
+        public void setChooseUserAtLaunch(boolean choose) {
+            prefs.putBoolean(XMPP_CHOOSE_USER_AT_LAUNCH, choose);
+        }
 }

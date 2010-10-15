@@ -59,11 +59,11 @@ public class DeveloperPreferences implements PreferencesItem {
 	}
 
 	public boolean getShowSceneMonitor() {
-		return prefs.get(PREFS_SCENE_MONITOR, "false").equals("true");
+		return prefs.getBoolean(PREFS_SCENE_MONITOR, false);
 	}
 
 	public void setShowSceneMonitor(boolean enabled) {
-		prefs.put(PREFS_SCENE_MONITOR, "" + enabled);
+		prefs.putBoolean(PREFS_SCENE_MONITOR, enabled);
 	}
 
 }
