@@ -113,11 +113,17 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 	    }
 	   
 	public Vector3f[] getLineVertices() {
+	    
+	    
 		IHotSpotFrame parentF = (IHotSpotFrame) this.getParentItem();
 		Vector2f parentFCoord = parentF.getRelativeLocation();
 		// get the worldlocation of hotspot
 		logger.debug("getVertices --> relative " + this.getRelativeLocation() + "parent " + parentFCoord + " parent scale " + parentF.getRelativeScale());
 		Vector2f xyHS1 =  new Vector2f((this.getRelativeLocation().x*parentF.getRelativeScale()) + parentFCoord.x, (this.getRelativeLocation().y *parentF.getRelativeScale()) + parentFCoord.y);
+		if( parentF.getRelativeRotation() > 0 ) {
+		    xyHS1 = new Vector2f(xyHS1.x - (xyHS1.x*parentF.getRelativeRotation()),xyHS1.y -( xyHS1.y*parentF.getRelativeRotation()));
+		}
+		
 		// get the worldlocation of hotspot
 		Vector2f xyHS2 = hotSpotFrameContent.getRelativeLocation();
 

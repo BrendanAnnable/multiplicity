@@ -1,13 +1,18 @@
 package multiplicity.csysngjme.items.hotspots;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.nio.FloatBuffer;
 import java.util.UUID;
 
+import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.ItemMap;
 import multiplicity.csysngjme.items.JMELine;
+import multiplicity.input.events.MultiTouchCursorEvent;
 
 import com.jme.bounding.OrthogonalBoundingBox;
 import com.jme.math.Vector2f;

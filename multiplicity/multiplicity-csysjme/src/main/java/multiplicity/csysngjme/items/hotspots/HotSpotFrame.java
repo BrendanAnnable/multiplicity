@@ -6,12 +6,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IColourRectangle;
+import multiplicity.csysng.items.IHotSpotText;
+import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
+import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEColourRectangle;
 import multiplicity.csysngjme.items.JMEFrame;
+import multiplicity.input.events.MultiTouchCursorEvent;
 
 import org.apache.log4j.Logger;
 
@@ -99,6 +103,24 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 
 	@Override
 	public void addHotLink(IHotLink hotLink) {
+	    
+	    if( ! (this instanceof IHotSpotText) )
+	        hotLink.getMultiTouchDispatcher().addListeners(palet.getMultiTouchDispatcher().getListeners());
+	    
+//	    hotLink.addItemListener(new ItemListenerAdapter(){
+//	            
+//	            @Override
+//	            public void itemCursorPressed(IItem item,
+//	                    MultiTouchCursorEvent event) {
+//	                // TODO Auto-generated method stub
+//	                super.itemCursorPressed(item, event);
+//	                
+//	                if( ! (HotSpotFrame.this instanceof IHotSpotText ) )
+//	                    HotSpotFrame.this.updateOverLay();
+//	            }
+//	            
+//	            
+//	        });
 	    this.hotLinks.add(hotLink);
 	    logger.debug("hotlink added to hotspot frame");
 	}
