@@ -159,4 +159,25 @@ public class StitcherUtils {
         
         HotSpotUtils.updateAllHotLinkConnections(stitcherApp.getHotSpotFrames());
     }
+    
+    public static void bringAllHotSpotFramesToTheTop() {
+        List<IHotSpotFrame> hotSpotFrames = stitcherApp.getHotSpotFrames();
+        
+        for (IHotSpotFrame iHotSpotFrame : hotSpotFrames) {
+            List<IHotLink> hotLinks = iHotSpotFrame.getHotLinks();
+            for (IHotLink iHotLink : hotLinks) {
+                stitcherApp.getZOrderManager().bringToTop(iHotLink, null);
+            }
+            stitcherApp.getZOrderManager().bringToTop(iHotSpotFrame, null);
+        }
+    }
+    
+    public static void bringAllHotLinksToTheTop(IHotSpotFrame hotspotFrame) {
+        List<IHotLink> hotLinks = hotspotFrame.getHotLinks();
+        for (IHotLink iHotLink : hotLinks) {
+            stitcherApp.getZOrderManager().bringToTop(iHotLink, null);
+        }
+        
+    }
+    
 }

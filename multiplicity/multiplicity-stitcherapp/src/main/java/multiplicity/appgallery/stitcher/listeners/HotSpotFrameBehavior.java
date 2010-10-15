@@ -6,6 +6,7 @@ import multiplicity.appgallery.stitcher.IStitcherContants;
 import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
@@ -44,6 +45,14 @@ public class HotSpotFrameBehavior extends MultiTouchEventAdapter implements
     public void cursorReleased(MultiTouchCursorEvent event) {
         super.cursorReleased(event);
         logger.debug("HOTSPOT FRAME POS RL" + hotSpotFrame.getRelativeLocation() + " WL" + hotSpotFrame.getWorldLocation());
+        StitcherUtils.bringAllHotLinksToTheTop(hotSpotFrame);
+        StitcherUtils.bringAllHotSpotFramesToTheTop();
+        
+        String type = hotSpotFrame.getType();
+        if( type.equals(IStitcherContants.IMAGE) || type.equals(IStitcherContants.BACKGROUND) ) {
+            hotSpotFrame.updateOverLay();
+             
+     }
     }
     
     @Override
@@ -76,6 +85,19 @@ public class HotSpotFrameBehavior extends MultiTouchEventAdapter implements
         if(item instanceof IHotSpotFrame) {
             this.hotSpotFrame = (IHotSpotFrame) item;
             this.hotSpotFrame.getMultiTouchDispatcher().addListener(this);
+            this.hotSpotFrame.addItemListener(new ItemListenerAdapter(){
+                
+                @Override
+                public void itemRotated(IItem item) {
+                    // TODO Auto-generated method stub
+                    super.itemRotated(item);
+                    
+                    logger.debug("frame is being rotated " + item.getRelativeRotation());
+
+                    
+                }
+                
+            });
         }else{
             //TODO: log severe
         }
