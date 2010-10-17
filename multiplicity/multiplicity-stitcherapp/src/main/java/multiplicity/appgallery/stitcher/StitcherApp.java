@@ -278,7 +278,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
             newHotSpotFrame  =  this.getHotSpotContentFactory().createEditableHotSpotTextFrame(HOTSPOT_FRAME_NAME_TEXT + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION,StitcherApp.class.getResource("keyboard.png"));
             
-            newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, StitcherUtils.burColorRGBA));
+            newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 0, 0, ColorRGBA.black));
             
             
             newHotSpotFrame.setSolidBackgroundColour(Color.black);

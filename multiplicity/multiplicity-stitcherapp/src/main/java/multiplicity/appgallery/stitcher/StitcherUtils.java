@@ -57,7 +57,7 @@ public class StitcherUtils {
         logger.debug("generate random position.......");
         logger.debug("frame size: " + frameSize + " framePosition " + frame.getRelativeLocation() + " imageSize " + imageSize);
 
-        int i = 4;
+        int i = 8;
         float lowerBoundX = -frameSize.x / i + imageSize.x / i;
         float upperBoundX = frameSize.x / i - imageSize.x / i;
 
