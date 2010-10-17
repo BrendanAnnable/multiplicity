@@ -136,9 +136,11 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
         
         if( getKeyboardImage() != null && getLabelText() != null ) {
 //            getLabelText().setText(StringUtils.upperCase(getLabelText().getText()));
-            getKeyboardImage().setRelativeLocation(new Vector2f(getLabelText().getWidth()/2+10,0));
-            super.setSize(width+getKeyboardImage().getWidth()+20, height);
-            
+            getKeyboardImage().setRelativeLocation(new Vector2f(getLabelText().getWidth()/2,0));
+//            super.setSize(getLabelText().getSize().x+getKeyboardImage().getWidth()+10, getLabelText().getSize().y);
+//            super.setSize(width+getKeyboardImage().getWidth()+20, height);
+            super.setSize(getLabelText().getSize().x+getKeyboardImage().getWidth()+10, getLabelText().getSize().y);
+
          
             
             
@@ -172,7 +174,7 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
         keyboardFrame.setRelativeLocation(new Vector2f(0f, -200f));
         
         JMERoundedRectangleBorder jmeRoundedRectangleBorder = new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 15, 5, new ColorRGBA(1f,0f, 1f, 1f));
-        jmeRoundedRectangleBorder.setColor(new ColorRGBA(.211f, .211f, .211f, 1f));
+        jmeRoundedRectangleBorder.setColor(new ColorRGBA(.211f, .211f, .211f, 0f));
 
         keyboardFrame.setBorder(jmeRoundedRectangleBorder);    
         BehaviourMaker.addBehaviour(keyboardFrame, RotateTranslateScaleBehaviour.class);
@@ -204,8 +206,8 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
         getKeyboardImage().setRelativeLocation(new Vector2f(getLabelText().getWidth()/2+10, 0));
         addItem(getKeyboardImage());
 
-        this.setSize(getLabelText().getSize().x+getKeyboardImage().getWidth()+10, getLabelText().getSize().y);
-        
+//        this.setSize(getLabelText().getSize().x+getKeyboardImage().getWidth()+10, getLabelText().getSize().y);
+        this.setSize(0, 0);
         if( t != null && t.equals("tag")) {
             getLabelText().setText(" ");
         }
