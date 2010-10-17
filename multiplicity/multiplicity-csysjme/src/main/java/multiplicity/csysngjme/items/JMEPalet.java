@@ -31,7 +31,7 @@ public class JMEPalet extends JMEColourCircle implements IPalet {
 	@Override
 	public void lockPalet(boolean locked) {
 		if(locked) {
-			super.changeBackgroundColor(new ColorRGBA(.3f, 3f, 3f, .5f));
+			super.changeBackgroundColor(new ColorRGBA(244/255f, 244/255f, 244/255f, .8f));
 		}
 		else {
 			super.changeBackgroundColor(this.colorRGBA);

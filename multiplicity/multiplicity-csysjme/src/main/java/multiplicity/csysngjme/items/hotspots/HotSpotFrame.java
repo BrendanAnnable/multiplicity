@@ -201,7 +201,7 @@ public class HotSpotFrame extends JMEFrame implements IHotSpotFrame {
 		if(isLocked) {
 			//our frame is in lock mode, let's unlock it
 			this.sendOverlayToBottom();
-			border.setColor(new ColorRGBA(1f, 1f, 1f, 0.6f));
+			border.setColor(new ColorRGBA(0f, 0f, 0f, 0f));
 		}
 		else {
 			//our frame is in unlock mode, let's lock it

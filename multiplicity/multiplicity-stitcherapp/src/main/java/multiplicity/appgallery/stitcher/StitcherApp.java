@@ -213,7 +213,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        float newY = bi.getSize().y * localScale.y;
 	        
 	        newHotSpotFrame = this.getHotSpotContentFactory().createHotSpotFrame(frameName,  UUID.randomUUID(), Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
-	        newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, new ColorRGBA(0f, 0f, 0f, 0f)));
+	        newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 1, new ColorRGBA(0f, 0f, 0f, 0f)));
 	        newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 	        newHotSpotFrame.maintainBorderSizeDuringScale();
 	        newHotSpotFrame.setRelativeLocation(atPosition);
@@ -259,7 +259,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
 	        newHotSpotFrame = (IHotSpotFrame) this.getHotSpotContentFactory().createHotSpotFrame(HOTSPOT_FRAME_NAME_IMAGE + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
 
-	        newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 15, new ColorRGBA(0f, 0f, 0f, 0f)));
+	        newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 0,0, new ColorRGBA(0f, 0f, 0f, 0f)));
 	        newHotSpotFrame.setSolidBackgroundColour(Color.black);
 //	        newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 	        newHotSpotFrame.maintainBorderSizeDuringScale();
@@ -278,7 +278,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
             newHotSpotFrame  =  this.getHotSpotContentFactory().createEditableHotSpotTextFrame(HOTSPOT_FRAME_NAME_TEXT + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION,StitcherApp.class.getResource("keyboard.png"));
             
-            newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 0, 0, ColorRGBA.black));
+            newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 0, 0, new ColorRGBA(0f, 0f, 0f, 0f)));
             
             
             newHotSpotFrame.setSolidBackgroundColour(Color.black);
@@ -326,9 +326,11 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 			IPalet palet = this.getPaletFactory().createPaletItem("palet",
 					UUID.randomUUID(), PALET_DIMENSION,
 					new ColorRGBA(0f, 1f, 0f, .5f));
+			
 			StitcherUtils.modScaleBehavior(palet.getBehaviours(), false);
 			newHotSpotFrame.addPalet(palet);
 			palet.centerItem();
+			palet.setRelativeScale(.8f);
 			BehaviourMaker.addBehaviour(palet,
 					RotateTranslateScaleBehaviour.class);
 
