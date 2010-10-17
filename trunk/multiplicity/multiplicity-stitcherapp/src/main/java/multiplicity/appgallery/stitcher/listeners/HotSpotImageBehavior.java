@@ -246,16 +246,6 @@ public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBeh
             }
         }// if
     }
- 
-    private void clearAllHighlightedHotSpotFrames() {
-        for (IHotSpotFrame hotSpotFrame : highlightedFrames) {
-            IBorder border = hotSpotFrame.getBorder();
-            border.setColor(new ColorRGBA(1f, 1f, 1f, 0.6f));
-        }
-        highlightedFrames = new ArrayList<HotSpotFrame>();
-    }
-
-
     
     public boolean isHotspotFrame(IItem item) {
         if( item != null && ( item instanceof IHotSpotFrame ) ) {

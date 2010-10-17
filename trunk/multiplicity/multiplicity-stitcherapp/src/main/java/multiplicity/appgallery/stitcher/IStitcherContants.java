@@ -35,7 +35,7 @@ public interface IStitcherContants {
 
     public final static int HOTSPOT_FRAME_DIMENSION = 200;
 
-    public final static int PALET_DIMENSION = 35;
+    public final static int PALET_DIMENSION = 20;
 
     public final static int SMALLER_PALET_DIMENSION = 30;
 

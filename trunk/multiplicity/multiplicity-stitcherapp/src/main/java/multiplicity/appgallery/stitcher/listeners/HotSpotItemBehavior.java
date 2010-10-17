@@ -145,16 +145,17 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements
                                 .createHotSpotItem(
                                         "hotspot",
                                         UUID.randomUUID(),
-                                        IStitcherContants.HOTSPOT_DIMENSION / 4,
+                                        20,
                                         ColorRGBA.black);
                         hotSpotItemCircle.setType(hotSpotItem.getType());
                         BehaviourMaker.addBehaviour(hotSpotItemCircle,
                                 HotSpotItemBehavior.class);
                         BehaviourMaker.addBehaviour(hotSpotItemCircle,
                                 RotateTranslateScaleBehaviour.class);
-                        StitcherUtils.modScaleBehavior(
-                                hotSpotItemCircle.getBehaviours(), false);
+//                        StitcherUtils.modScaleBehavior(
+//                                hotSpotItemCircle.getBehaviours(), false);
 
+                        hotSpotItemCircle.setRelativeScale(.8f);
                         Vector2f itemWorldPos = hotSpotItem.getWorldLocation();
 
                         sourceFrame.addItem(hotSpotItemCircle);
