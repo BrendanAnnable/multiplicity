@@ -155,7 +155,7 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements
 //                        StitcherUtils.modScaleBehavior(
 //                                hotSpotItemCircle.getBehaviours(), false);
 
-                        hotSpotItemCircle.setRelativeScale(.8f);
+//                        hotSpotItemCircle.setRelativeScale(.8f);
                         Vector2f itemWorldPos = hotSpotItem.getWorldLocation();
 
                         sourceFrame.addItem(hotSpotItemCircle);
