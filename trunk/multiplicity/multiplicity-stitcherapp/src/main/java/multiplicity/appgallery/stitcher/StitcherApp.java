@@ -14,9 +14,11 @@ import java.util.Vector;
 import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
+import multiplicity.appgallery.stitcher.listeners.BackgroundImageRotateScaleBehavior;
 import multiplicity.appgallery.stitcher.listeners.HotSpotFrameBehavior;
 import multiplicity.appgallery.stitcher.listeners.HotSpotImageBehavior;
 import multiplicity.appgallery.stitcher.listeners.HotSpotItemBehavior;
+import multiplicity.appgallery.stitcher.listeners.HotSpotRotateScaleBehavior;
 import multiplicity.appgallery.stitcher.listeners.HotSpotTextBehavior;
 import multiplicity.appgallery.stitcher.listeners.PaletBehavior;
 import multiplicity.appgallery.stitcher.listeners.RepositoryBehavior;
@@ -213,16 +215,16 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        float newY = bi.getSize().y * localScale.y;
 	        
 	        newHotSpotFrame = this.getHotSpotContentFactory().createHotSpotFrame(frameName,  UUID.randomUUID(), Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
-	        newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 1, 1, new ColorRGBA(0f, 0f, 0f, 0f)));
+	        newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 0, 0, new ColorRGBA(0f, 0f, 0f, 0f)));
 	        newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 	        newHotSpotFrame.maintainBorderSizeDuringScale();
 	        newHotSpotFrame.setRelativeLocation(atPosition);
-	        BehaviourMaker.addBehaviour(newHotSpotFrame, RotateTranslateScaleBehaviour.class);
+	        BehaviourMaker.addBehaviour(newHotSpotFrame, BackgroundImageRotateScaleBehavior.class);
 	        
             Vector2f itemWorldPos = backgroundImage.getWorldLocation();
             newHotSpotFrame.addItem(backgroundImage);
             backgroundImage.setWorldLocation(itemWorldPos);
-            BehaviourMaker.removeBehavior(backgroundImage, RotateTranslateScaleBehaviour.class);
+            BehaviourMaker.removeBehavior(backgroundImage, BackgroundImageRotateScaleBehavior.class);
             backgroundImage.centerItem();
 //            newHotSpotFrame.getZOrderManager().bringToTop(backgroundImage, null);
             // little trick to make sure palet and hotspots are always on top
@@ -327,12 +329,12 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 					UUID.randomUUID(), PALET_DIMENSION,
 					new ColorRGBA(0f, 1f, 0f, .5f));
 			
-			StitcherUtils.modScaleBehavior(palet.getBehaviours(), false);
+			
 			newHotSpotFrame.addPalet(palet);
 			palet.centerItem();
-			palet.setRelativeScale(.8f);
+//			palet.setRelativeScale(.8f);
 			BehaviourMaker.addBehaviour(palet,
-					RotateTranslateScaleBehaviour.class);
+					HotSpotRotateScaleBehavior.class);
 
 			BehaviourMaker.addBehaviour(palet, PaletBehavior.class);
 

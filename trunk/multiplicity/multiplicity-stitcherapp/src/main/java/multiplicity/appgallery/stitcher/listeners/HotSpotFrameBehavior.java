@@ -85,19 +85,6 @@ public class HotSpotFrameBehavior extends MultiTouchEventAdapter implements
         if(item instanceof IHotSpotFrame) {
             this.hotSpotFrame = (IHotSpotFrame) item;
             this.hotSpotFrame.getMultiTouchDispatcher().addListener(this);
-            this.hotSpotFrame.addItemListener(new ItemListenerAdapter(){
-                
-                @Override
-                public void itemRotated(IItem item) {
-                    // TODO Auto-generated method stub
-                    super.itemRotated(item);
-                    
-                    logger.debug("frame is being rotated " + item.getRelativeRotation());
-
-                    
-                }
-                
-            });
         }else{
             //TODO: log severe
         }
