@@ -144,7 +144,10 @@ public class StitcherUtils {
     }
 
     public static void addHotLink(IHotLink hotLink) {
+        Vector2f itemWorldPos = hotLink.getWorldLocation();
+
         stitcherApp.add(hotLink);
+        hotLink.setWorldLocation(itemWorldPos);
 //        BehaviourMaker.addBehaviour(hotLink, HotLinkBehavior.class);
     }
 

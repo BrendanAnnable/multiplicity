@@ -118,20 +118,26 @@ public class HotSpotItem extends JMEColourCircle implements IHotSpotItem {
 		IHotSpotFrame parentF = (IHotSpotFrame) this.getParentItem();
 		Vector2f parentFCoord = parentF.getRelativeLocation();
 		// get the worldlocation of hotspot
-		logger.debug("getVertices --> relative " + this.getRelativeLocation() + "parent " + parentFCoord + " parent scale " + parentF.getRelativeScale());
-		Vector2f xyHS1 =  new Vector2f((this.getRelativeLocation().x*parentF.getRelativeScale()) + parentFCoord.x, (this.getRelativeLocation().y *parentF.getRelativeScale()) + parentFCoord.y);
-		if( parentF.getRelativeRotation() > 0 ) {
-		    xyHS1 = new Vector2f(xyHS1.x - (xyHS1.x*parentF.getRelativeRotation()),xyHS1.y -( xyHS1.y*parentF.getRelativeRotation()));
-		}
+		logger.debug("hotspot item getVertices --> relative " + this.getRelativeLocation() + "world location " + this.getWorldLocation() + "parent " + parentFCoord + " parent scale " + parentF.getRelativeScale());
+//		Vector2f xyHS1 =  new Vector2f((this.getRelativeLocation().x*parentF.getRelativeScale()) + parentFCoord.x, (this.getRelativeLocation().y *parentF.getRelativeScale()) + parentFCoord.y);
+		
+		Vector2f xyHS1 = new Vector2f(this.getWorldLocation().x,this.getWorldLocation().y);
+		Vector2f xyHS2 = new Vector2f(hotSpotFrameContent.getWorldLocation().x,hotSpotFrameContent.getWorldLocation().y);
+		
+		logger.debug("hotspot xyHS1 after mod " + xyHS1);
+		
+//		if( parentF.getRelativeRotation() > 0 ) {
+//		    xyHS1 = new Vector2f(xyHS1.x - (xyHS1.x*parentF.getRelativeRotation()),xyHS1.y -( xyHS1.y*parentF.getRelativeRotation()));
+//		}
 		
 		// get the worldlocation of hotspot
-		Vector2f xyHS2 = hotSpotFrameContent.getRelativeLocation();
+//		Vector2f xyHS2 = hotSpotFrameContent.getRelativeLocation();
 
 		//what quadradent
 		Vector2f hotSpotWorldLocation = this.getWorldLocation();
 		Vector2f frameworldLocation = hotSpotFrameContent.getWorldLocation();
 		
-		logger.debug("hotspotworld location " + hotSpotWorldLocation + " frameworldlocation " + frameworldLocation);
+		logger.debug("hotspotworld location " + hotSpotWorldLocation + " hotspot contentframe world loc " + frameworldLocation + " hotspot contentframe rel loc " + xyHS2);
 		
 		
 		Vector3f[] vertices = new Vector3f[2];
