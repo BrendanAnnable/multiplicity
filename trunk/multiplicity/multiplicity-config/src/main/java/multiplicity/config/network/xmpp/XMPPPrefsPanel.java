@@ -4,7 +4,7 @@
  * Created on September 23, 2010, 3:21 PM
  */
 
-package multiplicity.config.network;
+package multiplicity.config.network.xmpp;
 
 import javax.swing.JOptionPane;
 
@@ -12,25 +12,20 @@ import javax.swing.JOptionPane;
  *
  * @author  dcs0ah1
  */
-public class NetworkPrefsPanel2 extends javax.swing.JPanel {
+public class XMPPPrefsPanel extends javax.swing.JPanel {
 	private static final long serialVersionUID = 7749882192186771339L;
-	private NetworkConfigPrefsItem prefs;
+	private XMPPConfigPrefsItem prefs;
     
     /** Creates new form NetworkPrefsPanel2 */
-    public NetworkPrefsPanel2(NetworkConfigPrefsItem networkConfigPrefsItem) {
+    public XMPPPrefsPanel(XMPPConfigPrefsItem networkConfigPrefsItem) {
         this.prefs = networkConfigPrefsItem;
         initComponents();
         loadPrefs();
     }
     
     private void loadPrefs() {
-        txtProxyHost.setText(prefs.getProxyHost());
-        txtProxyPort.setText(""+prefs.getProxyPort());
-        checkProxyEnabled.setSelected(prefs.getProxyEnabled());
-        
         txtXMPPServerHost.setText(prefs.getXMPPHost());
         txtXMPPServerPort.setText(""+prefs.getXMPPPort());
-        checkXMPPEnabled.setSelected(prefs.getXMPPEnabled());
         txtXMPPUser.setText(prefs.getXMPPUser());
         txtXMPPPassword.setText(prefs.getXMPPPassword());        
         setChooseUserAtLaunch(prefs.getChooseUserAtLaunch());
@@ -51,11 +46,6 @@ public class NetworkPrefsPanel2 extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        txtProxyHost = new javax.swing.JTextField();
-        txtProxyPort = new javax.swing.JTextField();
-        checkProxyEnabled = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -64,35 +54,8 @@ public class NetworkPrefsPanel2 extends javax.swing.JPanel {
         txtXMPPServerPort = new javax.swing.JTextField();
         txtXMPPUser = new javax.swing.JTextField();
         txtXMPPPassword = new javax.swing.JPasswordField();
-        checkXMPPEnabled = new javax.swing.JCheckBox();
         jLabel7 = new javax.swing.JLabel();
         checkChooseAtLaunch = new javax.swing.JCheckBox();
-
-        jLabel1.setText("HTTP Proxy Host:");
-
-        jLabel2.setText("HTTP Proxy Port:");
-
-        txtProxyHost.setText("jTextField1");
-        txtProxyHost.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtProxyHostKeyReleased(evt);
-            }
-        });
-
-        txtProxyPort.setText("jTextField1");
-        txtProxyPort.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtProxyPortKeyReleased(evt);
-            }
-        });
-
-        checkProxyEnabled.setText("Proxy Enabled");
-        checkProxyEnabled.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        checkProxyEnabled.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                checkProxyEnabledItemStateChanged(evt);
-            }
-        });
 
         jLabel3.setText("XMPP Server Host:");
 
@@ -130,14 +93,6 @@ public class NetworkPrefsPanel2 extends javax.swing.JPanel {
             }
         });
 
-        checkXMPPEnabled.setText("XMPP Enabled");
-        checkXMPPEnabled.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        checkXMPPEnabled.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                checkXMPPEnabledItemStateChanged(evt);
-            }
-        });
-
         jLabel7.setFont(new java.awt.Font("Lucida Grande", 0, 10));
         jLabel7.setForeground(new java.awt.Color(204, 0, 0));
         jLabel7.setText("WARNING: does not use secure storage.");
@@ -155,61 +110,32 @@ public class NetworkPrefsPanel2 extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtProxyPort)
-                                    .addComponent(txtProxyHost, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(24, 24, 24)
-                                .addComponent(checkProxyEnabled))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel6))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtXMPPPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-                                    .addComponent(txtXMPPUser, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-                                    .addComponent(txtXMPPServerPort, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-                                    .addComponent(txtXMPPServerHost))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(checkChooseAtLaunch)
-                            .addComponent(jLabel7)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(checkXMPPEnabled)))
-                .addContainerGap(76, Short.MAX_VALUE))
+                    .addComponent(txtXMPPPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(txtXMPPUser, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(txtXMPPServerPort, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(txtXMPPServerHost, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(checkChooseAtLaunch)
+                    .addComponent(jLabel7))
+                .addGap(82, 82, 82))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtProxyHost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtProxyPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(checkProxyEnabled)
-                .addGap(46, 46, 46)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtXMPPServerHost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtXMPPServerPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -218,38 +144,14 @@ public class NetworkPrefsPanel2 extends javax.swing.JPanel {
                     .addComponent(jLabel5)
                     .addComponent(txtXMPPUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(checkChooseAtLaunch))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(txtXMPPPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(checkXMPPEnabled)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(210, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-private void txtProxyHostKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProxyHostKeyReleased
-    prefs.setProxyHost(txtProxyHost.getText());
-}//GEN-LAST:event_txtProxyHostKeyReleased
-
-private void txtProxyPortKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProxyPortKeyReleased
-    int currentPort = prefs.getProxyPort();
-    try {
-        prefs.setProxyPort(Integer.parseInt(txtProxyPort.getText()));
-    }catch(NumberFormatException ex) {
-        JOptionPane.showMessageDialog(this,
-            "Can't convert " + txtProxyPort.getText() + " to a number.",
-            "Port should be an integer number.",
-            JOptionPane.ERROR_MESSAGE);
-        txtProxyPort.setText(""+currentPort);
-    }
-}//GEN-LAST:event_txtProxyPortKeyReleased
-
-private void checkProxyEnabledItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkProxyEnabledItemStateChanged
-
-    prefs.setProxyEnabled(checkProxyEnabled.isSelected());
-}//GEN-LAST:event_checkProxyEnabledItemStateChanged
 
 private void txtXMPPServerHostKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtXMPPServerHostKeyReleased
     prefs.setXMPPHost(txtXMPPServerHost.getText());
@@ -278,10 +180,6 @@ private void txtXMPPPasswordKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRS
     prefs.setXMPPPassword(pass);
 }//GEN-LAST:event_txtXMPPPasswordKeyReleased
 
-private void checkXMPPEnabledItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkXMPPEnabledItemStateChanged
-    prefs.setXMPPEnabled(checkXMPPEnabled.isSelected());
-}//GEN-LAST:event_checkXMPPEnabledItemStateChanged
-
 private void checkChooseAtLaunchItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkChooseAtLaunchItemStateChanged
     prefs.setChooseUserAtLaunch(checkChooseAtLaunch.isSelected());
     setChooseUserAtLaunch(checkChooseAtLaunch.isSelected());
@@ -290,17 +188,11 @@ private void checkChooseAtLaunchItemStateChanged(java.awt.event.ItemEvent evt) {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox checkChooseAtLaunch;
-    private javax.swing.JCheckBox checkProxyEnabled;
-    private javax.swing.JCheckBox checkXMPPEnabled;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JTextField txtProxyHost;
-    private javax.swing.JTextField txtProxyPort;
     private javax.swing.JPasswordField txtXMPPPassword;
     private javax.swing.JTextField txtXMPPServerHost;
     private javax.swing.JTextField txtXMPPServerPort;

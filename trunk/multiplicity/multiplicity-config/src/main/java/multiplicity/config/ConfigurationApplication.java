@@ -47,6 +47,8 @@ import javax.swing.JTabbedPane;
 import multiplicity.ioutils.FileUtils;
 
 public class ConfigurationApplication {
+    
+        static JTabbedPane jtp;
 
 	private static final String CORE_PREFS_LIST_FILE = "corepreferences.list";
 
@@ -63,7 +65,7 @@ public class ConfigurationApplication {
 		JFrame jf = new JFrame("Configuration Tool v0.1");
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jf.getContentPane().setLayout(new BorderLayout());
-		JTabbedPane jtp = new JTabbedPane();
+		jtp = new JTabbedPane();
 		jtp.addKeyListener(new KeyAdapter() {
 			@Override public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode() == 27 || e.getKeyCode() == 157) exit();
@@ -75,8 +77,11 @@ public class ConfigurationApplication {
 		jf.getContentPane().add(jtp, BorderLayout.CENTER);
 		jf.setSize(800, 600);
 		jf.setVisible(true);
-
 	}
+        
+        public static JTabbedPane getTabbedPane() {
+            return jtp;
+        }
 	
 	protected static void exit() {
 		System.exit(0);
