@@ -1,8 +1,9 @@
 package multiplicity.networkbase;
 
-import multiplicity.networkbase.contentdistribution.IContentDistributionManager;
+import multiplicity.networkbase.contentsync.IContentSynchronisationManager;
 import multiplicity.networkbase.exceptions.AlreadyConnectedException;
 import multiplicity.networkbase.exceptions.NotConnectedException;
+import multiplicity.networkbase.filedistribution.IFileDistributionManager;
 import multiplicity.networkbase.messaging.IMessageManager;
 import multiplicity.networkbase.model.DeviceIdentity;
 import multiplicity.networkbase.presence.IPresenceManager;
@@ -50,11 +51,16 @@ public interface IMultiplicityNetworkManager {
 	public IMessageManager getMessageManager();
 	
 	/**
-	 * Get the content distribution manager.
+	 * Get the file distribution manager.
 	 * @return
 	 */
-	public IContentDistributionManager getContentDistributionManager();
+	public IFileDistributionManager getFileDistributionManager();
 	
+	/**
+	 * Get the content sync manager.
+	 * @return
+	 */
+	public IContentSynchronisationManager getContentSynchronisationManager();	
 
 	/**
 	 * Get the device identity for this device's connection to the network.

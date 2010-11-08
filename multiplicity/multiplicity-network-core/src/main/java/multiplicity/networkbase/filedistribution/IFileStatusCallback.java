@@ -1,4 +1,4 @@
-package multiplicity.networkbase.contentdistribution;
+package multiplicity.networkbase.filedistribution;
 
 import java.io.File;
 import java.net.URL;
@@ -6,12 +6,12 @@ import java.net.URL;
 import multiplicity.networkbase.model.MD5Hash;
 
 /**
- * When registering or retrieving content through an {@link IContentDistributionManager},
+ * When registering or retrieving content through an {@link IFileDistributionManager},
  * changes in status are reported through this interface.
  * @author dcs0ah1
  *
  */
-public interface IContentStatusCallback {
+public interface IFileStatusCallback {
 	
 	/**
 	 * The content item requested to be registered was
