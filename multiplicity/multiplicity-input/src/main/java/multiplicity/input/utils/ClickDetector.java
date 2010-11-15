@@ -107,7 +107,6 @@ public class ClickDetector {
 		CursorDownRecord record = records.get(id);
 		if(record == null) return -1;
 		record.releaseTime = System.currentTimeMillis();
-		if(record == null) return -1;
 		boolean isDoubleClick = false;
 		boolean isSingleClick = ((System.currentTimeMillis() - record.pressTime) < time) && isCloseEnough(position, record.position);
 		if(isSingleClick) {

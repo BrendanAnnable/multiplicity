@@ -35,19 +35,19 @@ public class SelectionExample extends AbstractMultiplicityApp {
 	    IImage bg = getContentFactory().createImage("backgroundimage", UUID.randomUUID());
         bg.setImage(SelectionExample.class.getResource("yellowflowers_1680x1050.png"));
         bg.centerItem();
-        add(bg);
+        addItem(bg);
 	    
 	   
 		
 		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
         cursors.respondToMultiTouchInput(getMultiTouchEventProducer());     
-        add(cursors);
+        addItem(cursors);
 
         
         ICursorTrailsOverlay trails = getContentFactory().createCursorTrailsOverlay("trails", UUID.randomUUID());
         trails.respondToItem(bg);
         trails.setFadingColour(Color.white);
-        add(trails);
+        addItem(trails);
         
         SelectionMaker smaker = new SelectionMaker(this);
         this.getMultiTouchEventProducer().registerMultiTouchEventListener(smaker);
@@ -85,14 +85,14 @@ public class SelectionExample extends AbstractMultiplicityApp {
 				if(!insideframe) { // we aren't in the frame, so lets remove ourselves and put us back in the app
 					Vector2f releasePos = lbl.getWorldLocation();					
 					lbl.getParentItem().removeItem(lbl);
-					SelectionExample.this.add(lbl);
+					SelectionExample.this.addItem(lbl);
 					lbl.setWorldLocation(releasePos);
 					SelectionExample.this.getZOrderManager().bringToTop(lbl, null);
 				}
 			}
 		});
 		
-		add(lbl);
+		addItem(lbl);
 		sm.register(lbl);
 		
 		getZOrderManager().bringToTop(lbl, null);

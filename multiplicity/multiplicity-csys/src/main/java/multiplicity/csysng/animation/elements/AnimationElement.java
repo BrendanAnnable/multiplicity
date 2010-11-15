@@ -33,7 +33,6 @@
 package multiplicity.csysng.animation.elements;
 
 public abstract class AnimationElement {
-	
 	protected boolean enabled;
 	protected boolean firstCall = true;
 
@@ -41,6 +40,12 @@ public abstract class AnimationElement {
 		this.enabled = b;
 	}
 	
+	/**
+	 * Called by the AnimationSystem on each frame. Will call
+	 * <code>elementStart</code> and 
+	 * <code>updateAnimationState</code> as necessary.
+	 * @param tpf
+	 */
 	public void updateState(float tpf) {
 		if(firstCall) {
 			elementStart(tpf);
@@ -49,9 +54,29 @@ public abstract class AnimationElement {
 		updateAnimationState(tpf);
 	}
 	
+	/**
+	 * Called when the animation element is finished.
+	 * See <code>isFinished()</code>
+	 */
 	public abstract void reset();
+	
+	/**
+	 * Called on the first 
+	 * @param tpf
+	 */
 	public abstract void elementStart(float tpf);
+	
+	/**
+	 * Called each frame in the game loop.
+	 * @param tpf
+	 */
 	public abstract void updateAnimationState(float tpf);
+	
+	/**
+	 * When this method returns true, the animation element
+	 * will be reset.
+	 * @return
+	 */
 	public abstract boolean isFinished();
 	
 	public String toString() {

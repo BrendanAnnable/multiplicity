@@ -22,6 +22,8 @@ import multiplicity.input.IMultiTouchEventProducer;
 import multiplicity.input.IMultiTouchInputSource;
 import multiplicity.input.MultiTouchInputComponent;
 import multiplicity.input.exceptions.MultiTouchInputException;
+import multiplicity.networkbase.MultiplicityNetworkFactory;
+import multiplicity.networkbase.IMultiplicityNetworkManager;
 
 import com.acarter.scenemonitor.SceneMonitor;
 import com.jme.app.BaseGame;
@@ -52,6 +54,7 @@ import com.jme.util.Debug;
 import com.jme.util.GameTaskQueue;
 import com.jme.util.GameTaskQueueManager;
 import com.jme.util.TextureManager;
+import com.jme.util.ThrowableHandler;
 import com.jme.util.Timer;
 import com.jme.util.geom.Debugger;
 import com.jme.util.stat.StatCollector;
@@ -70,7 +73,6 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 	protected Node statNode;
 	protected Node graphNode;
 
-
 	protected float tpf;
 	protected boolean showDepth = false;
 	protected boolean showBounds = false;
@@ -86,13 +88,45 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 	protected PickedItemDispatcher pickedItemDispatcher;
 	protected IMultiTouchInputSource inputSource;
 	protected List<IUpdateable> itemsForUpdating = new ArrayList<IUpdateable>();
+	protected IMultiplicityNetworkManager networkConnection;
 
 	public AbstractSurfaceSystem() {
-		keyInput = new KeyboardInputUtility(this);		
-		System.setProperty("jme.stats", "set");
+		keyInput = new KeyboardInputUtility(this);
+		initNetwork();
+	}
+
+	private boolean showStats;
+
+	private void initNetwork() {
+		try {
+			networkConnection = MultiplicityNetworkFactory.getPreferredNetworkManager();
+		} catch (InstantiationException e) {
+			logger.log(Level.SEVERE, "Could not create the preferred network manager. No networking active.", e);
+		} catch (IllegalAccessException e) {
+			logger.log(Level.SEVERE, "Could not create the preferred network manager. No networking active.", e);
+		} catch (ClassNotFoundException e) {
+			logger.log(Level.SEVERE, "Could not create the preferred network manager. No networking active.", e);
+		}
+	}
+	
+	public IMultiplicityNetworkManager getNetworkConnection() {
+		return networkConnection;
 	}
 
 	protected void initSystem() throws JmeException {
+		setThrowableHandler(new ThrowableHandler() {			
+			@Override
+			public void handle(Throwable t) {
+				logger.warning("Exception in game loop.");				
+				StringBuffer trace = new StringBuffer();
+				for(StackTraceElement ste : t.getStackTrace()) {
+					trace.append("  " + ste.toString() + "\n");
+				}
+				logger.warning(trace.toString());
+			}
+		});
+		
+		
 		logger.info(getVersion());
 		keyInput.setupBindings();		
 		try {
@@ -175,7 +209,7 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		statNode.setCullHint( Spatial.CullHint.Never );
 		statNode.setRenderQueueMode(Renderer.QUEUE_ORTHO);
 
-		if (Debug.stats) {
+		if (new DeveloperPreferences().getShowSceneMonitor()) {
 			graphNode = new Node( "Graph node" );
 			graphNode.setCullHint( Spatial.CullHint.Never );
 			statNode.attachChild(graphNode);
@@ -228,7 +262,8 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		statNode.updateGeometricState( 0.0f, true );
 		statNode.updateRenderState();
 
-		if(new DeveloperPreferences().getShowSceneMonitor()) {
+		showStats = new DeveloperPreferences().getShowSceneMonitor();
+		if(showStats) {
 			SceneMonitor.getMonitor().unregisterAllNodes();
 			SceneMonitor.getMonitor().registerNode(surfaceSystemOrthoNode, "AbstractSurfaceSystem ortho node");
 			//TODO: doesn't seem like SceneMonitor wants to register more than one node?
@@ -255,7 +290,9 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 
 		RenderPass orthoRenderPass = new RenderPass();
 		orthoRenderPass.add(surfaceSystemOrthoNode);
-		orthoRenderPass.add(statNode);
+		if(showStats) {
+			orthoRenderPass.add(statNode);
+		}
 
 		renderPassManager.add(rootPass);
 		renderPassManager.add(orthoRenderPass);
@@ -278,8 +315,16 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		}
 		input.update( tpf );
 
-		AnimationSystem.getInstance().update(tpf);
+		try {
+			AnimationSystem.getInstance().update(tpf);
+		}catch(Exception e) {
+			logger.log(Level.WARNING, "Exception in animation system. ", e);
+			e.printStackTrace();
+		}
 
+		if(networkConnection != null && networkConnection.isConnected()) {
+			networkConnection.update();
+		}
 
 		for(IUpdateable updateItem : itemsForUpdating) {
 			try {
@@ -295,10 +340,20 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 		}
 
 
-		if (Debug.stats) {
+		if (showStats) {
 			StatCollector.update();
 		}
-		GameTaskQueueManager.getManager().getQueue(GameTaskQueue.UPDATE).execute();
+		
+		try {		
+			GameTaskQueueManager.getManager().getQueue(GameTaskQueue.UPDATE).execute();
+		}catch(Exception ex) {
+			logger.warning("Error in GameTaskQueue.UPDATE execution");				
+			StringBuffer trace = new StringBuffer();
+			for(StackTraceElement ste : ex.getStackTrace()) {
+				trace.append("  " + ste.toString() + "\n");
+			}
+			logger.warning(trace.toString());
+		}
 
 		keyInput.processKeyboard(interpolation);
 
@@ -421,6 +476,6 @@ public abstract class AbstractSurfaceSystem extends BaseGame {
 	public Camera 	getCamera() 					{ return cam; }
 
 	public boolean 	isDrawingStats() 				{ return showGraphs; }
-	public void 	setDrawingStats(boolean b) 		{ showGraphs = !showGraphs; Debug.updateGraphs = showGraphs; stats.clearControllers(); stats.newControllers(showGraphs); }
+	public void 	setDrawingStats(boolean b) 		{ if(!showStats) return; showGraphs = !showGraphs; Debug.updateGraphs = showGraphs; stats.clearControllers(); stats.newControllers(showGraphs); }
 
 }

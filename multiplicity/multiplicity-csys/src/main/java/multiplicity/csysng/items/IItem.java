@@ -11,9 +11,8 @@ import multiplicity.csysng.zorder.IZOrderManager;
 import com.jme.math.Vector2f;
 import com.jme.scene.Spatial;
 
-public interface IItem {	
+public interface IItem extends INode {
 	public UUID getUUID();
-	
 	public void setParentItem(IItem parent);
 	public IItem getParentItem();	
 	public String getName();
@@ -26,6 +25,13 @@ public interface IItem {
 	
 	public void setWorldLocation(Vector2f loc);
 	public Vector2f getWorldLocation();
+	
+	/**
+	 * Get the world location of an arbitrary point
+	 * @param v
+	 * @return
+	 */
+	public Vector2f getWorldLocation(Vector2f v);
 	public void setRelativeLocation(Vector2f loc);
 	public Vector2f getRelativeLocation();
 	public Vector2f convertWorldVelocityToLocalVelocity(Vector2f loc);
@@ -38,10 +44,6 @@ public interface IItem {
 	
 	public IZOrderManager getZOrderManager();
 	
-	public void addItem(IItem item);
-	public void removeItem(IItem item);
-	public boolean hasChildren();
-	public int getChildrenCount();	
 
 	public void setInteractionEnabled(boolean b);
 	
@@ -51,10 +53,10 @@ public interface IItem {
 	
 	public void behaviourAdded(IBehaviour behaviour);
 	public List<IBehaviour> getBehaviours();
+	public List<IBehaviour> getBehaviours(Class<? extends IBehaviour> clazz);
 
-    
-
-    
+    public void setVisible(boolean isVisible);
+	public boolean isVisible();
 
 	
 }

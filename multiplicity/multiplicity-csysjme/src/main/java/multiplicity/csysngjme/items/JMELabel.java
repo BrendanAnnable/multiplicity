@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.font.TextAttribute;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.text.AttributedString;
 import java.util.UUID;
 
 import com.jme.bounding.OrthogonalBoundingBox;
@@ -14,6 +16,7 @@ import com.jme.image.Texture.MagnificationFilter;
 import com.jme.image.Texture.MinificationFilter;
 import com.jme.math.FastMath;
 import com.jme.math.Vector2f;
+import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Spatial;
 import com.jme.scene.TexCoords;
 import com.jme.scene.shape.Quad;
@@ -33,7 +36,7 @@ import multiplicity.csysngjme.zordering.SimpleZOrderManager;
 public class JMELabel extends JMERectangularItem implements ILabel {
 	private static final long serialVersionUID = 7699849986105817403L;
 	private static float defaultHeight = 50f;
-	
+
 	private TextureState ts;
 	private Quad textQuad;
 	private Font font;
@@ -41,11 +44,13 @@ public class JMELabel extends JMERectangularItem implements ILabel {
 	private BlendState blendState;
 	private Color textColor;
 	private Color transparentBackgroundColor;
-	
+
+	private char[] underlineChars = {};
+
 	public JMELabel(String name, UUID uuid) {
 		super(name, uuid);
 	}
-	
+
 	@Override
 	public void initializeGeometry() {
 		text = "";
@@ -53,6 +58,11 @@ public class JMELabel extends JMERectangularItem implements ILabel {
 		transparentBackgroundColor = new Color(1, 1, 1, 0);
 		createQuad(defaultHeight);
 		attachChild(textQuad);
+	}
+
+	@Override
+	public void setUnderlineChars(char... underlineChars) {
+		this.underlineChars = underlineChars;
 	}
 
 	@Override
@@ -66,7 +76,7 @@ public class JMELabel extends JMERectangularItem implements ILabel {
 		this.text = text;
 		update();
 	}
-	
+
 	@Override
 	public void setTextColour(Color c) {
 		this.textColor = c;
@@ -74,84 +84,112 @@ public class JMELabel extends JMERectangularItem implements ILabel {
 	}
 
 	// private
-    
-    /**
-     * 
-     * @param scaleFactors is set to the factors needed to adjust texture coords
-     * to the next-power-of-two- sized resulting image
-     */
-    protected BufferedImage getImage(Vector2f imageSize, Vector2f contentSize){
-        BufferedImage tmp0 = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = (Graphics2D) tmp0.getGraphics();
-        Font drawFont = font;
-        g2d.setFont(drawFont);
-        Rectangle2D b = g2d.getFontMetrics().getStringBounds(text, g2d);
-     
-        int actualX = (int)b.getWidth() + 8;
-        int actualY = (int)b.getHeight() + 8; // TODO: remove +8 fudges
-        contentSize.x = (int)b.getWidth();
-        contentSize.y = (int)b.getHeight();
-        
-        int desiredX = FastMath.nearestPowerOfTwo(actualX);
-        int desiredY = FastMath.nearestPowerOfTwo(actualY);
-        imageSize.x = desiredX;
-        imageSize.y = desiredY;
-        
-        tmp0 = new BufferedImage(desiredX, desiredY, BufferedImage.TYPE_INT_ARGB);
-        
-        g2d = (Graphics2D) tmp0.getGraphics();
-        g2d.setColor(transparentBackgroundColor);
-        g2d.fillRect(0, 0, desiredX, desiredY);
-        g2d.setFont(drawFont);
-        g2d.setColor(textColor);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2d.drawString(text, 0, g2d.getFontMetrics().getMaxAscent());
-        
-        return tmp0;
-    }
-    
-    protected void createQuad(float height){
-    	textQuad = new Quad(getName() + "_quad");
-    	textQuad.setModelBound(new OrthogonalBoundingBox());
-    	textQuad.updateModelBound();
-    	ItemMap.register(textQuad, this);
-    	ts = DisplaySystem.getDisplaySystem().getRenderer().createTextureState();
-    	blendState = DisplaySystem.getDisplaySystem().getRenderer().createBlendState();		
+
+	/**
+	 * 
+	 * @param scaleFactors is set to the factors needed to adjust texture coords
+	 * to the next-power-of-two- sized resulting image
+	 */
+	protected BufferedImage getImage(Vector2f imageSize, Vector2f contentSize){
+		BufferedImage tmp0 = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = (Graphics2D) tmp0.getGraphics();
+		Font drawFont = font;
+		g2d.setFont(drawFont);
+		Rectangle2D b = g2d.getFontMetrics().getStringBounds(text, g2d);
+
+		int actualX = (int)b.getWidth() + 8;
+		int actualY = (int)b.getHeight() + 8; // TODO: remove +8 fudges
+		contentSize.x = (int)b.getWidth();
+		contentSize.y = (int)b.getHeight();
+
+		int desiredX = FastMath.nearestPowerOfTwo(actualX);
+		int desiredY = FastMath.nearestPowerOfTwo(actualY);
+		imageSize.x = desiredX;
+		imageSize.y = desiredY;
+
+		tmp0 = new BufferedImage(desiredX, desiredY, BufferedImage.TYPE_INT_ARGB);
+
+		g2d = (Graphics2D) tmp0.getGraphics();
+		g2d.setColor(transparentBackgroundColor);
+		g2d.fillRect(0, 0, desiredX, desiredY);
+		g2d.setFont(drawFont);
+		g2d.setColor(textColor);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+		if(text.length() < 1) return tmp0;
+
+		//        if(text.si > -1) {
+			AttributedString as = new AttributedString(text);
+			as.addAttribute(TextAttribute.FONT, drawFont);
+			for(int i = 0; i < text.length(); i++) {        		
+				if(shouldUnderline(text.charAt(i))) {
+					as.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, i, i+1);
+				}        		
+			}
+			g2d.drawString(as.getIterator(), 0, g2d.getFontMetrics().getMaxAscent());
+			//        }else{        
+				//        	g2d.drawString(text, 0, g2d.getFontMetrics().getMaxAscent());
+			//        }
+
+			return tmp0;
+	}
+
+	private boolean shouldUnderline(char charAt) {
+		for(int i = 0; i < underlineChars.length; i++) {
+			if(charAt == underlineChars[i]) return true;
+		}
+		return false;
+	}
+
+	protected void createQuad(float height){
+		textQuad = new Quad(getName() + "_quad");
+		textQuad.setModelBound(new OrthogonalBoundingBox());
+		textQuad.updateModelBound();
+		ItemMap.register(textQuad, this);
+		ts = DisplaySystem.getDisplaySystem().getRenderer().createTextureState();
+		blendState = DisplaySystem.getDisplaySystem().getRenderer().createBlendState();		
 		blendState.setSourceFunction(SourceFunction.SourceAlpha);
 		blendState.setDestinationFunction(DestinationFunction.OneMinusSourceAlpha);
 		blendState.setBlendEnabled(true);
-        textQuad.setRenderState(ts);
-        textQuad.setRenderState(blendState);
-        textQuad.updateRenderState();        				
-        update();
-    }
-    
+		textQuad.setRenderState(ts);
+		textQuad.setRenderState(blendState);
+		textQuad.updateRenderState();        				
+		update();
+	}
+
 	protected void update() {
 		Vector2f imageSize = new Vector2f();
 		Vector2f contentSize = new Vector2f();
-		
+
 		BufferedImage img = getImage(imageSize, contentSize);
 		float yscale = contentSize.y / imageSize.y;
-        textQuad.updateGeometry(contentSize.x, contentSize.y);
-        setSize(contentSize.x, contentSize.y);
-        textQuad.updateGeometricState(0f, true);
-        textQuad.updateModelBound();
-        Vector2f[] texCoords={
-                new Vector2f(0,1),
-                new Vector2f(0,1-yscale),
-                new Vector2f(contentSize.x/imageSize.x,1-yscale),
-                new Vector2f(contentSize.x/imageSize.x,1)
-            };
-        
-        TexCoords texcords = new TexCoords(BufferUtils.createFloatBuffer(texCoords));
-        textQuad.setTextureCoords(texcords);
+		textQuad.updateGeometry(contentSize.x, contentSize.y);
+		setSize(contentSize.x, contentSize.y);
+		textQuad.updateGeometricState(0f, true);
+		textQuad.updateModelBound();
+		Vector2f[] texCoords={
+				new Vector2f(0,1),
+				new Vector2f(0,1-yscale),
+				new Vector2f(contentSize.x/imageSize.x,1-yscale),
+				new Vector2f(contentSize.x/imageSize.x,1)
+		};
+
+		TexCoords texcords = new TexCoords(BufferUtils.createFloatBuffer(texCoords));
+		textQuad.setTextureCoords(texcords);
 		Texture tex = TextureManager.loadTexture(img, MinificationFilter.BilinearNoMipMaps, MagnificationFilter.Bilinear, true);
 		ts.clearTextures();
-        ts.setTexture(tex);
-        ts.setEnabled(true);
-        textQuad.updateRenderState();
-        
+		ts.setTexture(tex);
+		ts.setEnabled(true);
+		textQuad.updateRenderState();
+
+	}
+
+	@Override
+	public void setAlpha(float alpha) {
+		ColorRGBA currentColour = textQuad.getDefaultColor();
+		currentColour.set(currentColour.r, currentColour.g, currentColour.b, alpha);		
+		textQuad.setDefaultColor(currentColour);
 	}
 
 	@Override

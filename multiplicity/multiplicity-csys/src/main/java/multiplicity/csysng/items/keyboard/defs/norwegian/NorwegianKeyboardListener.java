@@ -2,11 +2,8 @@ package multiplicity.csysng.items.keyboard.defs.norwegian;
 
 import java.awt.event.KeyEvent;
 
-import org.apache.commons.lang.StringUtils;
-
 import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IFrame;
-import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.csysng.items.keyboard.behaviour.IMultiTouchKeyboardListener;
 import multiplicity.csysng.items.keyboard.model.KeyModifiers;

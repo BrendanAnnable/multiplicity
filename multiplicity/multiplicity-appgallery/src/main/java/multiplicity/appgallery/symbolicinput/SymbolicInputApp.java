@@ -47,7 +47,7 @@ public class SymbolicInputApp extends AbstractMultiplicityApp {
 		label2.setRelativeLocation(new Vector2f(0, 200));
 		label2.setCursorAt(3);
 		BehaviourMaker.addBehaviour(label2, RotateTranslateScaleBehaviour.class);		
-		add(label2);
+		addItem(label2);
 		zOrderManager.bringToTop(label2, null);
 		
 		
@@ -94,7 +94,7 @@ public class SymbolicInputApp extends AbstractMultiplicityApp {
 		jmeRoundedRectangleBorder.setColor(new ColorRGBA(.211f, .211f, .211f, 1f));
 		framewrap.setBorder(jmeRoundedRectangleBorder);
 		
-		add(framewrap);		
+		addItem(framewrap);		
 		BehaviourMaker.addBehaviour(framewrap, RotateTranslateScaleBehaviour.class);
 		
 		zOrderManager.bringToTop(framewrap, null);
@@ -104,7 +104,7 @@ public class SymbolicInputApp extends AbstractMultiplicityApp {
 		IImage bg = getContentFactory().createImage("backgroundimage", UUID.randomUUID());
 		bg.setImage(GalleryApp.class.getResource("yellowflowers_1680x1050.png"));
 		bg.centerItem();
-		add(bg);		
+		addItem(bg);		
 		zOrderManager.sendToBottom(bg, null);
 		zOrderManager.neverBringToTop(bg);
 	}

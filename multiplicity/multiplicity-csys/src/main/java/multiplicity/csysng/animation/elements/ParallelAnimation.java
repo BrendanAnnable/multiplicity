@@ -79,7 +79,7 @@ public class ParallelAnimation extends AnimationElement {
 	public void updateAnimationState(float tpf) {
 		boolean finishTest = true;
 		for(AnimationElement e : elements) {
-			e.updateAnimationState(tpf);
+			e.updateState(tpf);
 			finishTest = finishTest && e.isFinished();
 		}
 		finished = finishTest;

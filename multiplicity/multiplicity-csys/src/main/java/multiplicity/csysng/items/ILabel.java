@@ -8,4 +8,6 @@ public interface ILabel extends IRectangularItem {
 	public void setText(String text);
 	public String getText();
 	public void setTextColour(Color c);
+	public void setUnderlineChars(char... underlineChars);
+	public void setAlpha(float alpha);
 }

@@ -40,4 +40,20 @@ public class DisplayManager {
 	public int getDisplayHeight() {
 		return height;
 	}
+
+	public float getScreenLeft() {
+		return -getDisplayWidth()/2;
+	}
+	
+	public float getScreenRight() {
+		return getDisplayWidth()/2;
+	}
+	
+	public float getScreenTop() {
+		return getDisplayHeight()/2;
+	}
+	
+	public float getScreenBottom() {
+		return -getDisplayHeight()/2;
+	}
 }

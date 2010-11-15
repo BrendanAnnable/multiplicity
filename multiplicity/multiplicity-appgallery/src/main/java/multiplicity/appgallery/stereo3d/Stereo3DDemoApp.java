@@ -54,7 +54,7 @@ public class Stereo3DDemoApp extends AbstractMultiplicityApp {
 		label2.setFont(new Font("Helvetica", Font.BOLD, 24));
 		label2.setTextColour(Color.white);
 		label2.setRelativeLocation(new Vector2f(-300, 300));
-		add(label2);
+		addItem(label2);
 		
 		IImage img = getContentFactory().createImage("photo", UUID.randomUUID());
 		img.setImage(GalleryApp.class.getResource("aotn.jpg"));
@@ -67,7 +67,7 @@ public class Stereo3DDemoApp extends AbstractMultiplicityApp {
 		frame.setRelativeLocation(new Vector2f(320, -270));
 		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 		
-		add(frame);
+		addItem(frame);
 		
 	}
 	

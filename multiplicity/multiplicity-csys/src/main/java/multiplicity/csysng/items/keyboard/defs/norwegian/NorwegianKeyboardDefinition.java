@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 
-import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardDefinition;
 import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardKeyMaker;
 import multiplicity.csysng.items.keyboard.model.CharacterKey;
 import multiplicity.csysng.items.keyboard.model.KeyModifiers;

@@ -24,9 +24,12 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 	private IKeyboard item;
 	private List<IMultiTouchKeyboardListener> listeners = new ArrayList<IMultiTouchKeyboardListener>();
 	private Map<Long,KeyboardKey> trackedKeyPresses = new HashMap<Long,KeyboardKey>();
+	private Map<String,Long> keyPressTimes = new HashMap<String,Long>();
 	private boolean shiftDown = false;
 	private boolean ctlDown = false;
 	private boolean altDown = false;
+	private boolean enabled = true;
+	private long minTimeBetweenKeyPresses = 10; 
 
 	@Override
 	public void removeItemActingOn() {
@@ -34,6 +37,10 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 			item.getMultiTouchDispatcher().remove(this);
 		}
 		this.item = null;
+	}
+	
+	public void setMinimumTimeBetweenKeyPressesMS(long milliseconds) {
+		this.minTimeBetweenKeyPresses = milliseconds;
 	}
 
 	@Override
@@ -53,16 +60,18 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 	}
 
 	@Override
-	public void cursorChanged(MultiTouchCursorEvent event) {	
+	public void cursorChanged(MultiTouchCursorEvent event) {			
+		if(!enabled ) return;
+
 		KeyboardKey kk = trackedKeyPresses.get(event.getCursorID());
 		if(kk != null) {
 			KeyboardKey newKey = getKeyUnderEvent(event);
 			if(newKey == null || !(newKey.getKeyCode() == kk.getKeyCode())) {
-				
+
 				if(kk.getModifiers() == KeyModifiers.SHIFT) {
 					shiftDown = false;
 				}
-				
+
 				for(IMultiTouchKeyboardListener kl : listeners) {
 					kl.keyReleased(kk, shiftDown, altDown, ctlDown);
 				}
@@ -78,12 +87,15 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 
 	@Override
 	public void cursorPressed(MultiTouchCursorEvent event) {
+		if(!enabled ) return;
 		KeyboardKey kk = getKeyUnderEvent(event);
-		if(kk != null && kk.isEnabled()) {
+		
+		if(kk != null && kk.isEnabled()) {			
 			if(kk.getModifiers() == KeyModifiers.SHIFT) {
 				shiftDown = true;
 				trackedKeyPresses.put(event.getCursorID(), kk);
 			}
+
 			for(IMultiTouchKeyboardListener kl : listeners) {
 				kl.keyPressed(kk, shiftDown, altDown, ctlDown);
 			}
@@ -93,11 +105,24 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 
 	@Override
 	public void cursorReleased(MultiTouchCursorEvent event) {
+		if(!enabled ) return;
 		KeyboardKey kk = getKeyUnderEvent(event);
 		if(kk != null && kk.isEnabled()) {
 			if(kk.getModifiers() == KeyModifiers.SHIFT) {
 				shiftDown = false;
 			}
+			
+			if(keyPressTimes.containsKey(kk.getKeyStringRepresentation())) {
+				long lastTime = keyPressTimes.get(kk.getKeyStringRepresentation());
+				if(lastTime > 0) {
+					long duration = System.currentTimeMillis() - lastTime;
+					if(duration < minTimeBetweenKeyPresses) {
+						return;
+					}
+				}
+			}
+			keyPressTimes.put(kk.getKeyStringRepresentation(), System.currentTimeMillis());
+			
 			for(IMultiTouchKeyboardListener kl : listeners) {
 				kl.keyReleased(kk, shiftDown, altDown, ctlDown);
 			}
@@ -131,6 +156,10 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 	public void objectRemoved(MultiTouchObjectEvent event) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 
