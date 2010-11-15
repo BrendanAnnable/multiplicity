@@ -106,5 +106,13 @@ public class JMEKeyboard extends JMERectangularItem implements IKeyboard {
 			graphics.update(texture, false);
 		}
 	}
+	
+	@Override
+	public void reDraw() {
+		if(keyboardRenderer != null) {
+			keyboardRenderer.drawKeyboard(graphics, false, false, false);		
+			graphics.update(texture, false);
+		}
+	}
 
 }

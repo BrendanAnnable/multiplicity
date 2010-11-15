@@ -151,7 +151,7 @@ public class SelectionMaker implements IMultiTouchEventListener {
 				new Color(0.5f, 0.5f, 0.5f, 0.8f), 
 				new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 		frame.maintainBorderSizeDuringScale();
-		app.add(frame);
+		app.addItem(frame);
 		frame.setWorldLocation(center);
 		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 

@@ -7,6 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IItem;
+import multiplicity.csysng.items.INode.IChildrenChangedListener;
 import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.events.MultiTouchEventDispatcher;
 import multiplicity.csysng.zorder.IZOrderManager;
@@ -117,6 +118,13 @@ public abstract class JMEItem extends Node implements IItem {
 		this.getParent().localToWorld(getLocalTranslation(), out);
 		return new Vector2f(out.x, out.y);
 	}
+	
+	@Override
+	public Vector2f getWorldLocation(Vector2f v) {
+		if(this.getParent() == null) return v;
+		this.getParent().localToWorld(new Vector3f(v.x, v.y, 0), out);
+		return new Vector2f(out.x, out.y);
+	}
 
 	@Override
 	public void setRelativeLocation(Vector2f newLoc) {
@@ -193,6 +201,7 @@ public abstract class JMEItem extends Node implements IItem {
 		item.setParentItem(this);
 		getZOrderManager().registerForZOrdering(item);
 		zOrderManager.updateZOrdering();
+		notifyChildrenChanged();
 	}
 	
 	@Override
@@ -201,6 +210,7 @@ public abstract class JMEItem extends Node implements IItem {
 		detachChild(item.getTreeRootSpatial());
 		item.setParentItem(null);
 		getZOrderManager().unregisterForZOrdering(item);
+		notifyChildrenChanged();
 	}
 	
 	@Override
@@ -267,6 +277,16 @@ public abstract class JMEItem extends Node implements IItem {
 	public List<IBehaviour> getBehaviours() {
 		return behaviours;
 	}
+	
+	public List<IBehaviour> getBehaviours(Class<? extends IBehaviour> clazz) {
+		List<IBehaviour> bs = new ArrayList<IBehaviour>();
+		for(IBehaviour b : getBehaviours()) {
+			if(b.getClass().equals(clazz)) {
+				bs.add(b);
+			}
+		}
+		return bs;
+	}
 
     public List<IItem> getItemChildren() {
         return itemChildren;
@@ -289,5 +309,37 @@ public abstract class JMEItem extends Node implements IItem {
 	public void setItemListeners(List<IItemListener> itemListeners){
 	    this.itemListeners = itemListeners;
 	}
+	
+	@Override
+	public void setVisible(boolean isVisible) {
+		if(isVisible) {			
+			this.setCullHint(CullHint.Never);
+		}else{
+			this.setCullHint(CullHint.Always);
+		}
+	}
+	
+	@Override
+	public boolean isVisible() {
+		return this.getCullHint() != CullHint.Always;
+	}
+	
+	
+	List<IChildrenChangedListener> childrenChangedListeners = new ArrayList<IChildrenChangedListener>();
+	
+	private void notifyChildrenChanged() {
+		for(IChildrenChangedListener l : childrenChangedListeners) {
+			l.childrenChanged(this, itemChildren);
+		}
+	}
+	
+	public void registerChildrenChangedListener(IChildrenChangedListener listener) {
+		if(!childrenChangedListeners.contains(listener)) childrenChangedListeners.add(listener);
+	}
+	
+	public void deRegisterChildrenChangedListener(IChildrenChangedListener listener) {
+		childrenChangedListeners.remove(listener);
+	}
+	
 }
 

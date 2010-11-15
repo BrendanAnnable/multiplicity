@@ -109,6 +109,7 @@ public class JMEImage extends JMERectangularItem implements IImage {
 		}
 		}
 		imageQuad.updateRenderState();
+		
 	}
 
 	@Override

@@ -32,7 +32,7 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 	private void associate(long cursorID, IItem item) {
 		cursorItemAssociation.put(cursorID, item);
 	}
-	
+
 	private void associateThreeD(long cursorID, IThreeDeeContent contentItem) {
 		cursor3DItemAssociation.put(cursorID, contentItem);
 	}
@@ -40,7 +40,7 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 	private void disassociate(long cursorID) {
 		cursorItemAssociation.remove(cursorID);
 	}
-	
+
 	private void disassociateThreeD(long cursorID) {
 		cursor3DItemAssociation.remove(cursorID);
 	}
@@ -48,21 +48,22 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 	private IItem getAssociatedItem(long cursorID) {
 		return cursorItemAssociation.get(cursorID);
 	}
-	
+
 	private IThreeDeeContent getAssociatedThreeD(long cursorID) {
 		return cursor3DItemAssociation.get(cursorID);
 	}
 
 
 	@Override
-	public void cursorPressed(MultiTouchCursorEvent event) {		
+	public void cursorPressed(MultiTouchCursorEvent event) {	
 		// 2D
 		List<IItem> items = getPickedItemListener(event.getPosition().x, event.getPosition().y);
-		if(items != null) {
-			for(IItem item : items) {
-				associate(event.getCursorID(), item);
-				item.getMultiTouchDispatcher().cursorPressed(event);
-			}
+		if(items != null && items.size() > 0) {
+			//for(IItem item : items) {
+			IItem item = items.get(0);
+			associate(event.getCursorID(), item);
+			item.getMultiTouchDispatcher().cursorPressed(event);
+			//}
 		}
 
 		// 3D
@@ -84,7 +85,7 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 			item.getMultiTouchDispatcher().cursorReleased(event);
 			disassociate(event.getCursorID());
 		}
-		
+
 		// 3D
 		IThreeDeeContent threeD = getAssociatedThreeD(event.getCursorID());
 		if(threeD != null) {
@@ -100,7 +101,7 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 		if(item != null) {
 			item.getMultiTouchDispatcher().cursorClicked(event);
 		}
-		
+
 		// 3D
 		IThreeDeeContent threeD = getAssociatedThreeD(event.getCursorID());
 		if(threeD != null) {
@@ -115,7 +116,7 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 		if(item != null) {
 			item.getMultiTouchDispatcher().cursorChanged(event);
 		}
-		
+
 		// 3D
 		IThreeDeeContent threeD = getAssociatedThreeD(event.getCursorID());
 		if(threeD != null) {

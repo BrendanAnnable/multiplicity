@@ -9,7 +9,6 @@ import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.hotspot.IHotSpotRepo;
 import multiplicity.csysngjme.factory.ContentItemFactoryUtil;
-import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
 import multiplicity.csysngjme.items.hotspots.HotSpotItem;
 import multiplicity.csysngjme.items.hotspots.HotSpotRepo;

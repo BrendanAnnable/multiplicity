@@ -45,11 +45,11 @@ public class GalleryApp extends AbstractMultiplicityApp {
 		IImage bg = getContentFactory().createImage("backgroundimage", UUID.randomUUID());
 		bg.setImage(GalleryApp.class.getResource("yellowflowers_1680x1050.png"));
 		bg.centerItem();
-		add(bg);
+		addItem(bg);
 
 		IColourRectangle rect = getContentFactory().createColourRectangle("cr", UUID.randomUUID(), 100, 50);
 		rect.setSolidBackgroundColour(new Color(1.0f, 0f, 0f, 0.8f));
-		add(rect);
+		addItem(rect);
 		BehaviourMaker.addBehaviour(rect, RotateTranslateScaleBehaviour.class);
 		
 
@@ -70,12 +70,12 @@ public class GalleryApp extends AbstractMultiplicityApp {
 
 		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
 		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());		
-		add(cursors);
+		addItem(cursors);
 
 		ICursorTrailsOverlay trails = getContentFactory().createCursorTrailsOverlay("trails", UUID.randomUUID());
 		trails.respondToItem(bg);
 		trails.setFadingColour(Color.white);
-		add(trails);
+		addItem(trails);
 		
 
 		addNestedFrameExample();
@@ -95,7 +95,7 @@ public class GalleryApp extends AbstractMultiplicityApp {
 				new Color(0.5f, 0.5f, 0.5f, 0.8f), 
 				new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 		framewrap.maintainBorderSizeDuringScale();
-		add(framewrap);
+		addItem(framewrap);
 		BehaviourMaker.addBehaviour(framewrap, RotateTranslateScaleBehaviour.class);
 
 		IFrame f = getContentFactory().createFrame("innerframe", UUID.randomUUID(), 200, 100);		
@@ -117,7 +117,7 @@ public class GalleryApp extends AbstractMultiplicityApp {
 				new Color(0.5f, 0.5f, 0.5f, 0.8f), 
 				new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 		frame.maintainBorderSizeDuringScale();
-		add(frame);
+		addItem(frame);
 		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
 		ILabel label2 = getContentFactory().createLabel("label", UUID.randomUUID());

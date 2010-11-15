@@ -5,8 +5,6 @@ import java.awt.Font;
 import java.net.URL;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
-
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
@@ -22,7 +20,6 @@ import multiplicity.csysng.items.keyboard.behaviour.KeyboardBehaviour;
 import multiplicity.csysng.items.keyboard.defs.norwegian.NorwegianKeyboardListener;
 import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRenderer;
 import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
-import multiplicity.csysng.items.keyboard.model.KeyboardKey;
 import multiplicity.csysngjme.factory.JMEContentItemFactory;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 
@@ -266,5 +263,26 @@ public class HotSpotTextFrame extends HotSpotFrame implements IHotSpotText{
     public KeyboardBehaviour getKeyBoardBehavior() {
         return keyBoardBehavior;
     }
+
+
+	@Override
+	public void setCursorAtEnd() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setUnderlineChars(char... underlineChars) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setAlpha(float alpha) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

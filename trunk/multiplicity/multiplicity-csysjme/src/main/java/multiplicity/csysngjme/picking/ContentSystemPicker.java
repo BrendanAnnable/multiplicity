@@ -26,7 +26,8 @@ public class ContentSystemPicker implements IPickSystem {
 			Spatial pickableSpatial = ps.getSpatial();
 			Spatial parent = pickableSpatial.getParent();
 			if(parent instanceof IItem) {
-				items.add((IItem)parent);
+				IItem item = (IItem)parent;				
+				items.add(item);
 			}
 		}
 		

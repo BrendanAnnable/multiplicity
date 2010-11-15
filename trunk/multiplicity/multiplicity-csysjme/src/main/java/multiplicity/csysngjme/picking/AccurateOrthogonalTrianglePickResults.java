@@ -43,6 +43,7 @@ import com.jme.math.Ray;
 import com.jme.math.Vector2f;
 import com.jme.math.Vector3f;
 import com.jme.scene.TriMesh;
+import com.jme.scene.Spatial.CullHint;
 
 public class AccurateOrthogonalTrianglePickResults extends TrianglePickResults {
 
@@ -68,7 +69,8 @@ public class AccurateOrthogonalTrianglePickResults extends TrianglePickResults {
 			}
 			if(ps != null) {				
 				JMEItemUserData itemData = (JMEItemUserData) ps.getSpatial().getUserData(JMEItem.KEY_JMEITEMDATA);
-
+				boolean isCulled = ps.getSpatial().getCullHint() != CullHint.Never;
+				if(isCulled) continue;
 				if(itemData != null) {
 					// test to see if we have to compensate for stencil masking
 					if(itemData.getMaskGeometry() != null) {

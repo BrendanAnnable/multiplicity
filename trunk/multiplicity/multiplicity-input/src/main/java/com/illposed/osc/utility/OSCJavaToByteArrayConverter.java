@@ -154,8 +154,7 @@ public class OSCJavaToByteArrayConverter {
 	 * Creation date: (2/23/2001 2:43:25 AM)
 	 * @param aClass Class
 	 */
-	@SuppressWarnings("unchecked")
-	public void writeType(Class c) {
+	public void writeType(Class<?> c) {
 		// A big ol' case statement -- what's polymorphism mean, again?
 		// I really wish I could extend the base classes!
 

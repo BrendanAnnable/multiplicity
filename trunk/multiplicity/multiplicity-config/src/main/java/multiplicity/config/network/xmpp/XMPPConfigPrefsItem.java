@@ -1,5 +1,9 @@
 package multiplicity.config.network.xmpp;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import javax.swing.JPanel;
@@ -16,7 +20,8 @@ public class XMPPConfigPrefsItem implements PreferencesItem {
 	private static final String XMPP_USER = "XMPP_USER";
 	private static final String XMPP_PASSWORD = "XMPP_PASSWORD";
         private static final String XMPP_CHOOSE_USER_AT_LAUNCH = "XMPP_CHOOSE_USER_AT_LAUNCH";
-	
+	private static final String XMPP_CONTENT_SERVER_ID = "XMPP_CONTENT_SERVER_ID";
+        private static final String XMPP_CONTENT_DIR = "XMPP_CONTENT_DIR";
 
 	@Override
 	public JPanel getConfigurationPanel() {
@@ -66,5 +71,25 @@ public class XMPPConfigPrefsItem implements PreferencesItem {
         
         public void setChooseUserAtLaunch(boolean choose) {
             prefs.putBoolean(XMPP_CHOOSE_USER_AT_LAUNCH, choose);
+        }
+        
+        public String getContentServerID() {
+            return prefs.get(XMPP_CONTENT_SERVER_ID, "");
+        }
+        
+        public void setContentServerID(String id) {
+            prefs.put(XMPP_CONTENT_SERVER_ID, id);
+        }
+        
+        public File getContentDir() {
+            return new File(prefs.get(XMPP_CONTENT_DIR, "."));
+        }
+        
+        public void setContentDir(File f) {
+            try {
+                prefs.put(XMPP_CONTENT_DIR, f.getCanonicalPath());
+            } catch (IOException ex) {
+                Logger.getLogger(XMPPConfigPrefsItem.class.getName()).log(Level.SEVERE, "Could not set content directory preferences.", ex);
+            }
         }
 }

@@ -8,4 +8,5 @@ public interface IKeyboard extends IRectangularItem {
 	public KeyboardDefinition getKeyboardDefinition();
 	public void setKeyboardRenderer(IKeyboardGraphicsRenderer simpleAlphaKeyboardRenderer);
 	public void reDrawKeyboard(boolean shiftDown, boolean altDown, boolean ctlDown);
+	public void reDraw();
 }
