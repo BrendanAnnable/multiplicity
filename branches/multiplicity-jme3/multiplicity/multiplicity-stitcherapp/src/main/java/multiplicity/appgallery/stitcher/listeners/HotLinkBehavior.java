@@ -2,11 +2,8 @@ package multiplicity.appgallery.stitcher.listeners;
 
 import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.behaviours.IBehaviour;
-import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotLink;
-import multiplicity.csysng.items.hotspot.IHotSpotFrame;
-import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
 

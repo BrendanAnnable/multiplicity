@@ -8,7 +8,6 @@ import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.keyboard.defs.norwegian.NorwegianKeyboardListener;
 import multiplicity.csysng.items.keyboard.model.KeyboardKey;
-import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
 

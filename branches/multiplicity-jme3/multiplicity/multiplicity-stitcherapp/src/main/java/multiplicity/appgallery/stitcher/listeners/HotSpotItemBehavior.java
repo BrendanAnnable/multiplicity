@@ -3,13 +3,11 @@ package multiplicity.appgallery.stitcher.listeners;
 import java.util.List;
 import java.util.UUID;
 
-import multiplicity.appgallery.stitcher.IStitcherContants;
 import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
-import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotLink;
@@ -67,9 +65,8 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements
     public void cursorReleased(MultiTouchCursorEvent event) {
         super.cursorReleased(event);
         logger.debug("HotspotItem cursor released");
-        boolean offParent = true;
 
-        JMEFrame hotSpotRepo = (JMEFrame) hotSpotItem.getParentItem();
+        hotSpotItem.getParentItem();
         Vector2f locStore = new Vector2f();
         ContentSystem.getContentSystem().getDisplayManager()
                 .tableToScreen(event.getPosition(), locStore);
@@ -138,8 +135,7 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements
                 try {
                     if ((foundItem instanceof IHotSpotFrame && !(foundItem instanceof IHotSpotText))) {
                         JMEFrame sourceFrame = (JMEFrame) foundItem;
-                        IFrame originFrame = (IFrame) hotSpotItem
-                                .getParentItem();
+                        hotSpotItem.getParentItem();
 
                         IHotSpotItem hotSpotItemCircle = hotSpotContentItemFactory
                                 .createHotSpotItem(

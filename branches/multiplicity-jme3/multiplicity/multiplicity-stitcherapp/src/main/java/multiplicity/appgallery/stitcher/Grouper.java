@@ -154,7 +154,7 @@ public class Grouper implements IMultiTouchEventListener {
 		frame.setRelativeLocation(atPosition);
 		BehaviourMaker.addBehaviour(frame, RotateTranslateScaleBehaviour.class);
 
-		app.add(frame);
+		app.addItem(frame);
 		for (IItem item : items) {
 			Vector2f itemWorldPos = item.getWorldLocation();
 			app.remove(item);			
