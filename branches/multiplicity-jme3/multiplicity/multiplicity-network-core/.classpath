@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/multiplicity-config"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/multiplicity-csys"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
