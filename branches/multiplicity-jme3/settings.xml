@@ -1,0 +1,139 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <localRepository/>
+  <interactiveMode/>
+  <offline/>
+  <pluginGroups/>
+  <servers/>
+  <mirrors/>
+  <proxies/>
+  <profiles>
+    <profile>
+      <id>default</id>
+	  	<repositories>
+	  	
+	  		<repository>
+  				<id>xwiki</id>
+  				<name>xwiki reporsitory</name>
+  				<url>http://maven.xwiki.org/releases/</url>
+  				<layout>default</layout>
+			</repository>
+			
+	  		<repository>
+  				<id>jboss</id>
+  				<name>JBoss reporsitory</name>
+  				<url>http://repository.jboss.org/maven2/</url>
+  				<layout>default</layout>
+			</repository>
+			
+			<repository>
+  				<id>atlassian-maven1</id>
+  				<name>atlassian maven1 reporsitory</name>
+  				<url>https://maven.atlassian.com/maven1/maven2/</url>
+  				<layout>default</layout>
+			</repository>
+	
+      		<repository>
+            	<id>atlassian-m2-repository</id>
+            	<name>Atlassian Maven 2 Repository</name>
+            	<url>http://repository.atlassian.com/maven2</url>
+            	<snapshots>
+                	<enabled>true</enabled>
+            	</snapshots>
+        	</repository>
+        	
+        	<repository>
+            	<id>atlassian-m2-contrib</id>
+				<name>Atlassian Maven 2 Contributor Repository</name>
+            	<url>https://maven.atlassian.com/repository/public/</url>
+            	<snapshots>
+                	<enabled>true</enabled>
+            	</snapshots>
+        	</repository>
+
+        	<repository>
+          		<id>snapshots.maven.codehaus.org</id>
+          		<name>Maven Snapshots</name>
+          		<url>http://snapshots.repository.codehaus.org</url>
+          		<snapshots>
+            		<enabled>true</enabled>
+          		</snapshots>
+          		<releases>
+            		<enabled>true</enabled>
+          		</releases>
+        	</repository>
+      </repositories>
+      
+      <pluginRepositories>
+
+		<pluginRepository>
+    		<id>atlassian-contrib</id>
+    		<url>https://maven.atlassian.com/contrib</url>
+    		<snapshots>
+    		  <enabled>true</enabled>
+    		</snapshots>
+    		<releases>
+    	  		<enabled>true</enabled>
+    		</releases>
+  		</pluginRepository>
+  		
+  		<pluginRepository>
+			<id>atlassian-public</id>
+			<url>https://maven.atlassian.com/repository/public</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</pluginRepository>
+
+      </pluginRepositories>
+     </profile>
+     <profile>
+      <repositories>
+        <repository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>central</id>
+          <name>libs-releases</name>
+          <url>http://www.intermedia.uio.no/artifactory/libs-releases</url>
+        </repository>
+        <repository>
+          <snapshots />
+          <id>snapshots</id>
+          <name>libs-snapshots</name>
+          <url>http://www.intermedia.uio.no/artifactory/libs-snapshots</url>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>central</id>
+          <name>plugins-releases</name>
+          <url>http://www.intermedia.uio.no/artifactory/plugins-releases</url>
+        </pluginRepository>
+        <pluginRepository>
+          <snapshots />
+          <id>snapshots</id>
+          <name>plugins-snapshots</name>
+          <url>http://www.intermedia.uio.no/artifactory/plugins-snapshots</url>
+        </pluginRepository>
+      </pluginRepositories>
+      <id>artifactory</id>
+    </profile> 
+   </profiles>
+   
+  <activeProfiles>
+	<activeProfile>artifactory</activeProfile>
+    <activeProfile>default</activeProfile>
+  </activeProfiles>
+  
+  <usePluginRegistry>true</usePluginRegistry>
+</settings>
+
