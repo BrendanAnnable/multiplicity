@@ -4,39 +4,20 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
 import multiplicity.app.utils.LocalStorageUtility;
-import multiplicity.appgallery.stitcher.listeners.HotSpotImageBehavior;
-import multiplicity.csysng.ContentSystem;
-import multiplicity.csysng.behaviours.BehaviourMaker;
-import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.items.IBorder;
-import multiplicity.csysng.items.IFrame;
-import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IImage;
-import multiplicity.csysng.items.IImage.AlphaStyle;
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
-import multiplicity.csysng.items.hotspot.IHotSpotItem;
-import multiplicity.csysng.items.hotspot.IHotSpotRepo;
 import multiplicity.csysng.items.repository.IRepositoryFrame;
-import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
-import multiplicity.csysng.behaviours.inertia.InertiaBehaviour;
-import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMERectangularItem;
 import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
-import multiplicity.csysngjme.picking.AccuratePickingUtility;
-import multiplicity.csysngjme.picking.PickedSpatial;
-import multiplicity.input.events.MultiTouchCursorEvent;
-import multiplicity.jmeutils.UnitConversion;
 import no.uio.intermedia.snomobile.WikiUtility;
 import no.uio.intermedia.snomobile.interfaces.IAttachment;
 import no.uio.intermedia.snomobile.interfaces.IPage;
@@ -45,8 +26,6 @@ import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 import com.jme.renderer.ColorRGBA;
-import com.jme.scene.Geometry;
-import com.jme.scene.Node;
 import com.jme.scene.Spatial;
 
 public class AttachmentFetchThread extends Thread {
@@ -60,7 +39,6 @@ public class AttachmentFetchThread extends Thread {
 
 	private IPage iPage = null;
 
-	private String parentContainerName;
 
 	private ArrayList<HotSpotFrame> highlightedFrames = new ArrayList<HotSpotFrame>();
 	
@@ -70,7 +48,6 @@ public class AttachmentFetchThread extends Thread {
 		this.attachments = attachments;
 		this.iPage = iPage;
 		this.items = items;
-		this.parentContainerName = parentContainerName;
 	}
 
 	/**
@@ -358,7 +335,8 @@ public class AttachmentFetchThread extends Thread {
 //		return img;
 //	}
 	
-    private void clearAllHighlightedHotSpotFrames() {
+    @SuppressWarnings("unused")
+	private void clearAllHighlightedHotSpotFrames() {
         for (IHotSpotFrame hotSpotFrame : highlightedFrames) {
             IBorder border = hotSpotFrame.getBorder();
             border.setColor(new ColorRGBA(1f, 1f, 1f, 0.6f));

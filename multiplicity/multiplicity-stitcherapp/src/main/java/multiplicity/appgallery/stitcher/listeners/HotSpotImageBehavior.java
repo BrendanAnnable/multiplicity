@@ -1,42 +1,32 @@
 package multiplicity.appgallery.stitcher.listeners;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
-import com.jme.renderer.ColorRGBA;
 
 import multiplicity.appgallery.stitcher.IStitcherContants;
-import multiplicity.appgallery.stitcher.StitcherApp;
 import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
-import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
-import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.hotspot.IHotSpotRepo;
 import multiplicity.csysng.items.repository.IBackgroundRepositoryFrame;
 import multiplicity.csysng.items.repository.IImageRepositoryFrame;
 import multiplicity.csysng.items.repository.IRepositoryFrame;
-import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.JMERectangularItem;
-import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
-import multiplicity.jmeutils.UnitConversion;
 
 public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBehaviour {
     
     private final static Logger logger = Logger.getLogger(ImageItemListener.class.getName());
-
-    private ArrayList<HotSpotFrame> highlightedFrames = new ArrayList<HotSpotFrame>();
 
     private IImage mainImage;
     

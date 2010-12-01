@@ -26,8 +26,6 @@ import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
 import com.jme.renderer.ColorRGBA;
-import com.jme.scene.Geometry;
-import com.jme.scene.Spatial;
 
 public class ImageItemListener extends ItemListenerAdapter {
 
@@ -159,7 +157,7 @@ public class ImageItemListener extends ItemListenerAdapter {
             
             //check to see if it was released on the parent.
             if ( releasedItem.getParentItem() instanceof IRepositoryFrame) {
-                IRepositoryFrame repositoryFrame = (IRepositoryFrame) releasedItem.getParentItem();
+                releasedItem.getParentItem();
                 for (IItem foundItem : findItemsOnTableAtPosition) {
                      
                     if( isHotspotFrame(foundItem)) {

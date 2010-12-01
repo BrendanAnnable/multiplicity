@@ -25,12 +25,10 @@ import multiplicity.appgallery.stitcher.listeners.RepositoryBehavior;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
-import multiplicity.csysng.behaviours.inertia.InertiaBehaviour;
 import multiplicity.csysng.factory.IHotSpotContentFactory;
 import multiplicity.csysng.factory.IPaletFactory;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
-import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IImage;
@@ -143,7 +141,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
         bg.setImage(StitcherApp.class
                 .getResource("white1920x1200.png"));
         bg.centerItem();
-        add(bg);
+        addItem(bg);
         
         zOrderManager.sendToBottom(bg, null);
         zOrderManager.neverBringToTop(bg);
@@ -188,12 +186,12 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
 		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
 		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());
-		add(cursors);
+		addItem(cursors);
 		
 		  ICursorTrailsOverlay trails = getContentFactory().createCursorTrailsOverlay("trails", UUID.randomUUID());
 	        trails.respondToItem(bg);
 	        trails.setFadingColour(Color.black);
-	        add(trails);
+	        addItem(trails);
 	}
 
     public IHotSpotFrame createNewHotSpotContentFrame(String type) {
@@ -342,7 +340,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	    
 	    
 	    //add for later
-		this.add(newHotSpotFrame);
+		this.addItem(newHotSpotFrame);
         hotSpotFrames.add(newHotSpotFrame);
 	    
 	    return newHotSpotFrame;
@@ -374,7 +372,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             frame.setGradientBackground(new Gradient(startColor, endColor,
                     GradientDirection.VERTICAL));
            
-            add(frame);
+            addItem(frame);
             BehaviourMaker.addBehaviour(frame, RepositoryBehavior.class);
             addImagesToFrame(frame, imagesToAdd);
 //            getZOrderManager().bringToTop(frame, null);
@@ -398,7 +396,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             frame.maintainBorderSizeDuringScale();
             frame.setGradientBackground(new Gradient(startColor, endColor,
                     GradientDirection.VERTICAL));
-            add(frame);
+            addItem(frame);
             BehaviourMaker.addBehaviour(frame, RepositoryBehavior.class);
             frame.close();
             addImagesToFrame(frame, imagesToAdd);
@@ -424,7 +422,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             frame.setGradientBackground(new Gradient(startColor, endColor,
                     GradientDirection.VERTICAL));
             BehaviourMaker.addBehaviour(frame, RepositoryBehavior.class);
-            add(frame);
+            addItem(frame);
             frame.close();
             addImagesToFrame(frame, imagesToAdd);
            getZOrderManager().bringToTop(frame, null);
@@ -476,7 +474,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		
 		frame.setRelativeLocation(new Vector2f(-xPos, yPos));
 
-		this.add(frame);
+		this.addItem(frame);
 		fillHotSpotRepo(frame,type);
 
 		this.getZOrderManager().bringToTop(frame, null);
@@ -490,7 +488,6 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	    IHotSpotItem hotSpotItemImage = null;
 	    URL resource = null;
 	    
-	    ColorRGBA colorRGBA = null;
 	    if( type.equals(IMAGE) ) {
 	    	resource = StitcherApp.class.getResource("imagesymbol.png");
 	    } else if(type.equals(TEXT)) {

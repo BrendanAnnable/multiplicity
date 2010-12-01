@@ -2,7 +2,6 @@ package multiplicity.appgallery.stitcher.listeners;
 
 import java.util.List;
 
-import multiplicity.appgallery.stitcher.StitcherApp;
 import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.IBehaviour;
@@ -10,7 +9,6 @@ import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
-import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.jmeutils.UnitConversion;

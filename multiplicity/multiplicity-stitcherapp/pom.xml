@@ -8,10 +8,10 @@
 		<groupId>multiplicity.multiplicity</groupId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<groupId>multiplicity.sticherapp</groupId>
-  <artifactId>multiplicity-sticherapp</artifactId>
+	<groupId>multiplicity.stitcherapp</groupId>
+  <artifactId>multiplicity.stitcherapp</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>multiplicity-sticherapp</name>
+  <name>multiplicity-stitcherapp</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>

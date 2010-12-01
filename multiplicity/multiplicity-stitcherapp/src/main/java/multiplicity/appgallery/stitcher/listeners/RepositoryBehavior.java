@@ -1,6 +1,5 @@
 package multiplicity.appgallery.stitcher.listeners;
 
-import multiplicity.appgallery.stitcher.StitcherUtils;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.repository.IRepositoryFrame;

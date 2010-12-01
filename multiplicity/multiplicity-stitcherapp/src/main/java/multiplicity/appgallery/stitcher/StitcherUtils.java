@@ -90,15 +90,15 @@ public class StitcherUtils {
     public static void showKeyboard(IHotSpotText hotSpotText) {
         
         IFrame keyboard = hotSpotText.getKeyboard();
-        stitcherApp.add(keyboard);
+        stitcherApp.addItem(keyboard);
         stitcherApp.getZOrderManager().bringToTop(keyboard, null);
         hotSpotText.setKeyboardVisible(true);
         
     }
     
     public static void modScaleBehavior(List<IBehaviour> behaviours, boolean shouldScale) {
-        for (Iterator iterator = behaviours.iterator(); iterator.hasNext();) {
-            IBehaviour iBehaviour = (IBehaviour) iterator.next();
+        for (Iterator<IBehaviour> iterator = behaviours.iterator(); iterator.hasNext();) {
+            IBehaviour iBehaviour = iterator.next();
             if( iBehaviour instanceof RotateTranslateScaleBehaviour ) {
                 ((RotateTranslateScaleBehaviour)iBehaviour).setScaleEnabled(shouldScale);
             }
@@ -146,7 +146,7 @@ public class StitcherUtils {
     public static void addHotLink(IHotLink hotLink) {
         Vector2f itemWorldPos = hotLink.getWorldLocation();
 
-        stitcherApp.add(hotLink);
+        stitcherApp.addItem(hotLink);
         hotLink.setWorldLocation(itemWorldPos);
 //        BehaviourMaker.addBehaviour(hotLink, HotLinkBehavior.class);
     }
