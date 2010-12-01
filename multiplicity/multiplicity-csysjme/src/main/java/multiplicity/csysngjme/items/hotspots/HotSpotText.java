@@ -1,7 +1,6 @@
 package multiplicity.csysngjme.items.hotspots;
 
 import java.awt.Color;
-import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -9,7 +8,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.apache.log4j.Logger;
 
 import multiplicity.csysng.behaviours.BehaviourMaker;
-import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.items.IBorder;
@@ -17,22 +15,16 @@ import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IImage;
-import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
 import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.csysng.items.keyboard.IKeyboardGraphicsRenderer;
-import multiplicity.csysng.items.keyboard.behaviour.IMultiTouchKeyboardListener;
 import multiplicity.csysng.items.keyboard.behaviour.KeyboardBehaviour;
-import multiplicity.csysng.items.keyboard.defs.norwegian.NorwegianKeyboardDefinition;
 import multiplicity.csysng.items.keyboard.defs.norwegian.NorwegianKeyboardListener;
-import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardDefinition;
 import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRenderer;
-import multiplicity.csysng.items.keyboard.model.KeyModifiers;
 import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
-import multiplicity.csysng.items.keyboard.model.KeyboardKey;
 import multiplicity.csysngjme.factory.JMEContentItemFactory;
 import multiplicity.csysngjme.items.JMEEditableText;
 
@@ -41,8 +33,10 @@ import com.jme.renderer.Renderer;
 import com.jme.scene.Spatial;
 
 public class HotSpotText extends JMEEditableText implements IHotSpotText {
-    
-    private final static Logger logger = Logger.getLogger(HotSpotText.class.getName());
+	private static final long serialVersionUID = -1276465680372037574L;
+
+
+	private final static Logger logger = Logger.getLogger(HotSpotText.class.getName());
 
 
     public List<IHotLink> hotLinks = new CopyOnWriteArrayList<IHotLink>();

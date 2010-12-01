@@ -7,8 +7,9 @@ import multiplicity.csysng.items.repository.IImageRepositoryFrame;
 import com.jme.math.Vector2f;
 
 public class ImageRepository extends RepositoryFrame implements IImageRepositoryFrame{
+	private static final long serialVersionUID = -335257850923406400L;
 
-    public ImageRepository(String name, UUID uuid, int width, int height) {
+	public ImageRepository(String name, UUID uuid, int width, int height) {
         super(name, uuid, width, height);
     }
     

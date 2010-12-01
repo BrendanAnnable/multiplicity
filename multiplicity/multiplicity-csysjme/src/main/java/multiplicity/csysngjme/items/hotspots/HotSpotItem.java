@@ -1,11 +1,8 @@
 package multiplicity.csysngjme.items.hotspots;
 
-import java.awt.Color;
 import java.util.List;
 import java.util.UUID;
 
-import multiplicity.csysng.gfx.Gradient;
-import multiplicity.csysng.gfx.Gradient.GradientDirection;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;

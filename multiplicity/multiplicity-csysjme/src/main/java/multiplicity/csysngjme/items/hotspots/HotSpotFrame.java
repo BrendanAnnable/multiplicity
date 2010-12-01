@@ -7,19 +7,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IHotSpotText;
-import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
-import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEColourRectangle;
 import multiplicity.csysngjme.items.JMEFrame;
-import multiplicity.input.events.MultiTouchCursorEvent;
 
 import org.apache.log4j.Logger;
 
-import com.jme.math.Vector2f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.renderer.Renderer;
 import com.jme.scene.Line;

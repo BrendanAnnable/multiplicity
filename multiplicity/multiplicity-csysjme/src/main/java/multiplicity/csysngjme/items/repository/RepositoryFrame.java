@@ -2,11 +2,8 @@ package multiplicity.csysngjme.items.repository;
 
 import java.util.UUID;
 
-import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.events.ItemListenerAdapter;
 import multiplicity.csysng.items.repository.IRepositoryFrame;
 import multiplicity.csysngjme.items.JMEFrame;
-import multiplicity.input.events.MultiTouchCursorEvent;
 
 import org.apache.log4j.Logger;
 

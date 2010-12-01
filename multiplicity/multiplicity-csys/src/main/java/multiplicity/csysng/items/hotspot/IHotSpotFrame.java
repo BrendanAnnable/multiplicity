@@ -2,13 +2,9 @@ package multiplicity.csysng.items.hotspot;
 
 import java.util.List;
 
-import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IFrame;
-import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.IPalet;
-import multiplicity.csysng.items.keyboard.defs.norwegian.NorwegianKeyboardDefinition;
-import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
 
 public interface IHotSpotFrame extends IFrame {
 
