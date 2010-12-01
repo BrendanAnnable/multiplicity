@@ -7,7 +7,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.INode.IChildrenChangedListener;
 import multiplicity.csysng.items.events.IItemListener;
 import multiplicity.csysng.items.events.MultiTouchEventDispatcher;
 import multiplicity.csysng.zorder.IZOrderManager;

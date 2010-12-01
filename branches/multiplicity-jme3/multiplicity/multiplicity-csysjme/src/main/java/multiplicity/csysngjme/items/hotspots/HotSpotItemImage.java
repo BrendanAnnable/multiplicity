@@ -1,27 +1,19 @@
 package multiplicity.csysngjme.items.hotspots;
 
 import java.net.URL;
-import java.util.List;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
-
 import com.jme.math.Vector2f;
-import com.jme.math.Vector3f;
-import com.jme.renderer.ColorRGBA;
 
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.IImage.AlphaStyle;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEImage;
-import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
 
 public class HotSpotItemImage extends JMEImage implements IHotSpotItem {
 
     private static final long serialVersionUID = 3685342474539036654L;
-    private final static Logger logger = Logger.getLogger(HotSpotItem.class.getName());
 
     private String type;
     private URL imageResource;

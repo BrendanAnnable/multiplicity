@@ -20,8 +20,7 @@ public class OverlayBehavior extends MultiTouchEventAdapter implements IBehaviou
     public void cursorPressed(MultiTouchCursorEvent event) {
         super.cursorPressed(event);
         logger.debug("overlay pressed");
-        IHotSpotFrame hotspotFrame = (IHotSpotFrame)overlay.getParentItem();
-//        hotspotFrame.updateOverLay();
+        overlay.getParentItem();
     }
     
     @Override

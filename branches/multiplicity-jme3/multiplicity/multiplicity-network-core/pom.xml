@@ -1,6 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>multiplicity.network</groupId>
-  <artifactId>core</artifactId>
+  <groupId>multiplicity.network-core</groupId>
+  <artifactId>multiplicity.network-core</artifactId>
+  <name>multiplicity-network-core</name>
   <version>0.0.1-SNAPSHOT</version>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+  	<dependency>
+  		<groupId>multiplicity.config</groupId>
+  		<artifactId>multiplicity-config</artifactId>
+  		<version>1.0-SNAPSHOT</version>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>multiplicity.csysng</groupId>
+  		<artifactId>multiplicity-csys</artifactId>
+  		<version>1.0-SNAPSHOT</version>
+  		<scope>compile</scope>
+  	</dependency>
+  </dependencies>
 </project>
