@@ -10,6 +10,7 @@ import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysng.behaviours.hotspots.HotSpotUtils;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IImage;
@@ -18,7 +19,6 @@ import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysngjme.items.JMERectangularItem;
-import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
 
 import org.apache.log4j.Logger;
 

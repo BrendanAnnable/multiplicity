@@ -8,16 +8,15 @@ import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysng.behaviours.hotspots.HotSpotUtils;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysng.items.hotspot.IHotSpotRepo;
-import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
 import multiplicity.csysngjme.items.JMEFrame;
 import multiplicity.csysngjme.items.hotspots.HotLink;
-import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
 import multiplicity.input.events.MultiTouchObjectEvent;
@@ -34,9 +33,6 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements
             .getLogger(HotSpotItemBehavior.class.getName());
 
     private IHotSpotItem hotSpotItem;
-
-    private HotSpotContentItemFactory hotSpotContentItemFactory = new HotSpotContentItemFactory();
-
     
     
     @Override
@@ -137,7 +133,7 @@ public class HotSpotItemBehavior extends MultiTouchEventAdapter implements
                         JMEFrame sourceFrame = (JMEFrame) foundItem;
                         hotSpotItem.getParentItem();
 
-                        IHotSpotItem hotSpotItemCircle = hotSpotContentItemFactory
+                        IHotSpotItem hotSpotItemCircle = ContentSystem.getContentSystem().getContentFactory()
                                 .createHotSpotItem(
                                         "hotspot",
                                         UUID.randomUUID(),
