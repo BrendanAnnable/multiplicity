@@ -1,9 +1,7 @@
 package multiplicity.appgallery.browsewiki;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,44 +15,14 @@ import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
 import multiplicity.appgallery.stitcher.AttachmentFetchThread;
 import multiplicity.appgallery.stitcher.IStitcherContants;
 import multiplicity.appgallery.stitcher.StitcherUtils;
-import multiplicity.appgallery.stitcher.listeners.HotSpotFrameBehavior;
-import multiplicity.appgallery.stitcher.listeners.HotSpotImageBehavior;
-import multiplicity.appgallery.stitcher.listeners.HotSpotItemBehavior;
-import multiplicity.appgallery.stitcher.listeners.HotSpotTextBehavior;
-import multiplicity.appgallery.stitcher.listeners.PaletBehavior;
-import multiplicity.appgallery.stitcher.listeners.RepositoryBehavior;
 import multiplicity.csysng.behaviours.BehaviourMaker;
-import multiplicity.csysng.behaviours.IBehaviour;
-import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.behaviours.inertia.InertiaBehaviour;
-import multiplicity.csysng.factory.IHotSpotContentFactory;
-import multiplicity.csysng.factory.IPaletFactory;
-import multiplicity.csysng.gfx.Gradient;
-import multiplicity.csysng.gfx.Gradient.GradientDirection;
-import multiplicity.csysng.items.IFrame;
-import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
-import multiplicity.csysng.items.IPalet;
-import multiplicity.csysng.items.events.ItemListenerAdapter;
+import multiplicity.csysng.items.IRectangularItem;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
-import multiplicity.csysng.items.hotspot.IHotSpotItem;
-import multiplicity.csysng.items.hotspot.IHotSpotRepo;
-import multiplicity.csysng.items.keyboard.defs.norwegian.NorwegianKeyboardDefinition;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
-import multiplicity.csysng.items.repository.IBackgroundRepositoryFrame;
-import multiplicity.csysng.items.repository.IImageRepositoryFrame;
-import multiplicity.csysng.items.repository.IRepositoryContentItemFactory;
-import multiplicity.csysngjme.factory.PaletItemFactory;
-import multiplicity.csysngjme.factory.Repository.RepositoryContentItemFactory;
-import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
-import multiplicity.csysngjme.items.JMEImage;
-import multiplicity.csysngjme.items.JMERectangularItem;
-import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
-import multiplicity.csysngjme.items.hotspots.listeners.OverlayBehavior;
 import multiplicity.input.IMultiTouchEventProducer;
-import multiplicity.input.MultiTouchEventAdapter;
-import multiplicity.input.events.MultiTouchCursorEvent;
 import no.uio.intermedia.snomobile.XWikiRestFulService;
 import no.uio.intermedia.snomobile.interfaces.IAttachment;
 import no.uio.intermedia.snomobile.interfaces.IPage;
@@ -62,8 +30,6 @@ import no.uio.intermedia.snomobile.interfaces.IPage;
 import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
-import com.jme.math.Vector3f;
-import com.jme.renderer.ColorRGBA;
 import com.jme.system.DisplaySystem;
 
 public class BrowseWikiApp extends AbstractMultiplicityApp implements IStitcherContants {
@@ -72,21 +38,12 @@ public class BrowseWikiApp extends AbstractMultiplicityApp implements IStitcherC
     private final static Logger logger = Logger.getLogger(BrowseWikiApp.class.getName());
 	private final List<String> pageNames = new ArrayList<String>();
 	private final List<IHotSpotFrame> hotSpotFrames = new ArrayList<IHotSpotFrame>();
-	private IPage stencilsPage;
-	private IPage backgroundsPage;
 	private IPage scansPage;
 	// private Vector<IComment> comments;
 	private XWikiRestFulService wikiService;
 	private Vector<IAttachment> attachments;
 	// private Vector<ITag> tags;
 	
-	
-
-	private IHotSpotContentFactory hotSpotContentFactory;
-
-	private IPaletFactory paletFactory;
-
-	private IRepositoryContentItemFactory repositoryFactory;
 
 	public BrowseWikiApp(AbstractSurfaceSystem ass, IMultiTouchEventProducer mtInput) {
 		super(ass, mtInput);
@@ -94,9 +51,6 @@ public class BrowseWikiApp extends AbstractMultiplicityApp implements IStitcherC
 
 	@Override
 	public void onAppStart() {
-		setHotSpotContentFactory(new HotSpotContentItemFactory());
-		setPaletFactory(new PaletItemFactory());
-		setRepositoryFactory(new RepositoryContentItemFactory());
 		pageNames.add(STENCIL_REPO_NAME);
 		pageNames.add(BACKGROUND_REPO_NAME);
 		pageNames.add(SCAN_REPO_NAME);
@@ -175,7 +129,7 @@ public class BrowseWikiApp extends AbstractMultiplicityApp implements IStitcherC
 
 		ICursorOverlay cursors = getContentFactory().createCursorOverlay("cursorOverlay", UUID.randomUUID());
 		cursors.respondToMultiTouchInput(getMultiTouchEventProducer());
-		add(cursors);
+		addItem(cursors);
 	}
 
    
@@ -190,19 +144,17 @@ public class BrowseWikiApp extends AbstractMultiplicityApp implements IStitcherC
             
             float scale = (Float) itemEntry.elementAt(0);
             image.setRelativeScale(scale);
-            Vector2f position = this.generateRandomPosition(image);
+            Vector2f position = generateRandomPosition(image);
             image.setRelativeLocation(position);
             BehaviourMaker.addBehaviour(image, InertiaBehaviour.class);
-            this.add(image);
+            this.addItem(image);
         }
 
 	}
 	
     public static Vector2f generateRandomPosition(IImage vecItem) {
         
-        Vector2f frameSize = new Vector2f();
-        
-        Vector2f imageSize = ((JMERectangularItem) vecItem).getSize();
+        Vector2f imageSize = ((IRectangularItem) vecItem).getSize();
         
         logger.debug("generate random position.......");
 
@@ -226,30 +178,6 @@ public class BrowseWikiApp extends AbstractMultiplicityApp implements IStitcherC
 
 	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		SingleAppMultiplicitySurfaceSystem.startSystem(BrowseWikiApp.class);
-	}
-
-	public void setHotSpotContentFactory(IHotSpotContentFactory hotSpotContentFactory) {
-		this.hotSpotContentFactory = hotSpotContentFactory;
-	}
-
-	public IHotSpotContentFactory getHotSpotContentFactory() {
-		return hotSpotContentFactory;
-	}
-
-	public IPaletFactory getPaletFactory() {
-		return paletFactory;
-	}
-
-	public void setPaletFactory(IPaletFactory paletFactory) {
-		this.paletFactory = paletFactory;
-	}
-
-	public void setRepositoryFactory(IRepositoryContentItemFactory repositoryFactory) {
-		this.repositoryFactory = repositoryFactory;
-	}
-
-	public IRepositoryContentItemFactory getRepositoryFactory() {
-		return repositoryFactory;
 	}
 
     public List<IHotSpotFrame> getHotSpotFrames() {
