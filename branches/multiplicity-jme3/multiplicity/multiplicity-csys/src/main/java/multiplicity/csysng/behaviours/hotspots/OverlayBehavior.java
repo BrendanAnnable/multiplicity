@@ -1,4 +1,4 @@
-package multiplicity.csysngjme.items.hotspots.listeners;
+package multiplicity.csysng.behaviours.hotspots;
 
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.items.IColourRectangle;

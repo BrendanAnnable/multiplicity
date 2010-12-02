@@ -1,18 +1,30 @@
 package multiplicity.csysngjme.factory;
 
+import java.net.URL;
 import java.util.UUID;
+
+import com.jme.math.Vector2f;
+import com.jme.renderer.ColorRGBA;
 
 import multiplicity.csysng.factory.IContentFactory;
 import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IColourRectangle;
 import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IFrame;
+import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.ILabel;
 import multiplicity.csysng.items.ILinkingLine;
+import multiplicity.csysng.items.IPalet;
+import multiplicity.csysng.items.hotspot.IHotSpotFrame;
+import multiplicity.csysng.items.hotspot.IHotSpotItem;
+import multiplicity.csysng.items.hotspot.IHotSpotRepo;
 import multiplicity.csysng.items.keyboard.IKeyboard;
 import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
+import multiplicity.csysng.items.repository.IBackgroundRepositoryFrame;
+import multiplicity.csysng.items.repository.IImageRepositoryFrame;
+import multiplicity.csysng.items.repository.IRepositoryFrame;
 import multiplicity.csysng.threedee.IThreeDeeContent;
 import multiplicity.csysngjme.items.JMEColourRectangle;
 import multiplicity.csysngjme.items.JMECursorTrails;
@@ -23,7 +35,17 @@ import multiplicity.csysngjme.items.JMEImage;
 import multiplicity.csysngjme.items.JMEKeyboard;
 import multiplicity.csysngjme.items.JMELabel;
 import multiplicity.csysngjme.items.JMELinkingLine;
+import multiplicity.csysngjme.items.JMEPalet;
 import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
+import multiplicity.csysngjme.items.hotspots.HotSpotFrame;
+import multiplicity.csysngjme.items.hotspots.HotSpotItem;
+import multiplicity.csysngjme.items.hotspots.HotSpotItemImage;
+import multiplicity.csysngjme.items.hotspots.HotSpotRepo;
+import multiplicity.csysngjme.items.hotspots.HotSpotText;
+import multiplicity.csysngjme.items.hotspots.HotSpotTextFrame;
+import multiplicity.csysngjme.items.repository.BackgroundRepositoryFrame;
+import multiplicity.csysngjme.items.repository.ImageRepository;
+import multiplicity.csysngjme.items.repository.RepositoryFrame;
 import multiplicity.csysngjme.threedee.JMEThreeDeeContent;
 
 
@@ -104,6 +126,11 @@ public class JMEContentItemFactory extends ContentItemFactoryUtil implements ICo
 	public IBorder createRoundedRectangleBorder(String name, UUID uuid, float width, int cornerSegments) {
 		return new JMERoundedRectangleBorder(name, uuid, width, cornerSegments);
 	}
+	
+	@Override
+	public IBorder createRoundedRectangleBorder(String name, UUID uuid, float width, int cornerSegments, ColorRGBA colour) {
+		return new JMERoundedRectangleBorder(name, UUID.randomUUID(), width, cornerSegments, colour);
+	}
 
 	@Override
 	public ILinkingLine createLinkingLine(String name, UUID uuid) {
@@ -112,4 +139,118 @@ public class JMEContentItemFactory extends ContentItemFactoryUtil implements ICo
 		return line;
 	}
 	
+	@Override
+	public IPalet createPaletItem(String name, UUID uuid, float radius) {
+		JMEPalet pi = new JMEPalet(name, uuid, radius);
+        pi.initializeGeometry();
+        return pi;
+	}
+
+	@Override
+	public IPalet createPaletItem(String name, UUID uuid, float radius, ColorRGBA colorRGBA) {
+		JMEPalet pi = new JMEPalet(name, uuid, radius, colorRGBA);
+        pi.initializeGeometry();
+        return pi;
+	}
+	
+    @Override
+    public IRepositoryFrame createRepositoryFrame(String name, UUID uuid, int width, int height) {
+        IRepositoryFrame frame = new RepositoryFrame(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height);
+        frame.initializeGeometry();
+        return frame;
+    }
+    
+    @Override
+    public IRepositoryFrame createRepositoryFrame(String name, UUID uuid, int width, int height, Vector2f openLocation, Vector2f closeLocation) {
+       IRepositoryFrame frame = new RepositoryFrame(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height, openLocation, closeLocation);
+       frame.initializeGeometry();
+       return frame;
+    }
+    
+    @Override
+    public IBackgroundRepositoryFrame createBackgroundRepositoryFrame(
+            String name, UUID uuid, int width, int height,  Vector2f openLocation, Vector2f closeLocation) {
+        IBackgroundRepositoryFrame frame = new BackgroundRepositoryFrame(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height, openLocation, closeLocation);
+        frame.initializeGeometry();
+        return frame;
+    }
+    
+    @Override
+    public IBackgroundRepositoryFrame createBackgroundRepositoryFrame(
+            String name, UUID uuid, int width, int height) {
+        IBackgroundRepositoryFrame frame = new BackgroundRepositoryFrame(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height);
+        frame.initializeGeometry();
+        return frame;
+    }
+   
+    @Override
+    public IImageRepositoryFrame createImageRepositoryFrame(
+            String name, UUID uuid, int width, int height,  Vector2f openLocation, Vector2f closeLocation) {
+        IImageRepositoryFrame frame = new ImageRepository(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height, openLocation, closeLocation);
+        frame.initializeGeometry();
+        return frame;
+    }
+    
+    @Override
+    public IImageRepositoryFrame createImageRepositoryFrame(
+            String name, UUID uuid, int width, int height) {
+        IImageRepositoryFrame frame = new ImageRepository(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height);
+        frame.initializeGeometry();
+        return frame;
+    }
+    
+    @Override
+    public IHotSpotFrame createHotSpotFrame(String name, UUID uuid, int width, int height) {
+        HotSpotFrame frame = new HotSpotFrame(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height);
+        frame.initializeGeometry();
+        frame.addFrameOverlay();
+        return frame;
+    }
+
+	@Override
+	public IHotSpotItem createHotSpotItem(String name, UUID uuid, float radius) {
+		IHotSpotItem pi = new HotSpotItem(name, uuid, radius);
+        pi.initializeGeometry();
+        return pi;
+	}
+
+	@Override
+	public IHotSpotItem createHotSpotItem(String name, UUID uuid, float radius, ColorRGBA colorRGBA) {
+		IHotSpotItem pi = new HotSpotItem(name, uuid, radius, colorRGBA);
+        pi.initializeGeometry();
+        return pi;
+	}
+
+    @Override
+    public IHotSpotItem createHotSpotItemImage(String name, UUID uuid,
+             URL imageResource) {
+        IHotSpotItem pi = new HotSpotItemImage(name, uuid, imageResource);
+        pi.initializeGeometry();
+        return pi;
+    }
+    
+
+    @Override
+    public IHotSpotText createEditableHotSpotText(String name, UUID uuid) {
+        IHotSpotText text = new HotSpotText(name, uuid);
+        text.initializeGeometry();
+        return text;
+    }
+
+    @Override
+    public IHotSpotRepo createHotSpotRepo(String name, UUID uuid, int width,
+            int height) {
+        IHotSpotRepo frame =  new HotSpotRepo(ContentItemFactoryUtil.validateName(name), ContentItemFactoryUtil.validateUUID(uuid), width, height);
+        frame.initializeGeometry();
+        return frame;
+    }
+
+    @Override
+    public IHotSpotFrame createEditableHotSpotTextFrame(String name, UUID uuid, int width, int height,URL keyboardImage) {
+        HotSpotTextFrame text = new HotSpotTextFrame(name, uuid, width, height,keyboardImage);
+        text.initializeGeometry();
+//        text.addFrameOverlay();
+        return text;
+    }
+
 }
