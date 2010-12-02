@@ -3,12 +3,12 @@ package multiplicity.csysngjme.items.hotspots;
 import java.util.List;
 import java.util.UUID;
 
+import multiplicity.csysng.behaviours.hotspots.HotSpotUtils;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.hotspot.IHotLink;
 import multiplicity.csysng.items.hotspot.IHotSpotFrame;
 import multiplicity.csysng.items.hotspot.IHotSpotItem;
 import multiplicity.csysngjme.items.JMEColourCircle;
-import multiplicity.csysngjme.items.hotspots.listeners.HotSpotUtils;
 
 import org.apache.log4j.Logger;
 
