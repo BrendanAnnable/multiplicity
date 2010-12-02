@@ -9,7 +9,6 @@ import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
 import multiplicity.appgallery.gallery.GalleryApp;
-import multiplicity.csysng.animation.AnimationSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
 import multiplicity.csysng.behaviours.gesture.GestureDetectionBehaviour;
@@ -22,11 +21,9 @@ import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
 import multiplicity.csysng.items.IItem;
 import multiplicity.csysng.items.ILabel;
-import multiplicity.csysngjme.animation.animelements.Fader;
 import multiplicity.input.IMultiTouchEventProducer;
 
 import com.jme.math.Vector2f;
-import com.jme.scene.Geometry;
 
 public class ConceptMapApp extends AbstractMultiplicityApp {
 
@@ -57,7 +54,8 @@ public class ConceptMapApp extends AbstractMultiplicityApp {
 		instruction.setTextColour(Color.white);
 		addItem(instruction);
 		zOrderManager.bringToTop(instruction, null);
-		AnimationSystem.getInstance().add(new Fader((Geometry)instruction.getManipulableSpatial(), Fader.MODE_FADE_IN, 2, 10));
+		// can't use this fader as it is in csysngjme, not csysng
+		//AnimationSystem.getInstance().add(new Fader((Geometry)instruction.getManipulableSpatial(), Fader.MODE_FADE_IN, 2, 10));
 	}
 
 	protected void createNewNode() {

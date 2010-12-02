@@ -13,8 +13,10 @@ import multiplicity.app.AbstractMultiplicityApp;
 import multiplicity.app.AbstractSurfaceSystem;
 import multiplicity.app.singleappsystem.SingleAppMultiplicitySurfaceSystem;
 import multiplicity.appgallery.gallery.GalleryApp;
+import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
+import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IEditableText;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IImage;
@@ -27,7 +29,6 @@ import multiplicity.csysng.items.keyboard.defs.simple.SimpleAlphaKeyboardRendere
 import multiplicity.csysng.items.keyboard.model.KeyModifiers;
 import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
 import multiplicity.csysng.items.keyboard.model.KeyboardKey;
-import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
 import multiplicity.input.IMultiTouchEventProducer;
 
 public class SymbolicInputApp extends AbstractMultiplicityApp {
@@ -90,7 +91,7 @@ public class SymbolicInputApp extends AbstractMultiplicityApp {
 		framewrap.addItem(kb);
 		framewrap.setRelativeLocation(new Vector2f(0f, -200f));
 		
-		JMERoundedRectangleBorder jmeRoundedRectangleBorder = new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 15, 30, new ColorRGBA(1f,0f, 1f, 1f));
+		IBorder jmeRoundedRectangleBorder = ContentSystem.getContentSystem().getContentFactory().createRoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 15f, 30, new ColorRGBA(1f,0f, 1f, 1f));
 		jmeRoundedRectangleBorder.setColor(new ColorRGBA(.211f, .211f, .211f, 1f));
 		framewrap.setBorder(jmeRoundedRectangleBorder);
 		
