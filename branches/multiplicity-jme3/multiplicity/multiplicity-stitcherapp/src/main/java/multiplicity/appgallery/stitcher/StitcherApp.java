@@ -22,13 +22,14 @@ import multiplicity.appgallery.stitcher.listeners.HotSpotRotateScaleBehavior;
 import multiplicity.appgallery.stitcher.listeners.HotSpotTextBehavior;
 import multiplicity.appgallery.stitcher.listeners.PaletBehavior;
 import multiplicity.appgallery.stitcher.listeners.RepositoryBehavior;
+import multiplicity.csysng.ContentSystem;
 import multiplicity.csysng.behaviours.BehaviourMaker;
 import multiplicity.csysng.behaviours.IBehaviour;
 import multiplicity.csysng.behaviours.RotateTranslateScaleBehaviour;
-import multiplicity.csysng.factory.IHotSpotContentFactory;
-import multiplicity.csysng.factory.IPaletFactory;
+import multiplicity.csysng.behaviours.hotspots.OverlayBehavior;
 import multiplicity.csysng.gfx.Gradient;
 import multiplicity.csysng.gfx.Gradient.GradientDirection;
+import multiplicity.csysng.items.IBorder;
 import multiplicity.csysng.items.IFrame;
 import multiplicity.csysng.items.IHotSpotText;
 import multiplicity.csysng.items.IImage;
@@ -43,13 +44,6 @@ import multiplicity.csysng.items.overlays.ICursorOverlay;
 import multiplicity.csysng.items.overlays.ICursorTrailsOverlay;
 import multiplicity.csysng.items.repository.IBackgroundRepositoryFrame;
 import multiplicity.csysng.items.repository.IImageRepositoryFrame;
-import multiplicity.csysng.items.repository.IRepositoryContentItemFactory;
-import multiplicity.csysngjme.factory.PaletItemFactory;
-import multiplicity.csysngjme.factory.Repository.RepositoryContentItemFactory;
-import multiplicity.csysngjme.factory.hotspot.HotSpotContentItemFactory;
-import multiplicity.csysngjme.items.JMEImage;
-import multiplicity.csysngjme.items.JMERoundedRectangleBorder;
-import multiplicity.csysngjme.items.hotspots.listeners.OverlayBehavior;
 import multiplicity.input.IMultiTouchEventProducer;
 import multiplicity.input.MultiTouchEventAdapter;
 import multiplicity.input.events.MultiTouchCursorEvent;
@@ -60,7 +54,6 @@ import no.uio.intermedia.snomobile.interfaces.IPage;
 import org.apache.log4j.Logger;
 
 import com.jme.math.Vector2f;
-import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.system.DisplaySystem;
 
@@ -78,23 +71,12 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	private Vector<IAttachment> attachments;
 	// private Vector<ITag> tags;
 	
-	
-
-	private IHotSpotContentFactory hotSpotContentFactory;
-
-	private IPaletFactory paletFactory;
-
-	private IRepositoryContentItemFactory repositoryFactory;
-
 	public StitcherApp(AbstractSurfaceSystem ass, IMultiTouchEventProducer mtInput) {
 		super(ass, mtInput);
 	}
 
 	@Override
 	public void onAppStart() {
-		setHotSpotContentFactory(new HotSpotContentItemFactory());
-		setPaletFactory(new PaletItemFactory());
-		setRepositoryFactory(new RepositoryContentItemFactory());
 		StitcherUtils.stitcherApp = this;
 		pageNames.add(STENCIL_REPO_NAME);
 		pageNames.add(BACKGROUND_REPO_NAME);
@@ -204,16 +186,15 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	       
 	    if( type.equals(BACKGROUND) ) {
 	        backgroundImage.setRelativeScale(INITIAL_DROP_SCALE);
-	        JMEImage bi = (JMEImage)backgroundImage;
+	        IImage bi = (IImage)backgroundImage;
 
-	        // scale image.
-	        Vector3f localScale = bi.getLocalScale();
+	        // scale image.	      
 
-	        float newX = bi.getSize().x * localScale.x;
-	        float newY = bi.getSize().y * localScale.y;
+	        float newX = bi.getSize().x * bi.getRelativeScale();
+	        float newY = bi.getSize().y * bi.getRelativeScale();
 	        
-	        newHotSpotFrame = this.getHotSpotContentFactory().createHotSpotFrame(frameName,  UUID.randomUUID(), Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
-	        newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 0, 0, new ColorRGBA(0f, 0f, 0f, 0f)));
+	        newHotSpotFrame = ContentSystem.getContentSystem().getContentFactory().createHotSpotFrame(frameName,  UUID.randomUUID(), Float.valueOf(newX).intValue(), Float.valueOf(newY).intValue());
+	        newHotSpotFrame.setBorder(ContentSystem.getContentSystem().getContentFactory().createRoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 0, 0, new ColorRGBA(0f, 0f, 0f, 0f)));
 	        newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 	        newHotSpotFrame.maintainBorderSizeDuringScale();
 	        newHotSpotFrame.setRelativeLocation(atPosition);
@@ -257,9 +238,9 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	        float xPos = Integer.valueOf(-DisplaySystem.getDisplaySystem().getWidth() / 2 + (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
 	        float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
 
-	        newHotSpotFrame = (IHotSpotFrame) this.getHotSpotContentFactory().createHotSpotFrame(HOTSPOT_FRAME_NAME_IMAGE + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
+	        newHotSpotFrame = (IHotSpotFrame) ContentSystem.getContentSystem().getContentFactory().createHotSpotFrame(HOTSPOT_FRAME_NAME_IMAGE + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION);
 
-	        newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 0,0, new ColorRGBA(0f, 0f, 0f, 0f)));
+	        newHotSpotFrame.setBorder(ContentSystem.getContentSystem().getContentFactory().createRoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 0,0, new ColorRGBA(0f, 0f, 0f, 0f)));
 	        newHotSpotFrame.setSolidBackgroundColour(Color.black);
 //	        newHotSpotFrame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0.8f), new Color(0f, 0f, 0f, 0.8f), GradientDirection.VERTICAL));
 	        newHotSpotFrame.maintainBorderSizeDuringScale();
@@ -276,9 +257,9 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             float xPos = Integer.valueOf(-DisplaySystem.getDisplaySystem().getWidth() / 2 + (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
             float yPos = Integer.valueOf(DisplaySystem.getDisplaySystem().getHeight() / 2 - (HOTSPOT_FRAME_DIMENSION / 2 + Float.valueOf(BORDER_THICKNESS).intValue())).floatValue();
 
-            newHotSpotFrame  =  this.getHotSpotContentFactory().createEditableHotSpotTextFrame(HOTSPOT_FRAME_NAME_TEXT + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION,StitcherApp.class.getResource("keyboard.png"));
+            newHotSpotFrame  =  ContentSystem.getContentSystem().getContentFactory().createEditableHotSpotTextFrame(HOTSPOT_FRAME_NAME_TEXT + randomUUID, randomUUID, HOTSPOT_FRAME_DIMENSION, HOTSPOT_FRAME_DIMENSION,StitcherApp.class.getResource("keyboard.png"));
             
-            newHotSpotFrame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 0, 0, new ColorRGBA(0f, 0f, 0f, 0f)));
+            newHotSpotFrame.setBorder(ContentSystem.getContentSystem().getContentFactory().createRoundedRectangleBorder("randomframeborder", UUID.randomUUID(), 0, 0, new ColorRGBA(0f, 0f, 0f, 0f)));
             
             
             newHotSpotFrame.setSolidBackgroundColour(Color.black);
@@ -315,15 +296,14 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		BehaviourMaker.addBehaviour(newHotSpotFrame, HotSpotTextBehavior.class);
 
 		newHotSpotFrame.setType(type);
-		BehaviourMaker
-				.addBehaviour(newHotSpotFrame, HotSpotFrameBehavior.class);
+		BehaviourMaker.addBehaviour(newHotSpotFrame, HotSpotFrameBehavior.class);
 
 		if (type.equals(BACKGROUND) || type.equals(IMAGE)) {
 
 			BehaviourMaker.addBehaviour(newHotSpotFrame, OverlayBehavior.class);
 
 			// set up the palet
-			IPalet palet = this.getPaletFactory().createPaletItem("palet",
+			IPalet palet = ContentSystem.getContentSystem().getContentFactory().createPaletItem("palet",
 					UUID.randomUUID(), PALET_DIMENSION,
 					new ColorRGBA(0f, 1f, 0f, .5f));
 			
@@ -354,7 +334,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 		Color endColor = new Color(0f, 0f, 0f, 1f);
 
         if (frameName.equals(STENCIL_REPO_NAME)) {
-        	IImageRepositoryFrame frame = this.getRepositoryFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
+        	IImageRepositoryFrame frame = ContentSystem.getContentSystem().getContentFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
 //			frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
@@ -365,7 +345,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	         Vector2f openPosition = new Vector2f(closePosition.x, closePosition.y + TOP_BOTTOM_REPO_HEIGHT);
 	         frame.setOpenLocation(openPosition);
 	            frame.setCloseLocation(closePosition);
-			JMERoundedRectangleBorder border = new JMERoundedRectangleBorder( frameName +"-border", UUID.randomUUID(), BORDER_THICKNESS, 0);
+			IBorder border = ContentSystem.getContentSystem().getContentFactory().createRoundedRectangleBorder( frameName +"-border", UUID.randomUUID(), BORDER_THICKNESS, 0);
 			border.setColor(new ColorRGBA(.211f, .211f, .211f, 1f));
             frame.setBorder(border);
             frame.maintainBorderSizeDuringScale();
@@ -378,7 +358,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 //            getZOrderManager().bringToTop(frame, null);
             frame.close();
 		} else if (frameName.equals(SCAN_REPO_NAME)) {
-	        IImageRepositoryFrame frame = this.getRepositoryFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
+	        IImageRepositoryFrame frame = ContentSystem.getContentSystem().getContentFactory().createImageRepositoryFrame(frameName, UUID.randomUUID(), DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
 //			frame.setSize(DisplaySystem.getDisplaySystem().getWidth() - 10, TOP_BOTTOM_REPO_HEIGHT);
 
@@ -390,7 +370,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 			frame.setOpenLocation(openPosition);
 			frame.setCloseLocation(closePosition);
 			
-			JMERoundedRectangleBorder border = new JMERoundedRectangleBorder( frameName +"-border", UUID.randomUUID(), BORDER_THICKNESS, 0);
+			IBorder border = ContentSystem.getContentSystem().getContentFactory().createRoundedRectangleBorder( frameName +"-border", UUID.randomUUID(), BORDER_THICKNESS, 0);
 			border.setColor(new ColorRGBA(.211f, .211f, .211f, 1f));
 			frame.setBorder(border);
             frame.maintainBorderSizeDuringScale();
@@ -404,7 +384,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
             frame.close();
 		} else if (frameName.equals(BACKGROUND_REPO_NAME)) {
 
-		    IBackgroundRepositoryFrame frame = this.getRepositoryFactory().createBackgroundRepositoryFrame(frameName, UUID.randomUUID(), RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 10);
+		    IBackgroundRepositoryFrame frame = ContentSystem.getContentSystem().getContentFactory().createBackgroundRepositoryFrame(frameName, UUID.randomUUID(), RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 10);
 
 //			frame.setSize(RIGHT_LEFT_REPO_HEIGHT, DisplaySystem.getDisplaySystem().getHeight() - 10);
 
@@ -415,7 +395,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 			frame.setCloseLocation(closePosition);
 			frame.setOpenLocation(openPosition);
 
-			JMERoundedRectangleBorder border = new JMERoundedRectangleBorder( frameName +"-border", UUID.randomUUID(), BORDER_THICKNESS, 0);
+			IBorder border = ContentSystem.getContentSystem().getContentFactory().createRoundedRectangleBorder( frameName +"-border", UUID.randomUUID(), BORDER_THICKNESS, 0);
 			border.setColor(new ColorRGBA(.9f, .9f, .9f, 1f));
             frame.setBorder(border);
             frame.maintainBorderSizeDuringScale();
@@ -453,9 +433,9 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
 	public void createHotSpotRepo(String type) {
 	    
-	    IHotSpotRepo frame = this.getHotSpotContentFactory().createHotSpotRepo(HOTSPOTS, UUID.randomUUID(), HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
+	    IHotSpotRepo frame = ContentSystem.getContentSystem().getContentFactory().createHotSpotRepo(HOTSPOTS, UUID.randomUUID(), HOTSPOT_DIMENSION, HOTSPOT_DIMENSION);
 
-		frame.setBorder(new JMERoundedRectangleBorder("randomframeborder", UUID.randomUUID(), .1f, 5, new ColorRGBA(0f, 0f, 0f, .1f) ));
+		frame.setBorder(ContentSystem.getContentSystem().getContentFactory().createRoundedRectangleBorder("randomframeborder", UUID.randomUUID(), .1f, 5, new ColorRGBA(0f, 0f, 0f, .1f) ));
 		frame.setGradientBackground(new Gradient(new Color(0.5f, 0.5f, 0.5f, 0f), new Color(0.2f, 0.2f, 0.2f, 0f), GradientDirection.VERTICAL));
 		frame.maintainBorderSizeDuringScale();
 
@@ -493,7 +473,7 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 	    } else if(type.equals(TEXT)) {
 	    	resource = StitcherApp.class.getResource("textsymbol.png");
 	    }
-		hotSpotItemImage = this.getHotSpotContentFactory().createHotSpotItemImage("hotspot", UUID.randomUUID(), resource);
+		hotSpotItemImage = ContentSystem.getContentSystem().getContentFactory().createHotSpotItemImage("hotspot", UUID.randomUUID(), resource);
 		hotSpotItemImage.setType(type);
 		frame.addItem(hotSpotItemImage);
 		hotSpotItemImage.centerItem();
@@ -508,37 +488,10 @@ public class StitcherApp extends AbstractMultiplicityApp implements IStitcherCon
 
 	}
 
-
-
-
 	public static void main(String[] args) throws SecurityException, IllegalArgumentException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 		SingleAppMultiplicitySurfaceSystem.startSystem(StitcherApp.class);
 	}
-
-	public void setHotSpotContentFactory(IHotSpotContentFactory hotSpotContentFactory) {
-		this.hotSpotContentFactory = hotSpotContentFactory;
-	}
-
-	public IHotSpotContentFactory getHotSpotContentFactory() {
-		return hotSpotContentFactory;
-	}
-
-	public IPaletFactory getPaletFactory() {
-		return paletFactory;
-	}
-
-	public void setPaletFactory(IPaletFactory paletFactory) {
-		this.paletFactory = paletFactory;
-	}
-
-	public void setRepositoryFactory(IRepositoryContentItemFactory repositoryFactory) {
-		this.repositoryFactory = repositoryFactory;
-	}
-
-	public IRepositoryContentItemFactory getRepositoryFactory() {
-		return repositoryFactory;
-	}
-
+	
     public List<IHotSpotFrame> getHotSpotFrames() {
         return hotSpotFrames;
     }
