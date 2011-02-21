@@ -66,6 +66,13 @@ public class AttachmentFetchThread extends Thread {
 	
 	public String output_document_path = null;
 
+	/**
+	 * 
+	 * @param iPage
+	 * @param attachments
+	 * @param items
+	 * @param parentContainerName
+	 */
 	public AttachmentFetchThread(IPage iPage, Vector<IAttachment> attachments, List<IItem> items, String parentContainerName) {
 		this.attachments = attachments;
 		this.iPage = iPage;
@@ -105,6 +112,12 @@ public class AttachmentFetchThread extends Thread {
 		return items;
 	}
 
+	/**
+	 * check to see if the spatial is a repository node
+	 * 
+	 * @param spatial
+	 * @return
+	 */
 	public boolean isOnRepository(Spatial spatial) {
 	    
 	    if( spatial instanceof IRepositoryFrame ) {
@@ -118,6 +131,13 @@ public class AttachmentFetchThread extends Thread {
         return false;
 	    
 	}
+	
+	/**
+	 * check to see if the IItem is a repository node
+	 * 
+	 * @param item
+	 * @return
+	 */
 	public boolean isOnRepository(IItem item) {
 	        
 	        if( item instanceof IRepositoryFrame ) {
@@ -358,6 +378,9 @@ public class AttachmentFetchThread extends Thread {
 //		return img;
 //	}
 	
+	/**
+	 * clears all the highlights on the hotspotframes
+	 */
     private void clearAllHighlightedHotSpotFrames() {
         for (IHotSpotFrame hotSpotFrame : highlightedFrames) {
             IBorder border = hotSpotFrame.getBorder();
@@ -367,6 +390,9 @@ public class AttachmentFetchThread extends Thread {
     }
 
 	
+    /**
+     * Starts the thread
+     */
 	public void run() {
 		itemsToReturn = new Vector<Object>();
 
@@ -434,6 +460,11 @@ public class AttachmentFetchThread extends Thread {
 
 
 
+	/**
+	 * returns all the items from the wiki
+	 * 
+	 * @return
+	 */
 	public Vector<Object> getItemsToReturn() {
 		return itemsToReturn;
 	}

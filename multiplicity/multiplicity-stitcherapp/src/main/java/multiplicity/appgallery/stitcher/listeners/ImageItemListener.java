@@ -213,6 +213,13 @@ public class ImageItemListener extends ItemListenerAdapter {
         }
     }
 
+    /**
+     * copy an image
+     * 
+     * @param imageItem
+     * @param frame
+     * @return
+     */
     private IImage copyImage(IImage imageItem, IFrame frame) {
         IImage copy = StitcherUtils.createPhotoImage(imageItem
                 .getImageUrl());
@@ -225,6 +232,13 @@ public class ImageItemListener extends ItemListenerAdapter {
         return copy;
 
     }
+    
+    /**
+     * drop an item on the frame
+     * 
+     * @param releasedItem
+     * @param frameDroppedOn
+     */
     private void doBackgroundFrameDrop(IItem releasedItem, IItem frameDroppedOn) {
         if( releasedItem.getParentItem() instanceof IImageRepositoryFrame ) {
             logger.debug("doing a background frame drop");
@@ -251,6 +265,9 @@ public class ImageItemListener extends ItemListenerAdapter {
         }// if
     }
  
+    /**
+     * remove all the highlights
+     */
     private void clearAllHighlightedHotSpotFrames() {
         for (IHotSpotFrame hotSpotFrame : highlightedFrames) {
             IBorder border = hotSpotFrame.getBorder();
@@ -259,6 +276,12 @@ public class ImageItemListener extends ItemListenerAdapter {
         highlightedFrames = new ArrayList<HotSpotFrame>();
     }
 
+    /**
+     * drop an item on a hotspot frame
+     * 
+     * @param item
+     * @param hotSpotFrame
+     */
     protected void dropOnHotSpotFrame(IItem item, IHotSpotFrame hotSpotFrame) {
         IFrame frame = (IFrame) item.getParentItem();
         frame.removeItem(item);
@@ -277,12 +300,25 @@ public class ImageItemListener extends ItemListenerAdapter {
 //        stitcherApp.bumpHotSpotConnections();
     }
     
+    /**
+     * check if it is a hotspot frame or not
+     * 
+     * @param item
+     * @return
+     */
     public boolean isHotspotFrame(IItem item) {
         if( item != null && ( item instanceof IHotSpotFrame ) ) {
             return true;
         }
         return false;
     }
+    
+    /**
+     * check to see if this item is a repo
+     * 
+     * @param item
+     * @return
+     */
     public boolean isRepository(IItem item) {
         
         if( item instanceof IRepositoryFrame ) {
@@ -296,17 +332,6 @@ public class ImageItemListener extends ItemListenerAdapter {
         return false;
     }
     
-    public static float getScale(Vector2f size) {
-        float scale = 0;
-        float width = size.x;
-        float height = size.y;
+   
 
-        if ((width / height) < 1) {
-            scale = IStitcherContants.MAX_THUMBNAIL_SIDE_SIZE / width;
-        } else {
-            scale = IStitcherContants.MAX_THUMBNAIL_SIDE_SIZE / height;
-        }
-
-        return scale;
-    }
 }

@@ -275,20 +275,6 @@ public class HotSpotImageBehavior extends MultiTouchEventAdapter implements IBeh
         return false;
     }
     
-    public static float getScale(Vector2f size) {
-        float scale = 0;
-        float width = size.x;
-        float height = size.y;
-
-        if ((width / height) < 1) {
-            scale = IStitcherContants.MAX_THUMBNAIL_SIDE_SIZE / width;
-        } else {
-            scale = IStitcherContants.MAX_THUMBNAIL_SIDE_SIZE / height;
-        }
-
-        return scale;
-    }
-    
     @Override
     public void removeItemActingOn() {
         if(mainImage != null) {
