@@ -37,7 +37,12 @@ public class StitcherUtils {
     public static String wikiPass = null;
     public static int maxFileSize = 0;
 
-    
+    /**
+     * creates a photoImage from a url
+     * 
+     * @param url
+     * @return
+     */
     public static IImage createPhotoImage(URL url) {
             IImage img = ContentSystem.getContentSystem().getContentFactory().createImage(IStitcherContants.IMAGE, UUID.randomUUID());
             img.setImage(url);
@@ -47,6 +52,13 @@ public class StitcherUtils {
             return img;
     }
     
+    /**
+     * puts images randomly in a frame
+     * 
+     * @param frame
+     * @param vecItem
+     * @return
+     */
     public static Vector2f generateRandomPosition(IFrame frame, IImage vecItem) {
         
         Vector2f frameSize = new Vector2f();
@@ -73,6 +85,12 @@ public class StitcherUtils {
         return vector2f;
     }
 
+    /**
+     * returns the scale based on size
+     * 
+     * @param size
+     * @return
+     */
     public static float getScale(Vector2f size) {
         float scale = 0;
         float width = size.x;
@@ -87,6 +105,11 @@ public class StitcherUtils {
         return scale;
     }
     
+    /**
+     * shows the keyboard on hotspot text
+     * 
+     * @param hotSpotText
+     */
     public static void showKeyboard(IHotSpotText hotSpotText) {
         
         IFrame keyboard = hotSpotText.getKeyboard();
@@ -96,6 +119,12 @@ public class StitcherUtils {
         
     }
     
+    /**
+     * helper to modify the scale behavior
+     * 
+     * @param behaviours
+     * @param shouldScale
+     */
     public static void modScaleBehavior(List<IBehaviour> behaviours, boolean shouldScale) {
         for (Iterator iterator = behaviours.iterator(); iterator.hasNext();) {
             IBehaviour iBehaviour = (IBehaviour) iterator.next();
@@ -105,16 +134,31 @@ public class StitcherUtils {
         }
     }
     
+    /**
+     * hides the keyboard on a hotspot text
+     * 
+     * @param hotSpotText
+     */
     public static void hideKeyboard(IHotSpotText hotSpotText) {
         IFrame keyboard = hotSpotText.getKeyboard();
         stitcherApp.remove(keyboard);
         hotSpotText.setKeyboardVisible(false);
     }
 
+    /**
+     * brings an item to the top
+     * 
+     * @param item
+     */
     public static void bringToTop(IItem item) {
         stitcherApp.getZOrderManager().bringToTop(item, null);
     }
 
+    /**
+     * creates a frame
+     * 
+     * @param copyImage
+     */
     public static void createBackgroundFrame(IImage copyImage) {
         stitcherApp.createNewFrame(copyImage, new Vector2f(0.0f,
                 0.0f), IStitcherContants.BACKGROUND + "-"
@@ -122,6 +166,11 @@ public class StitcherUtils {
                 IStitcherContants.BACKGROUND);
     }
 
+    /**
+     * removes an item
+     * 
+     * @param hotThing
+     */
     public static void removeHotThing(IItem hotThing) {
         if( hotThing instanceof IHotLink ) {
             stitcherApp.remove(hotThing);
@@ -131,18 +180,40 @@ public class StitcherUtils {
         }
     }
 
+    /**
+     * creates a new hot spot frame
+     * 
+     * @param type
+     * @return
+     */
     public static IHotSpotFrame createNewHotSpotFrame(String type) {
         return stitcherApp.createNewHotSpotContentFrame(type);
     }
 
+    /**
+     * refills the repo of hotspots
+     * 
+     * @param originFrame
+     * @param type
+     */
     public static void fillHotSpotRepo(IFrame originFrame, String type) {
         stitcherApp.fillHotSpotRepo(originFrame,type);
     }
 
+    /**
+     * add a hotspot content frame
+     * 
+     * @param hotSpotFrameContent
+     */
     public static void addHotSpotContentFrame(IHotSpotFrame hotSpotFrameContent) {
         stitcherApp.getHotSpotFrames().add(hotSpotFrameContent);        
     }
 
+    /**
+     * adds a hotlink
+     * 
+     * @param hotLink
+     */
     public static void addHotLink(IHotLink hotLink) {
         Vector2f itemWorldPos = hotLink.getWorldLocation();
 
@@ -151,6 +222,9 @@ public class StitcherUtils {
 //        BehaviourMaker.addBehaviour(hotLink, HotLinkBehavior.class);
     }
 
+    /**
+     * updates hotshot content 
+     */
     public static void updateHotShotContentFrames() {
         for (IHotSpotFrame hsFrame : stitcherApp.getHotSpotFrames()) {
             if( hsFrame.hasPalet() )
@@ -158,11 +232,17 @@ public class StitcherUtils {
         }
     }
     
+    /**
+     * update hotlink connections
+     */
     public static void updateAllHotLinkConnections() {
         
         HotSpotUtils.updateAllHotLinkConnections(stitcherApp.getHotSpotFrames());
     }
     
+    /**
+     * bring all the hot frames to the top 
+     */
     public static void bringAllHotSpotFramesToTheTop() {
         List<IHotSpotFrame> hotSpotFrames = stitcherApp.getHotSpotFrames();
         
@@ -175,6 +255,11 @@ public class StitcherUtils {
         }
     }
     
+    /**
+     * bring all the hot frames to the top 
+     * 
+     * @param hotspotFrame
+     */
     public static void bringAllHotLinksToTheTop(IHotSpotFrame hotspotFrame) {
         List<IHotLink> hotLinks = hotspotFrame.getHotLinks();
         for (IHotLink iHotLink : hotLinks) {

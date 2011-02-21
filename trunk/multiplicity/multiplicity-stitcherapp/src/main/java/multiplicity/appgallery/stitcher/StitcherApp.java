@@ -1,3 +1,22 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 package multiplicity.appgallery.stitcher;
 
 import java.awt.Color;
