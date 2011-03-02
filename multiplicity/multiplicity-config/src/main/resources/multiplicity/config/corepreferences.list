@@ -1,8 +1,0 @@
-multiplicity.config.developer.DeveloperPreferences
-multiplicity.config.display.DisplayPreferences
-multiplicity.config.identity.IdentityConfigPrefsItem
-multiplicity.config.table.TableConfigPrefsItem
-multiplicity.config.apikeys.APIKeysConfigPrefsItem
-multiplicity.config.network.NetworkConfigPrefsItem
-multiplicity.config.server.ServerConfigPrefsItem
-multiplicity.config.position.PositionConfigPrefsItem
