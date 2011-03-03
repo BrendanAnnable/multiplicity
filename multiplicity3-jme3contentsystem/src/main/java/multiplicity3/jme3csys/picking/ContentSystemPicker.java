@@ -10,9 +10,9 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
-import multiplicity.csysng.items.item.ItemImpl;
-import multiplicity.csysng.items.item.IItem;
-import multiplicity.csysng.picksystem.IPickSystem;
+import multiplicity3.csys.items.item.IItem;
+import multiplicity3.csys.items.item.ItemImpl;
+import multiplicity3.csys.picksystem.IPickSystem;
 
 public class ContentSystemPicker implements IPickSystem {
 	private static final Logger log = Logger.getLogger(ContentSystemPicker.class.getName());

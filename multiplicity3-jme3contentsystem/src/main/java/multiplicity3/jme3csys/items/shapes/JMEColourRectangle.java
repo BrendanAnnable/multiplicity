@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import com.jme3.asset.AssetManager;
 
-import multiplicity.csysng.annotations.ImplementsContentItem;
-import multiplicity.csysng.items.shapes.ColourRectangleImpl;
-import multiplicity.csysng.items.shapes.IColourRectangle;
+import multiplicity3.csys.annotations.ImplementsContentItem;
+import multiplicity3.csys.items.shapes.ColourRectangleImpl;
+import multiplicity3.csys.items.shapes.IColourRectangle;
 import multiplicity3.jme3csys.items.IInitable;
 
 @ImplementsContentItem(target = IColourRectangle.class)

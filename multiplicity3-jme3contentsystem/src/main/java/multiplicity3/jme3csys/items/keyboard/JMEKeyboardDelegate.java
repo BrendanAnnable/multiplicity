@@ -15,9 +15,9 @@ import com.jme3.texture.Texture2D;
 
 import com.jme3.texture.plugins.AWTLoader;
 
-import multiplicity.csysng.items.keyboard.IKeyboardDelegate;
-import multiplicity.csysng.items.keyboard.IKeyboardGraphicsRenderer;
-import multiplicity.csysng.items.keyboard.model.KeyboardDefinition;
+import multiplicity3.csys.items.keyboard.IKeyboardDelegate;
+import multiplicity3.csys.items.keyboard.IKeyboardGraphicsRenderer;
+import multiplicity3.csys.items.keyboard.model.KeyboardDefinition;
 import multiplicity3.jme3csys.geometry.CenteredQuad;
 import multiplicity3.jme3csys.items.item.JMEItemDelegate;
 import multiplicity3.jme3csys.picking.ItemMap;

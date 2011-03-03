@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import com.jme3.asset.AssetManager;
 
-import multiplicity.csysng.annotations.ImplementsContentItem;
-import multiplicity.csysng.items.item.IItem;
-import multiplicity.csysng.items.item.ItemImpl;
+import multiplicity3.csys.annotations.ImplementsContentItem;
+import multiplicity3.csys.items.item.IItem;
+import multiplicity3.csys.items.item.ItemImpl;
 import multiplicity3.jme3csys.items.IInitable;
 
 @ImplementsContentItem(target = IItem.class)

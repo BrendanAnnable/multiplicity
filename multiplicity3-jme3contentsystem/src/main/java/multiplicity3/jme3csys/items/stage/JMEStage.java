@@ -4,10 +4,10 @@ import java.util.UUID;
 
 import com.jme3.asset.AssetManager;
 
-import multiplicity.csysng.ContentSystem;
-import multiplicity.csysng.annotations.ImplementsContentItem;
-import multiplicity.csysng.stage.IStage;
-import multiplicity.csysng.stage.StageImpl;
+import multiplicity3.csys.ContentSystem;
+import multiplicity3.csys.annotations.ImplementsContentItem;
+import multiplicity3.csys.stage.IStage;
+import multiplicity3.csys.stage.StageImpl;
 import multiplicity3.jme3csys.items.IInitable;
 
 @ImplementsContentItem(target = IStage.class)

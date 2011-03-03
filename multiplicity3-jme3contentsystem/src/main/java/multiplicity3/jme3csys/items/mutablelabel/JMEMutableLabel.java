@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import com.jme3.asset.AssetManager;
 
-import multiplicity.csysng.annotations.ImplementsContentItem;
-import multiplicity.csysng.items.mutablelabel.IMutableLabel;
-import multiplicity.csysng.items.mutablelabel.MutableLabelImpl;
+import multiplicity3.csys.annotations.ImplementsContentItem;
+import multiplicity3.csys.items.mutablelabel.IMutableLabel;
+import multiplicity3.csys.items.mutablelabel.MutableLabelImpl;
 import multiplicity3.jme3csys.items.IInitable;
 
 @ImplementsContentItem(target = IMutableLabel.class)

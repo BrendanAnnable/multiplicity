@@ -5,7 +5,7 @@ import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.scene.Spatial;
 
-import multiplicity.csysng.items.mutablelabel.IMutableLabelDelegate;
+import multiplicity3.csys.items.mutablelabel.IMutableLabelDelegate;
 import multiplicity3.jme3csys.items.item.JMEItemDelegate;
 import multiplicity3.jme3csys.picking.ItemMap;
 

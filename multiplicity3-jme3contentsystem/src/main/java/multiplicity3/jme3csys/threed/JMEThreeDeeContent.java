@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import com.jme3.scene.Spatial;
 
-import multiplicity.csysng.items.events.MultiTouchEventDispatcher;
-import multiplicity.csysng.threedee.IThreeDeeContent;
+import multiplicity3.csys.items.events.MultiTouchEventDispatcher;
+import multiplicity3.csys.threedee.IThreeDeeContent;
 import multiplicity3.jme3csys.picking.ItemMap;
 
 public class JMEThreeDeeContent implements IThreeDeeContent {

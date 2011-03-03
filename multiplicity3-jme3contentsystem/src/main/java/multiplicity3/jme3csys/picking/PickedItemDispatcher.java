@@ -8,12 +8,12 @@ import java.util.logging.Logger;
 import com.jme3.math.Vector2f;
 import com.jme3.scene.Node;
 
-import multiplicity.csysng.items.item.IItem;
-import multiplicity.csysng.stage.IStage;
-import multiplicity.csysng.threedee.IThreeDeeContent;
-import multiplicity.input.IMultiTouchEventListener;
-import multiplicity.input.events.MultiTouchCursorEvent;
-import multiplicity.input.events.MultiTouchObjectEvent;
+import multiplicity3.csys.items.item.IItem;
+import multiplicity3.csys.stage.IStage;
+import multiplicity3.csys.threedee.IThreeDeeContent;
+import multiplicity3.input.IMultiTouchEventListener;
+import multiplicity3.input.events.MultiTouchCursorEvent;
+import multiplicity3.input.events.MultiTouchObjectEvent;
 
 public class PickedItemDispatcher implements IMultiTouchEventListener {
 	private static final Logger log = Logger.getLogger(PickedItemDispatcher.class.getName());	
