@@ -19,5 +19,10 @@
   <modules>
     <module>multiplicity3-input</module>
     <module>multiplicity3-contentsystem</module>
+    <module>multiplicity3-config</module>
+    <module>multiplicity3-appsystem</module>
+    <module>multiplicity3-jme3contentsystem</module>
+    <module>multiplicity3-demo</module>
+    <module>multiplicity3-commons</module>
   </modules>
 </project>
