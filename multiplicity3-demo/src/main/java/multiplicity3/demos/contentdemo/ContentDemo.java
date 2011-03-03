@@ -43,9 +43,6 @@ public class ContentDemo implements IMultiplicityApp {
 		
 		// solid and gradient rectangles
 		try {
-			
-
-			
 			IContainer keyboardWithFrame = cf.create(IContainer.class, "keywf", UUID.randomUUID());			
 			
 			IKeyboard kb = cf.create(IKeyboard.class, "kb", UUID.randomUUID());
