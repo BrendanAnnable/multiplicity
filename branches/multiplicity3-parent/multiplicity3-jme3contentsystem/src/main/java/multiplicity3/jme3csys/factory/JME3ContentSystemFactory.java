@@ -9,13 +9,13 @@ import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.renderer.Renderer;
 
-import multiplicity.csysng.IUpdateable;
-import multiplicity.csysng.factory.ContentTypeAlreadyBoundException;
-import multiplicity.csysng.factory.ContentTypeInvalidException;
-import multiplicity.csysng.factory.ContentTypeNotBoundException;
-import multiplicity.csysng.factory.dynamic.DynamicContentSystemFactory;
-import multiplicity.csysng.factory.dynamic.IResourceFinderFilter;
-import multiplicity.csysng.items.item.IItem;
+import multiplicity3.csys.IUpdateable;
+import multiplicity3.csys.factory.ContentTypeAlreadyBoundException;
+import multiplicity3.csys.factory.ContentTypeInvalidException;
+import multiplicity3.csys.factory.ContentTypeNotBoundException;
+import multiplicity3.csys.factory.dynamic.DynamicContentSystemFactory;
+import multiplicity3.csys.factory.dynamic.IResourceFinderFilter;
+import multiplicity3.csys.items.item.IItem;
 import multiplicity3.jme3csys.annotations.RequiresUpdate;
 import multiplicity3.jme3csys.items.IInitable;
 

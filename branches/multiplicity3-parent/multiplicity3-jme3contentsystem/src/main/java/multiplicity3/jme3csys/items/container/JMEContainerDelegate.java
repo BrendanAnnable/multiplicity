@@ -4,7 +4,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
-import multiplicity.csysng.items.container.IContainerDelegate;
+import multiplicity3.csys.items.container.IContainerDelegate;
 import multiplicity3.jme3csys.items.item.JMEItemDelegate;
 
 public class JMEContainerDelegate extends JMEItemDelegate implements IContainerDelegate {

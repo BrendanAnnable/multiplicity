@@ -11,9 +11,9 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer.Type;
 
-import multiplicity.csysng.gfx.Gradient;
-import multiplicity.csysng.items.shapes.IColourRectangle;
-import multiplicity.csysng.items.shapes.IColourRectangleDelegate;
+import multiplicity3.csys.gfx.Gradient;
+import multiplicity3.csys.items.shapes.IColourRectangle;
+import multiplicity3.csys.items.shapes.IColourRectangleDelegate;
 import multiplicity3.jme3csys.geometry.CenteredQuad;
 import multiplicity3.jme3csys.items.item.JMEItemDelegate;
 import multiplicity3.jme3csys.picking.ItemMap;

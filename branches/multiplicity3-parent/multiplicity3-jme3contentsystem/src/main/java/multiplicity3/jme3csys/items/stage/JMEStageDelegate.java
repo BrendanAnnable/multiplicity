@@ -3,8 +3,8 @@ package multiplicity3.jme3csys.items.stage;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Spatial;
 
-import multiplicity.csysng.items.item.IItem;
-import multiplicity.csysng.stage.IStageDelegate;
+import multiplicity3.csys.items.item.IItem;
+import multiplicity3.csys.stage.IStageDelegate;
 import multiplicity3.jme3csys.items.item.JMEItemDelegate;
 
 public class JMEStageDelegate extends JMEItemDelegate implements IStageDelegate {

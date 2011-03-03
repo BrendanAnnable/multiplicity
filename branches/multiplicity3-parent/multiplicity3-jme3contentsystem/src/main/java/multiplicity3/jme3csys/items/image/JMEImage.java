@@ -5,9 +5,9 @@ import java.util.UUID;
 
 import com.jme3.asset.AssetManager;
 
-import multiplicity.csysng.items.image.IImage;
-import multiplicity.csysng.items.image.ImageImpl;
-import multiplicity.csysng.annotations.ImplementsContentItem;
+import multiplicity3.csys.annotations.ImplementsContentItem;
+import multiplicity3.csys.items.image.IImage;
+import multiplicity3.csys.items.image.ImageImpl;
 import multiplicity3.jme3csys.items.IInitable;
 import multiplicity3.jme3csys.items.item.JMEItemDelegate;
 

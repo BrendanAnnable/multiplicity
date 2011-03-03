@@ -4,10 +4,10 @@ import java.util.UUID;
 
 import com.jme3.asset.AssetManager;
 
-import multiplicity.csysng.IUpdateable;
-import multiplicity.csysng.annotations.ImplementsContentItem;
-import multiplicity.csysng.items.video.IVideo;
-import multiplicity.csysng.items.video.VideoImpl;
+import multiplicity3.csys.IUpdateable;
+import multiplicity3.csys.annotations.ImplementsContentItem;
+import multiplicity3.csys.items.video.IVideo;
+import multiplicity3.csys.items.video.VideoImpl;
 import multiplicity3.jme3csys.annotations.RequiresUpdate;
 import multiplicity3.jme3csys.items.IInitable;
 

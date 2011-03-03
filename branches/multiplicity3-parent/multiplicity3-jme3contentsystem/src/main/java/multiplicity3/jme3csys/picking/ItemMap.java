@@ -8,9 +8,9 @@ import java.util.UUID;
 
 import com.jme3.scene.Spatial;
 
-import multiplicity.csysng.items.item.ItemImpl;
-import multiplicity.csysng.items.item.IItem;
-import multiplicity.csysng.threedee.IThreeDeeContent;
+import multiplicity3.csys.items.item.IItem;
+import multiplicity3.csys.items.item.ItemImpl;
+import multiplicity3.csys.threedee.IThreeDeeContent;
 import multiplicity3.jme3csys.threed.JMEThreeDeeContent;
 
 public class ItemMap {

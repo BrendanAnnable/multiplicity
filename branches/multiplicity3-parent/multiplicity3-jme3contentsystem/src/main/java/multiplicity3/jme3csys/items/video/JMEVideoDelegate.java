@@ -22,8 +22,8 @@ import com.jme3.video.VFrame;
 import com.jme3.video.VQueue;
 import com.jme3.video.plugins.jheora.AVThread;
 
-import multiplicity.csysng.items.video.IVideoDelegate;
-import multiplicity.csysng.items.video.exceptions.CouldNotPlayVideoException;
+import multiplicity3.csys.items.video.IVideoDelegate;
+import multiplicity3.csys.items.video.exceptions.CouldNotPlayVideoException;
 import multiplicity3.jme3csys.geometry.CenteredQuad;
 import multiplicity3.jme3csys.items.item.JMEItemDelegate;
 import multiplicity3.jme3csys.picking.ItemMap;

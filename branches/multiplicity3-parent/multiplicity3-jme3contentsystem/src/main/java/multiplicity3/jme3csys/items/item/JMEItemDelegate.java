@@ -2,9 +2,9 @@ package multiplicity3.jme3csys.items.item;
 
 import java.util.logging.Logger;
 
-import multiplicity.csysng.annotations.ImplementsContentItem;
-import multiplicity.csysng.items.item.IItem;
-import multiplicity.csysng.items.item.IItemDelegate;
+import multiplicity3.csys.annotations.ImplementsContentItem;
+import multiplicity3.csys.items.item.IItem;
+import multiplicity3.csys.items.item.IItemDelegate;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.math.Quaternion;

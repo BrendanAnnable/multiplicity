@@ -11,7 +11,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer.Type;
 
-import multiplicity.csysng.items.border.IRoundedBorderDelegate;
+import multiplicity3.csys.items.border.IRoundedBorderDelegate;
 import multiplicity3.jme3csys.items.item.JMEItemDelegate;
 import multiplicity3.jme3csys.picking.ItemMap;
 

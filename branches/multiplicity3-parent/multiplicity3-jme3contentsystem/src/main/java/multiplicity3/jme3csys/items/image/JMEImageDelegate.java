@@ -2,9 +2,9 @@ package multiplicity3.jme3csys.items.image;
 
 import java.util.logging.Logger;
 
-import multiplicity.csysng.annotations.ImplementsContentItem;
-import multiplicity.csysng.items.image.IImage;
-import multiplicity.csysng.items.image.IImageDelegate;
+import multiplicity3.csys.annotations.ImplementsContentItem;
+import multiplicity3.csys.items.image.IImage;
+import multiplicity3.csys.items.image.IImageDelegate;
 import multiplicity3.jme3csys.geometry.CenteredQuad;
 import multiplicity3.jme3csys.items.item.JMEItemDelegate;
 import multiplicity3.jme3csys.picking.ItemMap;

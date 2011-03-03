@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import com.jme3.asset.AssetManager;
 
-import multiplicity.csysng.annotations.ImplementsContentItem;
-import multiplicity.csysng.items.keyboard.IKeyboard;
-import multiplicity.csysng.items.keyboard.KeyboardImpl;
+import multiplicity3.csys.annotations.ImplementsContentItem;
+import multiplicity3.csys.items.keyboard.IKeyboard;
+import multiplicity3.csys.items.keyboard.KeyboardImpl;
 import multiplicity3.jme3csys.items.IInitable;
 
 @ImplementsContentItem(target = IKeyboard.class)
