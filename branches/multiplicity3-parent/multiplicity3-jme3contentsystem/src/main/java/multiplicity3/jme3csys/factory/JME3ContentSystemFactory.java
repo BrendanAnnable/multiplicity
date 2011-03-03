@@ -29,7 +29,7 @@ public class JME3ContentSystemFactory extends DynamicContentSystemFactory {
 	private List<IUpdateable> updateList;
 
 	public JME3ContentSystemFactory(Renderer renderer, AudioRenderer audioRenderer, AssetManager assetManager, List<IUpdateable> updateList) throws ClassNotFoundException, IOException, ContentTypeAlreadyBoundException, ContentTypeInvalidException {
-		super("multiplicity.csysjme3.items", new IResourceFinderFilter() {			
+		super("multiplicity3.jme3csys.items", new IResourceFinderFilter() {			
 			@Override
 			public boolean accept(String dottedResourcePathname) {
 				String[] components = dottedResourcePathname.split("\\.");
