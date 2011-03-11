@@ -41,8 +41,8 @@ public class JMEImageDelegate extends JMEItemDelegate implements IImageDelegate 
 		// reminder of where to find j3md stuff: jme3/src/core-data
 		mat = new Material(assetManager, "Common/MatDefs/Misc/SimpleTextured.j3md");
 		mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-		Texture tex = assetManager.loadTexture("Interface/Logo/Monkey.jpg");
-		mat.setTexture("m_ColorMap", tex);
+		Texture tex = assetManager.loadTexture("multiplicity3/jme3csys/resources/placeholders/transparent_16.png");
+		mat.setTexture("ColorMap", tex);
 		
 		quadGeometry.setMaterial(mat);
 		
@@ -50,13 +50,6 @@ public class JMEImageDelegate extends JMEItemDelegate implements IImageDelegate 
 		log.fine("Attaching image quad geometry!");
 		attachChild(quadGeometry);
 	}
-	
-//	@Override
-//	public void setZOrder(int zOrder) {
-//		super.setZOrder(zOrder);
-//		Vector3f newZOrder = quadGeometry.getLocalTranslation().clone();
-//		quadGeometry.setLocalTranslation(newZOrder.x, newZOrder.y, zOrder);
-//	}
 	
 	@Override
 	public void setZOrder(int zOrder) {

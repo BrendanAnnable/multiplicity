@@ -56,6 +56,9 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 	}
 
 	private void applyMultiCursorTransform() {
+		log.fine("multi-cursor on item at " + affectedItem.getWorldLocation());
+		log.fine("cursor 1: " + cursor1Pos);
+		log.fine("cursor 2: " + cursor2Pos);
 		Vector2f oldCenter = new Vector2f();
 		oldCenter.interpolate(cursor1OldPos, cursor2OldPos, 0.5f);
 		Vector2f currentCenter = new Vector2f();
@@ -73,7 +76,9 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 		float newLength = cursor2Pos.subtract(cursor1Pos).length();
 		float scaleChange = newLength / oldLength;
 
-		if(scaleDisabled  || affectedItem.getRelativeScale() * scaleChange < minScale || affectedItem.getRelativeScale() * scaleChange > maxScale) {
+		if(scaleDisabled  
+				|| affectedItem.getRelativeScale() * scaleChange < minScale 
+				|| affectedItem.getRelativeScale() * scaleChange > maxScale) {
 			scaleChange = 1f;
 		}
 
@@ -82,10 +87,13 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 		float dx = newDistFromCurrentCenterToSpatial * FastMath.cos(currentCenterToSpatialAngle);
 		float dy = newDistFromCurrentCenterToSpatial * FastMath.sin(currentCenterToSpatialAngle);
 
-		Vector2f newScreenPosition = currentCenter.add(new Vector2f(dx, -dy));
+		Vector2f newScreenPosition = currentCenter.add(new Vector2f(dx, dy));
 		if(Float.isNaN(dx) || Float.isNaN(dy)) newScreenPosition = currentCenter;
+		
+		log.fine("new position: " + newScreenPosition);
+		
 		affectedItem.setWorldLocation(newScreenPosition);
-		affectedItem.setRelativeRotation(affectedItem.getRelativeRotation() - angleChange);
+		affectedItem.setRelativeRotation(affectedItem.getRelativeRotation() + angleChange);
 		affectedItem.setRelativeScale(affectedItem.getRelativeScale() * scaleChange);
 
 		float angle = affectedItem.getRelativeRotation();
@@ -130,7 +138,7 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 
 	@Override
 	public void cursorChanged(MultiTouchCursorEvent event) {
-		log.finer("Cursor changed on " + RotateTranslateScaleBehaviour.class.getName() + ": " + event.getPosition());
+		log.finer("Cursor changed: " + event.getPosition());
 		updateCursor(event);
 
 		if(getCursorCount() == 1) {			

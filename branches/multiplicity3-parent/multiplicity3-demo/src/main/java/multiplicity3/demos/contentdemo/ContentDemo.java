@@ -23,6 +23,8 @@ import multiplicity3.csys.items.keyboard.behaviour.KeyboardBehaviour;
 import multiplicity3.csys.items.keyboard.defs.simple.SimpleAlphaKeyboardDefinition;
 import multiplicity3.csys.items.keyboard.defs.simple.SimpleAlphaKeyboardRenderer;
 import multiplicity3.csys.items.keyboard.model.KeyboardKey;
+import multiplicity3.csys.items.line.ILine;
+import multiplicity3.csys.items.mutablelabel.IMutableLabel;
 import multiplicity3.csys.items.shapes.IColourRectangle;
 import multiplicity3.csys.stage.IStage;
 import multiplicity3.input.MultiTouchInputComponent;
@@ -74,24 +76,40 @@ public class ContentDemo implements IMultiplicityApp {
 			border.setColor(new ColorRGBA(1, 1, 1, 0.5f));
 			RotateTranslateScaleBehaviour rts = csys.getBehaviourMaker().addBehaviour(border, RotateTranslateScaleBehaviour.class);
 			rts.setItemActingOn(keyboardWithFrame);
-			
+			keyboardWithFrame.setRelativeLocation(new Vector2f(50, -200));
 			stage.addItem(keyboardWithFrame);
 			
 			
 			IColourRectangle rect = cf.create(IColourRectangle.class, "solidbox", UUID.randomUUID());
 			rect.setRelativeLocation(new Vector2f(0, 0));
 			rect.setSolidBackgroundColour(ColorRGBA.Blue);
+			rect.setRelativeLocation(new Vector2f(200, 300));
 			csys.getBehaviourMaker().addBehaviour(rect, RotateTranslateScaleBehaviour.class);
 			stage.addItem(rect);
 			rect.setSize(200, 100);
 			
 			IColourRectangle rect2 = cf.create(IColourRectangle.class, "gradientbox", UUID.randomUUID());
-			rect2.setRelativeLocation(new Vector2f(300, 0));
+			rect2.setRelativeLocation(new Vector2f(400, 190));
 			Gradient g = new Gradient(ColorRGBA.White, ColorRGBA.Gray, GradientDirection.VERTICAL);
 			rect2.setGradientBackground(g);
 			csys.getBehaviourMaker().addBehaviour(rect2, RotateTranslateScaleBehaviour.class);
 			stage.addItem(rect2);
 			rect2.setSize(200, 100);
+			
+			ILine line = cf.create(ILine.class, "line", UUID.randomUUID());
+			line.setSourceItem(rect);
+			line.setDestinationItem(rect2);
+			line.setLineWidth(3f);
+			stage.addItem(line);
+			
+			IMutableLabel label = cf.create(IMutableLabel.class, "lbl", UUID.randomUUID());
+			label.setFont("multiplicity3/demos/contentdemo/arial32_white.fnt");
+			label.setText("multiplicity");
+			label.setRelativeLocation(new Vector2f(-200, 250));
+			label.setRelativeScale(0.5f);
+			csys.getBehaviourMaker().addBehaviour(label, RotateTranslateScaleBehaviour.class);
+			stage.addItem(label);
+			
 		} catch (ContentTypeNotBoundException e) {
 			e.printStackTrace();
 		}
