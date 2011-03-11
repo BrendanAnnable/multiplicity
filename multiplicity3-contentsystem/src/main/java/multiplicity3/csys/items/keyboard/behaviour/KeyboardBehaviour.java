@@ -8,7 +8,6 @@ import java.util.Map;
 
 
 import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
 
 import multiplicity3.csys.behaviours.IBehaviour;
 import multiplicity3.csys.items.item.IItem;
@@ -135,8 +134,8 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 	}
 
 	private KeyboardKey getKeyUnderEvent(MultiTouchEvent event) {
-		Vector3f screenPosition = new Vector3f();
-		stage.getContentSystem().getDisplayManager().tableToScreen(event.getPosition().x, event.getPosition().y, screenPosition);		
+		Vector2f screenPosition = new Vector2f();
+		stage.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), screenPosition);		
 		Vector2f localPosition = item.getRelativeLocationOfWorldLocation(new Vector2f(screenPosition.x, screenPosition.y));		
 		localPosition.x = localPosition.x += (float) item.getKeyboardDefinition().getBounds().getWidth() / 2.0f;
 		localPosition.y = localPosition.y += (float) item.getKeyboardDefinition().getBounds().getHeight() / 2.0f;

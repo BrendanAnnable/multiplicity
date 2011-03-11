@@ -33,75 +33,88 @@ package multiplicity3.jme3csys.geometry;
  */
 
 
+import java.nio.FloatBuffer;
+
 import com.jme3.scene.*;
 import com.jme3.scene.VertexBuffer.Type;
 
 public class CenteredQuad extends Mesh {
 
-    private float width;
-    private float height;
+	private float width;
+	private float height;
+	private boolean flipCoords;
 
-    /**
-     * Do not use this constructor. Serialization purposes only.
-     */
-    public CenteredQuad(){
-    }
+	/**
+	 * Do not use this constructor. Serialization purposes only.
+	 */
+	public CenteredQuad(){
+	}
 
-    public CenteredQuad(float width, float height){
-        updateGeometry(width, height);
-    }
+	public CenteredQuad(float width, float height){
+		this(width, height, false);
+	}
 
-    public CenteredQuad(float width, float height, boolean flipCoords){
-        updateGeometry(width, height, flipCoords);
-    }
+	public CenteredQuad(float width, float height, boolean flipCoords){		
+		this.width = width;
+		this.height = height;
+		this.flipCoords = flipCoords;
+		initBuffers();
+	}
 
-    public float getHeight() {
-        return height;
-    }
+	public float getHeight() {
+		return height;
+	}
 
-    public float getWidth() {
-        return width;
-    }
+	public float getWidth() {
+		return width;
+	}
 
-    public void updateGeometry(float width, float height){
-        updateGeometry(width, height, false);
-    }
+	private void initBuffers() {
+		setBuffer(Type.Position, 3, new float[]{-width/2,      -height/2,      0,
+				width/2,  -height/2,      0,
+				width/2,  height/2, 0,
+				-width/2,      height/2, 0
+		});
 
-    public void updateGeometry(float width, float height, boolean flipCoords) {
-        this.width = width;
-        this.height = height;
-        setBuffer(Type.Position, 3, new float[]{-width/2,      -height/2,      0,
-                                                width/2,  -height/2,      0,
-                                                width/2,  height/2, 0,
-                                                -width/2,      height/2, 0
-                                                });
-        
 
-        if (flipCoords){
-            setBuffer(Type.TexCoord, 2, new float[]{0, 1,
-                                                    1, 1,
-                                                    1, 0,
-                                                    0, 0});
-        }else{
-            setBuffer(Type.TexCoord, 2, new float[]{0, 0,
-                                                    1, 0,
-                                                    1, 1,
-                                                    0, 1});
-        }
-        setBuffer(Type.Normal, 3, new float[]{0, 0, 1,
-                                              0, 0, 1,
-                                              0, 0, 1,
-                                              0, 0, 1});
-        if (height < 0){
-            setBuffer(Type.Index, 3, new short[]{0, 2, 1,
-                                                 0, 3, 2});
-        }else{
-            setBuffer(Type.Index, 3, new short[]{0, 1, 2,
-                                                 0, 2, 3});
-        }
-        
-        updateBound();
-    }
+		if (flipCoords){
+			setBuffer(Type.TexCoord, 2, new float[]{0, 1,
+					1, 1,
+					1, 0,
+					0, 0});
+		}else{
+			setBuffer(Type.TexCoord, 2, new float[]{0, 0,
+					1, 0,
+					1, 1,
+					0, 1});
+		}
+		setBuffer(Type.Normal, 3, new float[]{0, 0, 1,
+				0, 0, 1,
+				0, 0, 1,
+				0, 0, 1});
+		if (height < 0){
+			setBuffer(Type.Index, 3, new short[]{0, 2, 1,
+					0, 3, 2});
+		}else{
+			setBuffer(Type.Index, 3, new short[]{0, 1, 2,
+					0, 2, 3});
+		}
+		setDynamic();
+		updateBound();
+	}
+
+	public void updateGeometry(float width, float height) {
+		this.width = width;
+		this.height = height;
+		FloatBuffer fb = (FloatBuffer) getBuffer(Type.Position).getData();
+		fb.rewind();
+		fb.put(-width/2).put(-height/2).put(0);
+		fb.put(width/2).put(-height/2).put(0);
+		fb.put(width/2).put(height/2).put(0);
+		fb.put(-width/2).put(height/2).put(0);
+		getBuffer(Type.Position).updateData(fb);
+		updateBound();
+	}
 
 
 }
