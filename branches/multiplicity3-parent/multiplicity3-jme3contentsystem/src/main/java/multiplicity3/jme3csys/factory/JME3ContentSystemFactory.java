@@ -52,7 +52,9 @@ public class JME3ContentSystemFactory extends DynamicContentSystemFactory {
 			Class<ContentType> clazz, String name, UUID id)
 	throws ContentTypeNotBoundException {
 		log.fine("Creating " + clazz.getName());
-		ConcreteType instance = super.create(clazz, name, id);
+		// for some reason, linux jre6 doesn't like this, so need cast + suppress
+		@SuppressWarnings("unchecked")
+		ConcreteType instance = (ConcreteType) super.create(clazz, name, id);
 		if(instance == null) {
 			log.severe("Could not create an instance of " + clazz);
 			return null;
