@@ -284,6 +284,19 @@ public abstract class ItemImpl implements IItem {
 	}
 
 	@Override
+	public void removeAllItems(boolean recursive) {
+		if(recursive) {
+			for(IItem item : getItemChildren()) {
+				item.removeAllItems(recursive);
+			}
+		}
+		
+		for(IItem item : getItemChildren()) {
+			removeItem(item);
+		}
+	}
+	
+	@Override
 	public int getChildrenCount() {
 		return getItemChildren().size();
 	}

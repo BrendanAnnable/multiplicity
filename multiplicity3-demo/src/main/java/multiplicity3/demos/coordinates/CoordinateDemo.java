@@ -21,11 +21,14 @@ import multiplicity3.input.MultiTouchInputComponent;
 public class CoordinateDemo implements IMultiplicityApp {
 
 	public static void main(String[] args) {
-		new MultiplicityClient(new CoordinateDemo()).start();
+		MultiplicityClient client = MultiplicityClient.get();
+		client.start();
+		CoordinateDemo app = new CoordinateDemo();
+		client.setCurrentApp(app);
 	}
 
 	@Override
-	public void init(MultiTouchInputComponent input, IQueueOwner iqo) {
+	public void shouldStart(MultiTouchInputComponent input, IQueueOwner iqo) {
 		final IStage stage = MultiplicityEnvironment.get().getLocalStages().get(0); // get first local stage
 		ContentSystem csys = stage.getContentSystem();
 		IContentFactory cf = csys.getContentFactory();
@@ -64,5 +67,11 @@ public class CoordinateDemo implements IMultiplicityApp {
 		} catch (ContentTypeNotBoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void shouldStop() {
+		// TODO Auto-generated method stub
+		
 	}
 }

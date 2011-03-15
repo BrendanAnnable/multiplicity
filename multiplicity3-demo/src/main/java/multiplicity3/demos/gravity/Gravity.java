@@ -37,11 +37,14 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 	private Map<Long,ILine> lines = new HashMap<Long,ILine>();
 	
 	public static void main(String[] args) {
-		new MultiplicityClient(new Gravity()).start();
+		MultiplicityClient client = MultiplicityClient.get();
+		client.start();
+		Gravity app = new Gravity();
+		client.setCurrentApp(app);
 	}
 
 	@Override
-	public void init(MultiTouchInputComponent input, IQueueOwner iqo) {
+	public void shouldStart(MultiTouchInputComponent input, IQueueOwner iqo) {
 		log.info("init");
 		universe = new Universe();
 		input.registerMultiTouchEventListener(this);
@@ -141,4 +144,10 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 
 	@Override
 	public void objectChanged(MultiTouchObjectEvent event) {}
+
+	@Override
+	public void shouldStop() {
+		// TODO Auto-generated method stub
+		
+	}
 }

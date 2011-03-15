@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 import multiplicity3.appsystem.jme.JMEAppRoot;
@@ -16,6 +17,7 @@ import multiplicity3.csys.display.DisplayManager;
 import multiplicity3.csys.draganddrop.DragAndDropSystem;
 import multiplicity3.csys.factory.ContentTypeAlreadyBoundException;
 import multiplicity3.csys.factory.ContentTypeInvalidException;
+import multiplicity3.csys.stage.IStage;
 import multiplicity3.input.IMultiTouchInputSource;
 import multiplicity3.input.MultiTouchInputComponent;
 import multiplicity3.input.exceptions.MultiTouchInputException;
@@ -33,27 +35,29 @@ import com.jme3.scene.Spatial;
 public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 	
 	private static final Logger log = Logger.getLogger(MultiplicityClient.class.getName());
-	
-//	public static void main(String[] args) {
-//		MultiplicityClient m = new MultiplicityClient();
-//		m.start();
-//	}
 
 	private MultiTouchInputComponent mtInput;
-	//private NetworkedInputClient nic;
 	private IMultiTouchInputSource source;
 	private List<IUpdateable> updateList = new ArrayList<IUpdateable>();
-	private IMultiplicityApp app;
+	private IMultiplicityApp currentApp;
 
 	public static AssetManager assetManager;
+
+	private static MultiplicityClient instance;
 
 	public static AssetManager getSharedAssetManager() {
 		return assetManager;
 	}
 	
-	public MultiplicityClient(IMultiplicityApp app) {
-		super();
-		this.app = app;
+	public static MultiplicityClient get() {
+		synchronized(MultiplicityClient.class) {
+			if(instance == null) instance = new MultiplicityClient();
+			return instance;
+		}
+	}
+	
+	private MultiplicityClient() {
+		super();		
 	}
 
 	public void handleError(String errMsg, Throwable t) {
@@ -116,12 +120,34 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 		
 		source = MultiTouchInputUtility.getInputSource(inputManager, displayWidth, displayHeight);
 		mtInput = new MultiTouchInputComponent(source);
-		
+		System.out.println("mtInput created.");
 		mtInput.registerMultiTouchEventListener(new PickedItemDispatcher(multiplicityRootNode, stage));
 		
-		app.init(mtInput, this);
+		
 		
 		//printNode(guiNode);
+	}
+	
+	public void setCurrentApp(final IMultiplicityApp app) {
+		this.enqueue(new Callable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				if(currentApp == app) return null;				
+				if(currentApp != null) {
+					app.shouldStop();
+					for(IStage stage : MultiplicityEnvironment.get().getLocalStages()) {
+						stage.removeAllItems(true);
+					}
+				}
+				
+				app.shouldStart(mtInput, MultiplicityClient.this);
+				currentApp = app;
+				
+				return null;
+			}
+			
+		});
+		
 	}
 	
 	protected void printNode(Node n) {

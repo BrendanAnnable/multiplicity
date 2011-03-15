@@ -10,6 +10,7 @@ public interface INestable {
 	public void addItem(IItem item);
 	//TODO: change to return true/false
 	public void removeItem(IItem item);
+	public void removeAllItems(boolean recursive);
 	public boolean hasChildren();
 	public int getChildrenCount();
 	public IZOrderManager getZOrderManager();
