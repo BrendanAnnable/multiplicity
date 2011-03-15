@@ -32,11 +32,14 @@ import multiplicity3.input.MultiTouchInputComponent;
 public class ContentDemo implements IMultiplicityApp {
 
 	public static void main(String[] args) {
-		new MultiplicityClient(new ContentDemo()).start();
+		MultiplicityClient client = MultiplicityClient.get();
+		client.start();
+		ContentDemo app = new ContentDemo();
+		client.setCurrentApp(app);
 	}
 
 	@Override
-	public void init(MultiTouchInputComponent input, IQueueOwner iqo) {
+	public void shouldStart(MultiTouchInputComponent input, IQueueOwner iqo) {
 		final IStage stage = MultiplicityEnvironment.get().getLocalStages().get(0); // get first local stage
 		ContentSystem csys = stage.getContentSystem();
 		IContentFactory cf = csys.getContentFactory();
@@ -115,6 +118,12 @@ public class ContentDemo implements IMultiplicityApp {
 		}
 		
 		
+		
+		
+	}
+
+	@Override
+	public void shouldStop() {
 		
 		
 	}
