@@ -30,7 +30,6 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 	
 	private IStage stage;
 	private IContentFactory contentFactory;
-	private IImage blank;
 	private Universe universe;
 	
 	private Map<Long,Cursor> cursorMap = new HashMap<Long,Cursor>();
@@ -58,16 +57,6 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 			
 			universe.addBody(new Body(sun, Universe.MASS_SUN, new Vector2f(0, 0), new Vector2f(0,0)));
 			
-			blank = contentFactory.create(IImage.class, "blank", UUID.randomUUID());
-			blank.setSize(8,8);
-			stage.addItem(blank);
-			
-			//stage.getContentSystem().getBehaviourMaker().addBehaviour(moon, RotateTranslateScaleBehaviour.class);
-			
-//			ILinkingLine line = contentFactory.create(ILinkingLine.class, "line", UUID.randomUUID());
-//			line.setSourceItem(sun);
-//			line.setDestinationItem(moon);
-//			stage.addItem(line);
 		} catch (ContentTypeNotBoundException e) {
 			e.printStackTrace();
 		}
@@ -84,17 +73,18 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 			moon.setSize(8,8);
 			Vector2f screenPos = new Vector2f();
 			stage.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), screenPos);
-			System.out.println(screenPos);
 			moon.setWorldLocation(screenPos);			
 			stage.addItem(moon);
+			
 			Cursor c = new Cursor(event.getCursorID(), screenPos);
 			cursorMap.put(event.getCursorID(), c);
 			itemMap.put(event.getCursorID(), moon);
 			ILine line = contentFactory.create(ILine.class, "line", UUID.randomUUID());
-			line.setStartPosition(screenPos);
-			line.setEndPosition(screenPos.add(new Vector2f(1,1)));
-			//stage.addItem(line);
+			line.setStartPosition(stage.getRelativeLocationOfWorldLocation(screenPos));
+			line.setEndPosition(stage.getRelativeLocationOfWorldLocation(screenPos).add(new Vector2f(0.1f, 0.1f)));
+			stage.addItem(line);
 			lines.put(event.getCursorID(), line);
+			
 		} catch (ContentTypeNotBoundException e) {
 			e.printStackTrace();
 		}
@@ -108,7 +98,7 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 		if(c == null) return;
 		c.setEndPosition(screenPos);
 		Vector2f velocity = c.startpos.subtract(c.endpos);		
-		velocity.multLocal(1e3f);
+		velocity.multLocal(5e3f);
 		IItem representation = itemMap.get(event.getCursorID());
 		if(representation != null) {
 			Body b = new Body(representation, Universe.MASS_EARTH, screenPos, velocity);
@@ -129,11 +119,12 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 		c.setCurrentPosition(screenPos);		
 		IItem item = itemMap.get(event.getCursorID());
 		if(item != null) {
+			
 			item.setWorldLocation(screenPos);
 		}
 		ILine line = lines.get(event.getCursorID());
 		if(line != null) {
-			//line.setEndPosition(screenPos);
+			line.setEndPosition(stage.getRelativeLocationOfWorldLocation(screenPos));
 		}
 	}
 

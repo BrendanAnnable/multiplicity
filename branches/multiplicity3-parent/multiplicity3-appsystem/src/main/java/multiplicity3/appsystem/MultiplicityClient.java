@@ -67,27 +67,23 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 	@Override
 	public void simpleInitApp() {		
 		assetManager = this.getAssetManager();
-		guiNode.detachAllChildren();
+		multiplicityRootNode.detachAllChildren();
 		flyCam.setEnabled(false);
 		
 		Camera camera = this.getCamera();
 
 		// establish 0,0 in center
 		//TODO: manage this through the stage?
-		guiNode.setLocalTranslation(getCamera().getWidth()/2, getCamera().getHeight()/2, 0);
-//		ItemImpl.transformDelegateParent.setLocalTranslation(guiNode.getLocalTranslation());
-		
-		
+		multiplicityRootNode.setLocalTranslation(getCamera().getWidth()/2, getCamera().getHeight()/2, 0);		
 		
 		ContentSystem csys = new ContentSystem();
 		JMEStage stage = new JMEStage("localstage", UUID.randomUUID(), csys);
 		JMEStageDelegate delegate = new JMEStageDelegate(stage);
 		stage.setDelegate(delegate);
-		//stage.getTransformDelegate().setLocalTranslation(guiNode.getLocalTranslation());
 		stage.setZOrder(0);
 		
-		guiNode.attachChild(delegate.getManipulableSpatial());
-		guiNode.attachChild(stage.getTransformDelegate());
+		multiplicityRootNode.attachChild(delegate.getManipulableSpatial());
+		multiplicityRootNode.attachChild(stage.getTransformDelegate());
 		try {
 			csys.setContentFactory(new JME3ContentSystemFactory(renderer, audioRenderer, assetManager, updateList));
 		} catch (ClassNotFoundException e1) {
@@ -101,7 +97,7 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 		}
 
 		
-		csys.setPickSystem(new ContentSystemPicker(guiNode, camera.getWidth(), camera.getHeight()));
+		csys.setPickSystem(new ContentSystemPicker(multiplicityRootNode, camera.getWidth(), camera.getHeight()));
 		csys.setAnimationSystem(AnimationSystem.getInstance());
 		csys.setDisplayManager(new DisplayManager());				
 		csys.getDisplayManager().setDisplayDimensions(camera.getWidth(), camera.getHeight());
@@ -121,7 +117,7 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 		source = MultiTouchInputUtility.getInputSource(inputManager, displayWidth, displayHeight);
 		mtInput = new MultiTouchInputComponent(source);
 		
-		mtInput.registerMultiTouchEventListener(new PickedItemDispatcher(rootNode, stage));
+		mtInput.registerMultiTouchEventListener(new PickedItemDispatcher(multiplicityRootNode, stage));
 		
 		app.init(mtInput, this);
 		

@@ -25,11 +25,16 @@ public interface IItem extends INestable {
 	public List<IItemListener> getItemListeners();
 	public void setItemListeners(List<IItemListener> itemListeners);
 	
+	/**
+	 * Puts the item to a location on screen, given by screen coordinates
+	 * @param loc a position, in screen coordinates
+	 */
 	public void setWorldLocation(Vector2f loc);
 	public Vector2f getWorldLocation();
 	
 	/**
-	 * Get the world location of an arbitrary point
+	 * Get the world location of an arbitrary point, where the
+	 * arbitrary point is given in relative coordinates to this item.
 	 * @param v
 	 * @return
 	 */
