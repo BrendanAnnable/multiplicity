@@ -37,8 +37,8 @@ import com.jme3.util.BufferUtils;
  */
 public abstract class JMEAppRoot extends Application {
 
-    protected Node rootNode = new Node("Root Node");
-    protected Node guiNode = new Node("Gui Node");
+    private Node rootNode = new Node("Root Node");
+    protected Node multiplicityRootNode = new Node("Multiplicity Root Node");
 
     protected float secondCounter = 0.0f;
     protected BitmapText fpsText;
@@ -96,7 +96,7 @@ public abstract class JMEAppRoot extends Application {
     }
 
     public Node getGuiNode() {
-        return guiNode;
+        return multiplicityRootNode;
     }
 
     public Node getRootNode() {
@@ -116,26 +116,26 @@ public abstract class JMEAppRoot extends Application {
         fpsText = new BitmapText(guiFont, false);
         fpsText.setLocalTranslation(0, fpsText.getLineHeight(), 0);
         fpsText.setText("Frames per second");
-        guiNode.attachChild(fpsText);
+        multiplicityRootNode.attachChild(fpsText);
     }
 
     public void loadStatsView(){
         statsView = new StatsView("Statistics View", assetManager, renderer.getStatistics());
 //         move it up so it appears above fps text
         statsView.setLocalTranslation(0, fpsText.getLineHeight(), 0);
-        guiNode.attachChild(statsView);
+        multiplicityRootNode.attachChild(statsView);
     }
 
     @Override
     public void initialize(){
         super.initialize();
 
-        guiNode.setQueueBucket(Bucket.Gui);
-        guiNode.setCullHint(CullHint.Never);
+        multiplicityRootNode.setQueueBucket(Bucket.Gui);
+        multiplicityRootNode.setCullHint(CullHint.Never);
         loadFPSText();
         loadStatsView();
         viewPort.attachScene(rootNode);
-        guiViewPort.attachScene(guiNode);
+        guiViewPort.attachScene(multiplicityRootNode);
 
         if (inputManager != null){
             flyCam = new FlyByCamera(cam);
@@ -176,9 +176,9 @@ public abstract class JMEAppRoot extends Application {
         // simple update and root node
         simpleUpdate(tpf);
         rootNode.updateLogicalState(tpf);
-        guiNode.updateLogicalState(tpf);
+        multiplicityRootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
-        guiNode.updateGeometricState();
+        multiplicityRootNode.updateGeometricState();
 
         // render states
         stateManager.render(renderManager);

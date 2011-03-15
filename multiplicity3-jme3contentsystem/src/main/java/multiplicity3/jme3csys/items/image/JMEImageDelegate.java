@@ -39,10 +39,11 @@ public class JMEImageDelegate extends JMEItemDelegate implements IImageDelegate 
 		quadGeometry = new Geometry("quad_geom", quad);
 		
 		// reminder of where to find j3md stuff: jme3/src/core-data
-		mat = new Material(assetManager, "Common/MatDefs/Misc/SimpleTextured.j3md");
+		//mat = new Material(assetManager, "Common/MatDefs/Misc/SimpleTextured.j3md");
+		mat = new Material(assetManager, "multiplicity3/jme3csys/resources/shaders/Textured.j3md");
 		mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 		Texture tex = assetManager.loadTexture("multiplicity3/jme3csys/resources/placeholders/transparent_16.png");
-		mat.setTexture("ColorMap", tex);
+		mat.setTexture("m_ColorMap", tex);
 		
 		quadGeometry.setMaterial(mat);
 		

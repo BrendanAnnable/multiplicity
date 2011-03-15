@@ -53,7 +53,7 @@ public class JMELineDelegate extends JMEItemDelegate implements
 		quadGeometry.getMesh().setBuffer(Type.Color, 4, colorArray);
 		updateColours();
 		
-		mat = new Material(assetManager, "Common/MatDefs/Misc/VertexColor.j3md");
+		mat = new Material(assetManager, "multiplicity3/jme3csys/resources/shaders/VertexColour.j3md");
 		quadGeometry.setMaterial(mat);
 		
 		ItemMap.register(quadGeometry, item);
@@ -101,9 +101,21 @@ public class JMELineDelegate extends JMEItemDelegate implements
 	}
 
 	private float getLineHeight() {
-		if(sourceItem == null || destItem == null) return minLineLength;		
 		return Math.max(minLineLength,
-				destItem.getWorldLocation().subtract(sourceItem.getWorldLocation()).length());
+				endPosition.subtract(startPosition).length());
+	}
+	
+	@Override
+	public void setEndPosition(Vector2f v) {
+		this.endPosition = v;
+		updateLine();
+	}
+
+
+	@Override
+	public void setStartPosition(Vector2f v) {
+		this.startPosition = v;
+		updateLine();
 	}
 
 	@Override
@@ -113,7 +125,7 @@ public class JMELineDelegate extends JMEItemDelegate implements
 		}
 		this.sourceItem = item;
 		this.sourceItem.addItemListener(this);
-		updateLinkedLine();
+		setStartPosition(sourceItem.getWorldLocation());
 	}
 
 	@Override
@@ -122,9 +134,9 @@ public class JMELineDelegate extends JMEItemDelegate implements
 		if(this.destItem != null) {
 			this.destItem.removeItemListener(this);
 		}
-		this.destItem = item;
+		this.destItem = item;		
 		this.destItem.addItemListener(this);
-		updateLinkedLine();
+		setEndPosition(destItem.getWorldLocation());
 	}
 
 
@@ -156,17 +168,7 @@ public class JMELineDelegate extends JMEItemDelegate implements
 	public void itemZOrderChanged(IItem item) {}
 
 
-	@Override
-	public void setEndPosition(Vector2f v) {
-		this.endPosition = v;
-	}
 
-
-	@Override
-	public void setStartPosition(Vector2f v) {
-		this.startPosition = v;
-		
-	}
 
 
 }

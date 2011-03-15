@@ -53,7 +53,7 @@ public abstract class JMEItemDelegate extends Node implements IItemDelegate {
 
 	@Override
 	public void setRelativeScale(float scale) {
-		setLocalScale(scale);
+		setLocalScale(scale, scale, 1f);
 	}
 	
 	@Override
