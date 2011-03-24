@@ -48,6 +48,7 @@ public class JMEColourRectangleDelegate extends JMEItemDelegate implements IColo
 		updateColours();
 		
 		mat = new Material(assetManager, "Common/MatDefs/Misc/VertexColor.j3md");
+		mat.getAdditionalRenderState().setAlphaTest(true);
 		quadGeometry.setMaterial(mat);
 		
 		ItemMap.register(quadGeometry, item);

@@ -35,6 +35,8 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 	private Map<Long,Cursor> cursorMap = new HashMap<Long,Cursor>();
 	private Map<Long,IItem> itemMap = new HashMap<Long,IItem>();
 	private Map<Long,ILine> lines = new HashMap<Long,ILine>();
+
+	private MultiTouchInputComponent input;
 	
 	public static void main(String[] args) {
 		MultiplicityClient client = MultiplicityClient.get();
@@ -47,6 +49,7 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 	public void shouldStart(MultiTouchInputComponent input, IQueueOwner iqo) {
 		log.info("init");
 		universe = new Universe();
+		this.input = input;
 		input.registerMultiTouchEventListener(this);
 		this.stage = MultiplicityEnvironment.get().getLocalStages().get(0);
 		this.contentFactory = stage.getContentSystem().getContentFactory();
@@ -65,7 +68,11 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 		}
 	}
 	
-
+	@Override
+	public void shouldStop() {
+		stage.getContentSystem().getAnimationSystem().remove(universe);
+		this.input.unregisterMultiTouchEventListener(this);
+	}
 
 	@Override
 	public void cursorPressed(MultiTouchCursorEvent event) {
@@ -146,8 +153,9 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 	public void objectChanged(MultiTouchObjectEvent event) {}
 
 	@Override
-	public void shouldStop() {
-		// TODO Auto-generated method stub
-		
+	public String getFriendlyAppName() {
+		return "Gravity";
 	}
+
+
 }

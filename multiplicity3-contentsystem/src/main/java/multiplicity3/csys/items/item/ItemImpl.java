@@ -24,7 +24,6 @@ public abstract class ItemImpl implements IItem {
 	private static final Logger log = Logger.getLogger(ItemImpl.class.getName());
 
 	public static final String KEY_JMEITEMDATA = "KEY_JMEITEMDATA";
-//	public static final Node transformDelegateParent = new Node("_______ ROOT _______");
 
 	protected MultiTouchEventDispatcher dispatcher = new MultiTouchEventDispatcher();
 	protected UUID uuid;
@@ -291,8 +290,8 @@ public abstract class ItemImpl implements IItem {
 			}
 		}
 		
-		for(IItem item : getItemChildren()) {
-			removeItem(item);
+		for(int i = 0; i < getItemChildren().size(); i++) {
+			removeItem(getItemChildren().get(i));
 		}
 	}
 	

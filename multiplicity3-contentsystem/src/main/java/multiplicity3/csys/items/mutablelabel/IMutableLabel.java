@@ -1,5 +1,7 @@
 package multiplicity3.csys.items.mutablelabel;
 
+import com.jme3.math.Vector2f;
+
 import multiplicity3.csys.items.item.IItem;
 
 public interface IMutableLabel extends IItem {
@@ -8,4 +10,5 @@ public interface IMutableLabel extends IItem {
 	public void removeChar();
 	public String getText();
 	public void appendChar(char charAt);
+	public Vector2f getTextSize();
 }
