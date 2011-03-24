@@ -2,6 +2,8 @@ package multiplicity3.csys.items.mutablelabel;
 
 import java.util.UUID;
 
+import com.jme3.math.Vector2f;
+
 import multiplicity3.csys.items.item.ItemImpl;
 
 public class MutableLabelImpl extends ItemImpl implements IMutableLabel {
@@ -46,6 +48,12 @@ public class MutableLabelImpl extends ItemImpl implements IMutableLabel {
 	public void appendChar(char theChar) {
 		text = text + theChar;
 		labelDelegate.setText(text);
+	}
+
+	@Override
+	public Vector2f getTextSize() {
+		//TODO this breaks the 'never get stuff from the delegate rule...'
+		return labelDelegate.getTextSize();
 	}
 
 

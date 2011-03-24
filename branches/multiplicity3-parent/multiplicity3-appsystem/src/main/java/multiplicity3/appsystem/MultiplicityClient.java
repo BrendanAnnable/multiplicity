@@ -33,7 +33,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
 public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
-	
+
 	private static final Logger log = Logger.getLogger(MultiplicityClient.class.getName());
 
 	private MultiTouchInputComponent mtInput;
@@ -48,14 +48,14 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 	public static AssetManager getSharedAssetManager() {
 		return assetManager;
 	}
-	
+
 	public static MultiplicityClient get() {
 		synchronized(MultiplicityClient.class) {
 			if(instance == null) instance = new MultiplicityClient();
 			return instance;
 		}
 	}
-	
+
 	private MultiplicityClient() {
 		super();		
 	}
@@ -73,19 +73,19 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 		assetManager = this.getAssetManager();
 		multiplicityRootNode.detachAllChildren();
 		flyCam.setEnabled(false);
-		
+
 		Camera camera = this.getCamera();
 
 		// establish 0,0 in center
 		//TODO: manage this through the stage?
 		multiplicityRootNode.setLocalTranslation(getCamera().getWidth()/2, getCamera().getHeight()/2, 0);		
-		
+
 		ContentSystem csys = new ContentSystem();
 		JMEStage stage = new JMEStage("localstage", UUID.randomUUID(), csys);
 		JMEStageDelegate delegate = new JMEStageDelegate(stage);
 		stage.setDelegate(delegate);
 		stage.setZOrder(0);
-		
+
 		multiplicityRootNode.attachChild(delegate.getManipulableSpatial());
 		multiplicityRootNode.attachChild(stage.getTransformDelegate());
 		try {
@@ -100,60 +100,63 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 			e1.printStackTrace();
 		}
 
-		
+
 		csys.setPickSystem(new ContentSystemPicker(multiplicityRootNode, camera.getWidth(), camera.getHeight()));
 		csys.setAnimationSystem(AnimationSystem.getInstance());
 		csys.setDisplayManager(new DisplayManager());				
 		csys.getDisplayManager().setDisplayDimensions(camera.getWidth(), camera.getHeight());
-		
+
 		DragAndDropSystem dads = new DragAndDropSystem(stage);
 		csys.setDragAndDropSystem(dads);
 		csys.setBehaviourMaker(new BehaviourMaker(stage));
 		csys.getDragAndDropSystem().setPickSystemForApp(csys.getPickSystem());
-		
+
 		MultiplicityEnvironment.get().addStage("local", stage);
-		
+
 		initMultiTouchInput();
 
 		int displayWidth = getCamera().getWidth();
 		int displayHeight = getCamera().getHeight();
-		
+
 		source = MultiTouchInputUtility.getInputSource(inputManager, displayWidth, displayHeight);
 		mtInput = new MultiTouchInputComponent(source);
 		System.out.println("mtInput created.");
 		mtInput.registerMultiTouchEventListener(new PickedItemDispatcher(multiplicityRootNode, stage));
-		
-		
-		
+
+
+
 		//printNode(guiNode);
 	}
-	
+
 	public void setCurrentApp(final IMultiplicityApp app) {
 		this.enqueue(new Callable<Void>() {
 			@Override
 			public Void call() throws Exception {
+				System.out.println(Thread.currentThread().getName() + " now removing stuff from stages");
 				if(currentApp == app) return null;				
 				if(currentApp != null) {
-					app.shouldStop();
-					for(IStage stage : MultiplicityEnvironment.get().getLocalStages()) {
-						stage.removeAllItems(true);
+					currentApp.shouldStop();
+					for(int i = 0; i < MultiplicityEnvironment.get().getLocalStages().size(); i++) {
+						IStage stage = MultiplicityEnvironment.get().getLocalStages().get(i);
+						stage.removeAllItems(true);						
 					}
 				}
-				
+				log.info("Starting application " + app.getFriendlyAppName());
 				app.shouldStart(mtInput, MultiplicityClient.this);
+
 				currentApp = app;
-				
+
 				return null;
 			}
-			
+
 		});
-		
+
 	}
-	
+
 	protected void printNode(Node n) {
 		printNode(n, 0);
 	}
-	
+
 	private void printNode(Node n, int depth) {
 		printSpaces(depth);
 		System.out.println(n.getName() + " " + n.getClass());
@@ -168,7 +171,7 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 			}
 		}
 	}
-	
+
 	private void printSpaces(int n) {
 		for(int i = 0; i < n; i++) {
 			System.out.print(' ');

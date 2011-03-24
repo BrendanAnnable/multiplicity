@@ -128,5 +128,10 @@ public class ContentDemo implements IMultiplicityApp {
 		
 	}
 
+	@Override
+	public String getFriendlyAppName() {
+		return "Content Demo";
+	}
+
 
 }

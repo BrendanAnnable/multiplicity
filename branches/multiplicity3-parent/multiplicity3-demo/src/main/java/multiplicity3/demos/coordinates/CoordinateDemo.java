@@ -74,4 +74,9 @@ public class CoordinateDemo implements IMultiplicityApp {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String getFriendlyAppName() {
+		return "Coordinate Demo";
+	}
 }
