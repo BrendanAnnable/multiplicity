@@ -80,6 +80,7 @@ public abstract class JMEAppRoot extends Application {
     public void start(){
     	DisplayPreferences dprefs = new DisplayPreferences();
     	AppSettings settings = new AppSettings(true);
+    	settings.setTitle("Multiplicity v3.0");
     	settings.setBitsPerPixel(dprefs.getBitsPerPixel());
     	settings.setWidth(dprefs.getWidth());
     	settings.setHeight(dprefs.getHeight());
