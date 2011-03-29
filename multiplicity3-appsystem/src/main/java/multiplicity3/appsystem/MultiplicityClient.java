@@ -1,5 +1,6 @@
 package multiplicity3.appsystem;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -194,4 +195,20 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 			e.printStackTrace();
 		}
 	}
+	
+	public File getHomeDirectoryForApp(IMultiplicityApp app, boolean shouldCreateIfDoesNotExist) {
+		File appHomeDirectory = new File(getMultiplicityAppsDirectory(), app.getFriendlyAppName());
+		if(shouldCreateIfDoesNotExist)
+			appHomeDirectory.mkdirs();
+		return appHomeDirectory;
+	}
+
+	private File getMultiplicityAppsDirectory() {
+		return new File(getMultiplicityHomeDirectory(), "applications");
+	}
+
+	private File getMultiplicityHomeDirectory() {
+		return new File(System.getProperty("user.home"), ".multiplicity3");
+	}
+	
 }
