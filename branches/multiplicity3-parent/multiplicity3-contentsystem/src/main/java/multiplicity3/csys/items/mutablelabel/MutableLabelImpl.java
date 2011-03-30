@@ -68,5 +68,9 @@ public class MutableLabelImpl extends ItemImpl implements IMutableLabel {
 		return boxSizeIsSet;
 	}
 
+	@Override
+	public void setFontScale(float scale) {
+		labelDelegate.setFontScale(scale);		
+	}
 
 }

@@ -13,4 +13,5 @@ public interface IMutableLabel extends IItem {
 	public String getText();
 	public void appendChar(char charAt);
 	public Vector2f getTextSize();
+	public void setFontScale(float f);
 }

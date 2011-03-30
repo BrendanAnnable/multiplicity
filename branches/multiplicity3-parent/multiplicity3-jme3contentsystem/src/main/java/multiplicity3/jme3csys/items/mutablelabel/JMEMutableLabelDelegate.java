@@ -25,6 +25,7 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
 	private float lineWidth;
 	private float lineHeight;
 	private Rectangle boundingBox;
+	private float fontScale;
 
 	public JMEMutableLabelDelegate(JMEMutableLabel jmeMutableLabel) {
 		this.item = jmeMutableLabel;		
@@ -90,7 +91,7 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
 			txt.setVerticalAlignment(VAlign.Center);
 			txt.setLineWrapMode(LineWrapMode.Word);
 		}
-		
+		txt.setSize(32 * fontScale);
         txt.setText(currentText);
         for(Spatial c : txt.getChildren()) {
         	ItemMap.register(c, item);
@@ -113,7 +114,14 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
 
 	@Override
 	public void setBoxSize(float width, float height) {
-		boundingBox = new Rectangle(0, 0, width, height);
+		this.boundingBox = new Rectangle(0, 0, width, height);
+		doUpdate();
+	}
+
+
+	@Override
+	public void setFontScale(float scale) {
+		this.fontScale = scale;
 		doUpdate();
 	}
 
