@@ -1,5 +1,6 @@
 package multiplicity3.csys.items.image;
 
+import java.io.File;
 import java.util.UUID;
 
 import com.jme3.math.Vector2f;
@@ -50,6 +51,11 @@ public class ImageImpl extends ItemImpl implements IImage {
 	public void setSize(float width, float height) {
 		this.size.set(width, height);
 		imageDelegate.setSize(size);
+	}
+
+	@Override
+	public void setImage(File imageFile) {
+		imageDelegate.setImage(imageFile);
 	}
 
 }
