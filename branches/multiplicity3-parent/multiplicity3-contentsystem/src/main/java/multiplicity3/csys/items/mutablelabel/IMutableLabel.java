@@ -7,7 +7,7 @@ import multiplicity3.csys.items.item.IItem;
 public interface IMutableLabel extends IItem {
 	public void setText(String text);
 	public void setFont(String resourcePath);
-	public void setBoxSize(int width, int height);
+	public void setBoxSize(float width, float height);
 	public boolean isBoxSizeSet();
 	public void removeChar();
 	public String getText();

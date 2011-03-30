@@ -8,5 +8,5 @@ public interface IMutableLabelDelegate extends IItemDelegate {
 	void setText(String text);
 	void setFont(String resourcePath);
 	Vector2f getTextSize();
-	void setBoxSize(int width, int height);
+	void setBoxSize(float width, float height);
 }

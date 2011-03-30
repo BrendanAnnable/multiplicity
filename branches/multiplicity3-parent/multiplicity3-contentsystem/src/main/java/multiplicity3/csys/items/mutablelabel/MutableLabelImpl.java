@@ -58,7 +58,7 @@ public class MutableLabelImpl extends ItemImpl implements IMutableLabel {
 	}
 
 	@Override
-	public void setBoxSize(int width, int height) {
+	public void setBoxSize(float width, float height) {
 		this.boxSizeIsSet = true;
 		labelDelegate.setBoxSize(width, height);
 	}
