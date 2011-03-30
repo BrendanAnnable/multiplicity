@@ -2,7 +2,11 @@ package multiplicity3.jme3csys.items.mutablelabel;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapFont.VAlign;
 import com.jme3.font.BitmapText;
+import com.jme3.font.LineWrapMode;
+import com.jme3.font.Rectangle;
+import com.jme3.font.BitmapFont.Align;
 import com.jme3.math.Vector2f;
 import com.jme3.scene.Spatial;
 
@@ -20,9 +24,10 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
 	private AssetManager assetManager;
 	private float lineWidth;
 	private float lineHeight;
+	private Rectangle boundingBox;
 
 	public JMEMutableLabelDelegate(JMEMutableLabel jmeMutableLabel) {
-		this.item = jmeMutableLabel;
+		this.item = jmeMutableLabel;		
 	}
 
 
@@ -74,28 +79,42 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
         ItemMap.register(txt, item);
 	}
 	
-//	@Override
-//	public void setZOrder(int zOrder) {
-//		super.setZOrder(zOrder);
-//		Vector3f newZOrder = getLocalTranslation().clone();
-//		txt.setLocalTranslation(newZOrder.x, newZOrder.y, zOrder);
-//	}
-
-	
 	private void doUpdate() {
 		for(Spatial c : txt.getChildren()) {
         	ItemMap.unregister(c, item);
         }
-        txt.setSize(fnt.getPreferredSize() * 2f);
+		
+		if(boundingBox != null) {
+			txt.setBox(boundingBox);
+			txt.setAlignment(Align.Center);
+			txt.setVerticalAlignment(VAlign.Center);
+			txt.setLineWrapMode(LineWrapMode.Word);
+		}
+		
         txt.setText(currentText);
         for(Spatial c : txt.getChildren()) {
         	ItemMap.register(c, item);
         }
+
+//        System.out.println("\n-----");
+//        System.out.println("fnt.linewidth(currenttext): " + fnt.getLineWidth(currentText));
+//        System.out.println("fnt.prefferredsize: " + fnt.getPreferredSize());
+//        System.out.println("txt.linewidth: " + txt.getLineWidth());
+//        System.out.println("txt.lineheight: " + txt.getLineHeight());
+//        System.out.println("txt.height: " + txt.getHeight());
+//        System.out.println("txt.linecount: " + txt.getLineCount());
         
-        lineWidth = fnt.getLineWidth(currentText) * 2.01f; // hmmm... not sure what all this *2 stuff is about
-        lineHeight = txt.getLineHeight();
-		//txt.setBox(new Rectangle(0, 0, lineWidth, txt.getLineHeight()));
-		txt.setLocalTranslation(-lineWidth/2f, lineHeight/2f, txt.getLocalTranslation().z);		
+        if(boundingBox != null) {
+        	txt.setLocalTranslation(-txt.getLineWidth()/2f, txt.getHeight()/2f, 0);
+        }else{
+        	txt.setLocalTranslation(-fnt.getLineWidth(currentText)/2f, txt.getHeight()/2f, 0);
+        }
+	}
+
+	@Override
+	public void setBoxSize(int width, int height) {
+		boundingBox = new Rectangle(0, 0, width, height);
+		doUpdate();
 	}
 
 }

@@ -37,21 +37,19 @@ public class CoordinateDemo implements IMultiplicityApp {
 			IMutableLabel label_0_0 = cf.create(IMutableLabel.class, "lbl", UUID.randomUUID());
 			label_0_0.setFont("multiplicity3/demos/contentdemo/arial32_white.fnt");
 			label_0_0.setText("(0,0)");
-			label_0_0.setWorldLocation(new Vector2f(0, 0));
-			label_0_0.setRelativeScale(0.5f);
+			label_0_0.setWorldLocation(new Vector2f(0, 0));			
 			stage.addItem(label_0_0);
 			
 			IMutableLabel label_100_100 = cf.create(IMutableLabel.class, "lbl", UUID.randomUUID());
 			label_100_100.setFont("multiplicity3/demos/contentdemo/arial32_white.fnt");
 			label_100_100.setText("(100,100)");
-			label_100_100.setWorldLocation(new Vector2f(100, 100));
-			label_100_100.setRelativeScale(0.5f);
+			label_100_100.setWorldLocation(new Vector2f(100, 100));			
 			stage.addItem(label_100_100);
 			
 			final IMutableLabel cursorLabel = cf.create(IMutableLabel.class, "lbl", UUID.randomUUID());
 			cursorLabel.setFont("multiplicity3/demos/contentdemo/arial32_white.fnt");			
 			cursorLabel.setWorldLocation(new Vector2f(-100, -100));
-			cursorLabel.setRelativeScale(0.25f);
+			cursorLabel.setRelativeScale(0.5f);
 			stage.addItem(cursorLabel);
 			cursorLabel.setText("Move me!");
 			csys.getBehaviourMaker().addBehaviour(cursorLabel, RotateTranslateScaleBehaviour.class).setScaleEnabled(false);
