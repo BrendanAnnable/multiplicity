@@ -10,6 +10,7 @@ public class MutableLabelImpl extends ItemImpl implements IMutableLabel {
 
 	protected IMutableLabelDelegate labelDelegate;
 	private String text = "";
+	private boolean boxSizeIsSet = false;
 
 	public MutableLabelImpl(String name, UUID uuid) {
 		super(name, uuid);
@@ -54,6 +55,17 @@ public class MutableLabelImpl extends ItemImpl implements IMutableLabel {
 	public Vector2f getTextSize() {
 		//TODO this breaks the 'never get stuff from the delegate rule...'
 		return labelDelegate.getTextSize();
+	}
+
+	@Override
+	public void setBoxSize(int width, int height) {
+		this.boxSizeIsSet = true;
+		labelDelegate.setBoxSize(width, height);
+	}
+
+	@Override
+	public boolean isBoxSizeSet() {
+		return boxSizeIsSet;
 	}
 
 

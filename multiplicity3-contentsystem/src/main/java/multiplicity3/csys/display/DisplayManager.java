@@ -16,6 +16,12 @@ public class DisplayManager {
 		out.x = (width * in.x);
 		out.y = (height * in.y);
 	}
+	
+	public void tableToStage(Vector2f in, Vector2f out) {
+		tableToScreen(in, out);
+		out.x = out.x - width / 2f;
+		out.y = -(out.y - height / 2f);
+	}
 
 	public int getDisplayWidth() {
 		return width;
