@@ -1,5 +1,6 @@
 package multiplicity3.jme3csys.items.image;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 import multiplicity3.csys.annotations.ImplementsContentItem;
@@ -10,6 +11,7 @@ import multiplicity3.jme3csys.items.item.JMEItemDelegate;
 import multiplicity3.jme3csys.picking.ItemMap;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.plugins.FileLocator;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.Vector2f;
@@ -71,6 +73,14 @@ public class JMEImageDelegate extends JMEItemDelegate implements IImageDelegate 
 	public void setImage(String imageResource) {
 		Texture tex = assetManager.loadTexture(imageResource);		
 		mat.setTexture("m_ColorMap", tex);	
+	}
+	
+	@Override
+	public void setImage(File imageFile) {
+		File parent = imageFile.getParentFile();
+		assetManager.registerLocator(parent.getAbsolutePath(),
+				FileLocator.class);
+		setImage(imageFile.getName());
 	}
 
 	@Override
