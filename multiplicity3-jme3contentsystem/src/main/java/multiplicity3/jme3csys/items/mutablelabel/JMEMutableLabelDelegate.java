@@ -112,7 +112,7 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
 	}
 
 	@Override
-	public void setBoxSize(int width, int height) {
+	public void setBoxSize(float width, float height) {
 		boundingBox = new Rectangle(0, 0, width, height);
 		doUpdate();
 	}
