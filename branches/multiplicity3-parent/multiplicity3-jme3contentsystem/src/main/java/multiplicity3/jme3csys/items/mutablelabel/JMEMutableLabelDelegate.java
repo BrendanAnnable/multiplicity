@@ -25,7 +25,7 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
 	private float lineWidth;
 	private float lineHeight;
 	private Rectangle boundingBox;
-	private float fontScale;
+	private float fontScale = 1;
 
 	public JMEMutableLabelDelegate(JMEMutableLabel jmeMutableLabel) {
 		this.item = jmeMutableLabel;		
@@ -66,6 +66,7 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
 	public void setFont(String resourcePath) {
 		fnt = FontCache.get().getFont(resourcePath, assetManager);
 				
+		System.out.println(resourcePath + " -> " + fnt);
 		
 		detachChild(txt);
 		
@@ -73,7 +74,6 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
         	ItemMap.unregister(c, item);
         }
 		txt = new BitmapText(fnt, false);
-
 
 		doUpdate();
         attachChild(txt);
@@ -97,13 +97,13 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
         	ItemMap.register(c, item);
         }
 
-//        System.out.println("\n-----");
-//        System.out.println("fnt.linewidth(currenttext): " + fnt.getLineWidth(currentText));
-//        System.out.println("fnt.prefferredsize: " + fnt.getPreferredSize());
-//        System.out.println("txt.linewidth: " + txt.getLineWidth());
-//        System.out.println("txt.lineheight: " + txt.getLineHeight());
-//        System.out.println("txt.height: " + txt.getHeight());
-//        System.out.println("txt.linecount: " + txt.getLineCount());
+        System.out.println("\n----[" + this.currentText + "]-----");
+        System.out.println("fnt.linewidth(currenttext): " + fnt.getLineWidth(currentText));
+        System.out.println("fnt.prefferredsize: " + fnt.getPreferredSize());
+        System.out.println("txt.linewidth: " + txt.getLineWidth());
+        System.out.println("txt.lineheight: " + txt.getLineHeight());
+        System.out.println("txt.height: " + txt.getHeight());
+        System.out.println("txt.linecount: " + txt.getLineCount());
         
         if(boundingBox != null) {
         	txt.setLocalTranslation(-txt.getLineWidth()/2f, txt.getHeight()/2f, 0);
