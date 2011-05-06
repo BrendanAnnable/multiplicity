@@ -109,21 +109,20 @@ public class ContentDemo implements IMultiplicityApp {
 			label.setFont("multiplicity3/demos/contentdemo/arial32_white.fnt");
 			label.setText("multiplicity");
 			label.setRelativeLocation(new Vector2f(-200, 250));
-			label.setRelativeScale(0.5f);
+			label.setFontScale(2f);
 			csys.getBehaviourMaker().addBehaviour(label, RotateTranslateScaleBehaviour.class);
 			stage.addItem(label);
 			
 			IMutableLabel longTextLabel = cf.create(IMutableLabel.class, "lbl", UUID.randomUUID());
 			longTextLabel.setFont("multiplicity3/demos/contentdemo/arial32_white.fnt");
 			longTextLabel.setText("multiplicity3\n...is a platform for multi-touch interactive goodness");
-			longTextLabel.setRelativeScale(0.5f);
 			csys.getBehaviourMaker().addBehaviour(longTextLabel, RotateTranslateScaleBehaviour.class);
 			stage.addItem(longTextLabel);
 			
 			IMutableLabel longTextLabel2 = cf.create(IMutableLabel.class, "lbl", UUID.randomUUID());
 			longTextLabel2.setFont("multiplicity3/demos/contentdemo/arial32_white.fnt");
 			longTextLabel2.setText("word wrapping is not about keeping characters warm...");
-			longTextLabel2.setRelativeScale(0.5f);
+			longTextLabel2.setFontScale(0.5f);
 			longTextLabel2.setBoxSize(200, 100);
 			longTextLabel2.setRelativeLocation(new Vector2f(-100, 100));
 			csys.getBehaviourMaker().addBehaviour(longTextLabel2, RotateTranslateScaleBehaviour.class);
