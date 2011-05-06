@@ -211,4 +211,11 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 		return new File(System.getProperty("user.home"), ".multiplicity3");
 	}
 	
+    public void destroy() {
+    	if(currentApp != null) {
+    		currentApp.shouldStop();
+    	}
+    	super.destroy();
+    }
+	
 }

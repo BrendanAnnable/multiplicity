@@ -22,8 +22,6 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
 	private String currentText = "text";
 	private JMEMutableLabel item;
 	private AssetManager assetManager;
-	private float lineWidth;
-	private float lineHeight;
 	private Rectangle boundingBox;
 	private float fontScale = 1;
 
@@ -46,7 +44,7 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
 	
 	@Override
 	public Vector2f getTextSize() {
-		return new Vector2f(lineWidth, lineHeight);
+		return new Vector2f(fnt.getLineWidth(currentText), txt.getHeight());
 	}
 
 	
