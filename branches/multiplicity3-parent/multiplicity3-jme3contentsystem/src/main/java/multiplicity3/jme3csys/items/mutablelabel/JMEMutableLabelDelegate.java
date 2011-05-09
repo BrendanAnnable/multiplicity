@@ -94,14 +94,6 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
         for(Spatial c : txt.getChildren()) {
         	ItemMap.register(c, item);
         }
-
-        System.out.println("\n----[" + this.currentText + "]-----");
-        System.out.println("fnt.linewidth(currenttext): " + fnt.getLineWidth(currentText));
-        System.out.println("fnt.prefferredsize: " + fnt.getPreferredSize());
-        System.out.println("txt.linewidth: " + txt.getLineWidth());
-        System.out.println("txt.lineheight: " + txt.getLineHeight());
-        System.out.println("txt.height: " + txt.getHeight());
-        System.out.println("txt.linecount: " + txt.getLineCount());
         
         if(boundingBox != null) {
         	txt.setLocalTranslation(-txt.getLineWidth()/2f, txt.getHeight()/2f, 0);
