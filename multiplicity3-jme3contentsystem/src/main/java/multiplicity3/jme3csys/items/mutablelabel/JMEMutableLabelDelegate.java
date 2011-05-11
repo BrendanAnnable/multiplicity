@@ -63,8 +63,6 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
 	@Override
 	public void setFont(String resourcePath) {
 		fnt = FontCache.get().getFont(resourcePath, assetManager);
-				
-		System.out.println(resourcePath + " -> " + fnt);
 		
 		detachChild(txt);
 		

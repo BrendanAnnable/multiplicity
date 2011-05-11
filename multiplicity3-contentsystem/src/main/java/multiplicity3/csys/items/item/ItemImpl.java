@@ -36,7 +36,7 @@ public abstract class ItemImpl implements IItem {
 	private List<IItem> itemChildren = new ArrayList<IItem>();
 	private float relativeRotation;
 	private List<IBehaviour> behaviours = new ArrayList<IBehaviour>();
-	private boolean isVisible;	
+	private boolean isVisible = true;	
 	private Quaternion trot = new Quaternion(); // temp
 	private Vector3f tempWorldRotation = new Vector3f(); // temp
 
@@ -293,6 +293,11 @@ public abstract class ItemImpl implements IItem {
 		for(int i = 0; i < getItemChildren().size(); i++) {
 			removeItem(getItemChildren().get(i));
 		}
+	}
+	
+	@Override 
+	public List<IItem> getChildren() {
+		return getItemChildren();
 	}
 	
 	@Override
