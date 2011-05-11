@@ -13,6 +13,7 @@ public interface INestable {
 	public void removeAllItems(boolean recursive);
 	public boolean hasChildren();
 	public int getChildrenCount();
+	public List<IItem> getChildren();
 	public IZOrderManager getZOrderManager();
 	
 	//TODO: change to return true/false
@@ -23,4 +24,6 @@ public interface INestable {
 	public static interface IChildrenChangedListener {
 		public void childrenChanged(INestable node, List<IItem> list);
 	}
+
+	
 }
