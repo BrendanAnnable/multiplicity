@@ -121,7 +121,6 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 
 		source = MultiTouchInputUtility.getInputSource(inputManager, displayWidth, displayHeight);
 		mtInput = new MultiTouchInputComponent(source);
-		System.out.println("mtInput created.");
 		mtInput.registerMultiTouchEventListener(new PickedItemDispatcher(multiplicityRootNode, stage));
 
 
@@ -133,7 +132,6 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 		this.enqueue(new Callable<Void>() {
 			@Override
 			public Void call() throws Exception {
-				System.out.println(Thread.currentThread().getName() + " now removing stuff from stages");
 				if(currentApp == app) return null;				
 				if(currentApp != null) {
 					currentApp.shouldStop();
