@@ -76,5 +76,11 @@ public interface IMultiTouchInputSource {
 	 * @param distance in coordinate space
 	 */
 	public void setClickSensitivity(long time, float distance);
+	
+	/**
+	 * Should the mouse be shown or hidden?
+	 * @return
+	 */
+	public boolean requiresMouseDisplay();
 
 }

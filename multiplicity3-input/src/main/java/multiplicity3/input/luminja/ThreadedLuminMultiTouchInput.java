@@ -203,4 +203,9 @@ public class ThreadedLuminMultiTouchInput implements IMultiTouchInputSource {
 		}	
 	}
 
+	@Override
+	public boolean requiresMouseDisplay() {
+		return false;
+	}
+
 }
