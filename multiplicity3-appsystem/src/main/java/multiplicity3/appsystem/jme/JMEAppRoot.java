@@ -6,7 +6,6 @@ import com.jme3.app.Application;
 import com.jme3.app.StatsView;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
-import com.jme3.input.FlyByCamera;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
@@ -44,9 +43,6 @@ public abstract class JMEAppRoot extends Application {
     protected BitmapText fpsText;
     protected BitmapFont guiFont;
     protected StatsView statsView;
-
-    protected FlyByCamera flyCam;
-    protected boolean showSettings = true;
 
     private AppActionListener actionListener = new AppActionListener();
 
@@ -92,24 +88,12 @@ public abstract class JMEAppRoot extends Application {
         super.start();
     }
 
-    public FlyByCamera getFlyByCamera() {
-        return flyCam;
-    }
-
     public Node getGuiNode() {
         return multiplicityRootNode;
     }
 
     public Node getRootNode() {
         return rootNode;
-    }
-
-    public boolean isShowSettings() {
-        return showSettings;
-    }
-
-    public void setShowSettings(boolean showSettings) {
-        this.showSettings = showSettings;
     }
 
     public void loadFPSText(){
@@ -122,7 +106,7 @@ public abstract class JMEAppRoot extends Application {
 
     public void loadStatsView(){
         statsView = new StatsView("Statistics View", assetManager, renderer.getStatistics());
-//         move it up so it appears above fps text
+        //move it up so it appears above fps text
         statsView.setLocalTranslation(0, fpsText.getLineHeight(), 0);
         multiplicityRootNode.attachChild(statsView);
     }
@@ -139,10 +123,6 @@ public abstract class JMEAppRoot extends Application {
         guiViewPort.attachScene(multiplicityRootNode);
 
         if (inputManager != null){
-            flyCam = new FlyByCamera(cam);
-            flyCam.setMoveSpeed(1f);
-            flyCam.registerWithInput(inputManager);
-
             if (context.getType() == Type.Display)
                 inputManager.addMapping("SIMPLEAPP_Exit", new KeyTrigger(KeyInput.KEY_ESCAPE));
             

@@ -73,7 +73,6 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 	public void simpleInitApp() {		
 		assetManager = this.getAssetManager();
 		multiplicityRootNode.detachAllChildren();
-		flyCam.setEnabled(false);
 
 		Camera camera = this.getCamera();
 
@@ -123,7 +122,7 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 		mtInput = new MultiTouchInputComponent(source);
 		mtInput.registerMultiTouchEventListener(new PickedItemDispatcher(multiplicityRootNode, stage));
 
-
+		getInputManager().setCursorVisible(source.requiresMouseDisplay());
 
 		//printNode(guiNode);
 	}
