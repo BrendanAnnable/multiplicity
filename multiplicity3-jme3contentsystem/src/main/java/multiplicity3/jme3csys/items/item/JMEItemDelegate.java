@@ -74,6 +74,8 @@ public abstract class JMEItemDelegate extends Node implements IItemDelegate {
 		log.finer("Removing item " + item + " from " + this);
 		JMEItemDelegate itemDelegate = (JMEItemDelegate) item.getDelegate();		
 		detachChild(itemDelegate.getTreeRootSpatial());
+		log.finer("Item " + item + " removed.");
+		updateGeometricState();
 	}
 	
 	@Override

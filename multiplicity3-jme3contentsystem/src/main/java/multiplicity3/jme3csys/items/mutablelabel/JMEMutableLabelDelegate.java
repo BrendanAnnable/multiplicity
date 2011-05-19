@@ -36,9 +36,6 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
 		fnt = FontCache.get().getFont("Interface/Fonts/Default.fnt", assetManager);
         txt = new BitmapText(fnt, false);
         doUpdate();
-        for(Spatial c : txt.getChildren()) {
-        	ItemMap.register(c, item);
-        }
         attachChild(txt);
 	}
 	
@@ -70,13 +67,13 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
         	ItemMap.unregister(c, item);
         }
 		txt = new BitmapText(fnt, false);
-
-		doUpdate();
-        attachChild(txt);
+		attachChild(txt);
+		doUpdate();        
         ItemMap.register(txt, item);
 	}
 	
 	private void doUpdate() {
+		
 		for(Spatial c : txt.getChildren()) {
         	ItemMap.unregister(c, item);
         }
@@ -94,9 +91,12 @@ public class JMEMutableLabelDelegate extends JMEItemDelegate implements
         }
         
         if(boundingBox != null) {
+        	System.out.println("bounding is not null");
         	txt.setLocalTranslation(-txt.getLineWidth()/2f, txt.getHeight()/2f, 0);
         }else{
-        	txt.setLocalTranslation(-fnt.getLineWidth(currentText)/2f, txt.getHeight()/2f, 0);
+        	float lineWidth = fnt.getLineWidth(currentText);
+        	float textHeight = txt.getLineHeight();
+        	txt.setLocalTranslation(-lineWidth/2f, textHeight/2f, 0);
         }
 	}
 
