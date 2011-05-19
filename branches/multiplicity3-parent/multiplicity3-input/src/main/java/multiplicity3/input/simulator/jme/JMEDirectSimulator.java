@@ -48,4 +48,9 @@ public class JMEDirectSimulator extends AbstractDirectMultiTouchSimulator {
 
 	@Override
 	public void update(float tpf) {}
+
+	@Override
+	public boolean requiresMouseDisplay() {
+		return true;
+	}
 }

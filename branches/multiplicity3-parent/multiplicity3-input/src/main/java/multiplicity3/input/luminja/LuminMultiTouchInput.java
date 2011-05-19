@@ -153,4 +153,9 @@ public class LuminMultiTouchInput implements IMultiTouchInputSource {
 		process();
 	}
 
+	@Override
+	public boolean requiresMouseDisplay() {
+		return false;
+	}
+
 }

@@ -81,4 +81,9 @@ public class JMETUIOSimulator extends AbstractMultiTouchSimulator {
 
 	public void update(float tpf) {}
 
+	@Override
+	public boolean requiresMouseDisplay() {
+		return true;
+	}
+
 }
