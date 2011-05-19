@@ -166,6 +166,8 @@ public abstract class JMEAppRoot extends Application {
         renderManager.render(tpf);
         simpleRender(renderManager);
         stateManager.postRender();
+        
+        
     }
 
     public abstract void simpleInitApp();

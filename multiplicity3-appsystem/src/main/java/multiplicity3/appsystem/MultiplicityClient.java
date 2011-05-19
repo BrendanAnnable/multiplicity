@@ -141,7 +141,6 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 				}
 				log.info("Starting application " + app.getFriendlyAppName());
 				app.shouldStart(mtInput, MultiplicityClient.this);
-
 				currentApp = app;
 
 				return null;
