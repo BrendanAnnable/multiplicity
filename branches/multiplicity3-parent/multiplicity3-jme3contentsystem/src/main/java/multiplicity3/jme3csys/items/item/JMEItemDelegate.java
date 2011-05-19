@@ -66,6 +66,7 @@ public abstract class JMEItemDelegate extends Node implements IItemDelegate {
 		log.finer("Adding item " + item + " to " + this);
 		JMEItemDelegate itemDelegate = (JMEItemDelegate) item.getDelegate();		
 		attachChild(itemDelegate.getTreeRootSpatial());
+		updateGeometricState();
 	}
 	
 	@Override
