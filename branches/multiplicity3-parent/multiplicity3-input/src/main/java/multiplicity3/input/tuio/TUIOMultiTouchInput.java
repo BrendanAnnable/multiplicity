@@ -157,15 +157,16 @@ public class TUIOMultiTouchInput implements IMultiTouchInputSource, TuioListener
 	}
 
 	public void updateTuioCur(final long sessionID, final float xpos, final float ypos, final float x_speed, final float y_speed, float m_accel) {
-
+		System.out.println("updateTUIOCur " + xpos + "," + ypos);
 		Callable<Object> c = new Callable<Object>() {
 			@Override
 			public Object call() throws Exception {
 				final TUIOFingerCursor fingerCursor = fingerCursors.get(sessionID);
+				System.out.println("is finger cursor null? " + fingerCursor == null);
 				if(fingerCursor != null) {			
-					fingerCursor.setPosition(new Vector2f(xpos, ypos));
+					fingerCursor.setPosition(new Vector2f(xpos, 1-ypos));
 					fingerCursor.setVelocity(new Vector2f(x_speed, y_speed));
-
+					System.out.println(fingerCursor.getPosition());
 					if(fingerCursor.isNew()) {
 						for(IMultiTouchEventListener listener : listeners) {
 							clickDetector.newCursorPressed(fingerCursor.getId(), fingerCursor.getPosition());
@@ -229,7 +230,7 @@ public class TUIOMultiTouchInput implements IMultiTouchInputSource, TuioListener
 			public Object call() throws Exception {
 				TUIOFiducialObject fiducial = fiducials.get(sessionID);
 				if(fiducial != null) {
-					fiducial.setPosition(new Vector2f(xpos, ypos));
+					fiducial.setPosition(new Vector2f(xpos, 1-ypos));
 					fiducial.setVelocity(new Vector2f(x_speed, y_speed));
 					fiducial.setAngle(angle);
 					fiducial.setAngleVelocity(r_speed);
