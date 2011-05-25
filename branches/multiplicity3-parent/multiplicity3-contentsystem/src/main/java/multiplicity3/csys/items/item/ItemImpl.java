@@ -353,8 +353,11 @@ public abstract class ItemImpl implements IItem {
 
 	@Override
 	public void setVisible(boolean isVisible) {
-		this.isVisible = isVisible;
+		this.isVisible = isVisible;		
 		delegate.setVisible(isVisible);
+		for(int i = 0; i < itemChildren.size(); i++) {
+			itemChildren.get(i).setVisible(isVisible);
+		}
 	}
 
 	@Override
