@@ -59,9 +59,10 @@ public class ContentSystemPicker implements IPickSystem {
 					UUID uuid = UUID.fromString(uuidStr);
 					log.fine("    UUID found: " + uuid);
 					List<IItem> items = ItemMap.getItem(uuid);
-					log.fine("    " + uuid + " associated with " + items.size() + " items.");
-					//if(items.size() > 0) return items;					
-					foundItems.addAll(items);
+					for(IItem itm : items) {
+						if(itm.isVisible()) foundItems.add(itm);
+					}
+					
 				}else{
 					log.fine("    No UUID associated with " + hit);
 				}
