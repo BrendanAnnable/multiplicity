@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.jme3.math.Vector2f;
 
@@ -58,6 +60,8 @@ import de.evoluce.multitouch.adapter.java.JavaAdapter;
  *
  */
 public class LuminMultiTouchInput implements IMultiTouchInputSource {
+	private static final Logger log = Logger.getLogger(LuminMultiTouchInput.class.getName());
+
 	protected List<IMultiTouchEventListener> listeners = new ArrayList<IMultiTouchEventListener>();
 	protected JavaAdapter ja;	
 	protected BlobJ[] currentBlobs = new BlobJ[0];
@@ -92,14 +96,24 @@ public class LuminMultiTouchInput implements IMultiTouchInputSource {
 			MultiTouchCursorEvent event = new MultiTouchCursorEvent(blob.mID, pos, vel, blob.mWidth, 0f);
 
 			if(currentBlobRegistry.containsKey(blob.mID)) {
-				for(IMultiTouchEventListener listener : listeners) {					
-					listener.cursorChanged(event);
+				for(IMultiTouchEventListener listener : listeners) {	
+					try {
+						listener.cursorChanged(event);
+					}catch(Exception ex) {
+						log.warning("Problem in dispatching cursorChanged event " + event);
+						log.log(Level.WARNING, "  Error as follows:", ex);
+					}
 				}
 				lastKnownPosition.put(blob.mID, new Vector2f(blob.mX, blob.mY));
 			}else{
 				clickDetector.newCursorPressed(blob.mID, pos);
-				for(IMultiTouchEventListener listener : listeners) {					
-					listener.cursorPressed(event);
+				for(IMultiTouchEventListener listener : listeners) {	
+					try {
+						listener.cursorPressed(event);
+					}catch(Exception ex) {
+						log.warning("Problem in dispatching cursorPressed event " + event);
+						log.log(Level.WARNING, "  Error as follows:", ex);
+					}
 				}				
 			}
 		}
@@ -115,11 +129,23 @@ public class LuminMultiTouchInput implements IMultiTouchInputSource {
 
 				for(IMultiTouchEventListener l : listeners) {
 					int clickCount = clickDetector.cursorReleasedGetClickCount(blob.mID, pos);
+					
 					if(clickCount > 0) {
 						event.setClickCount(clickCount);
-						l.cursorClicked(event);
+						try {
+							l.cursorClicked(event);
+						}catch(Exception ex) {
+							log.warning("Problem in dispatching cursorClicked event " + event);
+							log.log(Level.WARNING, "  Error as follows:", ex);
+						}
 					}
-					l.cursorReleased(event);
+					
+					try {
+						l.cursorReleased(event);
+					}catch(Exception ex) {
+						log.warning("Problem in dispatching cursorReleased event " + event);
+						log.log(Level.WARNING, "  Error as follows:", ex);
+					}
 				}
 				lastKnownPosition.remove(blob.mID);
 			}
@@ -131,7 +157,7 @@ public class LuminMultiTouchInput implements IMultiTouchInputSource {
 	public void setClickSensitivity(long time, float distance) {
 		clickDetector.setSensitivity(time, distance);
 	}
-	
+
 	public void registerMultiTouchEventListener(IMultiTouchEventListener listener) {
 		if(!listeners.contains(listener)) listeners.add(listener);	
 	}
