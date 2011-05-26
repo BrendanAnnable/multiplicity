@@ -9,8 +9,8 @@ import java.util.UUID;
 import com.jme3.scene.Spatial;
 
 import multiplicity3.csys.items.item.IItem;
-import multiplicity3.csys.items.item.ItemImpl;
 import multiplicity3.csys.threedee.IThreeDeeContent;
+import multiplicity3.jme3csys.items.item.JMEItem;
 import multiplicity3.jme3csys.threed.JMEThreeDeeContent;
 
 public class ItemMap {
@@ -38,7 +38,7 @@ public class ItemMap {
 	 * @param item
 	 */
 	public static void register(Spatial spatial, IItem item) {
-		spatial.setUserData(ItemImpl.KEY_JMEITEMDATA, item.getUUID().toString());
+		spatial.setUserData(JMEItem.KEY_JMEITEMDATA, item.getUUID().toString());
 		List<IItem> list = itemMap.get(item.getUUID());
 		if(list == null) list = new ArrayList<IItem>();
 		list.add(item);

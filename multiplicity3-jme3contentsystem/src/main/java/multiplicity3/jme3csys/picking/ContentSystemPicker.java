@@ -5,15 +5,15 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import multiplicity3.csys.items.item.IItem;
+import multiplicity3.csys.picksystem.IPickSystem;
+import multiplicity3.jme3csys.items.item.JMEItem;
+
 import com.jme3.collision.CollisionResults;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-
-import multiplicity3.csys.items.item.IItem;
-import multiplicity3.csys.items.item.ItemImpl;
-import multiplicity3.csys.picksystem.IPickSystem;
 
 public class ContentSystemPicker implements IPickSystem {
 	private static final Logger log = Logger.getLogger(ContentSystemPicker.class.getName());
@@ -54,7 +54,7 @@ public class ContentSystemPicker implements IPickSystem {
 			log.fine("    Geometry is a " + results.getCollision(i).getGeometry().getClass().getName());
 			log.fine("    Testing for a UUID");
 			try {					
-				String uuidStr = (String) results.getCollision(i).getGeometry().getUserData(ItemImpl.KEY_JMEITEMDATA);
+				String uuidStr = (String) results.getCollision(i).getGeometry().getUserData(JMEItem.KEY_JMEITEMDATA);
 				if(uuidStr != null) {					
 					UUID uuid = UUID.fromString(uuidStr);
 					log.fine("    UUID found: " + uuid);
