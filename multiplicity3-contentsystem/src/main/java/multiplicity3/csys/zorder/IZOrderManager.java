@@ -12,7 +12,7 @@ public interface IZOrderManager extends IItemListener {
 	//void sendToBottom(IItem item, MultiTouchCursorEvent event);
 	//void bringToTop(IItem itemPressed, MultiTouchCursorEvent event);
 	//void registerForZOrdering(IItem item);
-	//public void unregisterForZOrdering(IItem i);
+	public void unregisterForZOrdering(IItem i);
 	void updateZOrdering();
 	//public void neverBringToTop(IItem item);	
 }
