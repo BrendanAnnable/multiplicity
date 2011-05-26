@@ -24,7 +24,6 @@ import multiplicity3.input.MultiTouchInputComponent;
 import multiplicity3.input.exceptions.MultiTouchInputException;
 import multiplicity3.jme3csys.factory.JME3ContentSystemFactory;
 import multiplicity3.jme3csys.items.stage.JMEStage;
-import multiplicity3.jme3csys.items.stage.JMEStageDelegate;
 import multiplicity3.jme3csys.picking.ContentSystemPicker;
 import multiplicity3.jme3csys.picking.PickedItemDispatcher;
 
@@ -82,12 +81,12 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 
 		ContentSystem csys = new ContentSystem();
 		JMEStage stage = new JMEStage("localstage", UUID.randomUUID(), csys);
-		JMEStageDelegate delegate = new JMEStageDelegate(stage);
-		stage.setDelegate(delegate);
+		//JMEStageDelegate delegate = new JMEStageDelegate(stage);
+		//stage.setDelegate(delegate);
 		stage.setZOrder(0);
 
-		multiplicityRootNode.attachChild(delegate.getManipulableSpatial());
-		multiplicityRootNode.attachChild(stage.getTransformDelegate());
+		multiplicityRootNode.attachChild(stage);
+
 		try {
 			csys.setContentFactory(new JME3ContentSystemFactory(renderer, audioRenderer, assetManager, updateList));
 		} catch (ClassNotFoundException e1) {

@@ -2,11 +2,13 @@ package multiplicity3.csys.zorder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import multiplicity3.csys.items.item.IItem;
 import multiplicity3.input.events.MultiTouchCursorEvent;
 
 public class NestedZOrderManager implements INestedZOrderManager {
+	private static final Logger log = Logger.getLogger(NestedZOrderManager.class.getName());
 
 	protected List<IItem> registeredItems = new ArrayList<IItem>();
 	private int capacity = 1;
@@ -29,58 +31,40 @@ public class NestedZOrderManager implements INestedZOrderManager {
 	}
 
 	@Override
-	public void itemMoved(IItem item) {
-		// TODO Auto-generated method stub
-
-	}
+	public void itemMoved(IItem item) {}
 
 	@Override
-	public void itemRotated(IItem item) {
-		// TODO Auto-generated method stub
-
-	}
+	public void itemRotated(IItem item) {}
 
 	@Override
-	public void itemScaled(IItem item) {
-		// TODO Auto-generated method stub
-
-	}
+	public void itemScaled(IItem item) {}
 
 	@Override
 	public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
+		log.fine("Press on " + item);
 		if(autoBringToTop) {
+			log.fine("Bringing " + item + " to the top");
 			bringToTop(item);
-			if(bringToTopPropagatesUp) {
-				if(getParentItemManager() != null) {
-					getParentItemManager().bringToTop(item.getParentItem());
-				}
+		}
+		if(bringToTopPropagatesUp) {
+			if(getParentItemManager() != null) {
+				getParentItemManager().bringToTop(item.getParentItem());
 			}
 		}
-	}
-
-	@Override
-	public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void itemCursorChanged(IItem item, MultiTouchCursorEvent event) {
-		// TODO Auto-generated method stub
-
-	}
+	public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {}
 
 	@Override
-	public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {
-		// TODO Auto-generated method stub
-
-	}
+	public void itemCursorChanged(IItem item, MultiTouchCursorEvent event) {}
 
 	@Override
-	public void itemZOrderChanged(IItem item) {
-		// TODO Auto-generated method stub
+	public void itemCursorClicked(IItem item, MultiTouchCursorEvent event) {}
 
-	}
+	@Override
+	public void itemZOrderChanged(IItem item) {}
 
 	@Override
 	public int getItemZOrder() {
@@ -90,6 +74,7 @@ public class NestedZOrderManager implements INestedZOrderManager {
 	@Override
 	public void setItemZOrder(int zValue) {
 		this.startZOrder = zValue;
+		this.itemBeingManaged.setZOrder(zValue);
 		updateZOrdering();
 	}
 
@@ -122,9 +107,9 @@ public class NestedZOrderManager implements INestedZOrderManager {
 	}
 
 	@Override
-	public void updateZOrdering() {
-		if(itemBeingManaged != null && itemBeingManaged.getDelegate().getTreeRootSpatial() != null) {
-			itemBeingManaged.getDelegate().setZOrder(startZOrder);
+	public void updateZOrdering() {		
+		if(itemBeingManaged != null) {
+			itemBeingManaged.setZOrder(startZOrder);
 		}
 		int z = startZOrder;
 		for(IItem i : registeredItems) {
@@ -139,7 +124,7 @@ public class NestedZOrderManager implements INestedZOrderManager {
 	}
 
 	@Override
-	public void childAttached(IItem item) {
+	public void childAttached(IItem item) {		
 		if(!registeredItems.contains(item)) {
 			registeredItems.add(0, item);
 			item.getZOrderManager().setItemZOrder(usedZSpace);
@@ -186,7 +171,7 @@ public class NestedZOrderManager implements INestedZOrderManager {
 	}
 
 	@Override
-	public void bringToTopPropagatesUp(boolean should) {
+	public void setBringToTopPropagatesUp(boolean should) {
 		this.bringToTopPropagatesUp  = should;		
 	}	
 

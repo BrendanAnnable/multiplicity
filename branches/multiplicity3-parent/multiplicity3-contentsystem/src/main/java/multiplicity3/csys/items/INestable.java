@@ -13,7 +13,7 @@ public interface INestable {
 	public void removeAllItems(boolean recursive);
 	public boolean hasChildren();
 	public int getChildrenCount();
-	public List<IItem> getChildren();
+	public List<IItem> getChildItems();
 	public IZOrderManager getZOrderManager();
 	
 	//TODO: change to return true/false

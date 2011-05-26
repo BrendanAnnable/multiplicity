@@ -10,10 +10,9 @@ import multiplicity3.csys.items.events.MultiTouchEventDispatcher;
 import multiplicity3.csys.zorder.INestedZOrderManager;
 
 import com.jme3.math.Vector2f;
-import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 
 public interface IItem extends INestable {
-	public IItemDelegate getDelegate();
 	public UUID getUUID();
 	public void setParentItem(IItem parent);
 	public IItem getParentItem();	
@@ -50,9 +49,6 @@ public interface IItem extends INestable {
 	public void setRelativeScale(float scale);
 	public float getRelativeScale();
 	
-	//TODO: really don't want this here...
-	public Node getTransformDelegate();
-	
 	public INestedZOrderManager getZOrderManager();
 	
 
@@ -71,5 +67,6 @@ public interface IItem extends INestable {
 	void setZOrder(int zOrder);
 	
 
+	public Spatial getManipulableSpatial();
 	
 }
