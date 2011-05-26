@@ -5,6 +5,13 @@ import java.io.File;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import multiplicity3.csys.annotations.ImplementsContentItem;
+import multiplicity3.csys.items.image.IImage;
+import multiplicity3.jme3csys.geometry.CenteredQuad;
+import multiplicity3.jme3csys.items.IInitable;
+import multiplicity3.jme3csys.items.item.JMEItem;
+import multiplicity3.jme3csys.picking.ItemMap;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.material.Material;
@@ -14,13 +21,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
-
-import multiplicity3.csys.annotations.ImplementsContentItem;
-import multiplicity3.csys.items.image.IImage;
-import multiplicity3.jme3csys.geometry.CenteredQuad;
-import multiplicity3.jme3csys.items.IInitable;
-import multiplicity3.jme3csys.items.item.JMEItem;
-import multiplicity3.jme3csys.picking.ItemMap;
+import com.jme3.texture.Texture.WrapMode;
 
 @ImplementsContentItem(target = IImage.class)
 public class JMEImage extends JMEItem implements IImage, IInitable {
@@ -30,6 +31,9 @@ public class JMEImage extends JMEItem implements IImage, IInitable {
 	private Geometry quadGeometry;
 	private Material mat;
 	private AssetManager assetManager;
+	private boolean wrap = false;
+
+	private String imageResource;
 	
 	public JMEImage(String name, UUID uuid) {
 		super(name, uuid);
@@ -45,9 +49,9 @@ public class JMEImage extends JMEItem implements IImage, IInitable {
 		//mat = new Material(assetManager, "Common/MatDefs/Misc/SimpleTextured.j3md");
 		mat = new Material(assetManager, "multiplicity3/jme3csys/resources/shaders/Textured.j3md");
 		mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-		Texture tex = assetManager.loadTexture("multiplicity3/jme3csys/resources/placeholders/transparent_16.png");
-		mat.setTexture("m_ColorMap", tex);
-		
+		setImage("multiplicity3/jme3csys/resources/placeholders/transparent_16.png");
+//		Texture tex = assetManager.loadTexture();
+//		mat.setTexture("m_ColorMap", tex);
 		quadGeometry.setMaterial(mat);
 		
 		ItemMap.register(quadGeometry, this);
@@ -72,8 +76,21 @@ public class JMEImage extends JMEItem implements IImage, IInitable {
 
 	@Override
 	public void setImage(String imageResource) {
-		Texture tex = assetManager.loadTexture(imageResource);		
+		this.imageResource = imageResource;
+		Texture tex = assetManager.loadTexture(imageResource);
+		if(wrap) {
+			tex.setWrap(WrapMode.Repeat);
+		}else{
+			tex.setWrap(WrapMode.EdgeClamp);
+		}
 		mat.setTexture("m_ColorMap", tex);	
+	}
+	
+	@Override
+	public void setWrapping(float xscale, float yscale) {
+		this.wrap = true;
+		quad.scaleTextureCoordinates(new Vector2f(xscale, yscale));
+		setImage(this.imageResource); // force a refresh
 	}
 	
 	@Override

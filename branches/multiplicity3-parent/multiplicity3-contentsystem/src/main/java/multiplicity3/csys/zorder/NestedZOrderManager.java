@@ -118,11 +118,6 @@ public class NestedZOrderManager implements INestedZOrderManager {
 		}		
 	}
 
-	public void neverBringToTop(IItem item) {
-		// TODO Auto-generated method stub
-
-	}
-
 	@Override
 	public void childAttached(IItem item) {		
 		if(!registeredItems.contains(item)) {
@@ -142,13 +137,18 @@ public class NestedZOrderManager implements INestedZOrderManager {
 
 	@Override
 	public void childRemoved(IItem item) {
+		unregisterForZOrdering(item);
+	}
+	
+	@Override
+	public void unregisterForZOrdering(IItem item) {
 		if(registeredItems.contains(item)) {
 			registeredItems.remove(item);
 			usedZSpace -= item.getZOrderManager().getZSpaceRequirement();
 			item.removeItemListener(this);
 		}
-		updateZOrdering();
-	}
+		updateZOrdering();		
+	}	
 
 	@Override
 	public void bringToTop(IItem item) {
@@ -173,6 +173,13 @@ public class NestedZOrderManager implements INestedZOrderManager {
 	@Override
 	public void setBringToTopPropagatesUp(boolean should) {
 		this.bringToTopPropagatesUp  = should;		
-	}	
+	}
+
+	@Override
+	public void ignore(IItem item) {
+		item.removeItemListener(this);
+	}
+
+
 
 }

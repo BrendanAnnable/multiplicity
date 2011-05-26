@@ -8,5 +8,6 @@ public interface INestedZOrderManager extends IZOrderManager {
 	void bringToTop(IItem item);
 	void sendToBottom(IItem item);
 	void childAttached(IItem item);
-	void childRemoved(IItem item);	
+	void childRemoved(IItem item);
+	void ignore(IItem background);	
 }
