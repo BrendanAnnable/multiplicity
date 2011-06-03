@@ -22,7 +22,7 @@ public class ItemDragAndDropWorker implements IMultiTouchEventListener {
 	
 	@Override
 	public void cursorReleased(MultiTouchCursorEvent event) {
-		stage.getContentSystem().getDragAndDropSystem().dropOccurred(event, item);		
+		stage.getDragAndDropSystem().dropOccurred(event, item);		
 	}
 
 	@Override

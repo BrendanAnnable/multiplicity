@@ -7,22 +7,6 @@ import java.io.InputStream;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.asset.TextureKey;
-import com.jme3.audio.AudioNode;
-import com.jme3.audio.AudioRenderer;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
-import com.jme3.renderer.Renderer;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
-import com.jme3.texture.Texture2D;
-import com.jme3.video.Clock;
-import com.jme3.video.VFrame;
-import com.jme3.video.VQueue;
-import com.jme3.video.plugins.jheora.AVThread;
-
 import multiplicity3.csys.IUpdateable;
 import multiplicity3.csys.annotations.ImplementsContentItem;
 import multiplicity3.csys.items.video.IVideo;
@@ -32,6 +16,21 @@ import multiplicity3.jme3csys.geometry.CenteredQuad;
 import multiplicity3.jme3csys.items.IInitable;
 import multiplicity3.jme3csys.items.item.JMEItem;
 import multiplicity3.jme3csys.picking.ItemMap;
+
+import com.jme3.asset.AssetManager;
+import com.jme3.asset.TextureKey;
+import com.jme3.audio.AudioNode;
+import com.jme3.audio.AudioRenderer;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.renderer.Renderer;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
+import com.jme3.texture.Texture2D;
+import com.jme3.video.Clock;
+import com.jme3.video.VFrame;
+import com.jme3.video.VQueue;
+import com.jme3.video.plugins.jheora.AVThread;
 
 @ImplementsContentItem(target = IVideo.class)
 @RequiresUpdate
@@ -72,14 +71,6 @@ public class JMEVideo extends JMEItem implements IVideo, IInitable, IUpdateable 
 		quadGeometry.setMaterial(mat);
 		ItemMap.register(quadGeometry, this);
 		attachChild(quadGeometry);
-	}
-	
-	@Override
-	public void setZOrder(int zOrder) {
-		super.setZOrder(zOrder);
-		Vector3f newZOrder = quadGeometry.getWorldTranslation().clone();
-		newZOrder.z = zOrder;
-		quadGeometry.getParent().worldToLocal(newZOrder, quadGeometry.getLocalTranslation());
 	}
 
 	@Override

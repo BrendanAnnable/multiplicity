@@ -41,6 +41,9 @@ import com.jme3.math.Vector2f;
  * position, rotation, velocity and pressure, although this values
  * will only be present for tables that provide that information.
  * 
+ * Position (0,0) is the notional BOTTOM-LEFT side of the surface.
+ * Position (1,1) is the notional TOP-RIGHT side of the surface.
+ * 
  * @author dcs0ah1
  *
  */

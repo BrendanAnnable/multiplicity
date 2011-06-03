@@ -154,7 +154,7 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 
 	Vector2f locStore = new Vector2f();
 	protected List<IItem> getPickedItemListener(float x, float y) {		
-		return stage.getContentSystem().getPickSystem().findItemsOnTableAtPosition(new Vector2f(x, y));
+		return stage.getPickSystem().findItemsOnTableAtPosition(new Vector2f(x, y));
 	}
 
 

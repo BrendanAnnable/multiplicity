@@ -16,7 +16,6 @@ import com.jme3.font.BitmapText;
 import com.jme3.font.LineWrapMode;
 import com.jme3.font.Rectangle;
 import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
 @ImplementsContentItem(target = IMutableLabel.class)
@@ -142,11 +141,11 @@ public class JMEMutableLabel extends JMEItem implements IMutableLabel, IInitable
 		setText(text);
 	}
 	
-	@Override
-	public void setZOrder(int zOrder) {
-		super.setZOrder(zOrder);				
-		Vector3f newZOrder = txt.getWorldTranslation().clone();
-		newZOrder.z = zOrder;
-		txt.getParent().worldToLocal(newZOrder, txt.getLocalTranslation());		
-	}
+//	@Override
+//	public void setZOrder(int zOrder) {
+//		super.setZOrder(zOrder);				
+//		Vector3f newZOrder = txt.getWorldTranslation().clone();
+//		newZOrder.z = zOrder;
+//		txt.getParent().worldToLocal(newZOrder, txt.getLocalTranslation());		
+//	}
 }

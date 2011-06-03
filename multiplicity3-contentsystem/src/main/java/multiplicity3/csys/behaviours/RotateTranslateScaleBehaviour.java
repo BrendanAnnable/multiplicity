@@ -15,10 +15,10 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 	private static final Logger log = Logger.getLogger(RotateTranslateScaleBehaviour.class.getName());
 	
 	
-	protected Vector2f cursor1Pos = new Vector2f();
-	protected Vector2f cursor2Pos = new Vector2f();
-	protected Vector2f cursor1OldPos = new Vector2f();
-	protected Vector2f cursor2OldPos = new Vector2f();
+	protected Vector2f cursor1WorldPosition = new Vector2f();
+	protected Vector2f cursor2WorldPosition = new Vector2f();
+	protected Vector2f cursor1OldWorldPosition = new Vector2f();
+	protected Vector2f cursor2OldWorldPosition = new Vector2f();
 
 	protected float maxScale = 4.0f;
 	protected float minScale = 0.1f;
@@ -57,23 +57,22 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 
 	private void applyMultiCursorTransform() {
 		log.fine("multi-cursor on item at " + affectedItem.getWorldLocation());
-		log.fine("cursor 1: " + cursor1Pos);
-		log.fine("cursor 2: " + cursor2Pos);
-		Vector2f oldCenter = new Vector2f();
-		oldCenter.interpolate(cursor1OldPos, cursor2OldPos, 0.5f);
-		Vector2f currentCenter = new Vector2f();
-		currentCenter.interpolate(cursor1Pos, cursor2Pos, 0.5f);
 
-		float oldAngle = cursor2OldPos.subtract(cursor1OldPos).getAngle();
-		float curAngle = cursor2Pos.subtract(cursor1Pos).getAngle();
+		Vector2f oldCenter = new Vector2f();
+		oldCenter.interpolate(cursor1OldWorldPosition, cursor2OldWorldPosition, 0.5f);
+		Vector2f currentCenter = new Vector2f();
+		currentCenter.interpolate(cursor1WorldPosition, cursor2WorldPosition, 0.5f);
+
+		float oldAngle = cursor2OldWorldPosition.subtract(cursor1OldWorldPosition).getAngle();
+		float curAngle = cursor2WorldPosition.subtract(cursor1WorldPosition).getAngle();
 		float angleChange = curAngle - oldAngle;
 
-		Vector2f spatialLoc = affectedItem.getWorldLocation();
-		Vector2f centerToSpatial = spatialLoc.subtract(oldCenter);
+		Vector2f centerToSpatial = affectedItem.getWorldLocation().subtract(oldCenter);
+		
 		float currentCenterToSpatialAngle = centerToSpatial.getAngle() + angleChange;
 
-		float oldLength = cursor2OldPos.subtract(cursor1OldPos).length();
-		float newLength = cursor2Pos.subtract(cursor1Pos).length();
+		float oldLength = cursor2OldWorldPosition.subtract(cursor1OldWorldPosition).length();
+		float newLength = cursor2WorldPosition.subtract(cursor1WorldPosition).length();
 		float scaleChange = newLength / oldLength;
 
 		if(scaleDisabled  
@@ -87,10 +86,9 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 		float dx = newDistFromCurrentCenterToSpatial * FastMath.cos(currentCenterToSpatialAngle);
 		float dy = newDistFromCurrentCenterToSpatial * FastMath.sin(currentCenterToSpatialAngle);
 
-		Vector2f newScreenPosition = currentCenter.add(new Vector2f(dx, dy));
+		Vector2f dxdy = new Vector2f(dx, dy);
+		Vector2f newScreenPosition = currentCenter.add(dxdy);
 		if(Float.isNaN(dx) || Float.isNaN(dy)) newScreenPosition = currentCenter;
-		
-		log.fine("new position: " + newScreenPosition);
 		
 		affectedItem.setWorldLocation(newScreenPosition);
 		affectedItem.setRelativeRotation(affectedItem.getRelativeRotation() + angleChange);
@@ -102,9 +100,9 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 
 	private void applySingleCursorTransform() {
 		if(cursor1ID != Long.MAX_VALUE) {
-			affectedItem.setWorldLocation(affectedItem.getWorldLocation().add(cursor1Pos.subtract(cursor1OldPos)));
+			affectedItem.setWorldLocation(affectedItem.getWorldLocation().add(cursor1WorldPosition.subtract(cursor1OldWorldPosition)));
 		}else if(cursor2ID != Long.MAX_VALUE) {
-			affectedItem.setWorldLocation(affectedItem.getWorldLocation().add(cursor2Pos.subtract(cursor2OldPos)));	
+			affectedItem.setWorldLocation(affectedItem.getWorldLocation().add(cursor2WorldPosition.subtract(cursor2OldWorldPosition)));	
 		}
 	}
 
@@ -126,19 +124,18 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 		}
 
 		if(cursor1ID == Long.MAX_VALUE) {
-			stage.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), cursor1Pos);
-			stage.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), cursor1OldPos);
+			stage.tableToWorld(event.getPosition(), cursor1WorldPosition);
+			stage.tableToWorld(event.getPosition(), cursor1OldWorldPosition);
 			cursor1ID = event.getCursorID();
 		}else if(cursor2ID == Long.MAX_VALUE) {
-			stage.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), cursor2Pos);
-			stage.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), cursor2OldPos);
+			stage.tableToWorld(event.getPosition(), cursor2WorldPosition);
+			stage.tableToWorld(event.getPosition(), cursor2OldWorldPosition);
 			cursor2ID = event.getCursorID();
 		}		
 	}
 
 	@Override
 	public void cursorChanged(MultiTouchCursorEvent event) {
-		log.finer("Cursor changed: " + event.getPosition());
 		updateCursor(event);
 
 		if(getCursorCount() == 1) {			
@@ -189,15 +186,15 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 	}
 
 	protected void updateCursor1(MultiTouchCursorEvent event) {	
-		cursor1OldPos.x = cursor1Pos.x;
-		cursor1OldPos.y = cursor1Pos.y;
-		stage.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), cursor1Pos);
+		cursor1OldWorldPosition.x = cursor1WorldPosition.x;
+		cursor1OldWorldPosition.y = cursor1WorldPosition.y;
+		stage.tableToWorld(event.getPosition(), cursor1WorldPosition);
 	}
 
 	protected void updateCursor2(MultiTouchCursorEvent event) {
-		cursor2OldPos.x = cursor2Pos.x;
-		cursor2OldPos.y = cursor2Pos.y;
-		stage.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), cursor2Pos);
+		cursor2OldWorldPosition.x = cursor2WorldPosition.x;
+		cursor2OldWorldPosition.y = cursor2WorldPosition.y;
+		stage.tableToWorld(event.getPosition(), cursor2WorldPosition);
 	}
 
 	@Override

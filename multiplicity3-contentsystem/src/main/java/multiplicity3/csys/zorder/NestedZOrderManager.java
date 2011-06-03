@@ -41,7 +41,6 @@ public class NestedZOrderManager implements INestedZOrderManager {
 
 	@Override
 	public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
-		log.fine("Press on " + item);
 		if(autoBringToTop) {
 			log.fine("Bringing " + item + " to the top");
 			bringToTop(item);
@@ -74,7 +73,6 @@ public class NestedZOrderManager implements INestedZOrderManager {
 	@Override
 	public void setItemZOrder(int zValue) {
 		this.startZOrder = zValue;
-		this.itemBeingManaged.setZOrder(zValue);
 		updateZOrdering();
 	}
 
@@ -113,6 +111,7 @@ public class NestedZOrderManager implements INestedZOrderManager {
 		}
 		int z = startZOrder;
 		for(IItem i : registeredItems) {
+			i.setZOrder(z);
 			i.getZOrderManager().setItemZOrder(z);
 			z -= i.getZOrderManager().getZSpaceRequirement();
 		}		
@@ -167,7 +166,7 @@ public class NestedZOrderManager implements INestedZOrderManager {
 	@Override
 	public void setAutoBringToTop(boolean enabled) {
 		this.autoBringToTop  = enabled;
-
+		updateZOrdering();
 	}
 
 	@Override

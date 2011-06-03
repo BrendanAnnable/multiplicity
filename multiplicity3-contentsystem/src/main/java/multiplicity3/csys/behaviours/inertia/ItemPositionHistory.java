@@ -24,7 +24,7 @@ public class ItemPositionHistory {
 	public void add(Vector2f position, long timeStampMillis) {
 		//TODO: must make sure the position input to this is in the right coordinate system!
 		//UnitConversion.tableToScreen(position, posTemp);
-		stage.getContentSystem().getDisplayManager().tableToScreen(position, posTemp);
+		stage.tableToScreen(position, posTemp);
 		positions.add(new PositionTime(posTemp.clone(), timeStampMillis));
 	}
 	

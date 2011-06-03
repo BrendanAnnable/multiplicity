@@ -17,7 +17,6 @@ import com.jme3.asset.plugins.FileLocator;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
@@ -59,15 +58,6 @@ public class JMEImage extends JMEItem implements IImage, IInitable {
 		attachChild(quadGeometry);
 	}
 	
-	@Override
-	public void setZOrder(int zOrder) {
-		super.setZOrder(zOrder);
-		Vector3f newZOrder = quadGeometry.getWorldTranslation().clone();
-		newZOrder.z = zOrder;
-		quadGeometry.getParent().worldToLocal(newZOrder, quadGeometry.getLocalTranslation());
-	}
-
-
 	@Override
 	public void setSize(Vector2f size) {
 		quad = new CenteredQuad(size.x, size.y);
