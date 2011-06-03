@@ -140,12 +140,4 @@ public class JMEMutableLabel extends JMEItem implements IMutableLabel, IInitable
 		text = text + theChar;
 		setText(text);
 	}
-	
-//	@Override
-//	public void setZOrder(int zOrder) {
-//		super.setZOrder(zOrder);				
-//		Vector3f newZOrder = txt.getWorldTranslation().clone();
-//		newZOrder.z = zOrder;
-//		txt.getParent().worldToLocal(newZOrder, txt.getLocalTranslation());		
-//	}
 }
