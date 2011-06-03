@@ -64,9 +64,11 @@ public interface IItem extends INestable {
 
     public void setVisible(boolean isVisible);
 	public boolean isVisible();
+	public int getZOrder();
 	void setZOrder(int zOrder);
 	
 
 	public Spatial getManipulableSpatial();
+	
 	
 }

@@ -5,17 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.UUID;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.material.Material;
-import com.jme3.material.RenderState.BlendMode;
-import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
-import com.jme3.texture.Image;
-import com.jme3.texture.Texture2D;
-import com.jme3.texture.plugins.AWTLoader;
-
 import multiplicity3.csys.annotations.ImplementsContentItem;
 import multiplicity3.csys.items.keyboard.IKeyboard;
 import multiplicity3.csys.items.keyboard.IKeyboardGraphicsRenderer;
@@ -24,6 +13,16 @@ import multiplicity3.jme3csys.geometry.CenteredQuad;
 import multiplicity3.jme3csys.items.IInitable;
 import multiplicity3.jme3csys.items.item.JMEItem;
 import multiplicity3.jme3csys.picking.ItemMap;
+
+import com.jme3.asset.AssetManager;
+import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
+import com.jme3.math.Vector2f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
+import com.jme3.texture.Image;
+import com.jme3.texture.Texture2D;
+import com.jme3.texture.plugins.AWTLoader;
 
 @ImplementsContentItem(target = IKeyboard.class)
 public class JMEKeyboard extends JMEItem implements IKeyboard, IInitable {
@@ -67,16 +66,6 @@ public class JMEKeyboard extends JMEItem implements IKeyboard, IInitable {
 		
 
 	}
-	
-	@Override
-	public void setZOrder(int zOrder) {
-		super.setZOrder(zOrder);
-		Vector3f newZOrder = quadGeometry.getWorldTranslation().clone();
-		newZOrder.z = zOrder;
-		quadGeometry.getParent().worldToLocal(newZOrder, quadGeometry.getLocalTranslation());
-	}
-
-
 
 	@Override
 	public Spatial getManipulableSpatial() {		

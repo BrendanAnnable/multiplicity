@@ -3,21 +3,20 @@ package multiplicity3.jme3csys.items.border;
 import java.nio.FloatBuffer;
 import java.util.UUID;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.material.Material;
-import com.jme3.material.RenderState.BlendMode;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.VertexBuffer.Type;
-
 import multiplicity3.csys.annotations.ImplementsContentItem;
 import multiplicity3.csys.items.border.IRoundedBorder;
 import multiplicity3.jme3csys.items.IInitable;
 import multiplicity3.jme3csys.items.item.JMEItem;
 import multiplicity3.jme3csys.picking.ItemMap;
+
+import com.jme3.asset.AssetManager;
+import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector2f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.VertexBuffer.Type;
 
 @ImplementsContentItem(target = IRoundedBorder.class)
 public class JMERoundedBorder extends JMEItem implements IRoundedBorder, IInitable {
@@ -56,14 +55,6 @@ public class JMERoundedBorder extends JMEItem implements IRoundedBorder, IInitab
 		return borderGeometry;
 	}
 	
-	@Override
-	public void setZOrder(int zOrder) {
-		super.setZOrder(zOrder);
-		Vector3f newZOrder = borderGeometry.getWorldTranslation().clone();
-		newZOrder.z = zOrder;
-		borderGeometry.getParent().worldToLocal(newZOrder, borderGeometry.getLocalTranslation());
-	}
-
 	@Override
 	public void setSize(float width, float height) {
 		this.innerWidth = width;

@@ -4,15 +4,6 @@ import java.nio.FloatBuffer;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.VertexBuffer.Type;
-
 import multiplicity3.csys.annotations.ImplementsContentItem;
 import multiplicity3.csys.gfx.Gradient;
 import multiplicity3.csys.items.shapes.IColourRectangle;
@@ -20,6 +11,14 @@ import multiplicity3.jme3csys.geometry.CenteredQuad;
 import multiplicity3.jme3csys.items.IInitable;
 import multiplicity3.jme3csys.items.item.JMEItem;
 import multiplicity3.jme3csys.picking.ItemMap;
+
+import com.jme3.asset.AssetManager;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector2f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.VertexBuffer.Type;
 
 @ImplementsContentItem(target = IColourRectangle.class)
 public class JMEColourRectangle extends JMEItem implements IColourRectangle, IInitable {
@@ -57,13 +56,13 @@ public class JMEColourRectangle extends JMEItem implements IColourRectangle, IIn
 		attachChild(quadGeometry);
 	}
 	
-	@Override
-	public void setZOrder(int zOrder) {
-		super.setZOrder(zOrder);
-		Vector3f newZOrder = quadGeometry.getWorldTranslation().clone();
-		newZOrder.z = zOrder;
-		quadGeometry.getParent().worldToLocal(newZOrder, quadGeometry.getLocalTranslation());
-	}
+//	@Override
+//	public void setZOrder(int zOrder) {
+//		super.setZOrder(zOrder);
+//		Vector3f newZOrder = quadGeometry.getWorldTranslation().clone();
+//		newZOrder.z = zOrder;
+//		quadGeometry.getParent().worldToLocal(newZOrder, quadGeometry.getLocalTranslation());
+//	}
 	
 	private void updateColours() {
 		FloatBuffer fb = (FloatBuffer) quadGeometry.getMesh().getBuffer(Type.Color).getData();

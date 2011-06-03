@@ -52,8 +52,8 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 		this.input = input;
 		input.registerMultiTouchEventListener(this);
 		this.stage = MultiplicityEnvironment.get().getLocalStages().get(0);
-		this.contentFactory = stage.getContentSystem().getContentFactory();
-		stage.getContentSystem().getAnimationSystem().add(universe);
+		this.contentFactory = stage.getContentFactory();
+		stage.getAnimationSystem().add(universe);
 		
 		try {
 			IImage sun = contentFactory.create(IImage.class, "sun", UUID.randomUUID());
@@ -70,7 +70,7 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 	
 	@Override
 	public void shouldStop() {
-		stage.getContentSystem().getAnimationSystem().remove(universe);
+		stage.getAnimationSystem().remove(universe);
 		this.input.unregisterMultiTouchEventListener(this);
 	}
 
@@ -82,7 +82,7 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 			moon.setImage("multiplicity3/demos/gravity/moon_64.png");
 			moon.setSize(8,8);
 			Vector2f screenPos = new Vector2f();
-			stage.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), screenPos);
+			stage.tableToScreen(event.getPosition(), screenPos);
 			moon.setWorldLocation(screenPos);			
 			stage.addItem(moon);
 			
@@ -103,7 +103,7 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 	@Override
 	public void cursorReleased(MultiTouchCursorEvent event) {
 		Vector2f screenPos = new Vector2f();
-		stage.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), screenPos);			
+		stage.tableToScreen(event.getPosition(), screenPos);			
 		Cursor c = cursorMap.get(event.getCursorID());
 		if(c == null) return;
 		c.setEndPosition(screenPos);
@@ -123,7 +123,7 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 	@Override
 	public void cursorChanged(MultiTouchCursorEvent event) {
 		Vector2f screenPos = new Vector2f();
-		stage.getContentSystem().getDisplayManager().tableToScreen(event.getPosition(), screenPos);	
+		stage.tableToScreen(event.getPosition(), screenPos);	
 		Cursor c = cursorMap.get(event.getCursorID());
 		if(c == null) return;
 		c.setCurrentPosition(screenPos);		

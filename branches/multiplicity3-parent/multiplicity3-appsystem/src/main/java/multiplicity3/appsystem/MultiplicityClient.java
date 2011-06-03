@@ -9,12 +9,10 @@ import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 import multiplicity3.appsystem.jme.JMEAppRoot;
-import multiplicity3.csys.ContentSystem;
 import multiplicity3.csys.IUpdateable;
 import multiplicity3.csys.MultiplicityEnvironment;
 import multiplicity3.csys.animation.AnimationSystem;
 import multiplicity3.csys.behaviours.BehaviourMaker;
-import multiplicity3.csys.display.DisplayManager;
 import multiplicity3.csys.draganddrop.DragAndDropSystem;
 import multiplicity3.csys.factory.ContentTypeAlreadyBoundException;
 import multiplicity3.csys.factory.ContentTypeInvalidException;
@@ -79,16 +77,14 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 		//TODO: manage this through the stage?
 		multiplicityRootNode.setLocalTranslation(getCamera().getWidth()/2, getCamera().getHeight()/2, 0);		
 
-		ContentSystem csys = new ContentSystem();
-		JMEStage stage = new JMEStage("localstage", UUID.randomUUID(), csys);
+		JMEStage stage = new JMEStage("localstage", UUID.randomUUID());
 		//JMEStageDelegate delegate = new JMEStageDelegate(stage);
 		//stage.setDelegate(delegate);
+		multiplicityRootNode.attachChild(stage);
 		stage.setZOrder(0);
 
-		multiplicityRootNode.attachChild(stage);
-
 		try {
-			csys.setContentFactory(new JME3ContentSystemFactory(renderer, audioRenderer, assetManager, updateList));
+			stage.setContentFactory(new JME3ContentSystemFactory(renderer, audioRenderer, assetManager, updateList));
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
@@ -100,15 +96,14 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 		}
 
 
-		csys.setPickSystem(new ContentSystemPicker(multiplicityRootNode, camera.getWidth(), camera.getHeight()));
-		csys.setAnimationSystem(AnimationSystem.getInstance());
-		csys.setDisplayManager(new DisplayManager());				
-		csys.getDisplayManager().setDisplayDimensions(camera.getWidth(), camera.getHeight());
+		stage.setPickSystem(new ContentSystemPicker(multiplicityRootNode, camera.getWidth(), camera.getHeight()));
+		stage.setAnimationSystem(AnimationSystem.getInstance());					
+		stage.setDisplayDimensions(camera.getWidth(), camera.getHeight());
 
 		DragAndDropSystem dads = new DragAndDropSystem(stage);
-		csys.setDragAndDropSystem(dads);
-		csys.setBehaviourMaker(new BehaviourMaker(stage));
-		csys.getDragAndDropSystem().setPickSystemForApp(csys.getPickSystem());
+		stage.setDragAndDropSystem(dads);
+		stage.setBehaviourMaker(new BehaviourMaker(stage));
+		stage.getDragAndDropSystem().setPickSystemForApp(stage.getPickSystem());
 
 		MultiplicityEnvironment.get().addStage("local", stage);
 

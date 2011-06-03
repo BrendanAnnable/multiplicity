@@ -81,9 +81,7 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 
 	@Override
 	public void setRelativeLocation(Vector2f newLoc) {
-
 		setLocalTranslation(newLoc.x, newLoc.y, getLocalTranslation().z);
-		//delegate.setRelativeLocation(newLoc);
 
 		for(IItemListener l : getItemListeners()) {
 			l.itemMoved(this);
@@ -96,7 +94,7 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 			setRelativeLocation(new Vector2f(loc.x, loc.y));
 		}else{
 			Vector3f store = new Vector3f();
-			getParent().worldToLocal(new Vector3f(loc.x, loc.y, getLocalTranslation().z), store);
+			getParent().worldToLocal(new Vector3f(loc.x, loc.y, getWorldTranslation().z), store);
 			setRelativeLocation(new Vector2f(store.x, store.y));
 		}		
 	}
@@ -148,7 +146,6 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 		this.relativeRotation = angle;
 		trot.fromAngleAxis(angle, Vector3f.UNIT_Z);
 		setLocalRotation(trot);		
-		//delegate.setRelativeRotation(angle);
 
 		for(IItemListener l : getItemListeners()) {
 			l.itemRotated(this);
@@ -170,7 +167,6 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 	@Override
 	public void setRelativeScale(float scale) {
 		setLocalScale(scale);
-		//delegate.setRelativeScale(scale);
 		for(IItemListener l : getItemListeners()) {
 			l.itemScaled(this);
 		}
@@ -216,6 +212,8 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 
 
 	List<IChildrenChangedListener> childrenChangedListeners = new ArrayList<IChildrenChangedListener>();
+
+	private int zorder;
 
 
 	@Override
@@ -265,7 +263,6 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 		log.fine("Adding " + item + " to " + this);
 		getItemChildren().add(item);
 		getZOrderManager().childAttached(item);
-		//delegate.addItem(item);
 		item.setParentItem(this);
 		notifyChildrenChanged();
 	}
@@ -274,7 +271,6 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 	public void removeItem(IItem item) {
 		getItemChildren().remove(item);
 		getZOrderManager().childRemoved(item);
-		//delegate.removeItem(item);
 		item.setParentItem(null);
 		notifyChildrenChanged();
 	}
@@ -371,8 +367,18 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 
 	@Override
 	public void setZOrder(int zOrder) {
-		Vector3f newZOrder = getLocalTranslation().clone();
-		setLocalTranslation(newZOrder.x, newZOrder.y, zOrder);
+		this.zorder = zOrder;
+		if(getParent() != null && this.getParentItem() != null) {
+			setLocalTranslation(getLocalTranslation().x, getLocalTranslation().y, zOrder - this.getParentItem().getZOrder());
+		}else{
+			Vector3f newZOrder = getLocalTranslation().clone();
+			setLocalTranslation(newZOrder.x, newZOrder.y, zOrder);
+		}
+		updateGeometricState();
+	}
+	
+	public int getZOrder() {
+		return this.zorder;
 	}
 
 	private void notifyChildrenChanged() {
@@ -381,20 +387,9 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 		}
 	}
 
-//	public boolean equals(Object obj) {
-//		if(obj == this) return true;		
-//		if(obj instanceof IItem) {
-//			return ((IItem) obj).getUUID().equals(getUUID());
-//		}
-//		return false;
-//	}
-
 	public String toString() {
 		return this.getClass().getName() + " (" + getItemName() + ")";
 	}
-
-
-
 }
 
 

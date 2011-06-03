@@ -46,13 +46,14 @@ public class ZOrderDemo implements IMultiplicityApp {
 	@Override
 	public void shouldStart(MultiTouchInputComponent input, IQueueOwner iqo) {
 		stage = MultiplicityEnvironment.get().getLocalStages().get(0);		
-		factory = stage.getContentSystem().getContentFactory();
+		factory = stage.getContentFactory();
 		
 		setupExpressionBackgroundGradient(); 
 		
 		try {
 			IColourRectangle rectangleGreen = getGreenRectangle();
 			rectangleGreen.setSize(300, 100);
+			rectangleGreen.setRelativeLocation(new Vector2f(0, 0));
 			
 			IColourRectangle rectangleRed = getRedRectangle();
 			rectangleRed.setSize(300, 100);
@@ -123,7 +124,7 @@ public class ZOrderDemo implements IMultiplicityApp {
 				
 		container.addItem(expl);
 
-		RotateTranslateScaleBehaviour rts = stage.getContentSystem().getBehaviourMaker().addBehaviour(expl, RotateTranslateScaleBehaviour.class);
+		RotateTranslateScaleBehaviour rts = stage.getBehaviourMaker().addBehaviour(expl, RotateTranslateScaleBehaviour.class);
 		rts.setScaleEnabled(false);
 		rts.setItemActingOn(container);
 		
@@ -142,13 +143,13 @@ public class ZOrderDemo implements IMultiplicityApp {
 		
 		container.addItem(border);
 		
-		RotateTranslateScaleBehaviour rtsb = stage.getContentSystem().getBehaviourMaker().addBehaviour(border, RotateTranslateScaleBehaviour.class);
+		RotateTranslateScaleBehaviour rtsb = stage.getBehaviourMaker().addBehaviour(border, RotateTranslateScaleBehaviour.class);
 		rtsb.setScaleEnabled(false);
 		rtsb.setItemActingOn(container);
 		
-		stage.getContentSystem().getDragAndDropSystem().registerDragSource(border);
-		stage.getContentSystem().getDragAndDropSystem().registerDragSource(background);
-		stage.getContentSystem().getDragAndDropSystem().registerDragSource(expl);		
+		stage.getDragAndDropSystem().registerDragSource(border);
+		stage.getDragAndDropSystem().registerDragSource(background);
+		stage.getDragAndDropSystem().registerDragSource(expl);		
 		
 		background.getMultiTouchDispatcher().addListener(new MultiTouchEventAdapter() {
 			@Override

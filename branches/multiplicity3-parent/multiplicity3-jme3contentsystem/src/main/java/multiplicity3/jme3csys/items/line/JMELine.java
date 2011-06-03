@@ -81,8 +81,17 @@ public class JMELine extends JMEItem implements ILine, IInitable, IItemListener 
 		Vector2f center = startPosition.add(delta.mult(0.5f));
 		float angle = delta.angleBetween(UP);		
 		q = q.fromAngleAxis(angle, new Vector3f(0, 0, -1));
-		quadGeometry.setLocalTranslation(center.x, center.y, 0);
+		
+		Vector3f newZOrder = quadGeometry.getWorldTranslation().clone();
+		newZOrder.x = center.x;
+		newZOrder.y = center.y;
+		quadGeometry.getParent().worldToLocal(newZOrder, quadGeometry.getLocalTranslation());
+		
+//		quadGeometry.setLocalTranslation(center.x, center.y, getLocalTranslation().z);
+		quadGeometry.setLocalTranslation(center.x, center.y, newZOrder.z);
+		
 		quadGeometry.setLocalRotation(q);
+		System.out.println("updateline: " + quadGeometry.getWorldTranslation());
 	}
 	
 	private void updateLinkedLine() {
@@ -212,5 +221,14 @@ public class JMELine extends JMEItem implements ILine, IInitable, IItemListener 
 	public IItem getDestinationItem() {
 		return destItem;
 	}
+	
+//	@Override
+//	public void setZOrder(int zOrder) {
+//		super.setZOrder(zOrder);
+//		Vector3f newZOrder = quadGeometry.getWorldTranslation().clone();
+//		newZOrder.z = zOrder;
+//		quadGeometry.getParent().worldToLocal(newZOrder, quadGeometry.getLocalTranslation());
+//		System.out.println("set z: " + quadGeometry.getWorldTranslation());
+//	}
 
 }
