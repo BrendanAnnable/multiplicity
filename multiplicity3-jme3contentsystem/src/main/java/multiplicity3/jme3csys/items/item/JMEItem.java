@@ -146,7 +146,7 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 		this.relativeRotation = angle;
 		trot.fromAngleAxis(angle, Vector3f.UNIT_Z);
 		setLocalRotation(trot);		
-
+		updateGeometricState();
 		for(IItemListener l : getItemListeners()) {
 			l.itemRotated(this);
 		}
