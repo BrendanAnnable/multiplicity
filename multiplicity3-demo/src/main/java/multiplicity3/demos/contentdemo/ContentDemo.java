@@ -1,6 +1,7 @@
 package multiplicity3.demos.contentdemo;
 
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
@@ -29,6 +30,8 @@ import multiplicity3.csys.stage.IStage;
 import multiplicity3.input.MultiTouchInputComponent;
 
 public class ContentDemo implements IMultiplicityApp {
+	
+	private static final Logger log = Logger.getLogger(ContentDemo.class.getName());
 
 	public static void main(String[] args) {
 		MultiplicityClient client = MultiplicityClient.get();
@@ -59,7 +62,7 @@ public class ContentDemo implements IMultiplicityApp {
 				@Override
 				public void keyReleased(KeyboardKey k, boolean shiftDown, boolean altDown,
 						boolean ctlDown) {
-					System.out.println(k.getKeyStringRepresentation());
+					log.fine("Key pressed: " + k.getKeyStringRepresentation());
 				}
 				
 				@Override
