@@ -11,8 +11,8 @@ import multiplicity3.csys.behaviours.IBehaviour;
 import multiplicity3.csys.items.events.IItemListener;
 import multiplicity3.csys.items.events.MultiTouchEventDispatcher;
 import multiplicity3.csys.items.item.IItem;
-import multiplicity3.csys.zorder.INestedZOrderManager;
-import multiplicity3.csys.zorder.NestedZOrderManager;
+import multiplicity3.csys.zorder.IZOrderManager;
+import multiplicity3.csys.zorder.ZOrderManager;
 import multiplicity3.input.IMultiTouchEventListener;
 import multiplicity3.input.events.MultiTouchCursorEvent;
 import multiplicity3.input.events.MultiTouchObjectEvent;
@@ -32,7 +32,7 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 	protected MultiTouchEventDispatcher dispatcher = new MultiTouchEventDispatcher();
 	protected UUID uuid;
 	protected IItem parentItem;
-	protected INestedZOrderManager zOrderManager;
+	protected IZOrderManager zOrderManager;
 	private List<IItemListener> itemListeners = new CopyOnWriteArrayList<IItemListener>();
 	private String itemName;
 	private List<IItem> itemChildren = new ArrayList<IItem>();
@@ -46,7 +46,7 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 		super(name);
 		this.itemName = name;
 		this.uuid = uuid;
-		zOrderManager = new NestedZOrderManager(this, 5);
+		zOrderManager = new ZOrderManager(this, 5);
 		final IItem instance = this;
 		dispatcher.addListener(new IMultiTouchEventListener() {			
 			@Override
@@ -227,7 +227,7 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 	}
 
 	@Override
-	public INestedZOrderManager getZOrderManager() {
+	public IZOrderManager getZOrderManager() {
 		return zOrderManager;
 	}
 
@@ -262,7 +262,7 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 	public void addItem(IItem item) {
 		log.fine("Adding " + item + " to " + this);
 		getItemChildren().add(item);
-		getZOrderManager().childAttached(item);
+		getZOrderManager().regiserForZOrdering(item);
 		item.setParentItem(this);
 		notifyChildrenChanged();
 	}
@@ -270,7 +270,7 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 	@Override
 	public void removeItem(IItem item) {
 		getItemChildren().remove(item);
-		getZOrderManager().childRemoved(item);
+		getZOrderManager().unregisterForZOrdering(item);
 		item.setParentItem(null);
 		notifyChildrenChanged();
 	}

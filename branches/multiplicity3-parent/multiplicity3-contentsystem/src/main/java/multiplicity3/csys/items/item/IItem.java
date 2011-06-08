@@ -7,7 +7,7 @@ import multiplicity3.csys.behaviours.IBehaviour;
 import multiplicity3.csys.items.INestable;
 import multiplicity3.csys.items.events.IItemListener;
 import multiplicity3.csys.items.events.MultiTouchEventDispatcher;
-import multiplicity3.csys.zorder.INestedZOrderManager;
+import multiplicity3.csys.zorder.IZOrderManager;
 
 import com.jme3.math.Vector2f;
 import com.jme3.scene.Spatial;
@@ -49,7 +49,7 @@ public interface IItem extends INestable {
 	public void setRelativeScale(float scale);
 	public float getRelativeScale();
 	
-	public INestedZOrderManager getZOrderManager();
+	public IZOrderManager getZOrderManager();
 	
 
 	public void setInteractionEnabled(boolean b);

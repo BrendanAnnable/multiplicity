@@ -50,31 +50,43 @@ public class ZOrderDemo implements IMultiplicityApp {
 		
 		setupExpressionBackgroundGradient(); 
 		
-		try {
-			IColourRectangle rectangleGreen = getGreenRectangle();
-			rectangleGreen.setSize(300, 100);
-			rectangleGreen.setRelativeLocation(new Vector2f(0, 0));
-			
-			IColourRectangle rectangleRed = getRedRectangle();
-			rectangleRed.setSize(300, 100);
-			rectangleRed.setRelativeLocation(new Vector2f(50, 50));
-			
-			stage.addItem(rectangleGreen);
-			stage.addItem(rectangleRed);
-			stage.getZOrderManager().setAutoBringToTop(true);
-			
+		try {			
+			IContainer rectanglesContainer = getContainerWithRectangles();	
+			stage.addItem(rectanglesContainer);			
+						
 			IContainer abc = createExpressionVisualRepresentation("abc");
 			stage.addItem(abc);
-			
+
 			IContainer def = createExpressionVisualRepresentation("def");
 			stage.addItem(def);			
 			
+			stage.getZOrderManager().setAutoBringToTop(true);
 		} catch (ContentTypeNotBoundException e) {
 			e.printStackTrace();
 		}
 
 	}
 	
+	private IContainer getContainerWithRectangles() throws ContentTypeNotBoundException {
+		IContainer container = stage.getContentFactory().create(IContainer.class, "RectangleContainer", UUID.randomUUID());
+		
+		IColourRectangle rectangleGreen = getGreenRectangle();
+		rectangleGreen.setSize(300, 100);
+		rectangleGreen.setRelativeLocation(new Vector2f(0, 0));
+		
+		IColourRectangle rectangleRed = getRedRectangle();
+		rectangleRed.setSize(300, 100);
+		rectangleRed.setRelativeLocation(new Vector2f(50, 50));
+		
+		container.addItem(rectangleGreen);
+		container.addItem(rectangleRed);
+		
+		container.getZOrderManager().setAutoBringToTop(true);
+		container.getZOrderManager().setBringToTopPropagatesUp(false);
+		
+		return container;
+	}
+
 	private IColourRectangle getRedRectangle() throws ContentTypeNotBoundException {		
 		ColorRGBA topRed = new ColorRGBA(0.8f, 0.3f, 0.3f, 1f);
 		ColorRGBA bottomRed = new ColorRGBA(0.6f, 0.3f, 0.3f, 1f);		
