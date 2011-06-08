@@ -82,20 +82,23 @@ public class JMELine extends JMEItem implements ILine, IInitable, IItemListener 
 		float angle = delta.angleBetween(UP);		
 		q = q.fromAngleAxis(angle, new Vector3f(0, 0, -1));
 		
-		Vector3f newZOrder = quadGeometry.getWorldTranslation().clone();
-		newZOrder.x = center.x;
-		newZOrder.y = center.y;
-		quadGeometry.getParent().worldToLocal(newZOrder, quadGeometry.getLocalTranslation());
+		Vector3f worldTranslation = quadGeometry.getWorldTranslation().clone();
+		worldTranslation.x = center.x;
+		worldTranslation.y = center.y;
 		
-		quadGeometry.setLocalTranslation(center.x, center.y, newZOrder.z);
+		Vector3f localTranslation = new Vector3f();
+		quadGeometry.getParent().worldToLocal(worldTranslation, localTranslation);
+		
+		quadGeometry.setLocalTranslation(localTranslation);
+		
 		
 		quadGeometry.setLocalRotation(q);
 	}
 	
 	private void updateLinkedLine() {
 		if(destItem == null || sourceItem == null) return;
-		this.startPosition = sourceItem.getRelativeLocation().clone();
-		this.endPosition = destItem.getRelativeLocation().clone();
+		this.startPosition = sourceItem.getWorldLocation().clone();
+		this.endPosition = destItem.getWorldLocation().clone();
 		updateLine();
 	}
 

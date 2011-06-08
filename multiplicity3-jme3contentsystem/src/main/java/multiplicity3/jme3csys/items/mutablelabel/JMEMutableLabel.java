@@ -55,6 +55,8 @@ public class JMEMutableLabel extends JMEItem implements IMutableLabel, IInitable
 	public void setText(String text) {
 		this.currentText = text;
 		this.text = text;
+		this.setName(text);
+		this.setItemName(text);
 		doUpdate();
 	}
 

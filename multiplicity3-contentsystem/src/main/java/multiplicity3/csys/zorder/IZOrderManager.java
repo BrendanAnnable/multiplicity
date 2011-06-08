@@ -4,15 +4,24 @@ import multiplicity3.csys.items.events.IItemListener;
 import multiplicity3.csys.items.item.IItem;
 
 public interface IZOrderManager extends IItemListener {
-	public void setItemZOrder(int zValue);
-	public int getItemZOrder();
-	void childZSpaceRequirementChanged(IItem itemBeingManaged, IZOrderManager defaultZOrderManager);
-	int getZSpaceRequirement();
-	void setCapacity(int c);
-	//void sendToBottom(IItem item, MultiTouchCursorEvent event);
-	//void bringToTop(IItem itemPressed, MultiTouchCursorEvent event);
-	//void registerForZOrdering(IItem item);
-	public void unregisterForZOrdering(IItem i);
-	void updateZOrdering();
-	//public void neverBringToTop(IItem item);	
+	void regiserForZOrdering(IItem item);	
+	void unregisterForZOrdering(IItem i);
+	void updateOrder();
+	
+	void ignoreItemClickedBehaviour(IItem item);
+	
+	void setItemZOrder(int zValue);
+	int getItemZOrder();
+	
+	void notifyChildZCapacityChanged(IItem itemBeingManaged, IZOrderManager defaultZOrderManager);
+	int getZCapacity();
+	void setZCapacity(int c);
+
+	
+	
+	void setAutoBringToTop(boolean enabled);
+	void setBringToTopPropagatesUp(boolean should);
+	
+	void bringToTop(IItem item);
+	void sendToBottom(IItem item);	
 }

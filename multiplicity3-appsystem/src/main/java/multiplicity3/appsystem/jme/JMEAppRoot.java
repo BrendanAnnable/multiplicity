@@ -1,5 +1,7 @@
 package multiplicity3.appsystem.jme;
 
+import java.util.logging.Logger;
+
 import multiplicity3.config.display.DisplayPreferences;
 
 import com.jme3.app.Application;
@@ -35,6 +37,7 @@ import com.jme3.util.BufferUtils;
  * </table>
  */
 public abstract class JMEAppRoot extends Application {
+	private static final Logger log = Logger.getLogger(JMEAppRoot.class.getName());
 
     private Node rootNode = new Node("Root Node");
     protected Node multiplicityRootNode = new Node("Multiplicity Root Node");
@@ -57,10 +60,10 @@ public abstract class JMEAppRoot extends Application {
                     if (cam != null){
                         Vector3f loc = cam.getLocation();
                         Quaternion rot = cam.getRotation();
-                        System.out.println("Camera Position: ("+
+                        log.info("Camera Position: ("+
                                 loc.x+", "+loc.y+", "+loc.z+")");
-                        System.out.println("Camera Rotation: "+rot);
-                        System.out.println("Camera Direction: "+cam.getDirection());
+                        log.info("Camera Rotation: "+rot);
+                        log.info("Camera Direction: "+cam.getDirection());
                     }
                 }else if (name.equals("SIMPLEAPP_Memory")){
                     BufferUtils.printCurrentDirectMemory(null);

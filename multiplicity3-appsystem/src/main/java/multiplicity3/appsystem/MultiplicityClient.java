@@ -9,6 +9,7 @@ import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 import multiplicity3.appsystem.jme.JMEAppRoot;
+import multiplicity3.appsystem.keyboard.MultiplicityClientActionResponder;
 import multiplicity3.csys.IUpdateable;
 import multiplicity3.csys.MultiplicityEnvironment;
 import multiplicity3.csys.animation.AnimationSystem;
@@ -70,6 +71,8 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 	public void simpleInitApp() {		
 		assetManager = this.getAssetManager();
 		multiplicityRootNode.detachAllChildren();
+		
+		
 
 		Camera camera = this.getCamera();
 
@@ -118,6 +121,8 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 
 		getInputManager().setCursorVisible(source.requiresMouseDisplay());
 
+		MultiplicityClientActionResponder mar = new MultiplicityClientActionResponder(getInputManager(), stage);		
+		getInputManager().addListener(mar, mar.getActionNamesSupported());
 		//printNode(guiNode);
 	}
 

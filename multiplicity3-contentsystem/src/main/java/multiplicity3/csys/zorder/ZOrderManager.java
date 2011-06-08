@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 import multiplicity3.csys.items.item.IItem;
 import multiplicity3.input.events.MultiTouchCursorEvent;
 
-public class NestedZOrderManager implements INestedZOrderManager {
-	private static final Logger log = Logger.getLogger(NestedZOrderManager.class.getName());
+public class ZOrderManager implements IZOrderManager {
+	private static final Logger log = Logger.getLogger(ZOrderManager.class.getName());
 
 	protected List<IItem> registeredItems = new ArrayList<IItem>();
 	private int capacity = 1;
@@ -18,17 +18,147 @@ public class NestedZOrderManager implements INestedZOrderManager {
 	private boolean autoBringToTop = true;
 	private boolean bringToTopPropagatesUp = true;
 
-	public NestedZOrderManager(IItem itemBeingManaged, int initialCapacity) {
+	public ZOrderManager(IItem itemBeingManaged, int initialCapacity) {
 		capacity = initialCapacity;
 		this.itemBeingManaged = itemBeingManaged;
 	}
 
-	public INestedZOrderManager getParentItemManager() {
+	public IZOrderManager getParentZOrderManager() {
 		if(itemBeingManaged != null && itemBeingManaged.getParentItem() != null) {
 			return itemBeingManaged.getParentItem().getZOrderManager();
 		}
 		return null;
 	}
+
+
+	@Override
+	public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
+		if(autoBringToTop) {
+			log.fine("Bringing " + item + " to the top");
+			bringToTop(item);
+		}
+		if(bringToTopPropagatesUp && getParentZOrderManager() != null) {
+			getParentZOrderManager().bringToTop(item.getParentItem());
+		}
+	}
+
+
+	@Override
+	public int getItemZOrder() {
+		return this.startZOrder;
+	}
+
+	
+	@Override
+	public void setItemZOrder(int zValue) {
+		this.startZOrder = zValue;
+		updateOrder();
+	}
+
+	
+	@Override
+	public void notifyChildZCapacityChanged(IItem item, IZOrderManager manager) {
+		log.fine(this.itemBeingManaged + " has item that changed capacity: " + item);
+		int zReq = capacity;
+		for(IItem i : registeredItems) {
+			zReq += i.getZOrderManager().getZCapacity();
+		}
+		this.usedZSpace = zReq;
+		if(usedZSpace > capacity) {
+			doubleZSpaceCapacity();	
+		}
+		updateOrder();
+	}
+
+
+	@Override
+	public int getZCapacity() {
+		return capacity;
+	}
+
+	@Override
+	public void setZCapacity(int c) {
+		log.fine(this.itemBeingManaged + " setCapacity " + c);
+		if(c > capacity) {
+			this.capacity = c;
+			log.fine(this.itemBeingManaged + " now has z capacity of " + this.capacity);
+			informParentThatCapacityChanged();
+		}
+	}
+
+
+
+	@Override
+	public void updateOrder() {		
+		if(itemBeingManaged != null) {
+			itemBeingManaged.setZOrder(startZOrder);
+		}
+		int z = startZOrder;
+		for(IItem i : registeredItems) {
+			i.getZOrderManager().setItemZOrder(z);
+			z -= i.getZOrderManager().getZCapacity();
+		}		
+	}
+
+	@Override
+	public void regiserForZOrdering(IItem item) {		
+		if(!registeredItems.contains(item)) {
+			registeredItems.add(0, item);
+			item.getZOrderManager().setItemZOrder(usedZSpace);
+			usedZSpace += item.getZOrderManager().getZCapacity();
+			if(usedZSpace > capacity) {
+				doubleZSpaceCapacity();	
+			}
+			item.addItemListener(this);			
+		}
+		updateOrder();
+	}
+
+
+
+
+	@Override
+	public void unregisterForZOrdering(IItem item) {
+		if(registeredItems.contains(item)) {
+			registeredItems.remove(item);
+			usedZSpace -= item.getZOrderManager().getZCapacity();
+			item.removeItemListener(this);
+		}
+		updateOrder();		
+	}	
+
+	@Override
+	public void bringToTop(IItem item) {
+		registeredItems.remove(item);
+		registeredItems.add(0, item);
+		updateOrder();
+	}
+
+	@Override
+	public void sendToBottom(IItem item) {
+		registeredItems.remove(item);
+		registeredItems.add(item);
+		updateOrder();
+	}
+
+	@Override
+	public void setAutoBringToTop(boolean enabled) {
+		this.autoBringToTop  = enabled;
+		updateOrder();
+	}
+
+	@Override
+	public void setBringToTopPropagatesUp(boolean should) {
+		this.bringToTopPropagatesUp  = should;		
+	}
+
+	@Override
+	public void ignoreItemClickedBehaviour(IItem item) {
+		item.removeItemListener(this);
+	}
+
+
+	// ****** unused ********
 
 	@Override
 	public void itemMoved(IItem item) {}
@@ -38,20 +168,6 @@ public class NestedZOrderManager implements INestedZOrderManager {
 
 	@Override
 	public void itemScaled(IItem item) {}
-
-	@Override
-	public void itemCursorPressed(IItem item, MultiTouchCursorEvent event) {
-		if(autoBringToTop) {
-			log.fine("Bringing " + item + " to the top");
-			bringToTop(item);
-		}
-		if(bringToTopPropagatesUp) {
-			if(getParentItemManager() != null) {
-				getParentItemManager().bringToTop(item.getParentItem());
-			}
-		}
-
-	}
 
 	@Override
 	public void itemCursorReleased(IItem item, MultiTouchCursorEvent event) {}
@@ -64,121 +180,18 @@ public class NestedZOrderManager implements INestedZOrderManager {
 
 	@Override
 	public void itemZOrderChanged(IItem item) {}
-
-	@Override
-	public int getItemZOrder() {
-		return this.startZOrder;
-	}
-
-	@Override
-	public void setItemZOrder(int zValue) {
-		this.startZOrder = zValue;
-		updateZOrdering();
-	}
-
-	@Override
-	public void childZSpaceRequirementChanged(IItem item, IZOrderManager manager) {
-		int zReq = capacity;
-		for(IItem i : registeredItems) {
-			zReq += i.getZOrderManager().getZSpaceRequirement();
-		}
-		this.usedZSpace = zReq;
-		if(usedZSpace > capacity) {
-			capacity *= 2;
-			if(getParentItemManager() != null) {
-				getParentItemManager().childZSpaceRequirementChanged(itemBeingManaged, this);
-			}	
-		}
-	}
-
-
-	@Override
-	public int getZSpaceRequirement() {
-		return capacity;
-	}
-
-	@Override
-	public void setCapacity(int c) {
-		if(c > capacity) {
-			this.capacity = c;
-		}
-	}
-
-	@Override
-	public void updateZOrdering() {		
-		if(itemBeingManaged != null) {
-			itemBeingManaged.setZOrder(startZOrder);
-		}
-		int z = startZOrder;
-		for(IItem i : registeredItems) {
-			i.setZOrder(z);
-			i.getZOrderManager().setItemZOrder(z);
-			z -= i.getZOrderManager().getZSpaceRequirement();
-		}		
-	}
-
-	@Override
-	public void childAttached(IItem item) {		
-		if(!registeredItems.contains(item)) {
-			registeredItems.add(0, item);
-			item.getZOrderManager().setItemZOrder(usedZSpace);
-			usedZSpace += item.getZOrderManager().getZSpaceRequirement();
-			if(usedZSpace > capacity) {
-				capacity *= 2;
-				if(getParentItemManager() != null) {
-					getParentItemManager().childZSpaceRequirementChanged(itemBeingManaged, this);
-				}	
-			}
-			item.addItemListener(this);			
-		}
-		updateZOrdering();
-	}
-
-	@Override
-	public void childRemoved(IItem item) {
-		unregisterForZOrdering(item);
+	
+	
+	// ****** private methods *****
+	
+	private void doubleZSpaceCapacity() {
+		setZCapacity(getZCapacity() * 2);
 	}
 	
-	@Override
-	public void unregisterForZOrdering(IItem item) {
-		if(registeredItems.contains(item)) {
-			registeredItems.remove(item);
-			usedZSpace -= item.getZOrderManager().getZSpaceRequirement();
-			item.removeItemListener(this);
+	private void informParentThatCapacityChanged() {
+		if(getParentZOrderManager() != null) {
+			getParentZOrderManager().notifyChildZCapacityChanged(itemBeingManaged, this);
 		}
-		updateZOrdering();		
-	}	
-
-	@Override
-	public void bringToTop(IItem item) {
-		registeredItems.remove(item);
-		registeredItems.add(0, item);
-		updateZOrdering();
 	}
-
-	@Override
-	public void sendToBottom(IItem item) {
-		registeredItems.remove(item);
-		registeredItems.add(item);
-		updateZOrdering();
-	}
-
-	@Override
-	public void setAutoBringToTop(boolean enabled) {
-		this.autoBringToTop  = enabled;
-		updateZOrdering();
-	}
-
-	@Override
-	public void setBringToTopPropagatesUp(boolean should) {
-		this.bringToTopPropagatesUp  = should;		
-	}
-
-	@Override
-	public void ignore(IItem item) {
-		item.removeItemListener(this);
-	}
-
-
 
 }
