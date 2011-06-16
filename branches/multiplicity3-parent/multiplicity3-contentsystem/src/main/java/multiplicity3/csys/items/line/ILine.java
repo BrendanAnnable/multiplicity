@@ -1,7 +1,6 @@
 package multiplicity3.csys.items.line;
 
-import java.awt.Color;
-
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 
 import multiplicity3.csys.items.item.IItem;
@@ -27,7 +26,7 @@ public interface ILine extends IItem {
 	public Vector2f getStartPosition();
 	public void setEndPosition(Vector2f v);
 	public Vector2f getEndPosition();
-	public void setLineColour(Color c);
+	public void setLineColour(ColorRGBA c);
 	public void setLineWidth(float width);
 	public float getLength();
 
@@ -35,5 +34,7 @@ public interface ILine extends IItem {
 	public IItem getSourceItem();
 	public void setDestinationItem(IItem item);
 	public IItem getDestinationItem();
+	
+	public void setLineVisibilityChangesWithItemVisibility(boolean autoVisibilityChange);
 
 }

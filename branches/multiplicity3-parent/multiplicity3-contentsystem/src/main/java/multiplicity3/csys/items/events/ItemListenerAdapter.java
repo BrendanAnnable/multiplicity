@@ -29,4 +29,7 @@ public class ItemListenerAdapter implements IItemListener {
 	@Override
 	public void itemZOrderChanged(IItem item) {}
 
+	@Override
+	public void itemVisibilityChanged(IItem item, boolean isVisible) {}
+
 }

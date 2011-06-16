@@ -1,18 +1,7 @@
 package multiplicity3.jme3csys.items.line;
 
-import java.awt.Color;
 import java.nio.FloatBuffer;
 import java.util.UUID;
-
-import com.jme3.asset.AssetManager;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.VertexBuffer.Type;
 
 import multiplicity3.csys.annotations.ImplementsContentItem;
 import multiplicity3.csys.items.events.IItemListener;
@@ -23,6 +12,16 @@ import multiplicity3.jme3csys.geometry.CenteredQuad;
 import multiplicity3.jme3csys.items.IInitable;
 import multiplicity3.jme3csys.items.item.JMEItem;
 import multiplicity3.jme3csys.picking.ItemMap;
+
+import com.jme3.asset.AssetManager;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.VertexBuffer.Type;
 
 @ImplementsContentItem(target = ILine.class)
 public class JMELine extends JMEItem implements ILine, IInitable, IItemListener {
@@ -42,6 +41,7 @@ public class JMELine extends JMEItem implements ILine, IInitable, IItemListener 
 	private Vector2f startPosition = new Vector2f(0, 0);
 	private Vector2f endPosition = new Vector2f(0, 10);
 	private LineMode mode;
+	private boolean itemVisibilityChangesLineVisibility = false;
 	
 	public JMELine(String name, UUID uuid) {
 		super(name, uuid);
@@ -159,6 +159,12 @@ public class JMELine extends JMEItem implements ILine, IInitable, IItemListener 
 			this.mode = LineMode.LINKED;
 		}
 	}
+	
+	@Override
+	public void setLineVisibilityChangesWithItemVisibility(
+			boolean autoVisibilityChange) {
+		this.itemVisibilityChangesLineVisibility = autoVisibilityChange;
+	}
 
 
 	@Override
@@ -204,8 +210,12 @@ public class JMELine extends JMEItem implements ILine, IInitable, IItemListener 
 	}
 	
 	@Override
-	public void setLineColour(Color c) {
-		// yet to do
+	public void setLineColour(ColorRGBA c) {
+		topLeft = c;
+		topRight = c;
+		bottomLeft = c;
+		bottomRight = c;
+		updateColours();
 	}
 
 	@Override
@@ -222,4 +232,19 @@ public class JMELine extends JMEItem implements ILine, IInitable, IItemListener 
 	public IItem getDestinationItem() {
 		return destItem;
 	}
+
+	@Override
+	public void itemVisibilityChanged(IItem item, boolean isVisible) {
+		if(itemVisibilityChangesLineVisibility && itemIsLinkedByThisLine(item)) {
+			this.setVisible(isVisible);
+		}
+	}
+
+	// ***********
+	
+	private boolean itemIsLinkedByThisLine(IItem item) {
+		return item == sourceItem || item == destItem;
+	}
+
+
 }
