@@ -181,6 +181,9 @@ public class ZOrderManager implements IZOrderManager {
 	@Override
 	public void itemZOrderChanged(IItem item) {}
 	
+	@Override
+	public void itemVisibilityChanged(IItem item, boolean isVisible) {}
+	
 	
 	// ****** private methods *****
 	
@@ -193,5 +196,6 @@ public class ZOrderManager implements IZOrderManager {
 			getParentZOrderManager().notifyChildZCapacityChanged(itemBeingManaged, this);
 		}
 	}
+
 
 }

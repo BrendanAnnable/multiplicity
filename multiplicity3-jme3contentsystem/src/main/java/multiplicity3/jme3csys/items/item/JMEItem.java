@@ -346,6 +346,7 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 
 	@Override
 	public void setVisible(boolean isVisible) {
+		if(isVisible == this.isVisible) return;		
 
 		if(isVisible) {			
 			this.setCullHint(CullHint.Never);
@@ -353,7 +354,11 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 			this.setCullHint(CullHint.Always);
 		}
 
-		this.isVisible = isVisible;		
+		this.isVisible = isVisible;
+		
+		for(IItemListener l : itemListeners) {
+			l.itemVisibilityChanged(this, isVisible);
+		}
 
 		for(int i = 0; i < itemChildren.size(); i++) {
 			itemChildren.get(i).setVisible(isVisible);

@@ -7,6 +7,7 @@ public interface IItemListener {
 	public void itemMoved(IItem item);
 	public void itemRotated(IItem item);
 	public void itemScaled(IItem item);
+	public void itemVisibilityChanged(IItem item, boolean isVisible);
 	public void itemCursorPressed(IItem item, MultiTouchCursorEvent event);
 	public void itemCursorReleased(IItem item, MultiTouchCursorEvent event);
 	public void itemCursorChanged(IItem item, MultiTouchCursorEvent event);
