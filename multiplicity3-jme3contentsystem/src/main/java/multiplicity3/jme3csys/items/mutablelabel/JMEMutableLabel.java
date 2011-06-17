@@ -44,7 +44,7 @@ public class JMEMutableLabel extends JMEItem implements IMutableLabel, IInitable
 	public Vector2f getTextSize() {
 		return new Vector2f(fnt.getLineWidth(currentText), txt.getHeight());
 	}
-
+	
 	
 	@Override
 	public Spatial getManipulableSpatial() {
@@ -96,12 +96,14 @@ public class JMEMutableLabel extends JMEItem implements IMutableLabel, IInitable
         }
         
         if(boundingBox != null) {
-        	txt.setLocalTranslation(-txt.getLineWidth()/2f, txt.getHeight()/2f, this.getLocalTranslation().z);
+        	txt.setLocalTranslation(-txt.getLineWidth()/2f, txt.getHeight()/2f, 0);
         }else{
         	float lineWidth = fnt.getLineWidth(currentText);
         	float textHeight = txt.getLineHeight();
-        	txt.setLocalTranslation(-lineWidth/2f, textHeight/2f, this.getLocalTranslation().z);
+        	txt.setLocalTranslation(-lineWidth/2f, textHeight/2f, 0);
         }
+        
+        updateGeometricState();
 	}
 
 	@Override
