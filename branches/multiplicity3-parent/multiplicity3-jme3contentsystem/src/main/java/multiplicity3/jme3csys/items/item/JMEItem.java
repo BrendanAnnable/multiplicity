@@ -82,7 +82,7 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 	@Override
 	public void setRelativeLocation(Vector2f newLoc) {
 		setLocalTranslation(newLoc.x, newLoc.y, getLocalTranslation().z);
-
+		updateGeometricState();
 		for(IItemListener l : getItemListeners()) {
 			l.itemMoved(this);
 		}
@@ -96,7 +96,8 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 			Vector3f store = new Vector3f();
 			getParent().worldToLocal(new Vector3f(loc.x, loc.y, getWorldTranslation().z), store);
 			setRelativeLocation(new Vector2f(store.x, store.y));
-		}		
+		}	
+		updateGeometricState();
 	}
 
 	@Override
@@ -249,12 +250,12 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 	}
 
 	@Override
-	public void setParentItem(IItem parent) {
-		parentItem = parent;
+	public void setParentItem(IItem parent) {		
 		this.removeFromParent();
 		if(parent != null) {
 			((JMEItem)parent).attachChild(this);
-		}
+		}		
+		parentItem = parent;
 	}
 
 
@@ -269,22 +270,19 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 
 	@Override
 	public void removeItem(IItem item) {
+		log.fine("Removing " + item + " from " + this);
 		getItemChildren().remove(item);
-		getZOrderManager().unregisterForZOrdering(item);
-		item.setParentItem(null);
+		getZOrderManager().unregisterForZOrdering(item);		
+		item.setParentItem(null);		
 		notifyChildrenChanged();
 	}
 
 	@Override
 	public void removeAllItems(boolean recursive) {
-		if(recursive) {
-			for(IItem item : getItemChildren()) {
-				item.removeAllItems(recursive);
-			}
-		}
-
-		for(int i = 0; i < getItemChildren().size(); i++) {
-			removeItem(getItemChildren().get(i));
+		while(getItemChildren().size() > 0) {
+			IItem item = getItemChildren().get(0);
+			if(recursive) item.removeAllItems(recursive);
+			removeItem(item);
 		}
 	}
 
