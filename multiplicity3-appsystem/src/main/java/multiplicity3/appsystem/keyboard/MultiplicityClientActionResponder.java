@@ -23,6 +23,11 @@ public class MultiplicityClientActionResponder  implements ActionListener {
 	public MultiplicityClientActionResponder(InputManager inputManager, IStage stage) {
 		this.stage = stage;
 
+		addPrintStageMapping(inputManager);
+		addPrintJMEMapping(inputManager);
+	}
+
+	private void addPrintStageMapping(InputManager inputManager) {
 		inputManager.addMapping("M3_PRINT_STAGE", new KeyTrigger(KeyInput.KEY_D));
 		
 		actions.put("M3_PRINT_STAGE", new Callable<Void>() {
@@ -32,7 +37,18 @@ public class MultiplicityClientActionResponder  implements ActionListener {
 				return null;
 			}			
 		});
-
+	}
+	
+	private void addPrintJMEMapping(InputManager inputManager) {
+		inputManager.addMapping("M3_PRINT_JME", new KeyTrigger(KeyInput.KEY_J));
+		
+		actions.put("M3_PRINT_JME", new Callable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				ContentSystemPrinter.logJMEStructure(log, Level.INFO, MultiplicityClientActionResponder.this.stage.getManipulableSpatial());
+				return null;
+			}			
+		});
 	}
 
 	@Override

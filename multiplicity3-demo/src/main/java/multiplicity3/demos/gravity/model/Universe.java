@@ -9,31 +9,84 @@ import multiplicity3.csys.animation.elements.AnimationElement;
 
 public class Universe extends AnimationElement {
 	
-	//public static final double MASS_SUN = 1.98892e30;
-	//public static final double MASS_EARTH = 5.9736e24;
+	private int maxBodies = 20;
+	private double gravitationalConstant = 1e5;
+	private double timeMultiplier = 0.001;
 	
-	public static final double MASS_SUN = 1e6;
-	public static final double MASS_EARTH = 1;
-	public static final double G = 1e5;
-	public static final double TIME_SCALE = 0.001;	
+
+
+	private static final float MAX_DIST_FROM_UNIVERSE_CENTER = 1200;	
 	
 	public float minimum_distance_apart = 1f;	
 	
 	private List<Body> bodies;
+	private UniverseChangeDelegate delegate;
 	
-	public Universe() {
+	public Universe(UniverseChangeDelegate delegate) {
 		bodies = new ArrayList<Body>();
+		this.delegate = delegate;
 	}
 	
 	public void addBody(Body b) {
+		if(bodies.contains(b)) return;
+		
 		this.bodies.add(b);
+		delegate.bodyAdded(b);
 	}
 
 	@Override
 	public void updateAnimationState(float tpf) {
 		if(bodies.size() < 2) return;
 		
-		double universeTime = tpf * TIME_SCALE;
+		updateUniverse(tpf);
+		
+	}
+
+	private void updateUniverse(float tpf) {
+		double universeTime = tpf * timeMultiplier;		
+		updateAllBodyVelocities(universeTime);		
+		updateAllBodyPositions(universeTime);
+		removeFarAwayBodies();
+	}
+
+	private void removeFarAwayBodies() {
+		List<Body> toRemove = new ArrayList<Body>();
+		Body a;
+		for(int i = 0; i < bodies.size(); i++) {
+			a = bodies.get(i);
+			if(a.getPosition().length() > MAX_DIST_FROM_UNIVERSE_CENTER) {
+				toRemove.add(a);
+			}
+		}
+
+		bodies.removeAll(toRemove);
+		
+		for(Body b : toRemove) {
+			delegate.bodyRemoved(b);
+		}
+	}
+	
+	public void removeAllBodies() {
+		List<Body> removeList = new ArrayList<Body>();
+		removeList.addAll(bodies);
+		bodies.clear();
+		for(Body b : removeList) {
+			delegate.bodyRemoved(b);
+		}
+	}
+
+	private void updateAllBodyPositions(double universeTime) {
+		Body body;
+		for(int i = 0; i < bodies.size(); i++) {
+			body = bodies.get(i);
+			body.setPosition(
+					body.getPosition().x + (float)(body.velocity.x * universeTime),
+					body.getPosition().y + (float)(body.velocity.y * universeTime));
+			delegate.bodyPositionChanged(body);
+		}
+	}
+
+	private void updateAllBodyVelocities(double universeTime) {
 		Body a, b;
 		Vector2f oldVelocity = new Vector2f();
 		for(int i = 0; i < bodies.size(); i++) {			
@@ -51,7 +104,7 @@ public class Universe extends AnimationElement {
 					dist_y = b.getPosition().y - a.getPosition().y;					
 					double r2 = b.getPosition().subtract(a.getPosition()).length();
 					r2 = r2 * r2;					
-					double force = G * b.mass / r2;
+					double force = getGravitationalConstant() * b.mass.getMass() / r2;
 					accel_x += dist_x * force;
 					accel_y += dist_y * force;
 				}				
@@ -63,13 +116,6 @@ public class Universe extends AnimationElement {
 			a.velocity.addLocal((float) (universeTime * accel_x), (float) (universeTime * accel_y));
 			
 		}
-		
-		for(int i = 0; i < bodies.size(); i++) {
-			a = bodies.get(i);
-			a.setPosition(
-					a.getPosition().x + (float)(a.velocity.x * universeTime),
-					a.getPosition().y + (float)(a.velocity.y * universeTime));
-		}		
 	}
 
 	@Override
@@ -84,6 +130,30 @@ public class Universe extends AnimationElement {
 	}
 
 	public boolean canAddMore() {
-		return bodies.size() < 20;
+		return bodies.size() < getMaxBodies();
+	}
+
+	public void setMaxBodies(int maxBodies) {
+		this.maxBodies = maxBodies;
+	}
+
+	public int getMaxBodies() {
+		return maxBodies;
+	}
+
+	public void setGravitationalConstant(double gravitationalConstant) {
+		this.gravitationalConstant = gravitationalConstant;
+	}
+
+	public double getGravitationalConstant() {
+		return gravitationalConstant;
+	}
+	
+	public double getTimeMultiplier() {
+		return timeMultiplier;
+	}
+
+	public void setTimeMultiplier(double timeMultiplier) {
+		this.timeMultiplier = timeMultiplier;
 	}
 }

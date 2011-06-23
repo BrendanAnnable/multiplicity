@@ -250,7 +250,8 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 	}
 
 	@Override
-	public void setParentItem(IItem parent) {		
+	public void setParentItem(IItem parent) {
+		log.fine(getManipulableSpatial() + " parent item changing to " + parent);
 		this.removeFromParent();
 		if(parent != null) {
 			((JMEItem)parent).attachChild(this);

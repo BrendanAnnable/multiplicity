@@ -4,16 +4,15 @@ import multiplicity3.csys.items.item.IItem;
 
 import com.jme3.math.Vector2f;
 
-public class Body {
-
-	
-
-	
-	public double mass;
+public class Body {	
+	public MassReference mass;
 	public Vector2f velocity;
 	private IItem representation;
+	private String name;
 
-	public Body(IItem representation, double mass, Vector2f position, Vector2f velocity) {
+
+	public Body(String name, IItem representation, MassReference mass, Vector2f position, Vector2f velocity) {
+		this.name = name;
 		this.representation = representation;
 		this.mass = mass;
 		this.velocity = velocity;
@@ -34,4 +33,14 @@ public class Body {
 	public void setPosition(float x, float y) {
 		representation.setRelativeLocation(new Vector2f(x,y));		
 	}
+	
+
+	public IItem getRepresentation() {
+		return representation;
+	}
+	
+	public String toString() {
+		return name + "[" + mass + "]";
+	}
+	
 }
