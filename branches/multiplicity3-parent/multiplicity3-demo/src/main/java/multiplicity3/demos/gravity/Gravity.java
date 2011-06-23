@@ -19,14 +19,19 @@ import multiplicity3.csys.items.line.ILine;
 import multiplicity3.csys.stage.IStage;
 import multiplicity3.demos.gravity.model.Body;
 import multiplicity3.demos.gravity.model.Cursor;
+import multiplicity3.demos.gravity.model.MassReference;
 import multiplicity3.demos.gravity.model.Universe;
+import multiplicity3.demos.gravity.model.UniverseChangeDelegate;
 import multiplicity3.input.IMultiTouchEventListener;
 import multiplicity3.input.MultiTouchInputComponent;
 import multiplicity3.input.events.MultiTouchCursorEvent;
 import multiplicity3.input.events.MultiTouchObjectEvent;
 
-public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
+public class Gravity implements IMultiplicityApp, IMultiTouchEventListener, UniverseChangeDelegate {
 	private static final Logger log = Logger.getLogger(Gravity.class.getName());
+	
+	public static final double MASS_SUN = 1e6;
+	public static final double MASS_EARTH = 1;
 	
 	private IStage stage;
 	private IContentFactory contentFactory;
@@ -38,6 +43,10 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 
 	private MultiTouchInputComponent input;
 	
+	private MassReference sunMass = new MassReference(MASS_SUN);
+	private MassReference earthMass = new MassReference(MASS_EARTH);
+	
+	
 	public static void main(String[] args) {
 		MultiplicityClient client = MultiplicityClient.get();
 		client.start();
@@ -48,20 +57,30 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 	@Override
 	public void shouldStart(MultiTouchInputComponent input, IQueueOwner iqo) {
 		log.info("init");
-		universe = new Universe();
+		universe = new Universe(this);
 		this.input = input;
 		input.registerMultiTouchEventListener(this);
 		this.stage = MultiplicityEnvironment.get().getLocalStages().get(0);
+		this.stage.getZOrderManager().setAutoBringToTop(false);
 		this.contentFactory = stage.getContentFactory();
 		stage.getAnimationSystem().add(universe);
 		
 		try {
+			IImage bg = contentFactory.create(IImage.class, "bg", UUID.randomUUID());
+			bg.setImage("multiplicity3/demos/gravity/starfield.png");
+			bg.setSize(1024,768);
+			stage.addItem(bg);
+			stage.getZOrderManager().ignoreItemClickedBehaviour(bg);
+			
 			IImage sun = contentFactory.create(IImage.class, "sun", UUID.randomUUID());
 			sun.setImage("multiplicity3/demos/gravity/sun_128.png");
 			sun.setSize(32,32);
 			stage.addItem(sun);
+			stage.getZOrderManager().bringToTop(sun);
 			
-			universe.addBody(new Body(sun, Universe.MASS_SUN, new Vector2f(0, 0), new Vector2f(0,0)));
+			universe.addBody(new Body("sun", sun, sunMass, new Vector2f(0, 0), new Vector2f(0,0)));
+			
+			universe.setMaxBodies(1000);
 			
 		} catch (ContentTypeNotBoundException e) {
 			e.printStackTrace();
@@ -78,21 +97,24 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 	public void cursorPressed(MultiTouchCursorEvent event) {
 		if(!universe.canAddMore()) return;
 		try {
-			IImage moon = contentFactory.create(IImage.class, "mooon", UUID.randomUUID());
+			IImage moon = contentFactory.create(IImage.class, "moon", UUID.randomUUID());
 			moon.setImage("multiplicity3/demos/gravity/moon_64.png");
 			moon.setSize(8,8);
-			Vector2f screenPos = new Vector2f();
-			stage.tableToScreen(event.getPosition(), screenPos);
-			moon.setWorldLocation(screenPos);			
 			stage.addItem(moon);
+			stage.getZOrderManager().bringToTop(moon);
 			
-			Cursor c = new Cursor(event.getCursorID(), screenPos);
+			Vector2f worldPositionOfCursor = new Vector2f();
+			stage.tableToScreen(event.getPosition(), worldPositionOfCursor);
+			moon.setWorldLocation(worldPositionOfCursor);			
+			
+			Cursor c = new Cursor(event.getCursorID(), worldPositionOfCursor);
 			cursorMap.put(event.getCursorID(), c);
 			itemMap.put(event.getCursorID(), moon);
 			ILine line = contentFactory.create(ILine.class, "line", UUID.randomUUID());
-			line.setStartPosition(stage.getRelativeLocationOfWorldLocation(screenPos));
-			line.setEndPosition(stage.getRelativeLocationOfWorldLocation(screenPos).add(new Vector2f(0.1f, 0.1f)));
 			stage.addItem(line);
+			line.setStartPosition(worldPositionOfCursor);
+			line.setEndPosition(worldPositionOfCursor.add(new Vector2f(0.1f, 0.1f)));
+			
 			lines.put(event.getCursorID(), line);
 			
 		} catch (ContentTypeNotBoundException e) {
@@ -111,7 +133,7 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 		velocity.multLocal(5e3f);
 		IItem representation = itemMap.get(event.getCursorID());
 		if(representation != null) {
-			Body b = new Body(representation, Universe.MASS_EARTH, screenPos, velocity);
+			Body b = new Body("earth", representation, earthMass, screenPos, velocity);
 			universe.addBody(b);
 		}
 		ILine line = lines.get(event.getCursorID());
@@ -122,19 +144,20 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 	
 	@Override
 	public void cursorChanged(MultiTouchCursorEvent event) {
-		Vector2f screenPos = new Vector2f();
-		stage.tableToScreen(event.getPosition(), screenPos);	
+		Vector2f worldPositionOfCursor = new Vector2f();
+		stage.tableToWorld(event.getPosition(), worldPositionOfCursor);
+		
 		Cursor c = cursorMap.get(event.getCursorID());
 		if(c == null) return;
-		c.setCurrentPosition(screenPos);		
+		
+		c.setCurrentPosition(worldPositionOfCursor);		
 		IItem item = itemMap.get(event.getCursorID());
-		if(item != null) {
-			
-			item.setWorldLocation(screenPos);
+		if(item != null) {			
+			item.setWorldLocation(worldPositionOfCursor);
 		}
 		ILine line = lines.get(event.getCursorID());
 		if(line != null) {
-			line.setEndPosition(stage.getRelativeLocationOfWorldLocation(screenPos));
+			line.setEndPosition(worldPositionOfCursor);
 		}
 	}
 
@@ -156,6 +179,18 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener {
 	public String getFriendlyAppName() {
 		return "Gravity";
 	}
+
+	@Override
+	public void bodyRemoved(Body b) {
+		log.fine(b + " removed");
+		stage.removeItem(b.getRepresentation());
+	}
+
+	@Override
+	public void bodyAdded(Body b) {}
+
+	@Override
+	public void bodyPositionChanged(Body body) {}
 
 
 }
