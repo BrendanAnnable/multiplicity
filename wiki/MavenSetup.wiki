@@ -1,0 +1,131 @@
+#labels setup
+Basic Project Setup
+
+You'll need:
+1. Maven installed
+2. Eclipse Helios
+3. Sonatype maven plugin for Eclipse
+4. Subversion plugin for Eclipse
+
+The repositories for the two projects are at:
+http://multiplicity.googlecode.com/svn/branches/multiplicity3-parent
+http://synergyspace.googlecode.com/svn/branches/synergynet3-parent
+
+If working outside the Durham University network you will need to tunnel with a command similar to this:
+
+ssh -L 8081:tel.dur.ac.uk:8081 username@vega.dur.ac.uk
+
+Go to http://tel.dur.ac.uk:8081/artifactory/webapp/mavensettings.html and generate the settings.xml file which you'll need to put in ~/.m2/
+
+If working outside TEL add the following to your settings.xml in ~/.m2/ before <profiles> (and remember to remove it when working within the University network):
+
+  <proxies>
+   <proxy>
+      <active>true</active>
+      <protocol>http</protocol>
+      <host>127.0.0.1</host>
+      <port>8081</port>
+      <username></username>
+      <password></password>
+      <nonProxyHosts></nonProxyHosts>
+    </proxy>
+  </proxies>
+
+Check out multiplicity3-parent into eclipse as a general (non-Java) project.
+Using command line for each sub-module (i.e. Sub-directory of the project) run:
+
+mvn eclipse:eclipse 
+
+This will generate the necessary .classpath and .project files.
+
+Back in Eclipse, for each project:
+
+ 1. Import the project into eclipse
+ 2. Enable Maven Dependency Management (right-click project, maven menu)
+ 3. Ensure the the JVM/JRE is set to 1.6
+
+Check out SynergyNet and repeat the process of running the mvn eclipse:eclipse command on each sub-directory, importing the created project into Eclipse, enabling Maven and ensuring the correct JRE of 1.6 for each project.
+ 
+Web Project Setup
+
+After basic project setup for each SynergyNet project ending with –web:
+
+1) In Eclipse go through the project’s settings.
+
+Ensure the latest GWT SDK is under the project’s Libraries.  (under Java Buld Path)
+
+Ensure “This project has a WAR directory” is ticked and that the following text field contains: war (Under Google > Web Applications)
+
+Ensure “Use Google Web Tool Kit” is ticked and that a valid GTK is selected for use.  (Under Google > Web Toolkit)
+
+
+2) Now close the project and edit its .classpath outside Eclipse.
+
+Edit the .classpath to ensure that the output directory for compiled classes goes in war/WEB-INF/classes and that the GWT library on your machine has a higher precedence than that dependency owned by Maven. 
+A web project should look similar to this:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+        <classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+        <classpathentry kind="src" path="src/main/java" output="war/WEB-INF/classes"/>
+        <classpathentry kind="src" path="src/test/java" output="war/WEB-INF/classes"/>
+        <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+        <classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
+        <classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>
+
+
+Note: Part 1 is recommended for any project that you want to run as a web app (notably synergynet-web).  You will only need to do part 2 for any web projects that you want to use the Window Builder design view for.  
+
+You should place a copy of gwt-servlet.jar in each project’s war/WEB-INF/lib/ directory (there are svn:ignore entries for this file, so Eclipse shouldn’t check them in).  This will help counter several warnings GWT may generate.
+
+To run synergynet-web, right-click 
+/synergynet3-web/src/main/java/synergynet3/web/client/SynergyNetWebEntryPoint.java and select: Run As->Web Application
+
+Before running a web project click the GWT Compile Project button (this should be an icon in Eclipse showing a red box with G on it) to ensure it is up to date and compatible with separate browsers. 
+ 
+Setting up an environment for Web Projects
+
+Note: If running on several devices ensure all are connected to the same local network.
+
+Install OpenFire (if running SynergyNet across several devices only one needs openfire – this is the server) and go to: http://127.0.0.1:9090 
+
+Login here (the default username/password is admin/admin for OpenFire) and set up openfire as so:
+
+USERS:
+Create a user for each possible device on the network, e.g:
+Red, blue, green, yellow, teacherconsole and projector1
+
+GROUPS:
+Groups identify what kind of device each user is. They should be set up like so:
+
+multiplicitydevices
+This should contain all users who are part of the SynergyNet network, e.g:
+red, blue, green, yellow, teacherconsole and projector1
+This group should also have 'Enable contact list group sharing' and 'share with additional users' ticked. Share with the groups:
+tables, projectors and teacherconsoles
+
+tables
+This refers to non-teacher, non-projector devices, e.g:
+red, blue, green and yellow
+This group should also have 'Enable contact list group sharing' and 'share with additional users' ticked. Share with the groups:
+multiplicitydevices, projectors and teacherconsoles
+
+projectors
+This refers to projects, e.g:
+projector1
+
+teacherconsoles
+Despite its name, this should have at most one device that acts as the controller (teacher console), e.g:
+teacherconsole
+
+
+The following VM parameters should be used to run table and web projects as a particular user:
+
+-Dsynergynet3.xmpp.host=localhost
+-Dsynergynet3.xmpp.port=5222 
+-Dsynergynet3.xmpp.username=username
+-Dsynergynet3.xmpp.password=password
+-Dgwt.args="-bindAddress 0.0.0.0"
+
+If running SynergyNet across several devices -Dsynergynet3.xmpp.host should equal the IP of the device the OpenFire service is running on.
