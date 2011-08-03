@@ -13,8 +13,8 @@ ssh -L 8081:tel.dur.ac.uk:8081 username@vega.dur.ac.uk
 
 Go to http://tel.dur.ac.uk:8081/artifactory/webapp/mavensettings.html and generate the settings.xml file which you'll need to put in ~/.m2/
 
-If working outside the Durham University network add the following to your settings.xml in ~/.m2/ before <profiles> (and remember to remove it when working within the University network):
-
+If working outside the Durham University network add the following to your settings.xml in ~/.m2/ before `<profiles>` (and remember to remove it when working within the University network):
+<code language="xml">
   <proxies>
    <proxy>
       <active>true</active>
@@ -25,6 +25,6 @@ If working outside the Durham University network add the following to your setti
       <password></password>
       <nonProxyHosts></nonProxyHosts>
     </proxy>
-  </proxies>
-
+  </proxies>`
+</code>
 Check out multiplicity3-parent into eclipse as a general (non-Java) project.  In eclipse go to file > import and select maven > Existing Maven Projects.  Ensure all the projects contained in multiplicity3-parent are selected and click finish.  
