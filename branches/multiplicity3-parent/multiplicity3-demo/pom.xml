@@ -12,13 +12,6 @@
   <version>1.0-SNAPSHOT</version>
   <name>multiplicity3-demo</name>
   <url>http://maven.apache.org</url>
-  <build>
-    <resources>
-      <resource>
-        <directory>assets</directory>
-      </resource>
-    </resources>
-  </build>
   <dependencies>
     <dependency>
     	<groupId>multiplicity3.appsystem</groupId>
