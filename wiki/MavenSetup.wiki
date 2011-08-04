@@ -34,4 +34,4 @@ Check out multiplicity3-parent into eclipse as a general (non-Java) project.  In
 
 *To Create a Jar Desployment*
 
-Ensure that any resource/asset files on a project’s classpath do not have ** in their excluded fields.  Right click the project and select Export > Java > Runnable jar file.  
+Ensure that any src/main/resources or src/test/resources folders on a project’s classpath do not have entries in their excluded fields. Right click the project and select Export > Java > Runnable jar file. 
