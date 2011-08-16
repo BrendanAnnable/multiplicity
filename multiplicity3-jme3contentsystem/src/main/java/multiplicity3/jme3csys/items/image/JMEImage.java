@@ -116,4 +116,9 @@ public class JMEImage extends JMEItem implements IImage, IInitable {
 		setSize(new Vector2f(width, height));
 	}
 
+	@Override
+	public String getImage() {
+		return imageResource;
+	}
+
 }

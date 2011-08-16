@@ -6,6 +6,7 @@ import multiplicity3.csys.items.shapes.IRectangularItem;
 
 public interface IImage extends IRectangularItem {
 	public void setImage(String imageResoure);
+	public String getImage();
 	public void setSize(float width, float height);
 	public void setImage(File imageFile);
 	public void setWrapping(float xscale, float yscale);
