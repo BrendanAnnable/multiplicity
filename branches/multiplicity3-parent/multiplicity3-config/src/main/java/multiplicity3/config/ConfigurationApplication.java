@@ -48,7 +48,7 @@ import multiplicity3.ioutils.FileUtils;
 
 public class ConfigurationApplication {
     
-        static JTabbedPane jtp;
+    protected static JTabbedPane jtp;
 
 	private static final String CORE_PREFS_LIST_FILE = "corepreferences.list";
 
@@ -61,7 +61,7 @@ public class ConfigurationApplication {
 	}
 
 	
-	private static void startConfigGUI() throws FileNotFoundException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	protected static void startConfigGUI() throws FileNotFoundException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		JFrame jf = new JFrame("Configuration Tool v0.1");
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jf.getContentPane().setLayout(new BorderLayout());

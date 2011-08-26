@@ -1,8 +1,3 @@
 multiplicity3.config.developer.DeveloperPreferences
 multiplicity3.config.display.DisplayPreferences
-multiplicity3.config.identity.IdentityConfigPrefsItem
 multiplicity3.config.table.TableConfigPrefsItem
-multiplicity3.config.apikeys.APIKeysConfigPrefsItem
-multiplicity3.config.network.NetworkConfigPrefsItem
-multiplicity3.config.server.ServerConfigPrefsItem
-multiplicity3.config.position.PositionConfigPrefsItem
