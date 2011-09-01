@@ -162,11 +162,16 @@ public abstract class JMEAppRoot extends Application {
         rootNode.updateLogicalState(tpf);
         multiplicityRootNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
-        multiplicityRootNode.updateGeometricState();
 
-        // render states
-        stateManager.render(renderManager);
-        renderManager.render(tpf);
+        try{
+            multiplicityRootNode.updateGeometricState();
+
+            // render states
+            stateManager.render(renderManager);
+        	renderManager.render(tpf);
+        }catch(Exception e){
+        	//Not a perfect solution but does make apps more stable
+        }
         simpleRender(renderManager);
         stateManager.postRender();
         
