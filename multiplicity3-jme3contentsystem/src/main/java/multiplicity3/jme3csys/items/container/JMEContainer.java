@@ -13,8 +13,6 @@ import com.jme3.scene.Spatial;
 @ImplementsContentItem(target = IContainer.class)
 public class JMEContainer extends JMEItem implements IContainer, IInitable {
 	
-	private Object[] information;
-
 	public JMEContainer(String name, UUID uuid) {
 		super(name, uuid);		
 	}
@@ -26,15 +24,5 @@ public class JMEContainer extends JMEItem implements IContainer, IInitable {
 
 	@Override
 	public void initializeGeometry(AssetManager assetManager) {}
-
-	@Override
-	public Object[] getInformation() {
-		return information;
-	}
-
-	@Override
-	public void setInformation(Object[] information) {
-		this.information = information;
-	}
 
 }

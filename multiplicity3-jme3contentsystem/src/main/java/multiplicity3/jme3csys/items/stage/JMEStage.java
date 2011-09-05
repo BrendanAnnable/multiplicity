@@ -24,7 +24,6 @@ public class JMEStage extends JMEItem implements IStage, IInitable {
 	private IPickSystem pickSystem;
 	private IStage localStage;
 	private BehaviourMaker behaviourMaker;
-	private Object[] additionalInformation;
 
 	private int width;
 	private int height;
@@ -143,17 +142,6 @@ public class JMEStage extends JMEItem implements IStage, IInitable {
 	@Override
 	public Vector2f screenToWorld(Vector2f pos) {
 		return pos;
-	}
-
-	@Override
-	public Object[] getInformation() {
-		return additionalInformation;
-	}
-
-	@Override
-	public void setInformation(Object[] info) {
-		this.additionalInformation = info;
-		
 	}
 	
 }
