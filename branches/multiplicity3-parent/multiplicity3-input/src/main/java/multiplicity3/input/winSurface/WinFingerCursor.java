@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009 University of Durham, England
+ * Copyright (c) 2008 University of Durham, England
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,53 +30,70 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package multiplicity3.config.table;
+package multiplicity3.input.winSurface;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.prefs.Preferences;
+import com.jme3.math.Vector2f;
 
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-
-import multiplicity3.config.ConfigurationApplication;
-import multiplicity3.config.PreferencesItem;
-
-public class TableConfigPrefsItem implements PreferencesItem {
-
-	private static final Preferences prefs = ConfigurationApplication.getPreferences(TableConfigPrefsItem.class);
+public class WinFingerCursor {
 	
-	public static final String PREFS_TABLE_TYPE = "TABLE_TYPE";
+	private long id;
+	private long creationTime;
+	private boolean isNew = false;
+	private Vector2f position;
+	private Vector2f velocity;
 	
-	public static enum TableType {
-		JMEDIRECT, TUIOSIM, TUIO, LUMIN, WIN
-	}
-	
-	@Override
-	public JPanel getConfigurationPanel() {
-		JPanel panel = new JPanel();
-		final JComboBox jcb = new JComboBox(TableType.values());
-		jcb.setSelectedItem(getTableType());
-		jcb.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setTableType(TableType.valueOf(jcb.getSelectedItem().toString()));
-			}			
-		});
-		panel.add(jcb);
-		return panel;
+	/**
+	 * Constructs the object with an id and also sets
+	 * the creationTime to be now.
+	 * 
+	 * @param id
+	 */
+	public WinFingerCursor(long id) {
+		setId(id);
+		setCreationTime(System.nanoTime());
 	}
 
-	@Override
-	public String getConfigurationPanelName() {
-		return "Table Type";
-	}
-	
-	public void setTableType(TableType type) {
-		prefs.put(PREFS_TABLE_TYPE, type.name());
+	public long getId() {
+		return id;
 	}
 
-	public TableType getTableType() {			
-		return TableType.valueOf(prefs.get(PREFS_TABLE_TYPE, TableType.JMEDIRECT.name()));
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public long getCreationTime() {
+		return creationTime;
+	}
+
+	public void setCreationTime(long creationTime) {
+		this.creationTime = creationTime;
+	}
+
+	public Vector2f getPosition() {
+		return position;
+	}
+
+	public void setPosition(Vector2f position) {
+		this.position = position;
+	}
+
+	public Vector2f getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(Vector2f velocity) {
+		this.velocity = velocity;
+	}
+
+	public boolean isNew() {
+		return isNew;
+	}
+
+	public void setNew(boolean isNew) {
+		this.isNew = isNew;
+	}
+	
+	public String toString() {
+		return "WinFingerCursor(" + this.getId() + ") @" + this.getPosition();
 	}
 }
