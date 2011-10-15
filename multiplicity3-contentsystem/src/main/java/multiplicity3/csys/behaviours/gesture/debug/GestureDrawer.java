@@ -15,7 +15,6 @@ import com.jme3.util.BufferUtils;
 
 public class GestureDrawer extends Node {
 
-	private static final long serialVersionUID = -8960376013092429184L;
 	private Line a;
 	private Line b;
 

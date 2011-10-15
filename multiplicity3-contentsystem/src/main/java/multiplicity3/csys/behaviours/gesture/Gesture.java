@@ -101,7 +101,6 @@ public class Gesture implements Serializable {
 		Gesture s = new Gesture(name);
 		
 		float lengthBetweenPoints = getStrokeLength() / numPoints;
-		float currentLength = 0;
 		float distanceToNextPoint = lengthBetweenPoints;
 		float lengthConsumedThisSegment = 0f;
 		
@@ -114,11 +113,9 @@ public class Gesture implements Serializable {
 				Vector2f dirAB = b.subtract(a).normalizeLocal(); 
 				Vector2f newPoint = a.add(dirAB.mult(lengthConsumedThisSegment + distanceToNextPoint));
 				s.addPoint(newPoint);
-				currentLength += distanceToNextPoint;
 				lengthConsumedThisSegment += distanceToNextPoint;
 				distanceToNextPoint = lengthBetweenPoints; 
 			}else{
-				currentLength += lengthConsumedThisSegment;
 				distanceToNextPoint = distanceToNextPoint - lengthAB;
 				i++;
 			}
@@ -221,7 +218,6 @@ public class Gesture implements Serializable {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
