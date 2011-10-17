@@ -49,7 +49,7 @@ public class TableConfigPrefsItem implements PreferencesItem {
 	public static final String PREFS_TABLE_TYPE = "TABLE_TYPE";
 	
 	public static enum TableType {
-		JMEDIRECT, TUIOSIM, TUIO, LUMIN, WIN
+		JMEDIRECT, TUIOSIM, TUIO, LUMIN
 	}
 	
 	@Override
