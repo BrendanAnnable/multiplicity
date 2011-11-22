@@ -1,7 +1,5 @@
 package multiplicity3.csys.behaviours.inertia;
 
-import com.jme3.math.Vector2f;
-
 import multiplicity3.csys.animation.AnimationSystem;
 import multiplicity3.csys.animation.elements.behaviourelements.InertiaAnimationElement;
 import multiplicity3.csys.behaviours.IBehaviour;
@@ -18,7 +16,6 @@ public class InertiaBehaviour implements IBehaviour, IMultiTouchEventListener {
 	
 	int cursorCount = 0;
 	private IItem eventSource;
-	private IItem targetItem;
 	protected IStage stage;
 	
 	@Override
@@ -33,9 +30,9 @@ public class InertiaBehaviour implements IBehaviour, IMultiTouchEventListener {
 
 	@Override
 	public void setItemActingOn(IItem item) {
-		this.targetItem = item;
-		iae = new InertiaAnimationElement(item);
-		positionHistory = new ItemPositionHistory(item);		
+		iae = new InertiaAnimationElement(item, stage);
+		positionHistory = new ItemPositionHistory(item);	
+		positionHistory.setStage(stage);
 	}
 
 	@Override
@@ -47,21 +44,23 @@ public class InertiaBehaviour implements IBehaviour, IMultiTouchEventListener {
 
 	@Override
 	public void cursorClicked(MultiTouchCursorEvent event) {
-		// TODO Auto-generated method stub
+		iae.reset();
+		positionHistory.clear();
 		
 	}
 
 	@Override
 	public void cursorPressed(MultiTouchCursorEvent event) {
 		cursorCount++;		
+		iae.reset();
+		positionHistory.clear();
 	}
 
 	@Override
 	public void cursorReleased(MultiTouchCursorEvent event) {
 		if(cursorCount == 1) {
 			positionHistory.add(event.getPosition(), System.currentTimeMillis());			
-			Vector2f worldToLocalV = targetItem.convertWorldVelocityToLocalVelocity(positionHistory.getVelocity());
-			iae.moveWithVelocity(worldToLocalV);
+			iae.moveWithVelocity(positionHistory.getVelocity());
 			AnimationSystem.getInstance().add(iae);
 			positionHistory.clear();
 		}
@@ -69,29 +68,23 @@ public class InertiaBehaviour implements IBehaviour, IMultiTouchEventListener {
 	}
 
 	@Override
-	public void objectAdded(MultiTouchObjectEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void objectAdded(MultiTouchObjectEvent event) {}
 
 	@Override
-	public void objectChanged(MultiTouchObjectEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void objectChanged(MultiTouchObjectEvent event) {}
 
 	@Override
-	public void objectRemoved(MultiTouchObjectEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void objectRemoved(MultiTouchObjectEvent event) {}
 
 	@Override
 	public void setStage(IStage stage) {
 		this.stage = stage;		
-		positionHistory.setStage(stage);
+		if (positionHistory != null) positionHistory.setStage(stage);
 	}
 
 
+	public void setDragFactor(float drag){
+		iae.setDragFactor(drag);
+	}
 
 }
