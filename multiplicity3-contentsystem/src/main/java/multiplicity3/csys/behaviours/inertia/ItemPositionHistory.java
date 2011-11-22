@@ -10,6 +10,9 @@ import com.jme3.math.Vector2f;
 
 // TODO have options for limiting the amount of history recorded
 public class ItemPositionHistory {
+	
+	private static final int SAMPLE_LIMIT = 5;
+	
 	public IItem item;
 	public List<PositionTime> positions;
 	public Vector2f velocity = new Vector2f(0f, 0f);
@@ -22,9 +25,7 @@ public class ItemPositionHistory {
 	Vector2f posTemp = new Vector2f();
 	private IStage stage;
 	public void add(Vector2f position, long timeStampMillis) {
-		//TODO: must make sure the position input to this is in the right coordinate system!
-		//UnitConversion.tableToScreen(position, posTemp);
-		stage.tableToScreen(position, posTemp);
+		stage.tableToScreen(position, posTemp);		
 		positions.add(new PositionTime(posTemp.clone(), timeStampMillis));
 	}
 	
@@ -37,33 +38,28 @@ public class ItemPositionHistory {
 		return velocity;
 	}
 	
-	// TODO a much better velocity calculation needed!!!
 	private void updateVelocity() {
-		if(positions.size() < 2) return;
+		if(positions.size() < SAMPLE_LIMIT) return;
 		
 		PositionTime earlier = null, later = null;
-		if(positions.size() < 3) {
-			later = positions.get(1);
-			earlier = positions.get(0);
-		}else if(positions.size() > 10){
-			later = positions.get(positions.size() - 9);
-			earlier = positions.get(0);
-		}else{
-			later = positions.get(positions.size() - 1);
-			earlier = positions.get(0);
-		}
+
+		earlier = positions.get(positions.size() - SAMPLE_LIMIT);
+		later = positions.get(positions.size() - 1);
+		
 		later.pos.subtract(earlier.pos, velocity);
-		float timeSeconds =  (later.timeStampMillis - earlier.timeStampMillis) / 1000f;
+		float timeSeconds =  (later.timeStampMillis - earlier.timeStampMillis);
 		velocity.multLocal(timeSeconds);
+			
 	}
 	
 	public void clear() {
 		positions.clear();		
+		velocity = new Vector2f(0f, 0f);
 	}
 
 	public static class PositionTime {
 		public Vector2f pos;
-		private long timeStampMillis;
+		public long timeStampMillis;
 		
 		public PositionTime(Vector2f pos, long timeMillis) {
 			this.pos = pos;

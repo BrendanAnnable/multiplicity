@@ -4,6 +4,7 @@ import com.jme3.math.Vector2f;
 
 import multiplicity3.csys.animation.elements.AnimationElement;
 import multiplicity3.csys.items.item.IItem;
+import multiplicity3.csys.stage.IStage;
 
 public class InertiaAnimationElement extends AnimationElement {
 	
@@ -11,9 +12,11 @@ public class InertiaAnimationElement extends AnimationElement {
 	private boolean finished;
 	private Vector2f currentVelocity;
 	private float dragFactor = 1f;
+	private IStage stage;
 
-	public InertiaAnimationElement(IItem item) {
+	public InertiaAnimationElement(IItem item, IStage stage) {
 		this.item = item;
+		this.stage = stage;
 	}
 
 	/*
@@ -37,18 +40,35 @@ public class InertiaAnimationElement extends AnimationElement {
 
 	@Override
 	public void reset() {
-		
+		finished = true;	
+		currentVelocity = new Vector2f();
 	}
 
 	@Override
 	public void updateAnimationState(float tpf) {
-		item.setRelativeLocation(item.getRelativeLocation().add(currentVelocity.mult(tpf)));
-		
-		Vector2f reduceBy = currentVelocity.mult(1/dragFactor  * tpf);
-		currentVelocity.subtractLocal(reduceBy);
-		
-		if(currentVelocity.length() < 1f) {
-			finished = true;
+		if (!finished){
+			item.setWorldLocation(item.getWorldLocation().add(currentVelocity.mult(tpf)));
+				
+			if (item.getWorldLocation().x > stage.getDisplayWidth()){
+				if (currentVelocity.x > 0)currentVelocity.setX(-currentVelocity.getX());				
+			}else if (item.getWorldLocation().x < 0){
+				if (currentVelocity.x < 0)currentVelocity.setX(-currentVelocity.getX());	
+			}
+			
+			if (item.getWorldLocation().y > stage.getDisplayHeight()){
+				if (currentVelocity.y > 0)currentVelocity.setY(-currentVelocity.getY());				
+			}else if (item.getWorldLocation().y < 0){
+				if (currentVelocity.y < 0)currentVelocity.setY(-currentVelocity.getY());	
+			}
+					
+			//TODO:  Initiate event for network flick
+			
+			Vector2f reduceBy = currentVelocity.mult(1/dragFactor  * tpf);
+			currentVelocity.subtractLocal(reduceBy);
+			
+			if(currentVelocity.length() < 1f) {
+				finished = true;
+			}
 		}
 	}
 
