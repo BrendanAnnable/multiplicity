@@ -60,8 +60,6 @@ public class InertiaAnimationElement extends AnimationElement {
 			}else if (item.getWorldLocation().y < 0){
 				if (currentVelocity.y < 0)currentVelocity.setY(-currentVelocity.getY());	
 			}
-					
-			//TODO:  Initiate event for network flick
 			
 			Vector2f reduceBy = currentVelocity.mult(1/dragFactor  * tpf);
 			currentVelocity.subtractLocal(reduceBy);
