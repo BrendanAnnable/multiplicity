@@ -4,8 +4,8 @@ import java.util.logging.Logger;
 
 import com.jme3.input.InputManager;
 
-import multiplicity3.config.table.TableConfigPrefsItem;
-import multiplicity3.config.table.TableConfigPrefsItem.TableType;
+import multiplicity3.config.input.InputConfigPrefsItem;
+import multiplicity3.config.input.InputConfigPrefsItem.InputType;
 import multiplicity3.input.IMultiTouchInputSource;
 import multiplicity3.input.luminja.LuminMultiTouchInput;
 import multiplicity3.input.simulator.jme.JMEDirectSimulator;
@@ -16,8 +16,8 @@ public class MultiTouchInputUtility {
 	private static final Logger log = Logger.getLogger(MultiTouchInputUtility.class.getName());
 
 	public static IMultiTouchInputSource getInputSource(InputManager inputManager, int displayWidth, int displayHeight) {
-		TableConfigPrefsItem tablePrefs = new TableConfigPrefsItem();
-		TableType tabletype = tablePrefs.getTableType();
+		InputConfigPrefsItem tablePrefs = new InputConfigPrefsItem();
+		InputType tabletype = tablePrefs.getInputType();
 		IMultiTouchInputSource multiTouchInput = null;
 		
 		log.info("Table type: " + tabletype.toString());
@@ -33,7 +33,7 @@ public class MultiTouchInputUtility {
 			break;
 		}
 		
-		case LUMIN: {
+		case EVOLUCE: {
 			try {
 				multiTouchInput = new LuminMultiTouchInput();
 			} catch (SecurityException e) {
@@ -51,18 +51,17 @@ public class MultiTouchInputUtility {
 			break;
 		}
 		
-		case TUIOSIM: {
-			try {
-				multiTouchInput = new TUIOMultiTouchInput();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			}
-			//TODO: update - but nobody uses this, right?
-			//JMETUIOSimulator simulator = new JMETUIOSimulator(displayWidth, displayHeight);
-			//simulator.start();
-			throw new UnsupportedOperationException();
-//			break;
-		}		
+//		case TUIOSIM: {
+//			try {
+//				multiTouchInput = new TUIOMultiTouchInput();
+//			} catch (SecurityException e) {
+//				e.printStackTrace();
+//			}
+//			//JMETUIOSimulator simulator = new JMETUIOSimulator(displayWidth, displayHeight);
+//			//simulator.start();
+//			throw new UnsupportedOperationException();
+////			break;
+//		}		
 		}
 
 		return multiTouchInput;

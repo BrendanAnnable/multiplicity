@@ -62,7 +62,7 @@ public class ConfigurationApplication {
 
 	
 	protected static void startConfigGUI() throws FileNotFoundException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-		JFrame jf = new JFrame("Configuration Tool v0.1");
+		JFrame jf = new JFrame("Configuration Tool");
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jf.getContentPane().setLayout(new BorderLayout());
 		jtp = new JTabbedPane();
@@ -75,7 +75,7 @@ public class ConfigurationApplication {
 		loadCorePreferencesItems(jtp);
 
 		jf.getContentPane().add(jtp, BorderLayout.CENTER);
-		jf.setSize(800, 600);
+		jf.setSize(680, 380);
 		jf.setVisible(true);
 	}
         

@@ -11,7 +11,7 @@ import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.Arrays;
 
-import javax.swing.JFileChooser;
+//import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -23,7 +23,7 @@ import com.jme3.system.AppSettings;
 import com.jme3.system.JmeSystem;
 
 import multiplicity3.config.PreferencesItem;
-import multiplicity3.config.display.DisplayPreferences.Stereo3DMode;
+//import multiplicity3.config.display.DisplayPreferences.Stereo3DMode;
 
 /**
  *
@@ -59,12 +59,12 @@ public class DisplayPreferencesPanel extends javax.swing.JPanel implements Prefe
         alphaBits = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         depthBits = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        displayShapeFile = new javax.swing.JTextField();
-        browseShapeFile = new javax.swing.JButton();
-        defaultDisplayShape = new javax.swing.JCheckBox();
-        stereo3DSelector = new javax.swing.JComboBox();
-        jLabel7 = new javax.swing.JLabel();
+//        jLabel6 = new javax.swing.JLabel();
+//        displayShapeFile = new javax.swing.JTextField();
+//        browseShapeFile = new javax.swing.JButton();
+//        defaultDisplayShape = new javax.swing.JCheckBox();
+//        stereo3DSelector = new javax.swing.JComboBox();
+//        jLabel7 = new javax.swing.JLabel();
 
         jLabel1.setText("Display Size:");
         jLabel1.setName("jLabel1"); // NOI18N
@@ -130,41 +130,41 @@ public class DisplayPreferencesPanel extends javax.swing.JPanel implements Prefe
             }
         });
 
-        jLabel6.setText("Display shape:");
-        jLabel6.setName("jLabel6"); // NOI18N
-
-        displayShapeFile.setEditable(false);
-        displayShapeFile.setText("jTextField1");
-        displayShapeFile.setMinimumSize(new java.awt.Dimension(280, 28));
-        displayShapeFile.setName("displayShapeFile"); // NOI18N
-
-        browseShapeFile.setText("Browse...");
-        browseShapeFile.setName("browseShapeFile"); // NOI18N
-        browseShapeFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                browseShapeFileActionPerformed(evt);
-            }
-        });
-
-        defaultDisplayShape.setText("Default rectangle shape display:");
-        defaultDisplayShape.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        defaultDisplayShape.setName("defaultDisplayShape"); // NOI18N
-        defaultDisplayShape.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                defaultDisplayShapeItemStateChanged(evt);
-            }
-        });
-
-        stereo3DSelector.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        stereo3DSelector.setName("stereo3DSelector"); // NOI18N
-        stereo3DSelector.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                stereo3DSelectorItemStateChanged(evt);
-            }
-        });
-
-        jLabel7.setText("Stereo 3D:");
-        jLabel7.setName("jLabel7"); // NOI18N
+//        jLabel6.setText("Display shape:");
+//        jLabel6.setName("jLabel6"); // NOI18N
+//
+//        displayShapeFile.setEditable(false);
+//        displayShapeFile.setText("jTextField1");
+//        displayShapeFile.setMinimumSize(new java.awt.Dimension(280, 28));
+//        displayShapeFile.setName("displayShapeFile"); // NOI18N
+//
+//        browseShapeFile.setText("Browse...");
+//        browseShapeFile.setName("browseShapeFile"); // NOI18N
+//        browseShapeFile.addActionListener(new java.awt.event.ActionListener() {
+//            public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                browseShapeFileActionPerformed(evt);
+//            }
+//        });
+//
+//        defaultDisplayShape.setText("Default rectangle shape display:");
+//        defaultDisplayShape.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+//        defaultDisplayShape.setName("defaultDisplayShape"); // NOI18N
+//        defaultDisplayShape.addItemListener(new java.awt.event.ItemListener() {
+//            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+//                defaultDisplayShapeItemStateChanged(evt);
+//            }
+//        });
+//
+//        stereo3DSelector.setModel(new javax.swing.DefaultComboBoxModel(Stereo3DMode.values()));
+//        stereo3DSelector.setName("stereo3DSelector"); // NOI18N
+//        stereo3DSelector.addItemListener(new java.awt.event.ItemListener() {
+//            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+//                stereo3DSelectorItemStateChanged(evt);
+//            }
+//        });
+//
+//        jLabel7.setText("Stereo 3D:");
+//        jLabel7.setName("jLabel7"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -178,19 +178,20 @@ public class DisplayPreferencesPanel extends javax.swing.JPanel implements Prefe
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
+                            .addComponent(jLabel5))
+//                            .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(depthBits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(alphaBits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(stencilBits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(antiAlias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(displayShapeFile, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(browseShapeFile))
-                            .addComponent(defaultDisplayShape)))
+                            .addComponent(antiAlias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+//                            .addGroup(layout.createSequentialGroup()
+//                                .addComponent(displayShapeFile, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+//                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+//                                .addComponent(browseShapeFile))
+//                            .addComponent(defaultDisplayShape)))
+    
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
@@ -198,9 +199,9 @@ public class DisplayPreferencesPanel extends javax.swing.JPanel implements Prefe
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(fullScreen, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(stereo3DSelector, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+//                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+//                        .addComponent(stereo3DSelector, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -210,8 +211,8 @@ public class DisplayPreferencesPanel extends javax.swing.JPanel implements Prefe
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(displaySelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
-                    .addComponent(stereo3DSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+//                    .addComponent(jLabel7)
+//                    .addComponent(stereo3DSelector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fullScreen))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -230,12 +231,12 @@ public class DisplayPreferencesPanel extends javax.swing.JPanel implements Prefe
                     .addComponent(jLabel5)
                     .addComponent(depthBits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(displayShapeFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(browseShapeFile))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(defaultDisplayShape)
+//                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+//                    .addComponent(jLabel6)
+//                    .addComponent(displayShapeFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+//                    .addComponent(browseShapeFile))
+//                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+//                .addComponent(defaultDisplayShape)
                 .addContainerGap(30, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -268,30 +269,30 @@ public class DisplayPreferencesPanel extends javax.swing.JPanel implements Prefe
 		prefs.setDepthBits(getNumberFromTextField(depthBits));
 	}//GEN-LAST:event_depthBitsKeyReleased
 
-	private void browseShapeFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseShapeFileActionPerformed
-		final JFileChooser fc = new JFileChooser(new File(prefs.getDisplayShape()));
-		fc.setFileFilter(new OBJFilter());
-		int returnVal = fc.showOpenDialog(this);
-
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			File file = fc.getSelectedFile();
-			displayShapeFile.setText(file.getAbsolutePath());
-			prefs.setDisplayShape(file.getAbsolutePath());
-		}
-	}//GEN-LAST:event_browseShapeFileActionPerformed
-
-	private void defaultDisplayShapeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_defaultDisplayShapeItemStateChanged
-		prefs.setUseDefaultShapeFlag(defaultDisplayShape.isSelected());
-		if (defaultDisplayShape.isSelected()){
-			browseShapeFile.setEnabled(false);
-		}else{
-			browseShapeFile.setEnabled(true);
-		}
-	}//GEN-LAST:event_defaultDisplayShapeItemStateChanged
-
-	private void stereo3DSelectorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_stereo3DSelectorItemStateChanged
-		prefs.setStereo3DMode(Stereo3DMode.valueOf(stereo3DSelector.getSelectedItem().toString()));
-	}//GEN-LAST:event_stereo3DSelectorItemStateChanged
+//	private void browseShapeFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseShapeFileActionPerformed
+//		final JFileChooser fc = new JFileChooser(new File(prefs.getDisplayShape()));
+//		fc.setFileFilter(new OBJFilter());
+//		int returnVal = fc.showOpenDialog(this);
+//
+//		if (returnVal == JFileChooser.APPROVE_OPTION) {
+//			File file = fc.getSelectedFile();
+//			displayShapeFile.setText(file.getAbsolutePath());
+//			prefs.setDisplayShape(file.getAbsolutePath());
+//		}
+//	}//GEN-LAST:event_browseShapeFileActionPerformed
+//
+//	private void defaultDisplayShapeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_defaultDisplayShapeItemStateChanged
+//		prefs.setUseDefaultShapeFlag(defaultDisplayShape.isSelected());
+//		if (defaultDisplayShape.isSelected()){
+//			browseShapeFile.setEnabled(false);
+//		}else{
+//			browseShapeFile.setEnabled(true);
+//		}
+//	}//GEN-LAST:event_defaultDisplayShapeItemStateChanged
+//
+//	private void stereo3DSelectorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_stereo3DSelectorItemStateChanged
+//		prefs.setStereo3DMode(Stereo3DMode.valueOf(stereo3DSelector.getSelectedItem().toString()));
+//	}//GEN-LAST:event_stereo3DSelectorItemStateChanged
 
 	private int getNumberFromTextField(JTextField tf) {
 		try {
@@ -362,9 +363,9 @@ public class DisplayPreferencesPanel extends javax.swing.JPanel implements Prefe
 		alphaBits.setText("" + prefs.getAlphaBits());
 		stencilBits.setText("" + prefs.getStencilBits());
 		depthBits.setText("" + prefs.getDepthBits());
-		displayShapeFile.setText(prefs.getDisplayShape());
-		stereo3DSelector.setSelectedItem(prefs.getStereo3DMode().toString());
-		defaultDisplayShape.setSelected(prefs.getUseDefaultShapeFlag());
+//		displayShapeFile.setText(prefs.getDisplayShape());
+//		stereo3DSelector.setSelectedItem(prefs.getStereo3DMode().toString());
+//		defaultDisplayShape.setSelected(prefs.getUseDefaultShapeFlag());
 	}
 
 	private void initFullScreen() {
@@ -393,21 +394,21 @@ public class DisplayPreferencesPanel extends javax.swing.JPanel implements Prefe
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField alphaBits;
     private javax.swing.JTextField antiAlias;
-    private javax.swing.JButton browseShapeFile;
-    private javax.swing.JCheckBox defaultDisplayShape;
+//    private javax.swing.JButton browseShapeFile;
+//    private javax.swing.JCheckBox defaultDisplayShape;
     private javax.swing.JTextField depthBits;
     private javax.swing.JComboBox displaySelector;
-    private javax.swing.JTextField displayShapeFile;
+//    private javax.swing.JTextField displayShapeFile;
     private javax.swing.JCheckBox fullScreen;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
+//    private javax.swing.JLabel jLabel6;
+//    private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField stencilBits;
-    private javax.swing.JComboBox stereo3DSelector;
+//    private javax.swing.JComboBox stereo3DSelector;
     // End of variables declaration//GEN-END:variables
 
 

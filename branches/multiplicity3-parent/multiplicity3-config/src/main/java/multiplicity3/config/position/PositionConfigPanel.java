@@ -50,9 +50,10 @@ public class PositionConfigPanel extends JPanel {
     private JCheckBox cbEnableNormalPositionMode = new JCheckBox();
     private JCheckBox cbEnableDeveloperMode = new JCheckBox();
 	private JLabel jLabelTablePosition = new JLabel();
-	private JLabel jLabelRotationAngle = new JLabel();
+	private JLabel jLabelTableOrientation = new JLabel();	
 	private JLabel jLabelX = new JLabel();
 	private JLabel jLabelY = new JLabel();
+	private JLabel jLabelAngle = new JLabel();
 	private JLabel jLabelWarning = new JLabel();
 	private JTextField jTextFieldPositionX = new JTextField();
 	private JTextField jTextFieldPositionY = new JTextField();
@@ -99,7 +100,7 @@ public class PositionConfigPanel extends JPanel {
 
 	    jLabelTablePosition.setText("Position:");
 
-	    jLabelX.setText("X = ");
+	    jLabelX.setText(" X = ");
 
 	    jTextFieldPositionX.addKeyListener(new KeyAdapter() {
 			@Override
@@ -117,7 +118,7 @@ public class PositionConfigPanel extends JPanel {
 			}
 		});
 
-	    jLabelY.setText("Y =");
+	    jLabelY.setText(" Y =");
 
 	    jTextFieldPositionY.addKeyListener(new KeyAdapter() {
 			@Override
@@ -135,7 +136,9 @@ public class PositionConfigPanel extends JPanel {
 			}
 		});
 
-	    jLabelRotationAngle.setText("Rotation Angle (in degrees) = ");
+	    jLabelTableOrientation.setText("Orientation (in degrees): ");
+	    
+	    jLabelAngle.setText(" Angle =");
 
 	    jTextFieldAngle.addKeyListener(new KeyAdapter() {
 			@Override
@@ -169,7 +172,7 @@ public class PositionConfigPanel extends JPanel {
 
         jLabelTableDistances.setText("Distances between displays:");
 
-        jLabelXDistance.setText("X = ");
+        jLabelXDistance.setText(" X = ");
 
         jTextFieldDistanceX.addKeyListener(new KeyAdapter() {
 			@Override
@@ -187,7 +190,7 @@ public class PositionConfigPanel extends JPanel {
 			}
 		});
 
-	    jLabelYDistance.setText("Y =");
+	    jLabelYDistance.setText(" Y =");
 
 	    jTextFieldDistanceY.addKeyListener(new KeyAdapter() {
 			@Override
@@ -207,7 +210,7 @@ public class PositionConfigPanel extends JPanel {
 
 	    jLabelTableLimits.setText("Grid Limit (0 = no limit):");
 
-	    jLabelXLimit.setText("X = ");
+	    jLabelXLimit.setText(" X = ");
 
 	    jTextFieldLimitX.addKeyListener(new KeyAdapter() {
 			@Override
@@ -225,7 +228,7 @@ public class PositionConfigPanel extends JPanel {
 			}
 		});
 
-	    jLabelYLimit.setText("Y =");
+	    jLabelYLimit.setText(" Y =");
 
 	    jTextFieldLimitY.addKeyListener(new KeyAdapter() {
 			@Override
@@ -277,12 +280,13 @@ public class PositionConfigPanel extends JPanel {
 
         cbEnableNormalPositionMode.setBounds(new Rectangle(10, 10, 300, 24));
         jLabelTablePosition.setBounds(new Rectangle(50, 30, 133, 46));
-	    jLabelX.setBounds(new Rectangle(270, 30, 39, 46));
+	    jLabelX.setBounds(new Rectangle(270, 30, 390, 46));	   
 	    jTextFieldPositionX.setBounds(new Rectangle(295, 42, 57, 24));
 	    jLabelY.setBounds(new Rectangle(420, 30, 39, 46));
 	    jTextFieldPositionY.setBounds(new Rectangle(445, 42, 57, 24));
-	    jLabelRotationAngle.setBounds(new Rectangle(50, 65, 250, 46));
-	    jTextFieldAngle.setBounds(new Rectangle(270, 77, 57, 24));
+	    jLabelTableOrientation.setBounds(new Rectangle(50, 65, 250, 46));
+	    jLabelAngle.setBounds(new Rectangle(247, 65, 250, 46));
+	    jTextFieldAngle.setBounds(new Rectangle(295, 77, 57, 24));
         cbEnableDeveloperMode.setBounds(new Rectangle(10, 150, 300, 24));
 	    jLabelTableDistances.setBounds(new Rectangle(50, 170, 210, 46));
 	    jLabelXDistance.setBounds(new Rectangle(270, 170, 39, 46));
@@ -297,7 +301,7 @@ public class PositionConfigPanel extends JPanel {
 	    jLabelPlacement.setBounds(new Rectangle(50, 240, 210, 46));
 	    horizontal.setBounds(new Rectangle(295, 252, 150, 24));
 	    vertical.setBounds(new Rectangle(445, 252, 155, 24));
-	    jLabelWarning.setBounds(new Rectangle(26, 300, 500, 46));
+	    jLabelWarning.setBounds(new Rectangle(26, 280, 500, 46));
 
 
 	    add(cbEnableNormalPositionMode, null);
@@ -306,7 +310,8 @@ public class PositionConfigPanel extends JPanel {
 	    add(jTextFieldPositionX, null);
 	    add(jLabelY, null);
 	    add(jTextFieldPositionY, null);
-	    add(jLabelRotationAngle, null);
+	    add(jLabelTableOrientation, null);
+	    add(jLabelAngle, null);
 	    add(jTextFieldAngle, null);
 	    add(cbEnableDeveloperMode, null);
 	    add(jLabelTableDistances, null);
