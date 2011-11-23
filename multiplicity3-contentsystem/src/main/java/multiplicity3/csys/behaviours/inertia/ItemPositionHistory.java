@@ -11,7 +11,8 @@ import com.jme3.math.Vector2f;
 // TODO have options for limiting the amount of history recorded
 public class ItemPositionHistory {
 	
-	private static final int SAMPLE_LIMIT = 5;
+	private static final int SAMPLE_LIMIT = 4;
+	private static final float THRESHOLD = 100;
 	
 	public IItem item;
 	public List<PositionTime> positions;
@@ -48,7 +49,13 @@ public class ItemPositionHistory {
 		
 		later.pos.subtract(earlier.pos, velocity);
 		float timeSeconds =  (later.timeStampMillis - earlier.timeStampMillis);
-		velocity.multLocal(timeSeconds);
+		
+		if (timeSeconds > THRESHOLD){
+			clear();
+		}else{
+			velocity.multLocal(timeSeconds);
+		}
+
 			
 	}
 	
