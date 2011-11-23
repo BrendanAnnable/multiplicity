@@ -20,9 +20,9 @@ public class DisplayPreferences implements PreferencesItem {
 	private static final String DISPLAY_ALPHA_BITS = "DISPLAY_ALPHA_BITS";	
 	private static final String DISPLAY_DEPTH_BITS = "DISPLAY_DEPTH";
 	private static final String DISPLAY_RENDERER = "DISPLAY_RENDERER";
-	private static final String DISPLAY_SHAPE = "DISPLAY_SHAPE";
-	private static final String DISPLAY_DEFAULT_SHAPE = "DISPLAY_DEFAULT_SHAPE";
-	private static final String DISPLAY_STEREO_MODE = "DISPLAY_STEREO_MODE";
+//	private static final String DISPLAY_SHAPE = "DISPLAY_SHAPE";
+//	private static final String DISPLAY_DEFAULT_SHAPE = "DISPLAY_DEFAULT_SHAPE";
+//	private static final String DISPLAY_STEREO_MODE = "DISPLAY_STEREO_MODE";
 	
 	public enum Stereo3DMode {
 		NONE,
@@ -124,27 +124,27 @@ public class DisplayPreferences implements PreferencesItem {
 		prefs.put(DISPLAY_RENDERER, renderer);
 	}
 
-	public void setDisplayShape(String s) {
-		prefs.put(DISPLAY_SHAPE, s);
-	}
-
-	public String getDisplayShape() {
-		return prefs.get(DISPLAY_SHAPE, "");
-	}
-
-	public void setUseDefaultShapeFlag(boolean fs) {
-		prefs.putBoolean(DISPLAY_DEFAULT_SHAPE, fs);
-	}
-
-	public boolean getUseDefaultShapeFlag() {
-		return prefs.getBoolean(DISPLAY_DEFAULT_SHAPE, true);
-	}
-
-	public void setStereo3DMode(Stereo3DMode mode) {
-		prefs.put(DISPLAY_STEREO_MODE, mode.toString());
-	}
-	
-	public Stereo3DMode getStereo3DMode() {
-		return Stereo3DMode.valueOf(prefs.get(DISPLAY_STEREO_MODE, Stereo3DMode.NONE.toString()));
-	}
+//	public void setDisplayShape(String s) {
+//		prefs.put(DISPLAY_SHAPE, s);
+//	}
+//
+//	public String getDisplayShape() {
+//		return prefs.get(DISPLAY_SHAPE, "");
+//	}
+//
+//	public void setUseDefaultShapeFlag(boolean fs) {
+//		prefs.putBoolean(DISPLAY_DEFAULT_SHAPE, fs);
+//	}
+//
+//	public boolean getUseDefaultShapeFlag() {
+//		return prefs.getBoolean(DISPLAY_DEFAULT_SHAPE, true);
+//	}
+//
+//	public void setStereo3DMode(Stereo3DMode mode) {
+//		prefs.put(DISPLAY_STEREO_MODE, mode.toString());
+//	}
+//	
+//	public Stereo3DMode getStereo3DMode() {
+//		return Stereo3DMode.valueOf(prefs.get(DISPLAY_STEREO_MODE, Stereo3DMode.NONE.toString()));
+//	}
 }

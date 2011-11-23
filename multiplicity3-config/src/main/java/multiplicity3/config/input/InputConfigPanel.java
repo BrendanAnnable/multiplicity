@@ -13,8 +13,8 @@
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
  *
- * * Neither the name of 'SynergySpace' nor the names of its contributors 
- *   may be used to endorse or promote products derived from this software 
+ * * Neither the name of 'SynergySpace' nor the names of its contributors
+ *   may be used to endorse or promote products derived from this software
  *   without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -30,53 +30,52 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package multiplicity3.config.table;
+package multiplicity3.config.input;
 
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.prefs.Preferences;
 
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import multiplicity3.config.ConfigurationApplication;
-import multiplicity3.config.PreferencesItem;
+import multiplicity3.config.input.InputConfigPrefsItem.InputType;
 
-public class TableConfigPrefsItem implements PreferencesItem {
+public class InputConfigPanel extends JPanel {
 
-	private static final Preferences prefs = ConfigurationApplication.getPreferences(TableConfigPrefsItem.class);
-	
-	public static final String PREFS_TABLE_TYPE = "TABLE_TYPE";
-	
-	public static enum TableType {
-		JMEDIRECT, TUIOSIM, TUIO, LUMIN
-	}
-	
-	@Override
-	public JPanel getConfigurationPanel() {
-		JPanel panel = new JPanel();
-		final JComboBox jcb = new JComboBox(TableType.values());
-		jcb.setSelectedItem(getTableType());
+	private static final long serialVersionUID = 1959347964564852506L;
+	private InputConfigPrefsItem prefsItem;
+
+    private JComboBox jcb = new JComboBox(InputType.values());
+	private JLabel jLabelInputType = new JLabel();
+
+
+    public InputConfigPanel(InputConfigPrefsItem inputConfigPrefsItem) {
+    	this.prefsItem = inputConfigPrefsItem;
+        initComponents();
+    }
+
+    private void initComponents() {
+
+	    setLayout(null);
+	    
+        jLabelInputType.setText("Input Type:");
+
+		jcb.setSelectedItem(prefsItem.getInputType());
 		jcb.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setTableType(TableType.valueOf(jcb.getSelectedItem().toString()));
+				prefsItem.setInputType(InputType.valueOf(jcb.getSelectedItem().toString()));
 			}			
 		});
-		panel.add(jcb);
-		return panel;
-	}
+	    
+		jLabelInputType.setBounds(new Rectangle(10, 10, 75, 23));
+		jcb.setBounds(new Rectangle(100, 10, 100, 23));
 
-	@Override
-	public String getConfigurationPanelName() {
-		return "Table Type";
-	}
-	
-	public void setTableType(TableType type) {
-		prefs.put(PREFS_TABLE_TYPE, type.name());
-	}
+	    add(jLabelInputType, null);
+	    add(jcb, null);
 
-	public TableType getTableType() {			
-		return TableType.valueOf(prefs.get(PREFS_TABLE_TYPE, TableType.JMEDIRECT.name()));
-	}
+    }
+
 }
