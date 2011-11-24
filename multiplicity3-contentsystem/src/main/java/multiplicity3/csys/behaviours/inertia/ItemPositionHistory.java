@@ -8,11 +8,11 @@ import multiplicity3.csys.stage.IStage;
 
 import com.jme3.math.Vector2f;
 
-// TODO have options for limiting the amount of history recorded
 public class ItemPositionHistory {
 	
-	private static final int SAMPLE_LIMIT = 4;
-	private static final float THRESHOLD = 100;
+	private static final int SAMPLE_SIZE = 4;
+	private static final int SAMPLE_OFFSET = 3;
+	private static final float TIME_THRESHOLD = 500;
 	
 	public IItem item;
 	public List<PositionTime> positions;
@@ -40,20 +40,20 @@ public class ItemPositionHistory {
 	}
 	
 	private void updateVelocity() {
-		if(positions.size() < SAMPLE_LIMIT) return;
+		if(positions.size() < SAMPLE_SIZE + SAMPLE_OFFSET) return;
 		
 		PositionTime earlier = null, later = null;
 
-		earlier = positions.get(positions.size() - SAMPLE_LIMIT);
-		later = positions.get(positions.size() - 1);
+		earlier = positions.get(positions.size() - SAMPLE_SIZE - SAMPLE_OFFSET);
+		later = positions.get(positions.size() - SAMPLE_OFFSET);
 		
 		later.pos.subtract(earlier.pos, velocity);
 		float timeSeconds =  (later.timeStampMillis - earlier.timeStampMillis);
 		
-		if (timeSeconds > THRESHOLD){
+		if (timeSeconds > TIME_THRESHOLD){
 			clear();
 		}else{
-			velocity.multLocal(timeSeconds);
+			velocity.multLocal(SAMPLE_SIZE + SAMPLE_OFFSET);
 		}
 
 			
