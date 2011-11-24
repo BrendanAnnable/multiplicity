@@ -37,6 +37,8 @@ import java.util.prefs.Preferences;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import com.jme3.math.Vector2f;
+
 import multiplicity3.config.ConfigurationApplication;
 import multiplicity3.config.PreferencesItem;
 
@@ -78,32 +80,32 @@ public class PositionConfigPrefsItem implements PreferencesItem {
 	}
 
 
-	public String getXPos() {
-		return prefs.get(PREFS_LOCATION_X, "0");
+	public int getXPos() {
+		return prefs.getInt(PREFS_LOCATION_X, 0);
 	}
 
-	public String getYPos() {
-		return prefs.get(PREFS_LOCATION_Y, "0");
+	public int getYPos() {
+		return prefs.getInt(PREFS_LOCATION_Y, 0);
 	}
 
-	public String getAngle() {
-		return prefs.get(PREFS_ANGLE, "0");
+	public Float getAngle() {
+		return prefs.getFloat(PREFS_ANGLE, 0);
 	}
 
-	public String getGridDistanceX() {
-		return prefs.get(GRID_DISTANCE_X, "0");
+	public int getGridDistanceX() {
+		return prefs.getInt(GRID_DISTANCE_X, 0);
 	}
 
-	public String getGridDistanceY() {
-		return prefs.get(GRID_DISTANCE_Y, "0");
+	public int getGridDistanceY() {
+		return prefs.getInt(GRID_DISTANCE_Y, 0);
 	}
 
-	public String getGridLimitX() {
-		return prefs.get(GRID_LIMIT_X, "0");
+	public int getGridLimitX() {
+		return prefs.getInt(GRID_LIMIT_X, 0);
 	}
 
-	public String getGridLimitY() {
-		return prefs.get(GRID_LIMIT_Y, "0");
+	public int getGridLimitY() {
+		return prefs.getInt(GRID_LIMIT_Y, 0);
 	}
 
 	public void setDeveloperMode(boolean selected) {
@@ -184,6 +186,43 @@ public class PositionConfigPrefsItem implements PreferencesItem {
 		}catch(Exception e){
 			return false;
 		}
+	}
+	
+	
+	public Vector2f getLocation(){
+		int location_x = getXPos();
+		int location_y = getYPos();
+
+		if (getDeveloperMode()){
+			if (getHorizontalPlacement()){
+				if(getGridLimitX() != 0){
+					int xPos = (prefs.getInt(PositionConfigPrefsItem.CURRENT_CONNECTIONS, 0)-1) % getGridLimitX();
+					location_x = xPos * getGridDistanceX();
+					int yPos = (prefs.getInt(PositionConfigPrefsItem.CURRENT_CONNECTIONS, 0)-1) / getGridLimitX();
+					location_y = yPos * getGridDistanceY();
+				}else{
+					location_x = (prefs.getInt(PositionConfigPrefsItem.CURRENT_CONNECTIONS, 0)-1) * getGridDistanceX();
+					location_y = 0;
+				}
+			}else{
+				if(getGridLimitY() != 0){
+					int yPos = (prefs.getInt(PositionConfigPrefsItem.CURRENT_CONNECTIONS, 0)-1) % getGridLimitY();
+					location_y = yPos * getGridDistanceY();
+					int xPos = (prefs.getInt(PositionConfigPrefsItem.CURRENT_CONNECTIONS, 0)-1) / getGridLimitY();
+					location_x = xPos * getGridDistanceX();
+				}else{
+					location_y = (prefs.getInt(PositionConfigPrefsItem.CURRENT_CONNECTIONS, 0)-1) * getGridDistanceY();
+					location_x = 0;
+				}
+			}
+		}
+		return new Vector2f(location_x, location_y);
+	}
+	
+	public float getOrientation(){
+		float angle = getAngle();
+		if (getDeveloperMode())angle = 0;		
+		return angle;
 	}
 
 }

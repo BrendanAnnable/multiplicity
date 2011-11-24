@@ -1,5 +1,6 @@
 package multiplicity3.csys.behaviours;
 
+import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.logging.Logger;
 
@@ -34,6 +35,23 @@ public class BehaviourMaker {
             log.warning(e.toString());
         }
         return null;
+    }
+    
+    public ArrayList<IBehaviour> getBehavior(IItem item, Class<? extends IBehaviour> behaviourClass) {
+    	ArrayList<IBehaviour> behaviours = new ArrayList<IBehaviour>();
+        if (!item.getBehaviours().isEmpty()) {
+        	ListIterator<IBehaviour> li = item.getBehaviours().listIterator();
+            
+            while(li.hasNext()) {
+            	IBehaviour b = li.next();
+            	
+            	if (b.getClass().equals(behaviourClass)) {
+            		behaviours.add(b);
+
+                }
+            }   
+        }
+        return behaviours;
     }
 
     public void removeBehavior(IItem item, Class<? extends IBehaviour> behaviourClass) {
