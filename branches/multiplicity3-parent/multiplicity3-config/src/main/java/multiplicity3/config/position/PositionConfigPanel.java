@@ -347,13 +347,13 @@ public class PositionConfigPanel extends JPanel {
 	}
 
 	private void loadPreferences(){
-		jTextFieldPositionX.setText(prefsItem.getXPos());
-		jTextFieldPositionY.setText(prefsItem.getYPos());
-		jTextFieldAngle.setText(prefsItem.getAngle());
-		jTextFieldDistanceX.setText(prefsItem.getGridDistanceX());
-		jTextFieldDistanceY.setText(prefsItem.getGridDistanceY());
-		jTextFieldLimitX.setText(prefsItem.getGridLimitX());
-		jTextFieldLimitY.setText(prefsItem.getGridLimitY());
+		jTextFieldPositionX.setText("" + prefsItem.getXPos());
+		jTextFieldPositionY.setText("" + prefsItem.getYPos());
+		jTextFieldAngle.setText("" + prefsItem.getAngle());
+		jTextFieldDistanceX.setText("" + prefsItem.getGridDistanceX());
+		jTextFieldDistanceY.setText("" + prefsItem.getGridDistanceY());
+		jTextFieldLimitX.setText("" + prefsItem.getGridLimitX());
+		jTextFieldLimitY.setText("" + prefsItem.getGridLimitY());
 	}
 
 	private void enableDeveloperMode(ActionEvent evt) {
