@@ -1,35 +1,15 @@
-#labels setup,Phase-Implementation
+#labels setup
 *Basic Project Setup*
 
-You'll need:
-1. Maven installed
-2. Eclipse Helios
-3. Sonatype maven plugin for Eclipse
-4. Subversion plugin for Eclipse
+Required:
+ # [http://maven.apache.org/ Maven installed]
+ # Eclipse [http://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/heliossr2 Helios] or [http://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/indigosr1 Indigo]
+ # [http://eclipse.org/m2e/ The Sonatype maven plugin for Eclipse]
+ # [http://www.eclipse.org/subversive/downloads.php The Subversion svn plugin for Eclipse]
 
-Check out the multiplicity project from the branch.
+First check out the multiplicity project from the branch.
 
-If working outside the Durham University network you will need to tunnel with a command similar to this:
-
-ssh -L 8081:tel.dur.ac.uk:8081 username@vega.dur.ac.uk
-
-Go to http://tel.dur.ac.uk:8081/artifactory/webapp/mavensettings.html and generate the settings.xml file which you'll need to put in ~/.m2/
-
-If working outside the Durham University network add the following to your settings.xml in ~/.m2/ before `<profiles>` (and remember to remove it when working within the University network):
-
-{{{
-  <proxies>
-   <proxy>
-      <active>true</active>
-      <protocol>http</protocol>
-      <host>127.0.0.1</host>
-      <port>8081</port>
-      <username></username>
-      <password></password>
-      <nonProxyHosts></nonProxyHosts>
-    </proxy>
-  </proxies>
-}}}
+Go to http://tel.dur.ac.uk/artifactory/webapp/mavensettings.html and generate the settings.xml file which you'll need to put in ~/.m2/
 
 Check out multiplicity3-parent into eclipse as a general (non-Java) project.  In eclipse go to file > import and select maven > Existing Maven Projects.  Ensure all the projects contained in multiplicity3-parent are selected and click finish.  
 
