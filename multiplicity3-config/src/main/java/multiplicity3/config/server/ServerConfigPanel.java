@@ -80,10 +80,10 @@ public class ServerConfigPanel extends JPanel {
 		setLayout(null);
 		
 		jLabel1.setBounds(new Rectangle(30, 30, 200, 24));
-		txtWebServerDir.setBounds(new Rectangle(170, 30, 250, 24));
-		btnSelectDir.setBounds(new Rectangle(425, 30, 120, 24));
+		txtWebServerDir.setBounds(new Rectangle(190, 30, 250, 24));
+		btnSelectDir.setBounds(new Rectangle(450, 30, 120, 24));
 		jLabel2.setBounds(new Rectangle(30, 60, 200, 24));
-		txtWebServerPort.setBounds(new Rectangle(170, 60, 50, 24));
+		txtWebServerPort.setBounds(new Rectangle(190, 60, 50, 24));
 
 		add(jLabel1);
 		add(txtWebServerDir);

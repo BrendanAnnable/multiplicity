@@ -153,14 +153,14 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
 	    displaySelector.setBounds(new Rectangle(130, 90, 200, 24));	    
 	    fullScreen.setBounds(new Rectangle(350, 90, 125, 24));
 	    
-	    jLabel2.setBounds(new Rectangle(30, 165, 150, 24));
-	    antiAlias.setBounds(new Rectangle(180, 165, 35, 24));
+	    jLabel2.setBounds(new Rectangle(30, 165, 175, 24));
+	    antiAlias.setBounds(new Rectangle(200, 165, 35, 24));
 	    
 	    jLabel3.setBounds(new Rectangle(275, 165, 150, 24));
 	    stencilBits.setBounds(new Rectangle(360, 165, 35, 24));
 	    
 	    jLabel4.setBounds(new Rectangle(30, 195, 150, 24));
-	    alphaBits.setBounds(new Rectangle(180, 195, 35, 24));
+	    alphaBits.setBounds(new Rectangle(200, 195, 35, 24));
 	    
 	    jLabel5.setBounds(new Rectangle(275, 195, 150, 24));
 	    depthBits.setBounds(new Rectangle(360, 195, 35, 24));

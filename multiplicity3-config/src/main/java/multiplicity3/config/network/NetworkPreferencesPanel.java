@@ -9,19 +9,21 @@ package multiplicity3.config.network;
 import java.awt.Rectangle;
 
 import javax.swing.JOptionPane;
-//import javax.swing.JTabbedPane;
-//
-//import multiplicity3.config.ConfigurationApplication;
-//import multiplicity3.config.network.xmpp.XMPPConfigPrefsItem;
-//import multiplicity3.config.network.xmpp.XMPPPrefsPanel;
 
 /**
  *
  * @author  dcs0ah1
  */
 public class NetworkPreferencesPanel extends javax.swing.JPanel {
+	
 	private static final long serialVersionUID = 7749882192186771339L;
 	private NetworkConfigPrefsItem prefs;
+	
+    private javax.swing.JCheckBox checkProxyEnabled;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField txtProxyHost;
+    private javax.swing.JTextField txtProxyPort;
     
     /** Creates new form NetworkPrefsPanel2 */
     public NetworkPreferencesPanel(NetworkConfigPrefsItem networkConfigPrefsItem) {
@@ -34,8 +36,6 @@ public class NetworkPreferencesPanel extends javax.swing.JPanel {
         txtProxyHost.setText(prefs.getProxyHost());
         txtProxyPort.setText(""+prefs.getProxyPort());
         checkProxyEnabled.setSelected(prefs.getProxyEnabled());
-//        chkEnableNetworkSystem.setSelected(prefs.getNetworkSystemEnabled());
-//        comboNetworkSystem.setSelectedItem(prefs.getNetworkSystemClass());
     }
 
     /** This method is called from within the constructor to
@@ -52,10 +52,6 @@ public class NetworkPreferencesPanel extends javax.swing.JPanel {
         txtProxyHost = new javax.swing.JTextField();
         txtProxyPort = new javax.swing.JTextField();
         checkProxyEnabled = new javax.swing.JCheckBox();
-//        comboNetworkSystem = new javax.swing.JComboBox();
-//        jLabel3 = new javax.swing.JLabel();
-//        chkEnableNetworkSystem = new javax.swing.JCheckBox();
-//        btnConfigure = new javax.swing.JButton();
 
         jLabel1.setText("HTTP Proxy Host:");
 
@@ -83,30 +79,6 @@ public class NetworkPreferencesPanel extends javax.swing.JPanel {
             }
         });
 
-//        comboNetworkSystem.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "multiplicity.network.xmpp.XMPPMultiplicityNetworkManager" }));
-//        comboNetworkSystem.addItemListener(new java.awt.event.ItemListener() {
-//            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-//                comboNetworkSystemItemStateChanged(evt);
-//            }
-//        });
-//
-//        jLabel3.setText("Select a class that implements IMultiplicityNetworkManager:");
-//
-//        chkEnableNetworkSystem.setText("Network system enabled:");
-//        chkEnableNetworkSystem.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-//        chkEnableNetworkSystem.addItemListener(new java.awt.event.ItemListener() {
-//            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-//                chkEnableNetworkSystemItemStateChanged(evt);
-//            }
-//        });
-//
-//        btnConfigure.setText("Configure");
-//        btnConfigure.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                btnConfigureActionPerformed(evt);
-//            }
-//        });
-
 		setLayout(null);
 		
 		jLabel1.setBounds(new Rectangle(30, 30, 200, 24));
@@ -117,80 +89,34 @@ public class NetworkPreferencesPanel extends javax.swing.JPanel {
 		
 		checkProxyEnabled.setBounds(new Rectangle(25, 90, 200, 24));
 		
-		
-//		jLabel3.setBounds(new Rectangle(30, 150, 200, 24));
-//		comboNetworkSystem.setBounds(new Rectangle(160, 150, 200, 24));	
-//		
-//		btnConfigure.setBounds(new Rectangle(300, 150, 200, 24));
-//
-//		chkEnableNetworkSystem.setBounds(new Rectangle(30, 180, 50, 24));
-		
 		add(jLabel1);
 		add(txtProxyHost);
 		add(jLabel2);
 		add(txtProxyPort);
 		add(checkProxyEnabled);
-//		add(comboNetworkSystem);
-//		add(jLabel3);
-//		add(chkEnableNetworkSystem);
-//		add(btnConfigure);
 		
     }// </editor-fold>//GEN-END:initComponents
 
-private void txtProxyHostKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProxyHostKeyReleased
-    prefs.setProxyHost(txtProxyHost.getText());
-}//GEN-LAST:event_txtProxyHostKeyReleased
-
-private void txtProxyPortKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProxyPortKeyReleased
-    int currentPort = prefs.getProxyPort();
-    try {
-        prefs.setProxyPort(Integer.parseInt(txtProxyPort.getText()));
-    }catch(NumberFormatException ex) {
-        JOptionPane.showMessageDialog(this,
-            "Can't convert " + txtProxyPort.getText() + " to a number.",
-            "Port should be an integer number.",
-            JOptionPane.ERROR_MESSAGE);
-        txtProxyPort.setText(""+currentPort);
-    }
-}//GEN-LAST:event_txtProxyPortKeyReleased
-
-private void checkProxyEnabledItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkProxyEnabledItemStateChanged
-
-    prefs.setProxyEnabled(checkProxyEnabled.isSelected());
-}//GEN-LAST:event_checkProxyEnabledItemStateChanged
-
-//private void btnConfigureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigureActionPerformed
-//switch(comboNetworkSystem.getSelectedIndex()){
-//    case 0: { break;}
-//    case 1: {
-//        XMPPPrefsPanel panel = new XMPPPrefsPanel(new XMPPConfigPrefsItem());
-//        JTabbedPane jtp = ConfigurationApplication.getTabbedPane();
-//        jtp.add("XMPP Prefs", panel);
-//        jtp.setSelectedComponent(panel);
-//        break;
-//    }
-//}
-//}//GEN-LAST:event_btnConfigureActionPerformed
-
-//private void chkEnableNetworkSystemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkEnableNetworkSystemItemStateChanged
-//    prefs.setNetworkSystemEnabled(chkEnableNetworkSystem.isSelected());
-//}//GEN-LAST:event_chkEnableNetworkSystemItemStateChanged
-
-//private void comboNetworkSystemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboNetworkSystemItemStateChanged
-//prefs.setNetworkSystemClass((String)comboNetworkSystem.getSelectedItem());
-//}//GEN-LAST:event_comboNetworkSystemItemStateChanged
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-//    private javax.swing.JButton btnConfigure;
-    private javax.swing.JCheckBox checkProxyEnabled;
-//    private javax.swing.JCheckBox chkEnableNetworkSystem;
-//    private javax.swing.JComboBox comboNetworkSystem;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-//    private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField txtProxyHost;
-    private javax.swing.JTextField txtProxyPort;
-    // End of variables declaration//GEN-END:variables
+	private void txtProxyHostKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProxyHostKeyReleased
+	    prefs.setProxyHost(txtProxyHost.getText());
+	}//GEN-LAST:event_txtProxyHostKeyReleased
+	
+	private void txtProxyPortKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProxyPortKeyReleased
+	    int currentPort = prefs.getProxyPort();
+	    try {
+	        prefs.setProxyPort(Integer.parseInt(txtProxyPort.getText()));
+	    }catch(NumberFormatException ex) {
+	        JOptionPane.showMessageDialog(this,
+	            "Can't convert " + txtProxyPort.getText() + " to a number.",
+	            "Port should be an integer number.",
+	            JOptionPane.ERROR_MESSAGE);
+	        txtProxyPort.setText(""+currentPort);
+	    }
+	}//GEN-LAST:event_txtProxyPortKeyReleased
+	
+	private void checkProxyEnabledItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkProxyEnabledItemStateChanged
+	
+	    prefs.setProxyEnabled(checkProxyEnabled.isSelected());
+	}//GEN-LAST:event_checkProxyEnabledItemStateChanged
 
 }
