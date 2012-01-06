@@ -47,7 +47,7 @@ public class IdentityConfigPrefsItem implements PreferencesItem {
 	
 	@Override
 	public JPanel getConfigurationPanel() {
-		return new IdentityPreferencesPanel();
+		return new IdentityConfigPanel();
 	}
 
 	@Override

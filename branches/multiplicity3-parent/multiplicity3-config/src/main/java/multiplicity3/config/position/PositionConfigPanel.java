@@ -53,7 +53,6 @@ public class PositionConfigPanel extends JPanel {
 	private JLabel jLabelTableOrientation = new JLabel();	
 	private JLabel jLabelX = new JLabel();
 	private JLabel jLabelY = new JLabel();
-	private JLabel jLabelAngle = new JLabel();
 	private JLabel jLabelWarning = new JLabel();
 	private JTextField jTextFieldPositionX = new JTextField();
 	private JTextField jTextFieldPositionY = new JTextField();
@@ -137,8 +136,6 @@ public class PositionConfigPanel extends JPanel {
 		});
 
 	    jLabelTableOrientation.setText("Orientation (in degrees): ");
-	    
-	    jLabelAngle.setText(" Angle =");
 
 	    jTextFieldAngle.addKeyListener(new KeyAdapter() {
 			@Override
@@ -278,30 +275,29 @@ public class PositionConfigPanel extends JPanel {
 
 	    jLabelWarning.setText("");
 
-        cbEnableNormalPositionMode.setBounds(new Rectangle(10, 10, 300, 24));
-        jLabelTablePosition.setBounds(new Rectangle(50, 30, 133, 46));
-	    jLabelX.setBounds(new Rectangle(270, 30, 390, 46));	   
-	    jTextFieldPositionX.setBounds(new Rectangle(295, 42, 57, 24));
-	    jLabelY.setBounds(new Rectangle(420, 30, 39, 46));
-	    jTextFieldPositionY.setBounds(new Rectangle(445, 42, 57, 24));
-	    jLabelTableOrientation.setBounds(new Rectangle(50, 65, 250, 46));
-	    jLabelAngle.setBounds(new Rectangle(247, 65, 250, 46));
-	    jTextFieldAngle.setBounds(new Rectangle(295, 77, 57, 24));
-        cbEnableDeveloperMode.setBounds(new Rectangle(10, 150, 300, 24));
-	    jLabelTableDistances.setBounds(new Rectangle(50, 170, 210, 46));
-	    jLabelXDistance.setBounds(new Rectangle(270, 170, 39, 46));
-	    jTextFieldDistanceX.setBounds(new Rectangle(295, 182, 57, 24));
-	    jLabelYDistance.setBounds(new Rectangle(420, 170, 39, 46));
-	    jTextFieldDistanceY.setBounds(new Rectangle(445, 182, 57, 24));
-	    jLabelTableLimits.setBounds(new Rectangle(50, 205, 200, 46));
-	    jLabelXLimit.setBounds(new Rectangle(270, 205, 39, 46));
-	    jTextFieldLimitX.setBounds(new Rectangle(295, 217, 57, 24));
-	    jLabelYLimit.setBounds(new Rectangle(420, 205, 39, 46));
-	    jTextFieldLimitY.setBounds(new Rectangle(445, 217, 57, 24));
-	    jLabelPlacement.setBounds(new Rectangle(50, 240, 210, 46));
-	    horizontal.setBounds(new Rectangle(295, 252, 150, 24));
-	    vertical.setBounds(new Rectangle(445, 252, 155, 24));
-	    jLabelWarning.setBounds(new Rectangle(26, 280, 500, 46));
+        cbEnableNormalPositionMode.setBounds(new Rectangle(30, 30, 300, 24));
+        jLabelTablePosition.setBounds(new Rectangle(70, 50, 133, 46));
+	    jLabelX.setBounds(new Rectangle(290, 50, 390, 46));	   
+	    jTextFieldPositionX.setBounds(new Rectangle(325, 62, 57, 24));
+	    jLabelY.setBounds(new Rectangle(440, 50, 39, 46));
+	    jTextFieldPositionY.setBounds(new Rectangle(475, 62, 57, 24));
+	    jLabelTableOrientation.setBounds(new Rectangle(70, 85, 250, 46));
+	    jTextFieldAngle.setBounds(new Rectangle(290, 97, 57, 24));
+        cbEnableDeveloperMode.setBounds(new Rectangle(30, 170, 300, 24));
+	    jLabelTableDistances.setBounds(new Rectangle(70, 190, 210, 46));
+	    jLabelXDistance.setBounds(new Rectangle(290, 190, 39, 46));
+	    jTextFieldDistanceX.setBounds(new Rectangle(325, 202, 57, 24));
+	    jLabelYDistance.setBounds(new Rectangle(440, 190, 39, 46));
+	    jTextFieldDistanceY.setBounds(new Rectangle(475, 202, 57, 24));
+	    jLabelTableLimits.setBounds(new Rectangle(70, 225, 200, 46));
+	    jLabelXLimit.setBounds(new Rectangle(290, 225, 39, 46));
+	    jTextFieldLimitX.setBounds(new Rectangle(325, 237, 57, 24));
+	    jLabelYLimit.setBounds(new Rectangle(440, 225, 39, 46));
+	    jTextFieldLimitY.setBounds(new Rectangle(475, 237, 57, 24));
+	    jLabelPlacement.setBounds(new Rectangle(70, 260, 210, 46));
+	    horizontal.setBounds(new Rectangle(290, 272, 150, 24));
+	    vertical.setBounds(new Rectangle(440, 272, 155, 24));
+	    jLabelWarning.setBounds(new Rectangle(30, 300, 500, 46));
 
 
 	    add(cbEnableNormalPositionMode, null);
@@ -311,7 +307,6 @@ public class PositionConfigPanel extends JPanel {
 	    add(jLabelY, null);
 	    add(jTextFieldPositionY, null);
 	    add(jLabelTableOrientation, null);
-	    add(jLabelAngle, null);
 	    add(jTextFieldAngle, null);
 	    add(cbEnableDeveloperMode, null);
 	    add(jLabelTableDistances, null);

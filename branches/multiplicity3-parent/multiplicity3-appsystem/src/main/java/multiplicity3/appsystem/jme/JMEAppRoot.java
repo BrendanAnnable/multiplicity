@@ -2,7 +2,7 @@ package multiplicity3.appsystem.jme;
 
 import java.util.logging.Logger;
 
-import multiplicity3.config.display.DisplayPreferences;
+import multiplicity3.config.display.DisplayPrefsItem;
 
 import com.jme3.app.Application;
 import com.jme3.app.StatsView;
@@ -77,7 +77,7 @@ public abstract class JMEAppRoot extends Application {
 
     @Override
     public void start(){
-    	DisplayPreferences dprefs = new DisplayPreferences();
+    	DisplayPrefsItem dprefs = new DisplayPrefsItem();
     	AppSettings settings = new AppSettings(true);
     	settings.setTitle("Multiplicity v3.0");
     	settings.setBitsPerPixel(dprefs.getBitsPerPixel());
