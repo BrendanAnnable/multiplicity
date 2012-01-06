@@ -22,13 +22,8 @@ public class IdentityConfigPanel extends javax.swing.JPanel {
 
     /** Creates new form IdentityPreferencesPanel */
     public IdentityConfigPanel() {
-        initComponents();
-        this.prefs = new IdentityConfigPrefsItem();
-        loadCurrentSettings();       
-    }
-    
-    private void loadCurrentSettings() {
-        txtID.setText(prefs.getID());
+        this.prefs = new IdentityConfigPrefsItem(); 
+        initComponents();   
     }
 
     /** This method is called from within the constructor to
@@ -43,16 +38,16 @@ public class IdentityConfigPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
-        txtID.setText("textField1");
+        txtID.setText(prefs.getID());
         txtID.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtIDKeyReleased(evt);
             }
         });
 
-        jLabel1.setText("Unique identity string:");
+        jLabel1.setText("Unique ID:");
 
-        jButton1.setText("Generate UUID");
+        jButton1.setText("Generate ID");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -61,9 +56,9 @@ public class IdentityConfigPanel extends javax.swing.JPanel {
         
 		setLayout(null);
 		
-		jLabel1.setBounds(new Rectangle(30, 30, 155, 24));
-		txtID.setBounds(new Rectangle(190, 30, 300, 24));
-		jButton1.setBounds(new Rectangle(190, 60, 120, 24));
+		jLabel1.setBounds(new Rectangle(30, 30, 100, 24));
+		txtID.setBounds(new Rectangle(130, 30, 300, 24));
+		jButton1.setBounds(new Rectangle(130, 60, 140, 24));
 
 
 		add(jLabel1);
