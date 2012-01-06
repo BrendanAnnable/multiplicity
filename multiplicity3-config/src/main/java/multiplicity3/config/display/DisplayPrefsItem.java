@@ -6,9 +6,9 @@ import javax.swing.JPanel;
 
 import multiplicity3.config.PreferencesItem;
 
-public class DisplayPreferences implements PreferencesItem {
+public class DisplayPrefsItem implements PreferencesItem {
 	
-	private static Preferences prefs = Preferences.userNodeForPackage(DisplayPreferences.class);
+	private static Preferences prefs = Preferences.userNodeForPackage(DisplayPrefsItem.class);
 
 	private static final String DISPLAY_WIDTH = "DISPLAY_WIDTH";
 	private static final String DISPLAY_HEIGHT = "DISPLAY_HEIGHT";
@@ -20,28 +20,23 @@ public class DisplayPreferences implements PreferencesItem {
 	private static final String DISPLAY_ALPHA_BITS = "DISPLAY_ALPHA_BITS";	
 	private static final String DISPLAY_DEPTH_BITS = "DISPLAY_DEPTH";
 	private static final String DISPLAY_RENDERER = "DISPLAY_RENDERER";
-//	private static final String DISPLAY_SHAPE = "DISPLAY_SHAPE";
-//	private static final String DISPLAY_DEFAULT_SHAPE = "DISPLAY_DEFAULT_SHAPE";
-//	private static final String DISPLAY_STEREO_MODE = "DISPLAY_STEREO_MODE";
+	public static final String PREFS_INPUT_TYPE = "INPUT_TYPE";
 	
-	public enum Stereo3DMode {
-		NONE,
-		ANAGLYPH,
-		STEREO_BUFFER
+	public static enum InputType {
+		JMEDIRECT, TUIO, EVOLUCE
 	}
 	
-	
-	public DisplayPreferences() {}
+	public DisplayPrefsItem() {}
 	
 	@Override
 	public JPanel getConfigurationPanel() {
-		DisplayPreferencesPanel dp2 = new DisplayPreferencesPanel(this);
+		DisplayConfigPanel dp2 = new DisplayConfigPanel(this);
 		return dp2;
 	}
 
 	@Override
 	public String getConfigurationPanelName() {
-		return "Display";
+		return "Interface";
 	}
 	
 	public void setWidth(int w) {
@@ -123,28 +118,13 @@ public class DisplayPreferences implements PreferencesItem {
 	public void setDisplayRenderer(String renderer) {
 		prefs.put(DISPLAY_RENDERER, renderer);
 	}
+	
+	public void setInputType(InputType type) {
+		prefs.put(PREFS_INPUT_TYPE, type.name());
+	}
 
-//	public void setDisplayShape(String s) {
-//		prefs.put(DISPLAY_SHAPE, s);
-//	}
-//
-//	public String getDisplayShape() {
-//		return prefs.get(DISPLAY_SHAPE, "");
-//	}
-//
-//	public void setUseDefaultShapeFlag(boolean fs) {
-//		prefs.putBoolean(DISPLAY_DEFAULT_SHAPE, fs);
-//	}
-//
-//	public boolean getUseDefaultShapeFlag() {
-//		return prefs.getBoolean(DISPLAY_DEFAULT_SHAPE, true);
-//	}
-//
-//	public void setStereo3DMode(Stereo3DMode mode) {
-//		prefs.put(DISPLAY_STEREO_MODE, mode.toString());
-//	}
-//	
-//	public Stereo3DMode getStereo3DMode() {
-//		return Stereo3DMode.valueOf(prefs.get(DISPLAY_STEREO_MODE, Stereo3DMode.NONE.toString()));
-//	}
+	public InputType getInputType() {			
+		return InputType.valueOf(prefs.get(PREFS_INPUT_TYPE, InputType.JMEDIRECT.name()));
+	}
+	
 }

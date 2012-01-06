@@ -6,12 +6,14 @@
 
 package multiplicity3.config.network;
 
-import javax.swing.JOptionPane;
-import javax.swing.JTabbedPane;
+import java.awt.Rectangle;
 
-import multiplicity3.config.ConfigurationApplication;
-import multiplicity3.config.network.xmpp.XMPPConfigPrefsItem;
-import multiplicity3.config.network.xmpp.XMPPPrefsPanel;
+import javax.swing.JOptionPane;
+//import javax.swing.JTabbedPane;
+//
+//import multiplicity3.config.ConfigurationApplication;
+//import multiplicity3.config.network.xmpp.XMPPConfigPrefsItem;
+//import multiplicity3.config.network.xmpp.XMPPPrefsPanel;
 
 /**
  *
@@ -32,8 +34,8 @@ public class NetworkPreferencesPanel extends javax.swing.JPanel {
         txtProxyHost.setText(prefs.getProxyHost());
         txtProxyPort.setText(""+prefs.getProxyPort());
         checkProxyEnabled.setSelected(prefs.getProxyEnabled());
-        chkEnableNetworkSystem.setSelected(prefs.getNetworkSystemEnabled());
-        comboNetworkSystem.setSelectedItem(prefs.getNetworkSystemClass());
+//        chkEnableNetworkSystem.setSelected(prefs.getNetworkSystemEnabled());
+//        comboNetworkSystem.setSelectedItem(prefs.getNetworkSystemClass());
     }
 
     /** This method is called from within the constructor to
@@ -50,10 +52,10 @@ public class NetworkPreferencesPanel extends javax.swing.JPanel {
         txtProxyHost = new javax.swing.JTextField();
         txtProxyPort = new javax.swing.JTextField();
         checkProxyEnabled = new javax.swing.JCheckBox();
-        comboNetworkSystem = new javax.swing.JComboBox();
-        jLabel3 = new javax.swing.JLabel();
-        chkEnableNetworkSystem = new javax.swing.JCheckBox();
-        btnConfigure = new javax.swing.JButton();
+//        comboNetworkSystem = new javax.swing.JComboBox();
+//        jLabel3 = new javax.swing.JLabel();
+//        chkEnableNetworkSystem = new javax.swing.JCheckBox();
+//        btnConfigure = new javax.swing.JButton();
 
         jLabel1.setText("HTTP Proxy Host:");
 
@@ -81,85 +83,58 @@ public class NetworkPreferencesPanel extends javax.swing.JPanel {
             }
         });
 
-        comboNetworkSystem.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "multiplicity.network.xmpp.XMPPMultiplicityNetworkManager" }));
-        comboNetworkSystem.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                comboNetworkSystemItemStateChanged(evt);
-            }
-        });
+//        comboNetworkSystem.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "None", "multiplicity.network.xmpp.XMPPMultiplicityNetworkManager" }));
+//        comboNetworkSystem.addItemListener(new java.awt.event.ItemListener() {
+//            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+//                comboNetworkSystemItemStateChanged(evt);
+//            }
+//        });
+//
+//        jLabel3.setText("Select a class that implements IMultiplicityNetworkManager:");
+//
+//        chkEnableNetworkSystem.setText("Network system enabled:");
+//        chkEnableNetworkSystem.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+//        chkEnableNetworkSystem.addItemListener(new java.awt.event.ItemListener() {
+//            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+//                chkEnableNetworkSystemItemStateChanged(evt);
+//            }
+//        });
+//
+//        btnConfigure.setText("Configure");
+//        btnConfigure.addActionListener(new java.awt.event.ActionListener() {
+//            public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                btnConfigureActionPerformed(evt);
+//            }
+//        });
 
-        jLabel3.setText("Select a class that implements IMultiplicityNetworkManager:");
-
-        chkEnableNetworkSystem.setText("Network system enabled:");
-        chkEnableNetworkSystem.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        chkEnableNetworkSystem.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                chkEnableNetworkSystemItemStateChanged(evt);
-            }
-        });
-
-        btnConfigure.setText("Configure");
-        btnConfigure.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConfigureActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtProxyPort)
-                            .addComponent(txtProxyHost, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(checkProxyEnabled))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(chkEnableNetworkSystem))
-                            .addComponent(comboNetworkSystem, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnConfigure)
-                .addGap(57, 57, 57))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtProxyHost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtProxyPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(checkProxyEnabled)
-                .addGap(72, 72, 72)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboNetworkSystem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnConfigure))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkEnableNetworkSystem)
-                .addContainerGap(91, Short.MAX_VALUE))
-        );
+		setLayout(null);
+		
+		jLabel1.setBounds(new Rectangle(30, 30, 200, 24));
+		txtProxyHost.setBounds(new Rectangle(160, 30, 200, 24));
+		
+		jLabel2.setBounds(new Rectangle(30, 60, 200, 24));
+		txtProxyPort.setBounds(new Rectangle(160, 60, 50, 24));
+		
+		checkProxyEnabled.setBounds(new Rectangle(25, 90, 200, 24));
+		
+		
+//		jLabel3.setBounds(new Rectangle(30, 150, 200, 24));
+//		comboNetworkSystem.setBounds(new Rectangle(160, 150, 200, 24));	
+//		
+//		btnConfigure.setBounds(new Rectangle(300, 150, 200, 24));
+//
+//		chkEnableNetworkSystem.setBounds(new Rectangle(30, 180, 50, 24));
+		
+		add(jLabel1);
+		add(txtProxyHost);
+		add(jLabel2);
+		add(txtProxyPort);
+		add(checkProxyEnabled);
+//		add(comboNetworkSystem);
+//		add(jLabel3);
+//		add(chkEnableNetworkSystem);
+//		add(btnConfigure);
+		
     }// </editor-fold>//GEN-END:initComponents
 
 private void txtProxyHostKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProxyHostKeyReleased
@@ -184,36 +159,36 @@ private void checkProxyEnabledItemStateChanged(java.awt.event.ItemEvent evt) {//
     prefs.setProxyEnabled(checkProxyEnabled.isSelected());
 }//GEN-LAST:event_checkProxyEnabledItemStateChanged
 
-private void btnConfigureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigureActionPerformed
-switch(comboNetworkSystem.getSelectedIndex()){
-    case 0: { break;}
-    case 1: {
-        XMPPPrefsPanel panel = new XMPPPrefsPanel(new XMPPConfigPrefsItem());
-        JTabbedPane jtp = ConfigurationApplication.getTabbedPane();
-        jtp.add("XMPP Prefs", panel);
-        jtp.setSelectedComponent(panel);
-        break;
-    }
-}
-}//GEN-LAST:event_btnConfigureActionPerformed
+//private void btnConfigureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigureActionPerformed
+//switch(comboNetworkSystem.getSelectedIndex()){
+//    case 0: { break;}
+//    case 1: {
+//        XMPPPrefsPanel panel = new XMPPPrefsPanel(new XMPPConfigPrefsItem());
+//        JTabbedPane jtp = ConfigurationApplication.getTabbedPane();
+//        jtp.add("XMPP Prefs", panel);
+//        jtp.setSelectedComponent(panel);
+//        break;
+//    }
+//}
+//}//GEN-LAST:event_btnConfigureActionPerformed
 
-private void chkEnableNetworkSystemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkEnableNetworkSystemItemStateChanged
-    prefs.setNetworkSystemEnabled(chkEnableNetworkSystem.isSelected());
-}//GEN-LAST:event_chkEnableNetworkSystemItemStateChanged
+//private void chkEnableNetworkSystemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkEnableNetworkSystemItemStateChanged
+//    prefs.setNetworkSystemEnabled(chkEnableNetworkSystem.isSelected());
+//}//GEN-LAST:event_chkEnableNetworkSystemItemStateChanged
 
-private void comboNetworkSystemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboNetworkSystemItemStateChanged
-prefs.setNetworkSystemClass((String)comboNetworkSystem.getSelectedItem());
-}//GEN-LAST:event_comboNetworkSystemItemStateChanged
+//private void comboNetworkSystemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboNetworkSystemItemStateChanged
+//prefs.setNetworkSystemClass((String)comboNetworkSystem.getSelectedItem());
+//}//GEN-LAST:event_comboNetworkSystemItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnConfigure;
+//    private javax.swing.JButton btnConfigure;
     private javax.swing.JCheckBox checkProxyEnabled;
-    private javax.swing.JCheckBox chkEnableNetworkSystem;
-    private javax.swing.JComboBox comboNetworkSystem;
+//    private javax.swing.JCheckBox chkEnableNetworkSystem;
+//    private javax.swing.JComboBox comboNetworkSystem;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+//    private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField txtProxyHost;
     private javax.swing.JTextField txtProxyPort;
     // End of variables declaration//GEN-END:variables

@@ -15,8 +15,8 @@ public class NetworkConfigPrefsItem implements PreferencesItem {
 	private static final String HTTP_PROXY_PORT = "HTTP_PROXY_PORT";
 	private static final String HTTP_PROXY_ENABLED = "HTTP_PROXY_ENABLED";
 	
-	private static final String NETWORK_SYSTEM_ENABLED = "NETWORK_SYSTEM_ENABLED";
-	private static final String NETWORK_SYSTEM_CLASS = "NETWORK_SYSTEM_CLASS";
+//	private static final String NETWORK_SYSTEM_ENABLED = "NETWORK_SYSTEM_ENABLED";
+//	private static final String NETWORK_SYSTEM_CLASS = "NETWORK_SYSTEM_CLASS";
 
 	@Override
 	public JPanel getConfigurationPanel() {
@@ -52,19 +52,19 @@ public class NetworkConfigPrefsItem implements PreferencesItem {
 		return prefs.getBoolean(HTTP_PROXY_ENABLED, false);
 	}    
 	
-	public void setNetworkSystemEnabled(boolean b) {
-		prefs.putBoolean(NETWORK_SYSTEM_ENABLED, b);
-	}
-	
-	public boolean getNetworkSystemEnabled() {
-		return prefs.getBoolean(NETWORK_SYSTEM_ENABLED, false);
-	}
-
-	public void setNetworkSystemClass(String clazz) {
-		prefs.put(NETWORK_SYSTEM_CLASS, clazz);		
-	}
-	
-	public String getNetworkSystemClass() {
-		return prefs.get(NETWORK_SYSTEM_CLASS, "");
-	}
+//	public void setNetworkSystemEnabled(boolean b) {
+//		prefs.putBoolean(NETWORK_SYSTEM_ENABLED, b);
+//	}
+//	
+//	public boolean getNetworkSystemEnabled() {
+//		return prefs.getBoolean(NETWORK_SYSTEM_ENABLED, false);
+//	}
+//
+//	public void setNetworkSystemClass(String clazz) {
+//		prefs.put(NETWORK_SYSTEM_CLASS, clazz);		
+//	}
+//	
+//	public String getNetworkSystemClass() {
+//		return prefs.get(NETWORK_SYSTEM_CLASS, "");
+//	}
 }

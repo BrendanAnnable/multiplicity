@@ -6,13 +6,14 @@
 
 package multiplicity3.config.identity;
 
+import java.awt.Rectangle;
 import java.util.UUID;
 
 /**
  *
  * @author  dcs0ah1
  */
-public class IdentityPreferencesPanel extends javax.swing.JPanel {
+public class IdentityConfigPanel extends javax.swing.JPanel {
     /**
 	 * 
 	 */
@@ -20,7 +21,7 @@ public class IdentityPreferencesPanel extends javax.swing.JPanel {
 	private IdentityConfigPrefsItem prefs;
 
     /** Creates new form IdentityPreferencesPanel */
-    public IdentityPreferencesPanel() {
+    public IdentityConfigPanel() {
         initComponents();
         this.prefs = new IdentityConfigPrefsItem();
         loadCurrentSettings();       
@@ -57,31 +58,18 @@ public class IdentityPreferencesPanel extends javax.swing.JPanel {
                 jButton1ActionPerformed(evt);
             }
         });
+        
+		setLayout(null);
+		
+		jLabel1.setBounds(new Rectangle(30, 30, 155, 24));
+		txtID.setBounds(new Rectangle(190, 30, 300, 24));
+		jButton1.setBounds(new Rectangle(190, 60, 120, 24));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
-                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(167, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addContainerGap(290, Short.MAX_VALUE))
-        );
+
+		add(jLabel1);
+		add(txtID);
+		add(jButton1);
+
     }// </editor-fold>//GEN-END:initComponents
 
 private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

@@ -75,7 +75,7 @@ public class ConfigurationApplication {
 		loadCorePreferencesItems(jtp);
 
 		jf.getContentPane().add(jtp, BorderLayout.CENTER);
-		jf.setSize(680, 380);
+		jf.setSize(620, 420);
 		jf.setVisible(true);
 	}
         

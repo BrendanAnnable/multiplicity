@@ -4,8 +4,8 @@ import java.util.logging.Logger;
 
 import com.jme3.input.InputManager;
 
-import multiplicity3.config.input.InputConfigPrefsItem;
-import multiplicity3.config.input.InputConfigPrefsItem.InputType;
+import multiplicity3.config.display.DisplayPrefsItem;
+import multiplicity3.config.display.DisplayPrefsItem.InputType;
 import multiplicity3.input.IMultiTouchInputSource;
 import multiplicity3.input.luminja.LuminMultiTouchInput;
 import multiplicity3.input.simulator.jme.JMEDirectSimulator;
@@ -16,7 +16,7 @@ public class MultiTouchInputUtility {
 	private static final Logger log = Logger.getLogger(MultiTouchInputUtility.class.getName());
 
 	public static IMultiTouchInputSource getInputSource(InputManager inputManager, int displayWidth, int displayHeight) {
-		InputConfigPrefsItem tablePrefs = new InputConfigPrefsItem();
+		DisplayPrefsItem tablePrefs = new DisplayPrefsItem();
 		InputType tabletype = tablePrefs.getInputType();
 		IMultiTouchInputSource multiTouchInput = null;
 		
