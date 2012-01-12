@@ -32,6 +32,7 @@
 
 package multiplicity3.config.position;
 
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -49,14 +50,15 @@ public class PositionConfigPanel extends JPanel {
 
     private JCheckBox cbEnableNormalPositionMode = new JCheckBox();
     private JCheckBox cbEnableDeveloperMode = new JCheckBox();
+	private JLabel jLabelTableHeight = new JLabel();
 	private JLabel jLabelTablePosition = new JLabel();
 	private JLabel jLabelTableOrientation = new JLabel();	
 	private JLabel jLabelX = new JLabel();
 	private JLabel jLabelY = new JLabel();
-	private JLabel jLabelWarning = new JLabel();
 	private JTextField jTextFieldPositionX = new JTextField();
 	private JTextField jTextFieldPositionY = new JTextField();
-	private JTextField jTextFieldAngle = new JTextField();
+	private JTextField jTextFieldTableAngle = new JTextField();
+	private JTextField jTextFieldTableHeight = new JTextField();
 	private JLabel jLabelTableDistances = new JLabel();
 	private JLabel jLabelXDistance = new JLabel();
 	private JLabel jLabelYDistance = new JLabel();
@@ -64,7 +66,6 @@ public class PositionConfigPanel extends JPanel {
 	private JTextField jTextFieldDistanceY = new JTextField();
     private JCheckBox horizontal = new JCheckBox();
     private JCheckBox vertical = new JCheckBox();
-
 	private JLabel jLabelTableLimits = new JLabel();
 	private JLabel jLabelXLimit = new JLabel();
 	private JLabel jLabelYLimit = new JLabel();
@@ -81,8 +82,26 @@ public class PositionConfigPanel extends JPanel {
 
     private void initComponents() {
 
-	    setLayout(null);
+	    setLayout(null);    
+	    
+	    jLabelTableOrientation.setText("Orientation (degrees) = ");
 
+	    jTextFieldTableAngle.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				prefsItem.setAngle(getFloatFromTextField(jTextFieldTableAngle));
+			}
+		});
+	    
+	    jLabelTableHeight.setText("Table Height (m) =");
+
+	    jTextFieldTableHeight.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				prefsItem.setTableHeight(getFloatFromTextField(jTextFieldTableHeight));
+			}
+		});
+	    
         cbEnableNormalPositionMode.setText("Enable User Defined Table Positioning");
         cbEnableNormalPositionMode.setSelected(!prefsItem.getDeveloperMode());
         cbEnableNormalPositionMode.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
@@ -97,59 +116,23 @@ public class PositionConfigPanel extends JPanel {
             }
         });
 
-	    jLabelTablePosition.setText("Position:");
+	    jLabelTablePosition.setText("Position (m):");
 
 	    jLabelX.setText(" X = ");
 
 	    jTextFieldPositionX.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (!prefsItem.setXPos(jTextFieldPositionX.getText())){
-					warn();
-				}
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (!prefsItem.setXPos(jTextFieldPositionX.getText())){
-					warn();
-				}
+				prefsItem.setXPos(getFloatFromTextField(jTextFieldPositionX));
 			}
 		});
 
-	    jLabelY.setText(" Y =");
+	    jLabelY.setText(" Y = ");
 
 	    jTextFieldPositionY.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (!prefsItem.setYPos(jTextFieldPositionY.getText())){
-					warn();
-				}
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (!prefsItem.setYPos(jTextFieldPositionY.getText())){
-					warn();
-				}
-			}
-		});
-
-	    jLabelTableOrientation.setText("Orientation (in degrees): ");
-
-	    jTextFieldAngle.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (!prefsItem.setAngle(jTextFieldAngle.getText())){
-					warn();
-				}
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (!prefsItem.setAngle(jTextFieldAngle.getText())){
-					warn();
-				}
+				prefsItem.setYPos(getFloatFromTextField(jTextFieldPositionY));
 			}
 		});
 
@@ -167,41 +150,23 @@ public class PositionConfigPanel extends JPanel {
             }
         });
 
-        jLabelTableDistances.setText("Distances between displays:");
+        jLabelTableDistances.setText("Distances between displays (m):");
 
         jLabelXDistance.setText(" X = ");
 
         jTextFieldDistanceX.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (!prefsItem.setXDistance(jTextFieldDistanceX.getText())){
-					warn();
-				}
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (!prefsItem.setXDistance(jTextFieldDistanceX.getText())){
-					warn();
-				}
+				prefsItem.setXDistance(getFloatFromTextField(jTextFieldDistanceX));
 			}
 		});
 
-	    jLabelYDistance.setText(" Y =");
+	    jLabelYDistance.setText(" Y = ");
 
 	    jTextFieldDistanceY.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (!prefsItem.setYDistance(jTextFieldDistanceY.getText())){
-					warn();
-				}
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (!prefsItem.setYDistance(jTextFieldDistanceY.getText())){
-					warn();
-				}
+				prefsItem.setYDistance(getFloatFromTextField(jTextFieldDistanceY));
 			}
 		});
 
@@ -212,34 +177,16 @@ public class PositionConfigPanel extends JPanel {
 	    jTextFieldLimitX.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (!prefsItem.setXLimit(jTextFieldLimitX.getText())){
-					warn();
-				}
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (!prefsItem.setXLimit(jTextFieldLimitX.getText())){
-					warn();
-				}
+				prefsItem.setXLimit(getIntegerFromTextField(jTextFieldLimitX));
 			}
 		});
 
-	    jLabelYLimit.setText(" Y =");
+	    jLabelYLimit.setText(" Y = ");
 
 	    jTextFieldLimitY.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (!prefsItem.setYLimit(jTextFieldLimitY.getText())){
-					warn();
-				}
-			}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (!prefsItem.setYLimit(jTextFieldLimitY.getText())){
-					warn();
-				}
+				prefsItem.setYLimit(getIntegerFromTextField(jTextFieldLimitY));
 			}
 		});
 
@@ -271,43 +218,44 @@ public class PositionConfigPanel extends JPanel {
             	}
             }
         });
+	    
+	    jLabelTableOrientation.setBounds(new Rectangle(30, 30, 150, 24));
+	    jTextFieldTableAngle.setBounds(new Rectangle(180, 30, 50, 24));
+	    jLabelTableHeight.setBounds(new Rectangle(290, 30, 150, 24));
+	    jTextFieldTableHeight.setBounds(new Rectangle(440, 30, 50, 24));
 
-
-	    jLabelWarning.setText("");
-
-        cbEnableNormalPositionMode.setBounds(new Rectangle(30, 30, 300, 24));
-        jLabelTablePosition.setBounds(new Rectangle(70, 50, 133, 46));
-	    jLabelX.setBounds(new Rectangle(290, 50, 390, 46));	   
-	    jTextFieldPositionX.setBounds(new Rectangle(325, 62, 57, 24));
-	    jLabelY.setBounds(new Rectangle(440, 50, 39, 46));
-	    jTextFieldPositionY.setBounds(new Rectangle(475, 62, 57, 24));
-	    jLabelTableOrientation.setBounds(new Rectangle(70, 85, 250, 46));
-	    jTextFieldAngle.setBounds(new Rectangle(290, 97, 57, 24));
+        cbEnableNormalPositionMode.setBounds(new Rectangle(30, 90, 300, 24));
+        jLabelTablePosition.setBounds(new Rectangle(70, 120, 133, 24));
+	    jLabelX.setBounds(new Rectangle(290, 120, 390, 24));	   
+	    jTextFieldPositionX.setBounds(new Rectangle(325, 120, 57, 24));
+	    jLabelY.setBounds(new Rectangle(440, 120, 39, 24));
+	    jTextFieldPositionY.setBounds(new Rectangle(475, 120, 57, 24));
+	    
         cbEnableDeveloperMode.setBounds(new Rectangle(30, 170, 300, 24));
-	    jLabelTableDistances.setBounds(new Rectangle(70, 190, 210, 46));
-	    jLabelXDistance.setBounds(new Rectangle(290, 190, 39, 46));
-	    jTextFieldDistanceX.setBounds(new Rectangle(325, 202, 57, 24));
-	    jLabelYDistance.setBounds(new Rectangle(440, 190, 39, 46));
-	    jTextFieldDistanceY.setBounds(new Rectangle(475, 202, 57, 24));
-	    jLabelTableLimits.setBounds(new Rectangle(70, 225, 200, 46));
-	    jLabelXLimit.setBounds(new Rectangle(290, 225, 39, 46));
-	    jTextFieldLimitX.setBounds(new Rectangle(325, 237, 57, 24));
-	    jLabelYLimit.setBounds(new Rectangle(440, 225, 39, 46));
-	    jTextFieldLimitY.setBounds(new Rectangle(475, 237, 57, 24));
-	    jLabelPlacement.setBounds(new Rectangle(70, 260, 210, 46));
-	    horizontal.setBounds(new Rectangle(290, 272, 150, 24));
-	    vertical.setBounds(new Rectangle(440, 272, 155, 24));
-	    jLabelWarning.setBounds(new Rectangle(30, 300, 500, 46));
+	    jLabelTableDistances.setBounds(new Rectangle(70, 200, 210, 24));
+	    jLabelXDistance.setBounds(new Rectangle(290, 200, 39, 24));
+	    jTextFieldDistanceX.setBounds(new Rectangle(325, 200, 57, 24));
+	    jLabelYDistance.setBounds(new Rectangle(440, 200, 39, 24));
+	    jTextFieldDistanceY.setBounds(new Rectangle(475, 200, 57, 24));
+	    jLabelTableLimits.setBounds(new Rectangle(70, 230, 200, 24));
+	    jLabelXLimit.setBounds(new Rectangle(290, 230, 39, 24));
+	    jTextFieldLimitX.setBounds(new Rectangle(325, 230, 57, 24));
+	    jLabelYLimit.setBounds(new Rectangle(440, 230, 39, 24));
+	    jTextFieldLimitY.setBounds(new Rectangle(475, 230, 57, 24));
+	    jLabelPlacement.setBounds(new Rectangle(70, 260, 210, 24));
+	    horizontal.setBounds(new Rectangle(290, 260, 150, 24));
+	    vertical.setBounds(new Rectangle(440, 260, 155, 24));
 
-
+	    add(jLabelTableOrientation, null);
+	    add(jTextFieldTableAngle, null);
+	    add(jLabelTableHeight, null);
+	    add(jTextFieldTableHeight, null);
 	    add(cbEnableNormalPositionMode, null);
 	    add(jLabelTablePosition, null);
 	    add(jLabelX, null);
 	    add(jTextFieldPositionX, null);
 	    add(jLabelY, null);
 	    add(jTextFieldPositionY, null);
-	    add(jLabelTableOrientation, null);
-	    add(jTextFieldAngle, null);
 	    add(cbEnableDeveloperMode, null);
 	    add(jLabelTableDistances, null);
 	    add(jLabelXDistance, null);
@@ -322,29 +270,36 @@ public class PositionConfigPanel extends JPanel {
 	    add(jLabelPlacement, null);
 	    add(horizontal,null);
 	    add(vertical,null);
-	    add(jLabelWarning, null);
 	    loadPreferences();
-
     }
 
-	private void warn(){
-		jLabelWarning.setText("Invalid parameters.  Please enter numeric values.");
-		new Thread(){
-			public void run(){
-				try {
-					sleep(2500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				jLabelWarning.setText("");
-			}
-		}.start();
+	private int getIntegerFromTextField(JTextField tf) {
+		try {
+			int num = Integer.parseInt(tf.getText());
+			tf.setForeground(Color.black);
+			return num;
+		}catch(NumberFormatException ex) {
+			tf.setForeground(Color.red);
+		}    
+		return 0;
+	}
+	
+	private Float getFloatFromTextField(JTextField tf) {
+		try {
+			float num = Float.parseFloat(tf.getText());
+			tf.setForeground(Color.black);
+			return num;
+		}catch(NumberFormatException ex) {
+			tf.setForeground(Color.red);
+		}    
+		return 0f;
 	}
 
 	private void loadPreferences(){
+		jTextFieldTableAngle.setText("" + prefsItem.getAngle());
+		jTextFieldTableHeight.setText("" + prefsItem.getTableHeight());
 		jTextFieldPositionX.setText("" + prefsItem.getXPos());
 		jTextFieldPositionY.setText("" + prefsItem.getYPos());
-		jTextFieldAngle.setText("" + prefsItem.getAngle());
 		jTextFieldDistanceX.setText("" + prefsItem.getGridDistanceX());
 		jTextFieldDistanceY.setText("" + prefsItem.getGridDistanceY());
 		jTextFieldLimitX.setText("" + prefsItem.getGridLimitX());

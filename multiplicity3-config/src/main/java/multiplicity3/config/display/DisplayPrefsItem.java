@@ -20,7 +20,8 @@ public class DisplayPrefsItem implements PreferencesItem {
 	private static final String DISPLAY_ALPHA_BITS = "DISPLAY_ALPHA_BITS";	
 	private static final String DISPLAY_DEPTH_BITS = "DISPLAY_DEPTH";
 	private static final String DISPLAY_RENDERER = "DISPLAY_RENDERER";
-	public static final String PREFS_INPUT_TYPE = "INPUT_TYPE";
+	private static final String DISPLAY_REAL_WIDTH = "DISPLAY_REAL_WIDTH";
+	private static final String PREFS_INPUT_TYPE = "INPUT_TYPE";
 	
 	public static enum InputType {
 		JMEDIRECT, TUIO, EVOLUCE
@@ -37,6 +38,14 @@ public class DisplayPrefsItem implements PreferencesItem {
 	@Override
 	public String getConfigurationPanelName() {
 		return "Interface";
+	}
+	
+	public void setRealWidth(float w) {
+		prefs.putFloat(DISPLAY_REAL_WIDTH, w);
+	}
+
+	public float getRealWidth() {
+		return prefs.getFloat(DISPLAY_REAL_WIDTH, 1024);
 	}
 	
 	public void setWidth(int w) {
