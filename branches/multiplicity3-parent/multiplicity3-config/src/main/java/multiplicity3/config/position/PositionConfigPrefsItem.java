@@ -39,6 +39,7 @@ import javax.swing.JPanel;
 
 import multiplicity3.config.ConfigurationApplication;
 import multiplicity3.config.PreferencesItem;
+import multiplicity3.config.display.DisplayPrefsItem;
 
 public class PositionConfigPrefsItem implements PreferencesItem {
 
@@ -53,8 +54,8 @@ public class PositionConfigPrefsItem implements PreferencesItem {
 	public static final String GRID_LIMIT_Y = "GRID_LIMIT_Y";
 	public static final String GRID_DISTANCE_X = "GRID_DISTANCE_X";
 	public static final String GRID_DISTANCE_Y = "GRID_DISTANCE_Y";
-	public static final String TABLE_WIDTH = "TABLE_WIDTH";
 	public static final String REFERENCE_DISTANCE = "REFERENCE_DISTANCE";
+	public static final String TABLE_HEIGHT = "TABLE_HEIGHT";
 
 	@Override
 	public JPanel getConfigurationPanel() {
@@ -68,6 +69,14 @@ public class PositionConfigPrefsItem implements PreferencesItem {
 		return "Position";
 	}
 
+	public float getAngle() {
+		return prefs.getFloat(PREFS_ANGLE, 0);
+	}
+	
+	public float getTableHeight() {
+		return prefs.getFloat(TABLE_HEIGHT, 0);
+	}
+	
 	public boolean getDeveloperMode() {
 		return prefs.get(PREFS_POS_DEVELOPER_MODE, "false").equals("true");
 	}
@@ -76,25 +85,20 @@ public class PositionConfigPrefsItem implements PreferencesItem {
 		return prefs.get(HORIZONTAL_PLACEMENT, "false").equals("true");
 	}
 
-
-	public int getXPos() {
-		return prefs.getInt(PREFS_LOCATION_X, 0);
+	public float getXPos() {
+		return prefs.getFloat(PREFS_LOCATION_X, 0);
 	}
 
-	public int getYPos() {
-		return prefs.getInt(PREFS_LOCATION_Y, 0);
+	public float getYPos() {
+		return prefs.getFloat(PREFS_LOCATION_Y, 0);
 	}
 
-	public Float getAngle() {
-		return prefs.getFloat(PREFS_ANGLE, 0);
+	public float getGridDistanceX() {
+		return prefs.getFloat(GRID_DISTANCE_X, 0);
 	}
 
-	public int getGridDistanceX() {
-		return prefs.getInt(GRID_DISTANCE_X, 0);
-	}
-
-	public int getGridDistanceY() {
-		return prefs.getInt(GRID_DISTANCE_Y, 0);
+	public float getGridDistanceY() {
+		return prefs.getFloat(GRID_DISTANCE_Y, 0);
 	}
 
 	public int getGridLimitX() {
@@ -114,81 +118,42 @@ public class PositionConfigPrefsItem implements PreferencesItem {
 		prefs.put(HORIZONTAL_PLACEMENT, "" + selected);
 
 	}
-
-	public boolean setXPos(String text) {
-		try{
-			int xPos = Integer.parseInt(text);
-			prefs.putInt(PREFS_LOCATION_X, xPos);
-			return true;
-		}catch(Exception e){
-			return false;
-		}
-	}
-
-	public boolean setYPos(String text) {
-		try{
-			int yPos = Integer.parseInt(text);
-			prefs.putInt(PREFS_LOCATION_Y, yPos);
-			return true;
-		}catch(Exception e){
-			return false;
-		}
-	}
-
-	public boolean setAngle(String text) {
-		try{
-			float angle = Float.parseFloat(text);
-			prefs.putFloat(PREFS_ANGLE, angle);
-			return true;
-		}catch(Exception e){
-			return false;
-		}
-	}
-
-	public boolean setXDistance(String text) {
-		try{
-			int xDis = Integer.parseInt(text);
-			prefs.putInt(GRID_DISTANCE_X, xDis);
-			return true;
-		}catch(Exception e){
-			return false;
-		}
-	}
-
-	public boolean setYDistance(String text) {
-		try{
-			int yDis = Integer.parseInt(text);
-			prefs.putInt(GRID_DISTANCE_Y, yDis);
-			return true;
-		}catch(Exception e){
-			return false;
-		}
-	}
-
-	public boolean setXLimit(String text) {
-		try{
-			int xLimit = Integer.parseInt(text);
-			prefs.putInt(GRID_LIMIT_X, xLimit);
-			return true;
-		}catch(Exception e){
-			return false;
-		}
-	}
-
-	public boolean setYLimit(String text) {
-		try{
-			int yLimit = Integer.parseInt(text);
-			prefs.putInt(GRID_LIMIT_Y, yLimit);
-			return true;
-		}catch(Exception e){
-			return false;
-		}
+	
+	public void setAngle(float angle) {
+		prefs.putFloat(PREFS_ANGLE, angle);
 	}
 	
-	public float getOrientation(){
-		float angle = getAngle();
-		if (getDeveloperMode())angle = 0;		
-		return angle;
+	public void setTableHeight(float height) {
+		prefs.putFloat(TABLE_HEIGHT, height);
 	}
 
+	public void setXPos(float xPos) {
+		prefs.putFloat(PREFS_LOCATION_X, xPos);
+	}
+
+	public void setYPos(float yPos) {
+		prefs.putFloat(PREFS_LOCATION_Y, yPos);
+	}
+
+	public void setXDistance(float xDis) {
+		prefs.putFloat(GRID_DISTANCE_X, xDis);
+	}
+
+	public void setYDistance(float yDis) {
+		prefs.putFloat(GRID_DISTANCE_Y, yDis);
+	}
+
+	public void setXLimit(int xLimit) {
+		prefs.getInt(GRID_LIMIT_X, xLimit);
+	}
+
+	public void setYLimit(int yLimit) {
+		prefs.getInt(GRID_LIMIT_Y, yLimit);
+	}
+	
+	public int getPixelValue(float value){
+		DisplayPrefsItem displayPrefs = new DisplayPrefsItem();		
+		return (int)(value * (displayPrefs.getWidth()/displayPrefs.getRealWidth()));
+	}
+	
 }
