@@ -45,7 +45,7 @@ public class DisplayPrefsItem implements PreferencesItem {
 	}
 
 	public float getRealWidth() {
-		return prefs.getFloat(DISPLAY_REAL_WIDTH, 1024);
+		return prefs.getFloat(DISPLAY_REAL_WIDTH, 1.5f);
 	}
 	
 	public void setWidth(int w) {

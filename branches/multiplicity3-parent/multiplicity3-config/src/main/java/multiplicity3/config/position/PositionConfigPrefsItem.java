@@ -74,7 +74,7 @@ public class PositionConfigPrefsItem implements PreferencesItem {
 	}
 	
 	public float getTableHeight() {
-		return prefs.getFloat(TABLE_HEIGHT, 0);
+		return prefs.getFloat(TABLE_HEIGHT, 1f);
 	}
 	
 	public boolean getDeveloperMode() {
@@ -94,7 +94,7 @@ public class PositionConfigPrefsItem implements PreferencesItem {
 	}
 
 	public float getGridDistanceX() {
-		return prefs.getFloat(GRID_DISTANCE_X, 0);
+		return prefs.getFloat(GRID_DISTANCE_X, 1.5f);
 	}
 
 	public float getGridDistanceY() {
