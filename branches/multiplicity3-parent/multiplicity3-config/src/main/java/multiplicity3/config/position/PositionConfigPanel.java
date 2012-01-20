@@ -219,8 +219,8 @@ public class PositionConfigPanel extends JPanel {
             }
         });
 	    
-	    jLabelTableOrientation.setBounds(new Rectangle(30, 30, 150, 24));
-	    jTextFieldTableAngle.setBounds(new Rectangle(180, 30, 50, 24));
+	    jLabelTableOrientation.setBounds(new Rectangle(30, 30, 175, 24));
+	    jTextFieldTableAngle.setBounds(new Rectangle(205, 30, 50, 24));
 	    jLabelTableHeight.setBounds(new Rectangle(290, 30, 150, 24));
 	    jTextFieldTableHeight.setBounds(new Rectangle(440, 30, 50, 24));
 
