@@ -32,7 +32,7 @@
 
 package multiplicity3.input.tuio.tuioobjects;
 
-public class TUIOFiducialObject extends TUIOObject {
+public class TUIOFiducialObject extends TUIOObjectRepresentation {
 
 	private int fiducialId;
 	private float angle;

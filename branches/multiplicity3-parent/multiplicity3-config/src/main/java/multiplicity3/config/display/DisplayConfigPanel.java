@@ -46,6 +46,7 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
     private JTextField depthBitsField = new JTextField();
     private JTextField displayWidthField = new JTextField();
     private JTextField stencilBitsField = new JTextField();
+    private JTextField tuioTextbox = new JTextField();
     private JComboBox displaySelector = new JComboBox();
     private JCheckBox fullScreen = new JCheckBox();
     private JComboBox jcb = new JComboBox(InputType.values());
@@ -55,7 +56,8 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
     private JLabel alphaBitsLabel = new JLabel();
     private JLabel depthBitsLabel = new JLabel();
     private JLabel displayWidthLabel = new JLabel();
-	private JLabel jLabelInputType = new JLabel();
+	private JLabel inputType = new JLabel();
+	private JLabel tuioLabel = new JLabel();
 
 	public DisplayConfigPanel(DisplayPrefsItem prefs) {
 		this.prefs = prefs;
@@ -81,7 +83,7 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
         fullScreen.setName("fullScreen"); 
         fullScreen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fullScreenActionPerformed(evt);
+            	prefs.setFullScreen(fullScreen.isSelected());
             }
         });
 
@@ -92,7 +94,7 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
         antiAliasField.setName("antiAlias"); 
         antiAliasField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                antiAliasKeyReleased(evt);
+            	prefs.setMinimumAntiAliasSamples(getIntegerFromTextField(antiAliasField, prefs.getMinimumAntiAliasSamples()));
             }
         });
 
@@ -103,7 +105,7 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
         stencilBitsField.setName("stencilBits"); 
         stencilBitsField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                stencilBitsKeyReleased(evt);
+            	prefs.setStencilBits(getIntegerFromTextField(stencilBitsField, prefs.getStencilBits()));
             }
         });
 
@@ -114,7 +116,7 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
         alphaBitsField.setName("alphaBits"); 
         alphaBitsField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                alphaBitsKeyReleased(evt);
+            	prefs.setAlphaBits(getIntegerFromTextField(alphaBitsField, prefs.getAlphaBits()));
             }
         });
 
@@ -125,7 +127,7 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
         depthBitsField.setName("depthBits"); 
         depthBitsField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                depthBitsKeyReleased(evt);
+            	prefs.setDepthBits(getIntegerFromTextField(depthBitsField, prefs.getDepthBits()));
             }
         });
         
@@ -136,26 +138,40 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
         displayWidthField.setName("displayWidth"); 
         displayWidthField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-            	displayWidthKeyReleased(evt);
+            	prefs.setRealWidth(getFloatFromTextField(displayWidthField, prefs.getRealWidth()));
             }
         });
         
         
             
-        jLabelInputType.setText("Input Type:");
+        inputType.setText("Input Type:");
 
 		jcb.setSelectedItem(prefs.getInputType());
 		jcb.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				prefs.setInputType(InputType.valueOf(jcb.getSelectedItem().toString()));
+				updateTuioOptionsVisibility();
 			}			
 		});
 		
+		tuioLabel.setText("TUIO Port: ");
+		
+		tuioTextbox.setText(""+prefs.getTuioPort());
+		tuioTextbox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+            	prefs.setTuioPort(getIntegerFromTextField(tuioTextbox, prefs.getTuioPort()));
+            }
+        });
+
+		
 	    setLayout(null);
 	    
-		jLabelInputType.setBounds(new Rectangle(30, 30, 100, 24));
+		inputType.setBounds(new Rectangle(30, 30, 100, 24));
 		jcb.setBounds(new Rectangle(130, 30, 200, 24));
+		
+		tuioLabel.setBounds(new Rectangle(30, 60, 250, 24));
+		tuioTextbox.setBounds(new Rectangle(130, 60, 150, 24));
 	    
 	    displaySizeLabel.setBounds(new Rectangle(30, 90, 100, 24));
 	    displaySelector.setBounds(new Rectangle(130, 90, 200, 24));	    
@@ -176,8 +192,12 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
 	    depthBitsLabel.setBounds(new Rectangle(275, 225, 150, 24));
 	    depthBitsField.setBounds(new Rectangle(360, 225, 35, 24));
 	    
-	    add(jLabelInputType);
+	    updateTuioOptionsVisibility();
+	    
+	    add(inputType);
 	    add(jcb);
+		add(tuioLabel);
+		add(tuioTextbox);
 	    add(displaySizeLabel);
 	    add(displaySelector);	
 	    add(fullScreen);
@@ -192,6 +212,11 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
 	    add(depthBitsLabel);
 	    add(depthBitsField);
 
+    }    
+    
+    private void updateTuioOptionsVisibility(){
+		tuioLabel.setVisible(prefs.getInputType() == InputType.TUIO);
+		tuioTextbox.setVisible(prefs.getInputType() == InputType.TUIO);
     }
 
 	private void displaySelectorItemStateChanged(java.awt.event.ItemEvent evt) {
@@ -200,53 +225,33 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
 			setSelectedDisplayMode(m);
 		}
 	}
-
-	private void fullScreenActionPerformed(java.awt.event.ActionEvent evt) {
-		prefs.setFullScreen(fullScreen.isSelected());
-	}
-
-	private void antiAliasKeyReleased(java.awt.event.KeyEvent evt) {
-		prefs.setMinimumAntiAliasSamples(getIntegerFromTextField(antiAliasField));
-	}
-
-
-	private void stencilBitsKeyReleased(java.awt.event.KeyEvent evt) {
-		prefs.setStencilBits(getIntegerFromTextField(stencilBitsField));
-	}
-
-	private void alphaBitsKeyReleased(java.awt.event.KeyEvent evt) {
-		prefs.setAlphaBits(getIntegerFromTextField(alphaBitsField));
-	}
-
-	private void depthBitsKeyReleased(java.awt.event.KeyEvent evt) {
-		prefs.setDepthBits(getIntegerFromTextField(depthBitsField));
+	
+	private int getIntegerFromTextField(JTextField tf, int previousValue) {
+		if(tf.getText().length() > 0) {
+			try {
+				int num = Integer.parseInt(tf.getText());
+				tf.setForeground(Color.black);
+				return num;
+			}catch(NumberFormatException ex) {
+				tf.setForeground(Color.red);
+			}    
+		}
+		return previousValue;
 	}
 	
-	private void displayWidthKeyReleased(java.awt.event.KeyEvent evt) {
-		prefs.setRealWidth(getFloatFromTextField(displayWidthField));
+	private Float getFloatFromTextField(JTextField tf, float previousValue) {
+		if(tf.getText().length() > 0) {
+			try {
+				float num = Float.parseFloat(tf.getText());
+				tf.setForeground(Color.black);
+				return num;
+			}catch(NumberFormatException ex) {
+				tf.setForeground(Color.red);
+			}    
+		}
+		return previousValue;
 	}
-	
-	private int getIntegerFromTextField(JTextField tf) {
-		try {
-			int num = Integer.parseInt(tf.getText());
-			tf.setForeground(Color.black);
-			return num;
-		}catch(NumberFormatException ex) {
-			tf.setForeground(Color.red);
-		}    
-		return 0;
-	}
-	
-	private Float getFloatFromTextField(JTextField tf) {
-		try {
-			float num = Float.parseFloat(tf.getText());
-			tf.setForeground(Color.black);
-			return num;
-		}catch(NumberFormatException ex) {
-			tf.setForeground(Color.red);
-		}    
-		return 0f;
-	}
+
 
 	private DisplayMode[] getDisplayModes() {
 		DisplayMode[] modes = null;

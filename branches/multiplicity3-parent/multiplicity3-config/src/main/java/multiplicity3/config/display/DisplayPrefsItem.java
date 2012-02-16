@@ -5,10 +5,12 @@ import java.util.prefs.Preferences;
 import javax.swing.JPanel;
 
 import multiplicity3.config.PreferencesItem;
+import multiplicity3.input.tuio.TUIOPrefsItem;
 
 public class DisplayPrefsItem implements PreferencesItem {
 	
 	private static Preferences prefs = Preferences.userNodeForPackage(DisplayPrefsItem.class);
+	private static TUIOPrefsItem tuioPrefs = new TUIOPrefsItem();
 
 	private static final String DISPLAY_WIDTH = "DISPLAY_WIDTH";
 	private static final String DISPLAY_HEIGHT = "DISPLAY_HEIGHT";
@@ -134,6 +136,14 @@ public class DisplayPrefsItem implements PreferencesItem {
 
 	public InputType getInputType() {			
 		return InputType.valueOf(prefs.get(PREFS_INPUT_TYPE, InputType.JMEDIRECT.name()));
+	}
+	
+	public void setTuioPort(int port) {
+		tuioPrefs.setTuioPort(port);
+	}
+
+	public int getTuioPort() {			
+		return tuioPrefs.getTuioPort();
 	}
 	
 }

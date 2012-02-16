@@ -89,7 +89,7 @@ public class PositionConfigPanel extends JPanel {
 	    jTextFieldTableAngle.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				prefsItem.setAngle(getFloatFromTextField(jTextFieldTableAngle));
+				prefsItem.setAngle(getFloatFromTextField(jTextFieldTableAngle, prefsItem.getAngle()));
 			}
 		});
 	    
@@ -98,7 +98,7 @@ public class PositionConfigPanel extends JPanel {
 	    jTextFieldTableHeight.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				prefsItem.setTableHeight(getFloatFromTextField(jTextFieldTableHeight));
+				prefsItem.setTableHeight(getFloatFromTextField(jTextFieldTableHeight, prefsItem.getTableHeight()));
 			}
 		});
 	    
@@ -123,7 +123,7 @@ public class PositionConfigPanel extends JPanel {
 	    jTextFieldPositionX.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				prefsItem.setXPos(getFloatFromTextField(jTextFieldPositionX));
+				prefsItem.setXPos(getFloatFromTextField(jTextFieldPositionX, prefsItem.getXPos()));
 			}
 		});
 
@@ -132,7 +132,7 @@ public class PositionConfigPanel extends JPanel {
 	    jTextFieldPositionY.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				prefsItem.setYPos(getFloatFromTextField(jTextFieldPositionY));
+				prefsItem.setYPos(getFloatFromTextField(jTextFieldPositionY, prefsItem.getYPos()));
 			}
 		});
 
@@ -157,7 +157,7 @@ public class PositionConfigPanel extends JPanel {
         jTextFieldDistanceX.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				prefsItem.setXDistance(getFloatFromTextField(jTextFieldDistanceX));
+				prefsItem.setXDistance(getFloatFromTextField(jTextFieldDistanceX, prefsItem.getGridDistanceX()));
 			}
 		});
 
@@ -166,7 +166,7 @@ public class PositionConfigPanel extends JPanel {
 	    jTextFieldDistanceY.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				prefsItem.setYDistance(getFloatFromTextField(jTextFieldDistanceY));
+				prefsItem.setYDistance(getFloatFromTextField(jTextFieldDistanceY, prefsItem.getGridDistanceY()));
 			}
 		});
 
@@ -177,7 +177,7 @@ public class PositionConfigPanel extends JPanel {
 	    jTextFieldLimitX.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				prefsItem.setXLimit(getIntegerFromTextField(jTextFieldLimitX));
+				prefsItem.setXLimit(getIntegerFromTextField(jTextFieldLimitX, prefsItem.getGridLimitX()));
 			}
 		});
 
@@ -186,7 +186,7 @@ public class PositionConfigPanel extends JPanel {
 	    jTextFieldLimitY.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				prefsItem.setYLimit(getIntegerFromTextField(jTextFieldLimitY));
+				prefsItem.setYLimit(getIntegerFromTextField(jTextFieldLimitY, prefsItem.getGridLimitY()));
 			}
 		});
 
@@ -273,28 +273,31 @@ public class PositionConfigPanel extends JPanel {
 	    loadPreferences();
     }
 
-	private int getIntegerFromTextField(JTextField tf) {
-		try {
-			int num = Integer.parseInt(tf.getText());
-			tf.setForeground(Color.black);
-			return num;
-		}catch(NumberFormatException ex) {
-			tf.setForeground(Color.red);
-		}    
-		return 0;
+	private int getIntegerFromTextField(JTextField tf, int previousValue) {
+		if(tf.getText().length() > 0) {
+			try {
+				int num = Integer.parseInt(tf.getText());
+				tf.setForeground(Color.black);
+				return num;
+			}catch(NumberFormatException ex) {
+				tf.setForeground(Color.red);
+			}    
+		}
+		return previousValue;
 	}
 	
-	private Float getFloatFromTextField(JTextField tf) {
-		try {
-			float num = Float.parseFloat(tf.getText());
-			tf.setForeground(Color.black);
-			return num;
-		}catch(NumberFormatException ex) {
-			tf.setForeground(Color.red);
-		}    
-		return 0f;
+	private Float getFloatFromTextField(JTextField tf, float previousValue) {
+		if(tf.getText().length() > 0) {
+			try {
+				float num = Float.parseFloat(tf.getText());
+				tf.setForeground(Color.black);
+				return num;
+			}catch(NumberFormatException ex) {
+				tf.setForeground(Color.red);
+			}    
+		}
+		return previousValue;
 	}
-
 	private void loadPreferences(){
 		jTextFieldTableAngle.setText("" + prefsItem.getAngle());
 		jTextFieldTableHeight.setText("" + prefsItem.getTableHeight());
