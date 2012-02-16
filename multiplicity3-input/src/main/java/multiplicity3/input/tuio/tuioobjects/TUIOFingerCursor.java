@@ -32,7 +32,7 @@
 
 package multiplicity3.input.tuio.tuioobjects;
 
-public class TUIOFingerCursor extends TUIOObject {
+public class TUIOFingerCursor extends TUIOObjectRepresentation {
 
 	public TUIOFingerCursor(long id) {
 		super(id);

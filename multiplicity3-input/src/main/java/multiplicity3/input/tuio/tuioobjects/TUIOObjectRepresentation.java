@@ -34,10 +34,9 @@ package multiplicity3.input.tuio.tuioobjects;
 
 import com.jme3.math.Vector2f;
 
-public abstract class TUIOObject {
+public abstract class TUIOObjectRepresentation {
 	private long id;
 	private long creationTime;
-	private boolean isNew = false;
 	private Vector2f position;
 	private Vector2f velocity;
 	
@@ -47,7 +46,7 @@ public abstract class TUIOObject {
 	 * 
 	 * @param id
 	 */
-	public TUIOObject(long id) {
+	public TUIOObjectRepresentation(long id) {
 		setId(id);
 		setCreationTime(System.nanoTime());
 	}
@@ -84,12 +83,4 @@ public abstract class TUIOObject {
 		this.velocity = velocity;
 	}
 
-	public boolean isNew() {
-		return isNew;
-	}
-
-	public void setNew(boolean isNew) {
-		this.isNew = isNew;
-	}
-	
 }

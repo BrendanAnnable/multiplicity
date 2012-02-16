@@ -38,6 +38,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import TUIO.TuioClient;
+import TUIO.TuioCursor;
+import TUIO.TuioListener;
+import TUIO.TuioObject;
+import TUIO.TuioTime;
+
 import com.jme3.math.Vector2f;
 
 import multiplicity3.input.IMultiTouchEventListener;
@@ -47,9 +53,6 @@ import multiplicity3.input.events.MultiTouchObjectEvent;
 import multiplicity3.input.tuio.tuioobjects.TUIOFiducialObject;
 import multiplicity3.input.tuio.tuioobjects.TUIOFingerCursor;
 import multiplicity3.input.utils.ClickDetector;
-
-import edu.upf.mtg.reactivision.TuioClient;
-import edu.upf.mtg.reactivision.TuioListener;
 
 /**
  * Support for tables which use the TUIO protocol. This implementation supports
@@ -92,7 +95,8 @@ public class TUIOMultiTouchInput implements IMultiTouchInputSource, TuioListener
 
 	public void start() {
 		synchronized(this) {
-			networkClient = new TuioClient();
+			TUIOPrefsItem tablePrefs = new TUIOPrefsItem();
+			networkClient = new TuioClient(tablePrefs.getTuioPort());
 			networkClient.addTuioListener(this);
 			networkClient.connect();
 			Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -117,17 +121,47 @@ public class TUIOMultiTouchInput implements IMultiTouchInputSource, TuioListener
 	 * subsequently updated in order for that to decide whether to inform
 	 * about being new or just updated.
 	 */
-	public void addTuioCur(long sessionID) {		
+	public void addTuioCursor(final TuioCursor tuioCursor) {		
+		final long sessionID = tuioCursor.getSessionID();
 		TUIOFingerCursor fingerCursor = fingerCursors.get(sessionID);
 		if(fingerCursor == null) {
 			fingerCursor = new TUIOFingerCursor(sessionID);
-			fingerCursor.setNew(true);
 			fingerCursors.put(sessionID, fingerCursor);
+			
+			Callable<Object> c = new Callable<Object>() {
+				
+				float xpos = tuioCursor.getX();
+				float ypos = tuioCursor.getY();
+				float x_speed = tuioCursor.getXSpeed();
+				float y_speed = tuioCursor.getYSpeed();		
+				
+				@Override
+				public Object call() throws Exception {
+					final TUIOFingerCursor fingerCursor = fingerCursors.get(sessionID);
+					if(fingerCursor != null) {			
+						fingerCursor.setPosition(new Vector2f(xpos, 1-ypos));
+						fingerCursor.setVelocity(new Vector2f(x_speed, y_speed));
+						for(IMultiTouchEventListener listener : listeners) {
+							clickDetector.newCursorPressed(fingerCursor.getId(), fingerCursor.getPosition());
+							MultiTouchCursorEvent evt = new MultiTouchCursorEvent(fingerCursor.getId(), fingerCursor.getPosition(), fingerCursor.getVelocity());
+							listener.cursorPressed(evt);
+						}
+					}
+					return null;
+				}
+			};
+			synchronized(callingList) {
+				callingList.add(c);
+			}
+			
+			
 		}
 	}
 
-	public void removeTuioCur(final long sessionID) {
+	public void removeTuioCursor(final TuioCursor tuioCursor) {
 		Callable<Object> c = new Callable<Object>() {
+			
+			long sessionID = tuioCursor.getSessionID();
 
 			@Override
 			public Object call() throws Exception {
@@ -156,26 +190,24 @@ public class TUIOMultiTouchInput implements IMultiTouchInputSource, TuioListener
 
 	}
 
-	public void updateTuioCur(final long sessionID, final float xpos, final float ypos, final float x_speed, final float y_speed, float m_accel) {
+	public void updateTuioCursor(final TuioCursor tuioCursor){
 		Callable<Object> c = new Callable<Object>() {
+			
+			float xpos = tuioCursor.getX();
+			float ypos = tuioCursor.getY();
+			float x_speed = tuioCursor.getXSpeed();
+			float y_speed = tuioCursor.getYSpeed();		
+			long sessionID = tuioCursor.getSessionID();
+			
 			@Override
 			public Object call() throws Exception {
 				final TUIOFingerCursor fingerCursor = fingerCursors.get(sessionID);
 				if(fingerCursor != null) {			
 					fingerCursor.setPosition(new Vector2f(xpos, 1-ypos));
 					fingerCursor.setVelocity(new Vector2f(x_speed, y_speed));
-					if(fingerCursor.isNew()) {
-						for(IMultiTouchEventListener listener : listeners) {
-							clickDetector.newCursorPressed(fingerCursor.getId(), fingerCursor.getPosition());
-							MultiTouchCursorEvent evt = new MultiTouchCursorEvent(fingerCursor.getId(), fingerCursor.getPosition(), fingerCursor.getVelocity());
-							listener.cursorPressed(evt);
-						}
-						fingerCursor.setNew(false);
-					}else{
-						for(IMultiTouchEventListener listener : listeners) {
-							MultiTouchCursorEvent event = new MultiTouchCursorEvent(fingerCursor.getId(), fingerCursor.getPosition(), fingerCursor.getVelocity());
-							listener.cursorChanged(event);
-						}
+					for(IMultiTouchEventListener listener : listeners) {
+						MultiTouchCursorEvent event = new MultiTouchCursorEvent(fingerCursor.getId(), fingerCursor.getPosition(), fingerCursor.getVelocity());
+						listener.cursorChanged(event);
 					}
 				}
 				return null;
@@ -188,17 +220,20 @@ public class TUIOMultiTouchInput implements IMultiTouchInputSource, TuioListener
 	}
 
 
-	public void addTuioObj(long sessionID, int fiducialID) {
+	public void addTuioObject(TuioObject tuioObject){
+		long sessionID = tuioObject.getSessionID();
+		int fiducialID = tuioObject.getSymbolID();
 		TUIOFiducialObject fiducial = fiducials.get(sessionID);
 		if(fiducial == null) {
 			fiducial = new TUIOFiducialObject(sessionID, fiducialID);
-			fiducial.setNew(true);
 			fiducials.put(sessionID, fiducial);			
 		}
 	}
 
-	public void removeTuioObj(final long sessionID, int fiducialID) {
+	public void removeTuioObject(final TuioObject tuioObject) {
 		Callable<Object> c = new Callable<Object>() {
+			
+			long sessionID = tuioObject.getSessionID();
 
 			@Override
 			public Object call() throws Exception {
@@ -220,8 +255,17 @@ public class TUIOMultiTouchInput implements IMultiTouchInputSource, TuioListener
 	}
 
 
-	public void updateTuioObj(final long sessionID, int fiducial_id, final float xpos, final float ypos, final float angle, final float x_speed, final float y_speed, final float r_speed, float m_accel, final float r_accel) {
+	public void updateTuioObject(final TuioObject tuioObject){
 		Callable<Object> c = new Callable<Object>() {
+			
+			long sessionID = tuioObject.getSessionID();
+			float angle = tuioObject.getAngle();
+			float x_speed = tuioObject.getXSpeed();
+			float y_speed = tuioObject.getYSpeed();
+			float r_speed = tuioObject.getRotationSpeed();
+			float r_accel = tuioObject.getRotationAccel();
+			float xpos = tuioObject.getX();
+			float ypos = tuioObject.getY();
 
 			@Override
 			public Object call() throws Exception {
@@ -247,7 +291,7 @@ public class TUIOMultiTouchInput implements IMultiTouchInputSource, TuioListener
 
 	}
 
-	public void refresh() {
+	public void refresh(TuioTime tuioTime) {
 		// unused
 	}
 
@@ -268,5 +312,5 @@ public class TUIOMultiTouchInput implements IMultiTouchInputSource, TuioListener
 	public boolean requiresMouseDisplay() {
 		return false;
 	}
-
+	
 }
