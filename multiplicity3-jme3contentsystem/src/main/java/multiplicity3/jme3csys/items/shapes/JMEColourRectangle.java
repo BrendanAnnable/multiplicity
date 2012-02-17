@@ -14,6 +14,7 @@ import multiplicity3.jme3csys.picking.ItemMap;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.scene.Geometry;
@@ -54,6 +55,10 @@ public class JMEColourRectangle extends JMEItem implements IColourRectangle, IIn
 		ItemMap.register(quadGeometry, this);
 		log.fine("Attaching colour rectangle quad geometry!");
 		attachChild(quadGeometry);
+	}
+	
+	public void enableTransparency(){
+		mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 	}
 	
 //	@Override
