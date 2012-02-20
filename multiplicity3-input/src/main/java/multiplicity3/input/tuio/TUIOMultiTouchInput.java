@@ -125,7 +125,7 @@ public class TUIOMultiTouchInput implements IMultiTouchInputSource, TuioListener
 		final long sessionID = tuioCursor.getSessionID();
 		TUIOFingerCursor fingerCursor = fingerCursors.get(sessionID);
 		if(fingerCursor == null) {
-			fingerCursor = new TUIOFingerCursor(sessionID);
+			fingerCursor = new TUIOFingerCursor();
 			fingerCursors.put(sessionID, fingerCursor);
 			
 			Callable<Object> c = new Callable<Object>() {

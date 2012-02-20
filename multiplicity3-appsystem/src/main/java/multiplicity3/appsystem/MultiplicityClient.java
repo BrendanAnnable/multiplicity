@@ -72,7 +72,7 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
 		assetManager = this.getAssetManager();
 		multiplicityRootNode.detachAllChildren();
 		
-		
+		setPauseOnLostFocus(false);
 
 		Camera camera = this.getCamera();
 

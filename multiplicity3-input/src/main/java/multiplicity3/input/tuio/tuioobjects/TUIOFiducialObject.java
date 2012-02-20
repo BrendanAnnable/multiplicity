@@ -40,7 +40,8 @@ public class TUIOFiducialObject extends TUIOObjectRepresentation {
 	private float angleAcceleration;
 
 	public TUIOFiducialObject(long id, int fiducial_id) {
-		super(id);
+		super();
+		setId(id);
 		this.fiducialId = fiducial_id;
 	}
 

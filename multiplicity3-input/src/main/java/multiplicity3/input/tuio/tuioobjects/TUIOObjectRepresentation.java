@@ -46,8 +46,7 @@ public abstract class TUIOObjectRepresentation {
 	 * 
 	 * @param id
 	 */
-	public TUIOObjectRepresentation(long id) {
-		setId(id);
+	public TUIOObjectRepresentation() {
 		setCreationTime(System.nanoTime());
 	}
 
