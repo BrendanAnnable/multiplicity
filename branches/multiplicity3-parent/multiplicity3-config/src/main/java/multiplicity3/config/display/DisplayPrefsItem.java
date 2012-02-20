@@ -26,7 +26,7 @@ public class DisplayPrefsItem implements PreferencesItem {
 	private static final String PREFS_INPUT_TYPE = "INPUT_TYPE";
 	
 	public static enum InputType {
-		JMEDIRECT, TUIO, EVOLUCE
+		JMEDIRECT, TUIO, EVOLUCE, WIN7
 	}
 	
 	public DisplayPrefsItem() {}

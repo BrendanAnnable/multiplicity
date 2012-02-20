@@ -49,8 +49,13 @@
 			<groupId>net.sourceforge.tuio</groupId>
 			<artifactId>tuio</artifactId>
 			<version>1.4</version>
+		</dependency>               
+
+		<dependency>
+		    <groupId>org.xvolks</groupId>
+		    <artifactId>jnative</artifactId>
+		    <version>1.4</version>
 		</dependency>
-                    
 
 	</dependencies>
 	<properties>

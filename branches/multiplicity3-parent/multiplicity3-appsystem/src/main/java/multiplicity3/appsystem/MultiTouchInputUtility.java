@@ -10,6 +10,7 @@ import multiplicity3.input.IMultiTouchInputSource;
 import multiplicity3.input.luminja.LuminMultiTouchInput;
 import multiplicity3.input.simulator.jme.JMEDirectSimulator;
 import multiplicity3.input.tuio.TUIOMultiTouchInput;
+import multiplicity3.input.win7.Win7TouchInput;
 
 public class MultiTouchInputUtility {
 	
@@ -36,6 +37,15 @@ public class MultiTouchInputUtility {
 		case EVOLUCE: {
 			try {
 				multiTouchInput = new LuminMultiTouchInput();
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			}
+			break;
+		}
+		
+		case WIN7: {
+			try {
+				multiTouchInput = new Win7TouchInput(tablePrefs.getWidth(), tablePrefs.getHeight());				
 			} catch (SecurityException e) {
 				e.printStackTrace();
 			}
