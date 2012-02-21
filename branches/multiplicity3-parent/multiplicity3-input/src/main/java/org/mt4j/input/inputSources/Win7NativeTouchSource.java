@@ -103,6 +103,7 @@ public class Win7NativeTouchSource{
 			
 			String dllAddress = Win7NativeTouchSource.class.getResource(dllName + ".dll").toString();				
 			dllAddress = dllAddress.replace("file:/", "");
+			dllAddress = dllAddress.replace("%20", " ");
 			
 			System.load(dllAddress);
 		}else{

@@ -53,8 +53,8 @@
 
 		<dependency>
 		    <groupId>org.xvolks</groupId>
-		    <artifactId>jnative</artifactId>
-		    <version>1.4</version>
+		    <artifactId>JNative</artifactId>
+		    <version>1.0</version>
 		</dependency>
 
 	</dependencies>
