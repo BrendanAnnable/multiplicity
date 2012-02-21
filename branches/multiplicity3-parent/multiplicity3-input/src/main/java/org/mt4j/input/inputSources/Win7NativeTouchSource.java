@@ -17,6 +17,14 @@
 */
 package org.mt4j.input.inputSources;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -96,16 +104,44 @@ public class Win7NativeTouchSource{
 		if (!loaded){
 			loaded = true;
 			
-			String dllName = dllName32;
-			
-			String bit = System.getProperty("sun.arch.data.model");
-			if (bit.contains("64"))dllName = dllName64;			
-			
-			String dllAddress = Win7NativeTouchSource.class.getResource(dllName + ".dll").toString();				
-			dllAddress = dllAddress.replace("file:/", "");
-			dllAddress = dllAddress.replace("%20", " ");
-			
-			System.load(dllAddress);
+			// Copy dll to temp directory to avoid loading issues from jar
+			AccessController.doPrivileged(new PrivilegedAction<Void>() {
+			    public Void run() {
+			    	
+					String dllName = dllName32;
+					
+					String bit = System.getProperty("sun.arch.data.model");
+					if (bit.contains("64"))dllName = dllName64;			
+			    	
+			        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
+			        File tmpFile = new File(tmpDir, dllName + ".dll");
+
+			        try {
+			            InputStream in = Win7NativeTouchSource.class.getResourceAsStream(dllName + ".dll");
+			            OutputStream out = new FileOutputStream(tmpFile);
+
+			            byte[] buf = new byte[8192];
+			            int len;
+			            while ((len = in.read(buf)) != -1) {
+			                out.write(buf, 0, len);
+			            }
+
+			            in.close();
+			            out.close();
+
+			            System.load(tmpFile.getAbsolutePath());
+
+			        } catch (FileNotFoundException fnfe) {
+			        	logger.warning("Could not create temporary dll.");
+			        } catch (IOException ioe) {
+			        	logger.warning("Could not copy dll.");
+			        }
+
+			        return null;
+			    }
+			});
+
+
 		}else{
 			logger.warning("Win7NativeTouchSource may only be instantiated once.");
 			return;
