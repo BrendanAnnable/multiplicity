@@ -94,6 +94,10 @@ public class Gravity implements IMultiplicityApp, IMultiTouchEventListener, Univ
 	}
 
 	@Override
+	public void onDestroy() {}
+
+
+	@Override
 	public void cursorPressed(MultiTouchCursorEvent event) {
 		if(!universe.canAddMore()) return;
 		try {

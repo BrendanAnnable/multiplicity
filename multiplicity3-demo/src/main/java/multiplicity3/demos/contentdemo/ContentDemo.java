@@ -132,17 +132,15 @@ public class ContentDemo implements IMultiplicityApp {
 		} catch (ContentTypeNotBoundException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-		
 	}
 
 	@Override
-	public void shouldStop() {
-		
-		
-	}
+	public void shouldStop() {}
+	
+
+	@Override
+	public void onDestroy() {}
+
 
 	@Override
 	public String getFriendlyAppName() {

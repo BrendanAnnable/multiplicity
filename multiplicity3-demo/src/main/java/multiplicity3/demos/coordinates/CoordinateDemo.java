@@ -108,6 +108,10 @@ public class CoordinateDemo implements IMultiplicityApp {
 	public void shouldStop() {}
 
 	@Override
+	public void onDestroy() {}
+
+
+	@Override
 	public String getFriendlyAppName() {
 		return "Coordinate Demo";
 	}

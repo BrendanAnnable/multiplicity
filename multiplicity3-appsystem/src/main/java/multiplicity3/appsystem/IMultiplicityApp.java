@@ -6,4 +6,5 @@ public interface IMultiplicityApp {
 	String getFriendlyAppName();
 	void shouldStart(MultiTouchInputComponent input, IQueueOwner iqo);
 	void shouldStop();
+	void onDestroy();
 }
