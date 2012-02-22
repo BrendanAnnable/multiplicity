@@ -110,7 +110,9 @@ public class ZOrderDemo implements IMultiplicityApp {
 	public void shouldStop() {}
 	
 	
-	
+	@Override
+	public void onDestroy() {}
+
 	
 	private void setupExpressionBackgroundGradient() {
 		ColorRGBA gradientTop = new ColorRGBA(0.6f, 0.6f, 0.6f, 0.5f);
