@@ -33,6 +33,7 @@
 package multiplicity3.input.luminja;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,9 @@ import de.evoluce.multitouch.adapter.java.JavaAdapter;
  *
  */
 public class LuminMultiTouchInput implements IMultiTouchInputSource {
+	
+	private final static float BLOB_CHANGED_THRESHOLD = 0.003f;
+	
 	private static final Logger log = Logger.getLogger(LuminMultiTouchInput.class.getName());
 
 	protected List<IMultiTouchEventListener> listeners = new ArrayList<IMultiTouchEventListener>();
@@ -96,15 +100,20 @@ public class LuminMultiTouchInput implements IMultiTouchInputSource {
 			MultiTouchCursorEvent event = new MultiTouchCursorEvent(blob.mID, pos, vel, blob.mWidth, 0f);
 
 			if(currentBlobRegistry.containsKey(blob.mID)) {
-				for(IMultiTouchEventListener listener : listeners) {	
-					try {
-						listener.cursorChanged(event);
-					}catch(Exception ex) {
-						log.warning("Problem in dispatching cursorChanged event " + event);
-						log.log(Level.WARNING, "  Error as follows:", ex);
+				if (new Vector2f(blob.mX, blob.mY).distance(new Vector2f(currentBlobRegistry.get(blob.mID).mX,
+						currentBlobRegistry.get(blob.mID).mY)) > BLOB_CHANGED_THRESHOLD){
+					for(IMultiTouchEventListener listener : listeners) {	
+						try {
+							listener.cursorChanged(event);
+						}catch(Exception ex) {
+							log.warning("Problem in dispatching cursorChanged event " + event);
+							log.log(Level.WARNING, "  Error as follows:", ex);
+						}
 					}
+					lastKnownPosition.put(blob.mID, new Vector2f(blob.mX, blob.mY));
+				}else{
+					newRegistry.put(blob.mID, currentBlobRegistry.get(blob.mID));
 				}
-				lastKnownPosition.put(blob.mID, new Vector2f(blob.mX, blob.mY));
 			}else{
 				clickDetector.newCursorPressed(blob.mID, pos);
 				for(IMultiTouchEventListener listener : listeners) {	
