@@ -39,7 +39,6 @@ import javax.swing.JPanel;
 
 import multiplicity3.config.ConfigurationApplication;
 import multiplicity3.config.PreferencesItem;
-import multiplicity3.config.display.DisplayPrefsItem;
 
 public class PositionConfigPrefsItem implements PreferencesItem {
 
@@ -149,11 +148,6 @@ public class PositionConfigPrefsItem implements PreferencesItem {
 
 	public void setYLimit(int yLimit) {
 		prefs.getInt(GRID_LIMIT_Y, yLimit);
-	}
-	
-	public int getPixelValue(float value){
-		DisplayPrefsItem displayPrefs = new DisplayPrefsItem();		
-		return (int)(value * (displayPrefs.getWidth()/displayPrefs.getRealWidth()));
 	}
 	
 }
