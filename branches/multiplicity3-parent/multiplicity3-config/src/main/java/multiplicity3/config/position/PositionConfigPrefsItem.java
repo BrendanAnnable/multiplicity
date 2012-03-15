@@ -143,11 +143,11 @@ public class PositionConfigPrefsItem implements PreferencesItem {
 	}
 
 	public void setXLimit(int xLimit) {
-		prefs.getInt(GRID_LIMIT_X, xLimit);
+		prefs.putInt(GRID_LIMIT_X, xLimit);
 	}
 
 	public void setYLimit(int yLimit) {
-		prefs.getInt(GRID_LIMIT_Y, yLimit);
+		prefs.putInt(GRID_LIMIT_Y, yLimit);
 	}
 	
 }
