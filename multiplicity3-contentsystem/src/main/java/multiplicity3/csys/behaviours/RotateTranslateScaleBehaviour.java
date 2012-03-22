@@ -109,6 +109,19 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 	public void setScaleEnabled(boolean b) {
 		scaleDisabled = !b;
 	}
+	
+	public void setScaleLimits(float minScale, float maxScale){
+		this.minScale = minScale;
+		this.maxScale = maxScale;
+	}
+	
+	public void setScaleMinLimit(float minScale){
+		this.minScale = minScale;
+	}
+	
+	public void setScaleMaxLimit(float maxScale){
+		this.maxScale = maxScale;
+	}
 
 	public boolean isScaleEnabled() {
 		return !scaleDisabled;

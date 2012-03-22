@@ -83,8 +83,8 @@ public class InertiaBehaviour implements IBehaviour, IMultiTouchEventListener {
 	}
 
 
-	public void setDragFactor(float drag){
-		iae.setDragFactor(drag);
+	public void setDeceleration(float deceleration){
+		iae.setDeceleration(deceleration);
 	}
 
 }

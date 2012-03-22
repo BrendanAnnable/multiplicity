@@ -11,7 +11,7 @@ public class InertiaAnimationElement extends AnimationElement {
 	private IItem item;
 	private boolean finished;
 	private Vector2f currentVelocity;
-	private float dragFactor = 1f;
+	private float deceleration = 100f;
 	private IStage stage;
 
 	public InertiaAnimationElement(IItem item, IStage stage) {
@@ -22,12 +22,12 @@ public class InertiaAnimationElement extends AnimationElement {
 	/*
 	 * Value > 1 for less than default drag, value < 1 for more than default drag.
 	 */
-	public void setDragFactor(float drag) {
-		this.dragFactor = drag;
+	public void setDeceleration(float deceleration) {
+		this.deceleration = deceleration;
 	}
 	
-	public float getDragFactor() {
-		return this.dragFactor;
+	public float getDecelerationFactor() {
+		return this.deceleration;
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class InertiaAnimationElement extends AnimationElement {
 				if (currentVelocity.y < 0)currentVelocity.setY(-currentVelocity.getY());	
 			}
 			
-			Vector2f reduceBy = currentVelocity.mult(1/dragFactor  * tpf);
+			Vector2f reduceBy = currentVelocity.normalize().mult(deceleration* tpf);
 			currentVelocity.subtractLocal(reduceBy);
 			
 			if(currentVelocity.length() < 1f) {
