@@ -82,5 +82,11 @@ public interface IMultiTouchInputSource {
 	 * @return
 	 */
 	public boolean requiresMouseDisplay();
+	
+	
+	/**
+	 * Stop the listener from running
+	 */
+	public void endListening();
 
 }

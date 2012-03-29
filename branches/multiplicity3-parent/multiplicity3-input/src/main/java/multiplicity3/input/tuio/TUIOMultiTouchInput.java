@@ -312,5 +312,10 @@ public class TUIOMultiTouchInput implements IMultiTouchInputSource, TuioListener
 	public boolean requiresMouseDisplay() {
 		return false;
 	}
+
+	@Override
+	public void endListening() {
+		stop();		
+	}
 	
 }
