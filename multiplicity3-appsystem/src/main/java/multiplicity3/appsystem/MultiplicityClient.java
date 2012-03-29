@@ -211,6 +211,9 @@ public class MultiplicityClient extends JMEAppRoot implements IQueueOwner {
     		currentApp.shouldStop();
     		currentApp.onDestroy();
     	}
+    	if (source != null){
+    		source.endListening();
+    	}
     	super.destroy();
     }
 	

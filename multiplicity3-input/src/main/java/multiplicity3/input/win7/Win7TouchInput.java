@@ -212,4 +212,7 @@ public class Win7TouchInput implements IMultiTouchInputSource {
 		return false;
 	}
 
+	@Override
+	public void endListening() {}
+
 }
