@@ -264,7 +264,7 @@ public abstract class JMEItem extends Node implements IItem, IInitable {
 	public void addItem(IItem item) {
 		log.fine("Adding " + item + " to " + this);
 		getItemChildren().add(item);
-		getZOrderManager().regiserForZOrdering(item);
+		getZOrderManager().registerForZOrdering(item);
 		item.setParentItem(this);
 		notifyChildrenChanged();
 	}

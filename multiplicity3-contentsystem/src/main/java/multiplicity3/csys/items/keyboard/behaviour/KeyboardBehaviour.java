@@ -29,9 +29,9 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 	private boolean shiftDown = false;
 	private boolean ctlDown = false;
 	private boolean altDown = false;
-	private boolean enabled = true;
 	private long minTimeBetweenKeyPresses = 10;
 	private IStage stage; 
+	private boolean active = true;
 
 	
 	public void setMinimumTimeBetweenKeyPressesMS(long milliseconds) {
@@ -64,7 +64,7 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 
 	@Override
 	public void cursorChanged(MultiTouchCursorEvent event) {			
-		if(!enabled ) return;
+		if(!active ) return;
 
 		KeyboardKey kk = trackedKeyPresses.get(event.getCursorID());
 		if(kk != null) {
@@ -90,7 +90,7 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 
 	@Override
 	public void cursorPressed(MultiTouchCursorEvent event) {
-		if(!enabled ) return;
+		if(!active ) return;
 		KeyboardKey kk = getKeyUnderEvent(event);
 		
 		if(kk != null && kk.isEnabled()) {			
@@ -108,7 +108,7 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 
 	@Override
 	public void cursorReleased(MultiTouchCursorEvent event) {
-		if(!enabled ) return;
+		if(!active ) return;
 		KeyboardKey kk = getKeyUnderEvent(event);
 		if(kk != null && kk.isEnabled()) {
 			if(kk.getModifiers() == KeyModifiers.SHIFT) {
@@ -144,33 +144,21 @@ public class KeyboardBehaviour implements IBehaviour, IMultiTouchEventListener {
 	}
 
 	@Override
-	public void objectAdded(MultiTouchObjectEvent event) {
-		// TODO Auto-generated method stub
-
-	}
+	public void objectAdded(MultiTouchObjectEvent event) {}
 
 	@Override
-	public void objectChanged(MultiTouchObjectEvent event) {
-		// TODO Auto-generated method stub
-
-	}
+	public void objectChanged(MultiTouchObjectEvent event) {}
 
 	@Override
-	public void objectRemoved(MultiTouchObjectEvent event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+	public void objectRemoved(MultiTouchObjectEvent event) {}
 
 	@Override
 	public void setStage(IStage stage) {
 		this.stage = stage;		
 	}
 
-
-
-
+	@Override
+	public void setActive(boolean active) {
+		this.active = active;		
+	}
 }

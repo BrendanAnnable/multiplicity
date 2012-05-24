@@ -17,6 +17,7 @@ public class InertiaBehaviour implements IBehaviour, IMultiTouchEventListener {
 	int cursorCount = 0;
 	private IItem eventSource;
 	protected IStage stage;
+	private boolean active = true;
 	
 	@Override
 	public void setEventSource(IItem eventSourceItem) {
@@ -36,28 +37,32 @@ public class InertiaBehaviour implements IBehaviour, IMultiTouchEventListener {
 	}
 
 	@Override
-	public void cursorChanged(MultiTouchCursorEvent event) {		
+	public void cursorChanged(MultiTouchCursorEvent event) {				
+		if(!active ) return;	
 		if(cursorCount == 1) {
 			positionHistory.add(event.getPosition(), System.currentTimeMillis());
 		}
 	}
 
 	@Override
-	public void cursorClicked(MultiTouchCursorEvent event) {
+	public void cursorClicked(MultiTouchCursorEvent event) {			
+		if(!active ) return;
 		iae.reset();
 		positionHistory.clear();
 		
 	}
 
 	@Override
-	public void cursorPressed(MultiTouchCursorEvent event) {
+	public void cursorPressed(MultiTouchCursorEvent event) {			
+		if(!active ) return;
 		cursorCount++;		
 		iae.reset();
 		positionHistory.clear();
 	}
 
 	@Override
-	public void cursorReleased(MultiTouchCursorEvent event) {
+	public void cursorReleased(MultiTouchCursorEvent event) {			
+		if(!active ) return;
 		if(cursorCount == 1) {
 			positionHistory.add(event.getPosition(), System.currentTimeMillis());			
 			iae.moveWithVelocity(positionHistory.getVelocity());
@@ -85,6 +90,11 @@ public class InertiaBehaviour implements IBehaviour, IMultiTouchEventListener {
 
 	public void setDeceleration(float deceleration){
 		iae.setDeceleration(deceleration);
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }

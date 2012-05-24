@@ -17,6 +17,7 @@ public class GestureDetectionBehaviour implements IBehaviour, IMultiTouchEventLi
 	private IItem item;
 	private List<IGestureListener> listeners = new ArrayList<IGestureListener>();
 	private Map<Long, Gesture> currentGestures = new HashMap<Long,Gesture>();
+	private boolean active = true;
 
 	@Override
 	public void setItemActingOn(IItem item) {
@@ -35,7 +36,8 @@ public class GestureDetectionBehaviour implements IBehaviour, IMultiTouchEventLi
 	}
 
 	@Override
-	public void cursorChanged(MultiTouchCursorEvent event) {
+	public void cursorChanged(MultiTouchCursorEvent event) {			
+		if(!active ) return;
 		Gesture g = currentGestures.get(event.getCursorID());
 		if(g != null) {
 			g.addPoint(event.getPosition());
@@ -49,14 +51,16 @@ public class GestureDetectionBehaviour implements IBehaviour, IMultiTouchEventLi
 	}
 
 	@Override
-	public void cursorPressed(MultiTouchCursorEvent event) {
+	public void cursorPressed(MultiTouchCursorEvent event) {			
+		if(!active ) return;
 		Gesture g = new Gesture("c" + event.getCursorID());
 		g.addPoint(event.getPosition());
 		currentGestures.put(event.getCursorID(), g);
 	}
 
 	@Override
-	public void cursorReleased(MultiTouchCursorEvent event) {
+	public void cursorReleased(MultiTouchCursorEvent event) {			
+		if(!active ) return;
 		Gesture g = currentGestures.get(event.getCursorID());
 		if(g != null) {
 			g.addPoint(event.getPosition());
@@ -96,6 +100,11 @@ public class GestureDetectionBehaviour implements IBehaviour, IMultiTouchEventLi
 	public void setStage(IStage stage) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		this.active = active;		
 	}
 
 

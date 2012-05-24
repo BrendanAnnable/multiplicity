@@ -12,6 +12,7 @@ public class MoveBetweenContainerBehaviour implements IBehaviour, IMultiTouchEve
 	
 	private final static Logger logger = Logger.getLogger(MoveBetweenContainerBehaviour.class.getName());	
 	private IItem item;
+	private boolean active;
 
 	@Override
 	public void setItemActingOn(IItem item) {
@@ -49,6 +50,8 @@ public class MoveBetweenContainerBehaviour implements IBehaviour, IMultiTouchEve
 
 	@Override
 	public void cursorReleased(MultiTouchCursorEvent event) {
+		
+		if(!active ) return;
 		logger.info("cursor released caught event: "+item.getParentItem().getClass());
 	}
 
@@ -72,8 +75,12 @@ public class MoveBetweenContainerBehaviour implements IBehaviour, IMultiTouchEve
 
 	@Override
 	public void setStage(IStage stage) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }
