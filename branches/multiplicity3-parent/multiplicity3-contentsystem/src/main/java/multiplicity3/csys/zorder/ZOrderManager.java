@@ -101,7 +101,7 @@ public class ZOrderManager implements IZOrderManager {
 	}
 
 	@Override
-	public void regiserForZOrdering(IItem item) {		
+	public void registerForZOrdering(IItem item) {		
 		if(!registeredItems.contains(item)) {
 			registeredItems.add(0, item);
 			item.getZOrderManager().setItemZOrder(usedZSpace);

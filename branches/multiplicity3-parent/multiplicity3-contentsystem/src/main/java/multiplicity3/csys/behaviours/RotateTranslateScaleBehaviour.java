@@ -29,7 +29,7 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 	private long cursor1ID = Long.MAX_VALUE;
 	private long cursor2ID = Long.MAX_VALUE;
 	private boolean scaleDisabled = false;
-
+	private boolean active = true;
 
 	private IStage stage;
 
@@ -131,7 +131,8 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 	public void cursorClicked(MultiTouchCursorEvent event) {}
 
 	@Override
-	public void cursorPressed(MultiTouchCursorEvent event) {
+	public void cursorPressed(MultiTouchCursorEvent event) {			
+		if(!active ) return;
 		if(event.getCursorID() == cursor1ID || event.getCursorID() == cursor2ID) {
 			return;
 		}
@@ -148,7 +149,8 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 	}
 
 	@Override
-	public void cursorChanged(MultiTouchCursorEvent event) {
+	public void cursorChanged(MultiTouchCursorEvent event) {			
+		if(!active ) return;
 		updateCursor(event);
 
 		if(getCursorCount() == 1) {			
@@ -166,7 +168,7 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 	}
 
 	@Override
-	public void cursorReleased(MultiTouchCursorEvent event) {
+	public void cursorReleased(MultiTouchCursorEvent event) {			
 		if(event.getCursorID() == cursor1ID && cursor1ID != Long.MAX_VALUE) {
 			cursor1ID = Long.MAX_VALUE;
 		}else if(event.getCursorID() == cursor2ID && cursor2ID != Long.MAX_VALUE) {
@@ -217,6 +219,11 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 
 	public boolean isActive() {
 		return getCursorCount() > 0;
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }

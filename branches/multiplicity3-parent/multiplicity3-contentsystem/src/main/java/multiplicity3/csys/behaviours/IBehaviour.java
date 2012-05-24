@@ -25,4 +25,11 @@ public interface IBehaviour {
 	 */
 	public void setStage(IStage stage);
 	
+	/**
+	 * Set whether a behaviour executes events
+	 * 
+	 * @param active
+	 */
+	public void setActive(boolean active);
+	
 }

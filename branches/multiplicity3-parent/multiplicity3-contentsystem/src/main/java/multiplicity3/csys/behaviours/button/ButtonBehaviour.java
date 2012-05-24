@@ -9,6 +9,7 @@ import multiplicity3.input.events.MultiTouchCursorEvent;
 public class ButtonBehaviour implements IBehaviour {
 
 	private IItem item;
+	private boolean active = true;
 
 	@Override
 	public void setEventSource(IItem eventSourceItem) {
@@ -24,17 +25,20 @@ public class ButtonBehaviour implements IBehaviour {
 			final IButtonBehaviourListener bb = (IButtonBehaviourListener) l;
 			item.getMultiTouchDispatcher().addListener(new MultiTouchEventAdapter() {
 				@Override
-				public void cursorReleased(MultiTouchCursorEvent event) {
+				public void cursorReleased(MultiTouchCursorEvent event) {			
+					if(!active ) return;
 					bb.buttonReleased(item);				
 				}
 
 				@Override
-				public void cursorPressed(MultiTouchCursorEvent event) {
+				public void cursorPressed(MultiTouchCursorEvent event) {			
+					if(!active ) return;
 					bb.buttonPressed(item);
 				}
 
 				@Override
-				public void cursorClicked(MultiTouchCursorEvent event) {
+				public void cursorClicked(MultiTouchCursorEvent event) {			
+					if(!active ) return;
 					bb.buttonClicked(item);				
 				}
 			});
@@ -45,6 +49,11 @@ public class ButtonBehaviour implements IBehaviour {
 	public void setStage(IStage stage) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 

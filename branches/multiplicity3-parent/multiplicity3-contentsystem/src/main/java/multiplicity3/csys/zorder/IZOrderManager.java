@@ -4,7 +4,7 @@ import multiplicity3.csys.items.events.IItemListener;
 import multiplicity3.csys.items.item.IItem;
 
 public interface IZOrderManager extends IItemListener {
-	void regiserForZOrdering(IItem item);	
+	void registerForZOrdering(IItem item);	
 	void unregisterForZOrdering(IItem i);
 	void updateOrder();
 	
