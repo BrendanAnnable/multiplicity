@@ -29,6 +29,7 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 	private long cursor1ID = Long.MAX_VALUE;
 	private long cursor2ID = Long.MAX_VALUE;
 	private boolean scaleDisabled = false;
+	private boolean rotationDisabled = false;
 	private boolean active = true;
 
 	private IStage stage;
@@ -66,6 +67,8 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 		float oldAngle = cursor2OldWorldPosition.subtract(cursor1OldWorldPosition).getAngle();
 		float curAngle = cursor2WorldPosition.subtract(cursor1WorldPosition).getAngle();
 		float angleChange = curAngle - oldAngle;
+		
+		if(rotationDisabled)angleChange = 0f;		
 
 		Vector2f centerToSpatial = affectedItem.getWorldLocation().subtract(oldCenter);
 		
@@ -122,9 +125,18 @@ public class RotateTranslateScaleBehaviour implements IBehaviour, IMultiTouchEve
 	public void setScaleMaxLimit(float maxScale){
 		this.maxScale = maxScale;
 	}
-
+	
 	public boolean isScaleEnabled() {
 		return !scaleDisabled;
+	}
+	
+	public void setRotationEnabled(boolean b) {
+		rotationDisabled = !b;
+	}
+	
+	
+	public boolean isRotationEnabled(){
+		return rotationDisabled;
 	}
 
 	@Override
