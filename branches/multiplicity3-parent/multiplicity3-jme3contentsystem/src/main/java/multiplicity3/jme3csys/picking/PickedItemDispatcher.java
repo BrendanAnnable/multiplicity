@@ -10,7 +10,6 @@ import com.jme3.scene.Node;
 
 import multiplicity3.csys.items.item.IItem;
 import multiplicity3.csys.stage.IStage;
-import multiplicity3.csys.threedee.IThreeDeeContent;
 import multiplicity3.input.IMultiTouchEventListener;
 import multiplicity3.input.events.MultiTouchCursorEvent;
 import multiplicity3.input.events.MultiTouchObjectEvent;
@@ -21,7 +20,6 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 	//TODO: enable 3d picking too
 	//	private Node threeDeePickRoot;
 	private Map<Long, IItem> cursorItemAssociation = new HashMap<Long, IItem>();
-	private Map<Long, IThreeDeeContent> cursor3DItemAssociation = new HashMap<Long, IThreeDeeContent>();
 
 	private IStage stage;
 
@@ -33,24 +31,12 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 		cursorItemAssociation.put(cursorID, item);
 	}
 
-	private void associateThreeD(long cursorID, IThreeDeeContent contentItem) {
-		cursor3DItemAssociation.put(cursorID, contentItem);
-	}
-
 	private void disassociate(long cursorID) {
 		cursorItemAssociation.remove(cursorID);
 	}
 
-	private void disassociateThreeD(long cursorID) {
-		cursor3DItemAssociation.remove(cursorID);
-	}
-
 	private IItem getAssociatedItem(long cursorID) {
 		return cursorItemAssociation.get(cursorID);
-	}
-
-	private IThreeDeeContent getAssociatedThreeD(long cursorID) {
-		return cursor3DItemAssociation.get(cursorID);
 	}
 
 
@@ -68,14 +54,6 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 			//}
 		}
 
-		// 3D
-		List<IThreeDeeContent> threeDContent = getPickedThreeDContent(event.getPosition().x, event.getPosition().y);
-		if(threeDContent != null) {
-			for(IThreeDeeContent contentItem : threeDContent) {
-				associateThreeD(event.getCursorID(), contentItem);
-				contentItem.getMultiTouchDispatcher().cursorPressed(event);
-			}
-		}
 	}
 
 
@@ -88,12 +66,6 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 			disassociate(event.getCursorID());
 		}
 
-		// 3D
-		IThreeDeeContent threeD = getAssociatedThreeD(event.getCursorID());
-		if(threeD != null) {
-			threeD.getMultiTouchDispatcher().cursorReleased(event);
-			disassociateThreeD(event.getCursorID());
-		}
 	}	
 
 	@Override
@@ -102,12 +74,6 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 		IItem item = getAssociatedItem(event.getCursorID());
 		if(item != null) {
 			item.getMultiTouchDispatcher().cursorClicked(event);
-		}
-
-		// 3D
-		IThreeDeeContent threeD = getAssociatedThreeD(event.getCursorID());
-		if(threeD != null) {
-			threeD.getMultiTouchDispatcher().cursorClicked(event);
 		}
 	}
 
@@ -119,11 +85,6 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 			item.getMultiTouchDispatcher().cursorChanged(event);
 		}
 
-		// 3D
-		IThreeDeeContent threeD = getAssociatedThreeD(event.getCursorID());
-		if(threeD != null) {
-			threeD.getMultiTouchDispatcher().cursorChanged(event);
-		}
 	}
 
 	@Override
@@ -150,26 +111,9 @@ public class PickedItemDispatcher implements IMultiTouchEventListener {
 		}
 	}
 
-
-
 	Vector2f locStore = new Vector2f();
 	protected List<IItem> getPickedItemListener(float x, float y) {		
 		return stage.getPickSystem().findItemsOnTableAtPosition(new Vector2f(x, y));
 	}
 
-
-
-	private List<IThreeDeeContent> getPickedThreeDContent(float x, float y) {
-		//TODO: implement
-		//		UnitConversion.tableToScreen(x, y, locStore);
-		//		List<PickedSpatial> picked3D = AccuratePickingUtility.pickAll(threeDeePickRoot, locStore);
-		//		if(picked3D.size() > 0) {
-		//			JMEItemUserData itemData = (JMEItemUserData) picked3D.get(0).getSpatial().getUserData(JMEThreeDeeContent.KEY_JMETHREEDEEITEMDATA);
-		//			if(itemData != null) {
-		//				UUID uuid = itemData.getUUID();
-		//				return ItemMap.getThreeD(uuid);
-		//			}
-		//		}
-		return null;
-	}
 }
