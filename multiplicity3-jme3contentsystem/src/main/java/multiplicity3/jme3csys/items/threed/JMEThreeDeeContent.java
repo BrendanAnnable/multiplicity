@@ -12,7 +12,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
 import multiplicity3.csys.annotations.ImplementsContentItem;
-import multiplicity3.csys.items.events.MultiTouchEventDispatcher;
 import multiplicity3.csys.items.threed.IThreeDeeContent;
 import multiplicity3.jme3csys.items.IInitable;
 import multiplicity3.jme3csys.items.item.JMEItem;
@@ -22,10 +21,6 @@ import multiplicity3.jme3csys.picking.ItemMap;
 public class JMEThreeDeeContent extends JMEItem implements IThreeDeeContent, IInitable {
 	private static final Logger log = Logger.getLogger(JMEThreeDeeContent.class.getName());
 
-	public static final String KEY_JMETHREEDEEITEMDATA = "KEY_JMETHREEDEEITEMDATA";
-	protected MultiTouchEventDispatcher dispatcher = new MultiTouchEventDispatcher();
-	private String name;
-	private UUID uuid;
 	private Spatial spatial;
 
 	private AssetManager assetManager;
@@ -39,28 +34,6 @@ public class JMEThreeDeeContent extends JMEItem implements IThreeDeeContent, IIn
 	@Override
 	public Spatial getSpatial() {		
 		return spatial;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setUUID(UUID uuid) {
-		this.uuid = uuid;
-	}
-
-	@Override
-	public UUID getUUID() {
-		return uuid;
-	}
-
-	@Override
-	public MultiTouchEventDispatcher getMultiTouchDispatcher() {
-		return dispatcher;
 	}
 
 	@Override
@@ -84,7 +57,6 @@ public class JMEThreeDeeContent extends JMEItem implements IThreeDeeContent, IIn
 	public void setModel(String modelResource) {
 		this.modelResource = modelResource;
 		spatial = assetManager.loadModel(modelResource);	
-		spatial.setUserData(KEY_JMETHREEDEEITEMDATA, uuid.toString());
 		ItemMap.register(spatial, this);
 		log.fine("Attaching spatial geometry!");
 		attachChild(spatial);
@@ -105,7 +77,7 @@ public class JMEThreeDeeContent extends JMEItem implements IThreeDeeContent, IIn
 	@Override
 	public void setTexture(String textureResource) {
 		this.textureResource = textureResource;
-		Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+		Material material = new Material(assetManager, "Common/MatDefs/Misc/Textured.j3md");
 		material.setTexture("ColorMap", assetManager.loadTexture(textureResource));
         spatial.setMaterial(material);
 	}
