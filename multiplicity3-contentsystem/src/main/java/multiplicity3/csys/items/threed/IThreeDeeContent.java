@@ -7,10 +7,8 @@ import multiplicity3.csys.items.events.MultiTouchEventDispatcher;
 import multiplicity3.csys.items.item.IItem;
 
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 
 public interface IThreeDeeContent extends IItem {
-	public Spatial getSpatial();
 	public UUID getUUID();
 	public MultiTouchEventDispatcher getMultiTouchDispatcher();
 	void setModel(File modelFile);

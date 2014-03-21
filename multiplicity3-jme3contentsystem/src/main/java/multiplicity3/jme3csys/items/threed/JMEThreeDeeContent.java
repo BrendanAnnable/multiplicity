@@ -8,11 +8,16 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
+import com.jme3.texture.Texture;
+import com.jme3.texture.Texture.WrapMode;
 
 import multiplicity3.csys.annotations.ImplementsContentItem;
 import multiplicity3.csys.items.threed.IThreeDeeContent;
+import multiplicity3.jme3csys.geometry.CenteredQuad;
 import multiplicity3.jme3csys.items.IInitable;
 import multiplicity3.jme3csys.items.item.JMEItem;
 import multiplicity3.jme3csys.picking.ItemMap;
@@ -21,7 +26,8 @@ import multiplicity3.jme3csys.picking.ItemMap;
 public class JMEThreeDeeContent extends JMEItem implements IThreeDeeContent, IInitable {
 	private static final Logger log = Logger.getLogger(JMEThreeDeeContent.class.getName());
 
-	private Spatial spatial;
+	private Geometry geometry;
+	private Material material; 
 
 	private AssetManager assetManager;
 	private String modelResource = "";
@@ -32,18 +38,25 @@ public class JMEThreeDeeContent extends JMEItem implements IThreeDeeContent, IIn
 	}
 
 	@Override
-	public Spatial getSpatial() {		
-		return spatial;
-	}
-
-	@Override
 	public Spatial getManipulableSpatial() {
-		return spatial;
+		return geometry;
 	}
 
 	@Override
-	public void initializeGeometry(AssetManager assetManager) {
+	public void initializeGeometry(AssetManager assetManager) {		
 		this.assetManager = assetManager;
+		
+		CenteredQuad quad = new CenteredQuad(100, 100);	
+		geometry = new Geometry("quad_geom", quad);
+		
+		material = new Material(assetManager, "multiplicity3/jme3csys/resources/shaders/Textured.j3md");
+		material.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+		setTexture("multiplicity3/jme3csys/resources/placeholders/transparent_16.png");
+		
+		geometry.setMaterial(material);
+		ItemMap.register(geometry, this);
+		log.fine("Attaching spatial geometry!");
+		attachChild(geometry);
 	}
 	
 	@Override
@@ -56,10 +69,7 @@ public class JMEThreeDeeContent extends JMEItem implements IThreeDeeContent, IIn
 	@Override
 	public void setModel(String modelResource) {
 		this.modelResource = modelResource;
-		spatial = assetManager.loadModel(modelResource);	
-		ItemMap.register(spatial, this);
-		log.fine("Attaching spatial geometry!");
-		attachChild(spatial);
+		geometry.setMesh(((Geometry)assetManager.loadModel(modelResource)).getMesh());	
 	}
 	
 	@Override
@@ -71,15 +81,15 @@ public class JMEThreeDeeContent extends JMEItem implements IThreeDeeContent, IIn
 	public void setTexture(File textureFile) {
 		File parent = textureFile.getParentFile();
 		assetManager.registerLocator(parent.getAbsolutePath(), FileLocator.class);
-		setModel(textureFile.getName());
+		setTexture(textureFile.getName());
 	}
 	
 	@Override
 	public void setTexture(String textureResource) {
 		this.textureResource = textureResource;
-		Material material = new Material(assetManager, "Common/MatDefs/Misc/Textured.j3md");
-		material.setTexture("ColorMap", assetManager.loadTexture(textureResource));
-        spatial.setMaterial(material);
+		Texture tex = assetManager.loadTexture(textureResource);
+		tex.setWrap(WrapMode.EdgeClamp);  //or edgeclamp?
+		material.setTexture("m_ColorMap", tex);	
 	}
 	
 	@Override
@@ -89,16 +99,16 @@ public class JMEThreeDeeContent extends JMEItem implements IThreeDeeContent, IIn
 	
 	@Override
 	public void setSize(float width, float height, float depth) {
-		((BoundingBox)spatial.getWorldBound()).setXExtent(width);
-		((BoundingBox)spatial.getWorldBound()).setYExtent(height);
-		((BoundingBox)spatial.getWorldBound()).setZExtent(depth);		
+		((BoundingBox)geometry.getWorldBound()).setXExtent(width);
+		((BoundingBox)geometry.getWorldBound()).setYExtent(height);
+		((BoundingBox)geometry.getWorldBound()).setZExtent(depth);		
 	}
 
 	@Override
 	public Vector3f getSize() {
-		float width = ((BoundingBox)spatial.getWorldBound()).getXExtent();
-		float height = ((BoundingBox)spatial.getWorldBound()).getYExtent();
-		float depth = ((BoundingBox)spatial.getWorldBound()).getZExtent();
+		float width = ((BoundingBox)geometry.getWorldBound()).getXExtent();
+		float height = ((BoundingBox)geometry.getWorldBound()).getYExtent();
+		float depth = ((BoundingBox)geometry.getWorldBound()).getZExtent();
 		return new Vector3f(width, height, depth);		
 	}
 

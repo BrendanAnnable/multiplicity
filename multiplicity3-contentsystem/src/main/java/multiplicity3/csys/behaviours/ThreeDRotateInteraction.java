@@ -1,4 +1,4 @@
-package multiplicity3.csys.items.threed.interaction;
+package multiplicity3.csys.behaviours;
 
 import java.util.logging.Logger;
 
@@ -6,7 +6,6 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 
-import multiplicity3.csys.behaviours.IBehaviour;
 import multiplicity3.csys.items.item.IItem;
 import multiplicity3.csys.stage.IStage;
 import multiplicity3.input.IMultiTouchEventListener;
