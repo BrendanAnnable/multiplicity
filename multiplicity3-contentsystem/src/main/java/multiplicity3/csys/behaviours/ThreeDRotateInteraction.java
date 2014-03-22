@@ -2,7 +2,6 @@ package multiplicity3.csys.behaviours;
 
 import java.util.logging.Logger;
 
-import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 
@@ -17,7 +16,6 @@ public class ThreeDRotateInteraction implements IBehaviour, IMultiTouchEventList
 
 	private long currentCursorID;
 	private Vector2f cursorPressedPosition;
-	private Quaternion initialRotation;
 
 	private IItem eventSourceItem;
 	private IItem affectedItem;
@@ -45,23 +43,23 @@ public class ThreeDRotateInteraction implements IBehaviour, IMultiTouchEventList
 		if(!active ) return;
 		this.currentCursorID = event.getCursorID();
 		this.cursorPressedPosition = event.getPosition();
-		this.initialRotation = affectedItem.getManipulableSpatial().getLocalRotation().clone();
 	}
 
 	@Override
 	public void cursorClicked(MultiTouchCursorEvent event) {}
 
-	// TODO: make this a meaningful 3D rotation
 	@Override
 	public void cursorChanged(MultiTouchCursorEvent event) {			
 		if(!active ) return;
 		if(currentCursorID == event.getCursorID()) {
+			
 			Vector2f change = event.getPosition().subtract(cursorPressedPosition);
-			float yaw = -FastMath.PI * change.y;
-			float roll = FastMath.PI * change.x;
-			float pitch = 0;
-			Quaternion rot = new Quaternion().fromAngles(yaw, roll, pitch);			
-			affectedItem.getManipulableSpatial().getLocalRotation().set(initialRotation.mult(rot));
+               
+	       float[] angles = {-change.y/2, change.x/2, 0};
+	       Quaternion q = new Quaternion();
+	       q.fromAngles(angles);           
+	       q.multLocal(affectedItem.getManipulableSpatial().getLocalRotation());
+	       affectedItem.getManipulableSpatial().setLocalRotation(q);
 		}
 	}
 
