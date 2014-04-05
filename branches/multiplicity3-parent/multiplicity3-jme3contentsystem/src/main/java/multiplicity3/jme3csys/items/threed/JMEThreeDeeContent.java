@@ -32,6 +32,8 @@ public class JMEThreeDeeContent extends JMEItem implements IThreeDeeContent, IIn
 	private AssetManager assetManager;
 	private String modelResource = "";
 	private String textureResource = "";
+	
+	private Vector3f extent = new Vector3f();
 
 	public JMEThreeDeeContent(String name, UUID uuid) {
 		super(name, uuid);	
@@ -69,7 +71,9 @@ public class JMEThreeDeeContent extends JMEItem implements IThreeDeeContent, IIn
 	@Override
 	public void setModel(String modelResource) {
 		this.modelResource = modelResource;
-		geometry.setMesh(((Geometry)assetManager.loadModel(modelResource)).getMesh());	
+		Spatial s = assetManager.loadModel(modelResource);
+		((BoundingBox)s.getWorldBound()).getExtent(extent);
+		geometry.setMesh(((Geometry)s).getMesh());	
 	}
 	
 	@Override
@@ -106,10 +110,7 @@ public class JMEThreeDeeContent extends JMEItem implements IThreeDeeContent, IIn
 
 	@Override
 	public Vector3f getSize() {
-		float width = ((BoundingBox)geometry.getWorldBound()).getXExtent();
-		float height = ((BoundingBox)geometry.getWorldBound()).getYExtent();
-		float depth = ((BoundingBox)geometry.getWorldBound()).getZExtent();
-		return new Vector3f(width, height, depth);		
+		return extent;		
 	}
 
 }
