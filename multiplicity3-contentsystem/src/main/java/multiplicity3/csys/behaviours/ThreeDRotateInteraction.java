@@ -67,8 +67,8 @@ public class ThreeDRotateInteraction implements IBehaviour, IMultiTouchEventList
 			newPos.rotateAroundOrigin(-parentItem.getRelativeRotation(), false);	
 			if (newPos.length() < (maxDim*parentItem.getRelativeScale())){
 				Vector2f change = newPos.subtract(cursorPressedPosition);	
-				float xChange = (((-change.y/2)/(height*parentItem.getRelativeScale())) / (360 * FastMath.DEG_TO_RAD));
-				float yChange = (((change.x/2)/(width*parentItem.getRelativeScale())) / (360 * FastMath.DEG_TO_RAD));
+				float xChange = (((-change.y)/(height*parentItem.getRelativeScale())) / (360 * FastMath.DEG_TO_RAD));
+				float yChange = (((change.x)/(width*parentItem.getRelativeScale())) / (360 * FastMath.DEG_TO_RAD));
 				
 				float[] angles = {xChange, yChange, 0};
 				Quaternion q = new Quaternion();
