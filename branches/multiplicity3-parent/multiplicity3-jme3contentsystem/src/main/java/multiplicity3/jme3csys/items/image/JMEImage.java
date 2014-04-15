@@ -68,12 +68,17 @@ public class JMEImage extends JMEItem implements IImage, IInitable {
 	public void setImage(String imageResource) {
 		this.imageResource = imageResource;
 		Texture tex = assetManager.loadTexture(imageResource);
+		setTexture(tex);
+	}
+	
+	@Override
+	public void setTexture(Texture tex) {
 		if(wrap) {
 			tex.setWrap(WrapMode.Repeat);
 		}else{
 			tex.setWrap(WrapMode.EdgeClamp);
 		}
-		mat.setTexture("m_ColorMap", tex);	
+		mat.setTexture("m_ColorMap", tex);			
 	}
 	
 	@Override
