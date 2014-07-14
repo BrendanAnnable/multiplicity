@@ -50,14 +50,17 @@ public class Win7TouchInput implements IMultiTouchInputSource {
 	private float width = 1024f;	
 	private float height = 768f;
 	
+	private boolean is64bitJava = false;
+	
 	private Win7NativeTouchSource win7NativeTouchSource;
 	
 	/**
 	 * Instantiates a new win7 native touch source.
 	 */
-	public Win7TouchInput(float width, float height) {
+	public Win7TouchInput(float width, float height, boolean is64bitJava) {
 		this.width = width;
 		this.height = height;
+		this.is64bitJava = is64bitJava;
 		start();
 	}
 		
@@ -170,6 +173,14 @@ public class Win7TouchInput implements IMultiTouchInputSource {
 		synchronized(callingList) {
 			callingList.add(c);
 		}
+	}
+	
+	public boolean isIs64bitJava() {
+		return is64bitJava;
+	}
+
+	public void setIs64bitJava(boolean is64bitJava) {
+		this.is64bitJava = is64bitJava;
 	}
 	
 	@Override

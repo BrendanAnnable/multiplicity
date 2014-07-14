@@ -25,9 +25,7 @@ public class DisplayPrefsItem implements PreferencesItem {
 	private static final String DISPLAY_REAL_WIDTH = "DISPLAY_REAL_WIDTH";
 	private static final String PREFS_INPUT_TYPE = "INPUT_TYPE";
 	
-	public static enum InputType {
-		JMEDIRECT, TUIO, EVOLUCE, WIN7
-	}
+	public static final String[] INPUT_TYPES = {"Mouse and Keyboard", "TUIO", "Evoluce MIM", "Windows 7", "Windows 7 (64bit Java)"};
 	
 	public DisplayPrefsItem() {}
 	
@@ -130,12 +128,12 @@ public class DisplayPrefsItem implements PreferencesItem {
 		prefs.put(DISPLAY_RENDERER, renderer);
 	}
 	
-	public void setInputType(InputType type) {
-		prefs.put(PREFS_INPUT_TYPE, type.name());
+	public void setInputType(String type) {
+		prefs.put(PREFS_INPUT_TYPE, type);
 	}
 
-	public InputType getInputType() {			
-		return InputType.valueOf(prefs.get(PREFS_INPUT_TYPE, InputType.JMEDIRECT.name()));
+	public String getInputType() {			
+		return prefs.get(PREFS_INPUT_TYPE, INPUT_TYPES[0]);
 	}
 	
 	public void setTuioPort(int port) {
