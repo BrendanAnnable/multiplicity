@@ -28,7 +28,7 @@ import org.lwjgl.opengl.DisplayMode;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeSystem;
 
-import multiplicity3.config.display.DisplayPrefsItem.InputType;
+import multiplicity3.config.display.DisplayPrefsItem;
 
 import multiplicity3.config.PreferencesItem;
 
@@ -49,7 +49,7 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
     private JTextField tuioTextbox = new JTextField();
     private JComboBox displaySelector = new JComboBox();
     private JCheckBox fullScreen = new JCheckBox();
-    private JComboBox jcb = new JComboBox(InputType.values());
+    private JComboBox jcb = new JComboBox();
     private JLabel displaySizeLabel = new JLabel();
     private JLabel antiAliasLabel = new JLabel();
     private JLabel StencilBitsLabel = new JLabel();
@@ -146,11 +146,11 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
             
         inputType.setText("Input Type:");
 
-		jcb.setSelectedItem(prefs.getInputType());
+        initInputSelector();
 		jcb.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				prefs.setInputType(InputType.valueOf(jcb.getSelectedItem().toString()));
+				prefs.setInputType((String)jcb.getSelectedItem());
 				updateTuioOptionsVisibility();
 			}			
 		});
@@ -215,8 +215,8 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
     }    
     
     private void updateTuioOptionsVisibility(){
-		tuioLabel.setVisible(prefs.getInputType() == InputType.TUIO);
-		tuioTextbox.setVisible(prefs.getInputType() == InputType.TUIO);
+		tuioLabel.setVisible(prefs.getInputType().equals(DisplayPrefsItem.INPUT_TYPES[1]));
+		tuioTextbox.setVisible(prefs.getInputType().equals(DisplayPrefsItem.INPUT_TYPES[1]));
     }
 
 	private void displaySelectorItemStateChanged(java.awt.event.ItemEvent evt) {
@@ -304,7 +304,7 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
 		prefs.setFrequency(m.getFrequency());
 	}
 
-	private void loadCurrentSettings() {
+	private void loadCurrentSettings() {		
 		initDisplaySelector();
 		initFullScreen();
 		antiAliasField.setText("" + prefs.getMinimumAntiAliasSamples());
@@ -335,6 +335,14 @@ public class DisplayConfigPanel extends JPanel implements PreferencesItem {
 		// restore saved display mode
 		setSelectedDisplayMode(currentMode);
 		displaySelector.setSelectedIndex(getCurrentDisplayModeIndex(getDisplayModes()));		
+	}
+	
+	private void initInputSelector() {
+		jcb.removeAllItems();
+		for (String input : DisplayPrefsItem.INPUT_TYPES) {
+			jcb.addItem(input);
+		}
+		jcb.setSelectedItem(prefs.getInputType());
 	}
 	
 	@Override

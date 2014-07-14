@@ -88,8 +88,8 @@ public class Win7NativeTouchSource{
 	/**
 	 * Instantiates a new win7 native touch source.
 	 */
-	public Win7NativeTouchSource(Win7TouchInput win7TouchInput) {
-		this.win7TouchInput = win7TouchInput;
+	public Win7NativeTouchSource(Win7TouchInput win7TouchInputIn) {
+		this.win7TouchInput = win7TouchInputIn;
 		
 		this.success = false;
 		
@@ -108,10 +108,10 @@ public class Win7NativeTouchSource{
 			AccessController.doPrivileged(new PrivilegedAction<Void>() {
 			    public Void run() {
 			    	
-					String dllName = dllName32;
-					
-					String bit = System.getProperty("sun.arch.data.model");
-					if (bit.contains("64"))dllName = dllName64;			
+					String dllName = dllName32;					
+					if (win7TouchInput.isIs64bitJava()){
+						dllName = dllName64;			
+					}
 			    	
 			        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
 			        File tmpFile = new File(tmpDir, dllName + ".dll");
