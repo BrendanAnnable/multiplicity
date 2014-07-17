@@ -32,15 +32,13 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import com.sun.jna.Pointer;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef.HWND;
 
 import multiplicity3.input.IMultiTouchEventListener;
 import multiplicity3.input.utils.ClickDetector;
 import multiplicity3.input.win7.Win7TouchInput;
-
-import org.xvolks.jnative.exceptions.NativeException;
-import org.xvolks.jnative.misc.basicStructures.HWND;
-import org.xvolks.jnative.util.User32;
-
 
 
 
@@ -150,6 +148,7 @@ public class Win7NativeTouchSource{
 		boolean touchAvailable = this.getSystemMetrics();
 		if (!touchAvailable){
 			logger.severe("Windows 7 Touch Input currently not available!");
+			System.exit(0);
 			return;
 		}else{
 			logger.info("Windows 7 Touch Input available.");
@@ -212,21 +211,12 @@ public class Win7NativeTouchSource{
 
 		SwingUtilities.invokeLater(new Runnable() { 
 			public void run() {
-				int awtCanvasHandle = 0;
-				try {
-					try {					
-						HWND appHWND = User32.GetForegroundWindow();
-						awtCanvasHandle = appHWND.getValue();
-					} catch (NativeException e1) {
-						e1.printStackTrace();
-					} catch (IllegalAccessException e1) {
-						e1.printStackTrace();
-					} 			
-
-					setApplicationHandle(awtCanvasHandle);
-				} catch (Exception e) {
-					System.err.println(e.getMessage());
-				}
+		        HWND fgWindow = User32.INSTANCE.GetForegroundWindow();
+		        int titleLength = User32.INSTANCE.GetWindowTextLength(fgWindow) + 1;
+		        char[] title = new char[titleLength];
+		        User32.INSTANCE.GetWindowText(fgWindow, title, titleLength);
+		        int awtCanvasHandle = (int)Pointer.nativeValue(fgWindow.getPointer());
+				setApplicationHandle(awtCanvasHandle);
 			}
 		});
 	}
