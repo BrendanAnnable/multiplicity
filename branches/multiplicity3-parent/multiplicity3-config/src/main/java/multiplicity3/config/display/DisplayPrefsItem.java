@@ -25,7 +25,7 @@ public class DisplayPrefsItem implements PreferencesItem {
 	private static final String DISPLAY_REAL_WIDTH = "DISPLAY_REAL_WIDTH";
 	private static final String PREFS_INPUT_TYPE = "INPUT_TYPE";
 	
-	public static final String[] INPUT_TYPES = {"Mouse and Keyboard", "TUIO", "Evoluce MIM", "Windows 7", "Windows 7 (64bit Java)"};
+	public static final String[] INPUT_TYPES = {"Mouse and Keyboard", "TUIO", "Evoluce MIM", "Windows Touch", "Windows Touch (64bit Java)"};
 	
 	public DisplayPrefsItem() {}
 	
