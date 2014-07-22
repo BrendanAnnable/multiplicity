@@ -94,9 +94,8 @@ public class Win7NativeTouchSource{
 		String platform = System.getProperty("os.name").toLowerCase();
 		logger.info("Platform: \"" + platform + "\"");
 		
-		if (!platform.contains("windows 7")) {
-			logger.severe("Win7NativeTouchSource input source can only be used on platforms running windows 7!");
-			return;
+		if (!platform.contains("windows")) {
+			logger.severe("Win7NativeTouchSource input source can only be used on windows.");
 		}
 		
 		if (!loaded){
