@@ -53,6 +53,7 @@ import com.jme3.math.Vector2f;
  *
  */
 public abstract class MultiTouchEvent implements Serializable {
+	private static long lastEvent = System.nanoTime();
 	private static final long serialVersionUID = 7048581503978460895L;
 	
 	protected long cursorID;
@@ -85,6 +86,7 @@ public abstract class MultiTouchEvent implements Serializable {
 		this.pressure = pressure;
 		this.angle = angle;
 		this.timeOfCreationNanos = System.nanoTime();
+		updateLastEvent();
 	}
 
 	public long getCursorID() {
@@ -121,5 +123,13 @@ public abstract class MultiTouchEvent implements Serializable {
 	
 	public String toString() {
 		return getClass().getName() + " " + cursorID + " @" + currentPosition + " vel: " + velocity;
+	}
+	
+	private void updateLastEvent(){
+		lastEvent = System.nanoTime();
+	}
+
+	public static long getLastEvent() {
+		return lastEvent;
 	}
 }
