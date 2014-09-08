@@ -6,6 +6,14 @@
   <artifactId>multiplicity3-parent</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
+  
+  <distributionManagement>
+    <repository>
+      <id>libs-snapshot-local</id>
+      <name>libs-snapshot-local</name>
+      <url>http://tel.dur.ac.uk/artifactory/libs-snapshot-local/</url>
+    </repository>
+  </distributionManagement>
 
   <name>multiplicity3-parent</name>
   <url>http://maven.apache.org</url>
