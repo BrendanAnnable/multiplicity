@@ -9,9 +9,9 @@
   
   <distributionManagement>
     <repository>
-      <id>libs-snapshot-local</id>
-      <name>libs-snapshot-local</name>
-      <url>http://tel.dur.ac.uk/artifactory/libs-snapshot-local/</url>
+      <id>SynergyNet</id>
+      <name>SynergyNet-snapshots</name>
+      <url>http://tel.dur.ac.uk/artifactory/libs-snapshot-local</url>
     </repository>
   </distributionManagement>
 
